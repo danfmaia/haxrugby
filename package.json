@@ -1,0 +1,34 @@
+{
+  "name": "haxru-bot",
+  "description": "A HaxBall Headless API's based bot for HaxRU rooms.",
+  "version": "1.0.0",
+  "author": "Dan Maia (aka JP)",
+  "scripts": {
+    "test": "mocha --require ts-node/register src/**/*.test.ts",
+    "build": "browserify src/Bot/Main.ts -p [tsify] > dist/bundle.js",
+    "build-uglify": "browserify src/Bot/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.149",
+    "inversify": "^5.0.1",
+    "inversihax": "^1.1.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.29.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^16.9.2",
+    "browserify": "^16.2.3",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "ts-node": "^8.0.3",
+    "tsify": "^4.0.1",
+    "tslint": "^5.14.0",
+    "typemoq": "^2.1.0",
+    "typescript": "^3.4.1",
+    "uglify-es": "^3.3.9"
+  }
+}
