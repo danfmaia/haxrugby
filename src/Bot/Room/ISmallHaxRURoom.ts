@@ -13,5 +13,6 @@ export interface ISmallHaxRURoom extends IRoom<CustomPlayer> {
   isMatchInProgress: boolean;
   isTimeRunning: boolean;
 
+  initializeMatch(player?: CustomPlayer): void;
   cancelMatch(player: CustomPlayer, callback: () => void): void;
 }

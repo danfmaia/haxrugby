@@ -6,6 +6,7 @@ import { CustomPlayer } from '../models/CustomPlayer';
 import { smallConfig } from '../constants/config/smallConfig';
 import { ISmallHaxRURoom } from '../Room/ISmallHaxRURoom';
 import { IMatchConfig } from '../models/match/MatchConfig';
+import Util from '../util/Util';
 
 @CommandDecorator({
   names: ['new-match', 'new']
@@ -28,29 +29,29 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
       return;
     }
 
-    if (this.room.isMatchInProgress) {
-      this.room.cancelMatch(player, callback);
-    }
-
-    function callback() {
+    const callback = () => {
       const matchConfig: IMatchConfig = smallConfig;
 
-      if (args[0] && typeof args[0] === 'number') {
-        const parsedTimeLimit = Math.floor(parseInt(args[0]));
-        if (parsedTimeLimit > 0) {
-          matchConfig.timeLimit = parsedTimeLimit;
-        }
+      const timeLimit = Util.validatePositiveNumericInput(args[0]);
+      if (timeLimit) {
+        matchConfig.timeLimit = timeLimit;
       }
 
-      if (args[1] && typeof args[1] === 'number') {
-        const parsedScoreLimit = Math.floor(parseInt(args[1]));
-        if (parsedScoreLimit > 0) {
-          matchConfig.scoreLimit = parsedScoreLimit;
-        }
+      const scoreLimit = Util.validatePositiveNumericInput(args[1]);
+      if (scoreLimit) {
+        matchConfig.scoreLimit = scoreLimit;
       }
 
       this.room.matchConfig = matchConfig;
-      this.room.startGame();
+      this.room.setTimeLimit(matchConfig.timeLimit);
+      this.room.setScoreLimit(matchConfig.scoreLimit);
+      Util.timeout(1500, () => this.room.initializeMatch(player));
+    };
+
+    if (this.room.isMatchInProgress) {
+      this.room.cancelMatch(player, callback);
+    } else {
+      callback();
     }
   }
 }

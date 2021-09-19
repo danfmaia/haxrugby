@@ -19,7 +19,7 @@ import { stadium_A } from '../stadiums/small/stadium_A';
 import { MINUTE_IN_MS } from '../constants/general';
 import { smallConfig } from '../constants/config/smallConfig';
 import styles from '../constants/styles';
-import Util from '../util/util';
+import Util from '../util/Util';
 
 export class SmallHaxRURoom
   extends RoomBase<CustomPlayer>
@@ -58,7 +58,7 @@ export class SmallHaxRURoom
         }
 
         if (
-          (this.remainingTime < this.matchConfig.timeLimitInMs &&
+          (this.remainingTime < this.matchConfig.getTimeLimitInMs() &&
             this.remainingTime > 0 &&
             this.remainingTime % MINUTE_IN_MS === 0) ||
           this.remainingTime === MINUTE_IN_MS / 2 ||
@@ -67,7 +67,7 @@ export class SmallHaxRURoom
           this.sendStatus();
         }
 
-        if (this.remainingTime === this.matchConfig.timeLimitInMs - 5000) {
+        if (this.remainingTime === this.matchConfig.getTimeLimitInMs() - 5000) {
           this.sendPromotionLinks();
         }
 
@@ -84,7 +84,7 @@ export class SmallHaxRURoom
     this.onGameStart.addHandler((byPlayer) => {
       this.isTimeRunning = false;
       if (!this.isMatchInProgress) {
-        this.initializeMatch();
+        this.initializeMatch(byPlayer);
       }
     });
 
@@ -170,35 +170,35 @@ export class SmallHaxRURoom
     );
 
     this.sendBoldAnnouncement('Server no DISCORD:', null, 0);
-    this.sendNormalAnnouncement('    https://discord.gg/amVeAMyh', null, 0);
+    this.sendNormalAnnouncement('    discord.io/HaxRU', null, 0);
 
     this.sendBoldAnnouncement('Grupo no FACEBOOK:', null, 0);
     this.sendNormalAnnouncement('    fb.com/groups/rugbyu', null, 0);
   }
 
-  private initializeMatch(player?: CustomPlayer) {
-    this.remainingTime = this.matchConfig.timeLimitInMs;
+  public initializeMatch(player?: CustomPlayer) {
+    this.remainingTime = this.matchConfig.getTimeLimitInMs();
     this.isMatchInProgress = true;
+    this.startGame();
 
     if (player) {
       this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`);
     } else {
-      this.sendNormalAnnouncement(
-        `Duração:  ${this.matchConfig.timeLimit} minutos`
-      );
-      this.sendNormalAnnouncement(
-        `Limite de pontos:  ${this.matchConfig.scoreLimit}`
-      );
+      this.sendBoldAnnouncement('Iniciando nova partida!');
     }
+    this.sendNormalAnnouncement(
+      `Duração:  ${this.matchConfig.timeLimit} minutos`
+    );
+    this.sendNormalAnnouncement(
+      `Limite de pontos:  ${this.matchConfig.scoreLimit}`
+    );
   }
 
   private finalizeMatch() {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.pauseGame(true);
-    Util.timeout(5000, () => {
-      this.stopGame();
-    });
+    Util.timeout(5000, () => this.stopGame());
 
     this.sendBoldAnnouncement('Fim da partida!');
     this.sendNormalAnnouncement(
@@ -210,17 +210,19 @@ export class SmallHaxRURoom
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.pauseGame(true);
-    Util.timeout(3000, () => {
+    Util.timeout(3500, () => {
       this.stopGame();
       callback();
     });
 
     this.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`);
     this.sendNormalAnnouncement(
-      `Tempo restante:  ${this.getRemainingTimeString}`
+      `Tempo restante:  ${this.getRemainingTimeString()}`
     );
     this.sendNormalAnnouncement(
       `Placar parcial:  ${this.redScore}-${this.blueScore}`
     );
+    this.sendNormalAnnouncement('', null, 0);
+    this.sendNormalAnnouncement(`Iniciando nova partida em 5 segundos...`);
   }
 }
