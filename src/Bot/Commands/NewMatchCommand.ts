@@ -6,7 +6,7 @@ import { CustomPlayer } from '../models/CustomPlayer';
 import { smallConfig } from '../constants/config/smallConfig';
 import { ISmallHaxRURoom } from '../Room/ISmallHaxRURoom';
 import { IMatchConfig } from '../models/match/MatchConfig';
-import Util from '../util/Util';
+import Util from '../util/Utils';
 
 @CommandDecorator({
   names: ['new-match', 'new']

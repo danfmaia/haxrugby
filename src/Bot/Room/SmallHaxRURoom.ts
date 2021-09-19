@@ -19,7 +19,7 @@ import { stadium_A } from '../stadiums/small/stadium_A';
 import { MINUTE_IN_MS } from '../constants/general';
 import { smallConfig } from '../constants/config/smallConfig';
 import styles from '../constants/styles';
-import Util from '../util/Util';
+import Util from '../util/Utils';
 
 export class SmallHaxRURoom
   extends RoomBase<CustomPlayer>
