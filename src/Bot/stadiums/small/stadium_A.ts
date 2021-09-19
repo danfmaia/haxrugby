@@ -1,4 +1,4 @@
-export const stadium_red = `{
+export const stadium_A = `{
 	"name" : "SmallRU 0.07 red by JP",
 	
 	"width" : 420,

@@ -11,34 +11,29 @@ import * as moment from 'moment';
 
 import { ISmallHaxRURoom } from './ISmallHaxRURoom';
 
+import { CustomPlayer } from '../models/CustomPlayer';
+import { IMatchConfig } from '../models/match/MatchConfig';
+
+import { stadium_A } from '../stadiums/small/stadium_A';
+
 import { MINUTE_IN_MS } from '../constants/general';
 import { smallConfig } from '../constants/config/smallConfig';
-
-import { CustomPlayer } from '../models/CustomPlayer';
-import { MatchConfig } from '../models/match/MatchConfig';
-
-import { stadium_red } from '../stadiums/small/stadium_red';
-import { styles } from '../constants/styles';
-
-const matchConfig: MatchConfig = smallConfig;
+import styles from '../constants/styles';
+import Util from '../util/util';
 
 export class SmallHaxRURoom
   extends RoomBase<CustomPlayer>
   implements ISmallHaxRURoom
 {
+  public matchConfig: IMatchConfig = smallConfig;
+
   public tickCount: number = 0;
-  public remainingTime: number = matchConfig.TIME_LIMIT_IN_MS;
-
-  public isMatchInProgress: boolean = false;
-  // public isAfterKickoff: boolean = false;
-  public isTimeRunning: boolean = false;
-
+  public remainingTime: number;
   public redScore: number = 0;
   public blueScore: number = 0;
 
-  // public get isGameInProgress(): boolean {
-  //   return this.mIsGameInProgress;
-  // }
+  public isMatchInProgress: boolean = false;
+  public isTimeRunning: boolean = false;
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
@@ -63,7 +58,7 @@ export class SmallHaxRURoom
         }
 
         if (
-          (this.remainingTime < matchConfig.TIME_LIMIT_IN_MS &&
+          (this.remainingTime < this.matchConfig.timeLimitInMs &&
             this.remainingTime > 0 &&
             this.remainingTime % MINUTE_IN_MS === 0) ||
           this.remainingTime === MINUTE_IN_MS / 2 ||
@@ -72,7 +67,7 @@ export class SmallHaxRURoom
           this.sendStatus();
         }
 
-        if (this.remainingTime === matchConfig.TIME_LIMIT_IN_MS - 5000) {
+        if (this.remainingTime === this.matchConfig.timeLimitInMs - 5000) {
           this.sendPromotionLinks();
         }
 
@@ -119,7 +114,7 @@ export class SmallHaxRURoom
         this.setPlayerAdmin(player.id, true);
       }
       this.sendBoldAnnouncement(
-        'Bem vindo(a) ao HaxBall Rugby Union (HaxRU®)!',
+        'Bem vindo(a) ao HaxBall Rugby Union (HaxRU)!',
         player.id
       );
       this.sendStatus(player.id);
@@ -131,10 +126,10 @@ export class SmallHaxRURoom
       }
     });
 
-    this.setCustomStadium(stadium_red);
+    this.setCustomStadium(stadium_A);
     this.setTeamsLock(true);
-    this.setTimeLimit(matchConfig.TIME_LIMIT);
-    this.setScoreLimit(matchConfig.SCORE_LIMIT);
+    this.setTimeLimit(this.matchConfig.timeLimit);
+    this.setScoreLimit(this.matchConfig.scoreLimit);
   }
 
   private getRemainingTimeString(): string {
@@ -148,12 +143,6 @@ export class SmallHaxRURoom
       `Placar e Tempo restante: ${this.redScore}-${this.blueScore} | ${this.getRemainingTimeString()}`,
       playerId
     );
-
-    // this.sendChat(
-    //   `Tempo restante >> ${this.getRemainingTimeString()}`,
-    //   playerId
-    // );
-    // this.sendChat(`Placar >> ${this.redScore}-${this.blueScore}`, playerId);
   }
 
   private sendNormalAnnouncement(
@@ -187,28 +176,51 @@ export class SmallHaxRURoom
     this.sendNormalAnnouncement('    fb.com/groups/rugbyu', null, 0);
   }
 
-  private initializeMatch() {
-    this.remainingTime = matchConfig.TIME_LIMIT_IN_MS;
+  private initializeMatch(player?: CustomPlayer) {
+    this.remainingTime = this.matchConfig.timeLimitInMs;
     this.isMatchInProgress = true;
 
-    this.sendBoldAnnouncement('Início da partida!');
-    this.sendNormalAnnouncement(
-      `Esta partida irá até ${matchConfig.TIME_LIMIT} minutos ou ${matchConfig.SCORE_LIMIT} pontos.`
-    );
+    if (player) {
+      this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`);
+    } else {
+      this.sendNormalAnnouncement(
+        `Duração:  ${this.matchConfig.timeLimit} minutos`
+      );
+      this.sendNormalAnnouncement(
+        `Limite de pontos:  ${this.matchConfig.scoreLimit}`
+      );
+    }
   }
 
   private finalizeMatch() {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.pauseGame(true);
-    const timeoutToStop = setTimeout(() => {
+    Util.timeout(5000, () => {
       this.stopGame();
-      clearTimeout(timeoutToStop);
-    }, 5000);
+    });
 
     this.sendBoldAnnouncement('Fim da partida!');
     this.sendNormalAnnouncement(
       `Placar final: ${this.redScore}-${this.blueScore}`
+    );
+  }
+
+  public cancelMatch(player: CustomPlayer, callback: () => void) {
+    this.isMatchInProgress = false;
+    this.isTimeRunning = false;
+    this.pauseGame(true);
+    Util.timeout(3000, () => {
+      this.stopGame();
+      callback();
+    });
+
+    this.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`);
+    this.sendNormalAnnouncement(
+      `Tempo restante:  ${this.getRemainingTimeString}`
+    );
+    this.sendNormalAnnouncement(
+      `Placar parcial:  ${this.redScore}-${this.blueScore}`
     );
   }
 }

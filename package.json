@@ -1,7 +1,7 @@
 {
-  "name": "haxru-bot",
-  "description": "A HaxBall Headless API's based bot for HaxRU rooms.",
-  "version": "1.0.0",
+  "name": "haxru-hostbot",
+  "description": "The HaxRU hostbot. Based on HaxBall Headless API.",
+  "version": "0.0.1",
   "author": "Dan Maia (aka JP)",
   "scripts": {
     "test": "mocha --require ts-node/register src/**/*.test.ts",
