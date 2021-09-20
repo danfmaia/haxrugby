@@ -3,9 +3,8 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 
 import { CustomPlayer } from '../models/CustomPlayer';
 
-import { smallConfig } from '../constants/config/smallConfig';
+import smallConfig from '../constants/config/smallConfig';
 import { ISmallHaxRURoom } from '../Room/ISmallHaxRURoom';
-import { IMatchConfig } from '../models/match/MatchConfig';
 import Util from '../util/Util';
 
 @CommandDecorator({
@@ -30,7 +29,7 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
     }
 
     const callback = () => {
-      const matchConfig: IMatchConfig = smallConfig;
+      const matchConfig = smallConfig;
 
       const timeLimit = Util.validatePositiveNumericInput(args[0]);
       if (timeLimit) {

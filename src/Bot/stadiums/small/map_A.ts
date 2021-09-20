@@ -1,5 +1,5 @@
-{
-	"name" : "SmallRU 0.07 blue by JP",
+const map_A = `{
+	"name" : "SmallRU 0.07 red by JP",
 	
 	"width" : 420,
 	"height" : 200,
@@ -87,7 +87,7 @@
 		{ "v0" : 30, "v1" : 31, "trait" : "Line" },
 		{ "v0" : 32, "v1" : 33, "trait" : "Line" },
 
-		{ "v0" : 34, "v1" : 35, "trait" : "kickOffBarrier", "curve" : 180 },
+		{ "v0" : 34, "v1" : 35, "trait" : "kickOffBarrier", "curve" : -180 },
 
 		{ "v0" : 36, "v1" : 37, "trait" : "Line", "curve" : 90 },
 		{ "v0" : 37, "v1" : 38, "trait" : "Line" },
@@ -122,12 +122,14 @@
 	
 	"traits" : {
 		"Line" : { "vis" : true , "bCoef" : 0, "cGroup" : [0], "cMask" : [0], "color" : [199, 230, 189] },
-		"fadeLine" : { "vis" : true , "bCoef" : 0, "cGroup" : [0], "cMask" : [0], "color" : [150, 173, 142] },
+		"fadeLine" : { "vis" : true , "bCoef" : 0, "cGroup" : [0], "cMask" : [0], "color" : [150, 173, 142] },		
 		"ballArea" : { "vis" : false, "bCoef" : 1, "cMask" : ["ball"] },
 		"goalPost" : { "radius" : 2, "invMass" : 0, "bCoef" : 0.5 },
 		"goalNet" : { "vis" : true, "bCoef" : 0.1, "cMask" : [0] }, 
 		"kickOffBarrier" : { "vis" : false, "bCoef" : 0.1, "cGroup" : ["redKO", "blueKO"], "cMask" : ["red", "blue"] },
-		"RedKOBarrier" : { "vis" : false , "bCoef" : 0.1, "cGroup" : ["redKO", "blueKO"], "cMask" : ["red"] },
-		"BlueKOBarrier" : { "vis" : false , "bCoef" : 0.1, "cGroup" : ["redKO", "blueKO"], "cMask" : ["red"] }
+		"RedKOBarrier" : { "vis" : false , "bCoef" : 0.1, "cGroup" : ["redKO"], "cMask" : ["red", "blue"] },
+		"BlueKOBarrier" : { "vis" : false , "bCoef" : 0.1, "cGroup" : ["blueKO"], "cMask" : ["red", "blue"] }
 	}
-}
+}`;
+
+export default map_A;

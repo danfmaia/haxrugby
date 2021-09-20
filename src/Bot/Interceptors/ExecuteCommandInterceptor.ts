@@ -22,7 +22,7 @@ export class ExecuteCommandInterceptor implements IChatMessageInterceptor<ChatMe
         message.broadcastForward = false;
         message.command.execute(message.sentBy, message.commandParameters);
 
-        this.mRoom.sendChat(`Command executed by player "${message.sentBy.name}" with id "${message.sentBy.guid}"`);
+        // this.mRoom.sendChat(`Command executed by player "${message.sentBy.name}" with id "${message.sentBy.guid}"`);
 
         return false;
     }

@@ -1,32 +1,36 @@
-const Util = {
-  timeout: (ms: number, callback: () => void) => {
+function timeout(ms: number, callback: () => void) {
+  const timeout = setTimeout(() => {
+    callback();
+    clearTimeout(timeout);
+  }, ms);
+}
+
+function timeoutAsync(ms: number, callback: () => void) {
+  return new Promise(() => {
     const timeout = setTimeout(() => {
       callback();
       clearTimeout(timeout);
     }, ms);
-  },
+  });
+}
 
-  timeoutAsync: (ms: number, callback: () => void) => {
-    return new Promise(() => {
-      const timeout = setTimeout(() => {
-        callback();
-        clearTimeout(timeout);
-      }, ms);
-    });
-  },
-
-  validatePositiveNumericInput: (input?: string): number | false => {
-    if (input) {
-      const parsed = parseInt(input);
-      if (parsed) {
-        const floored = Math.floor(parsed);
-        if (floored > 0) {
-          return floored;
-        }
+function validatePositiveNumericInput(input?: string): number | false {
+  if (input) {
+    const parsed = parseInt(input);
+    if (parsed) {
+      const floored = Math.floor(parsed);
+      if (floored > 0) {
+        return floored;
       }
     }
-    return false;
   }
+  return false;
+}
+
+const Util = {
+  timeout,
+  timeoutAsync,
+  validatePositiveNumericInput
 };
 
 export default Util;
