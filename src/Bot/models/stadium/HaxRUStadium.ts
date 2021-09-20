@@ -2,30 +2,37 @@ import { IPosition } from 'inversihax';
 import { BALL_RADIUS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
 
-interface IStadium {
-  getIsGoal: (
+interface IHaxRUStadium {
+  kickoffLineX: number;
+
+  getIsGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastBallPositionWhenTouched: IPosition
-  ) => false | TeamEnum;
+  ): false | TeamEnum;
+  getIsBallBetweenKickoffLines(ballPosition: IPosition): boolean;
 }
 
-class HaxRUStadium implements IStadium {
+class HaxRUStadium implements IHaxRUStadium {
   private _goalLineX: number;
   private _goalPostY: number;
-  private _miniAreaDistance: number;
+  private _miniAreaX: number;
+  private _kickoffLineX: number;
 
-  // public get goalLineX(): number {
-  //   return this._goalLineX;
-  // }
-  // public get goalPostY(): number {
-  //   return this._goalPostY;
-  // }
+  public get kickoffLineX(): number {
+    return this._kickoffLineX;
+  }
 
-  constructor(goalLineX: number, goalPostY: number, miniAreaDistance: number) {
+  constructor(
+    goalLineX: number,
+    goalPostY: number,
+    miniAreaX: number,
+    kickoffLineX: number
+  ) {
     this._goalLineX = goalLineX;
     this._goalPostY = goalPostY;
-    this._miniAreaDistance = miniAreaDistance;
+    this._miniAreaX = miniAreaX;
+    this._kickoffLineX = kickoffLineX;
   }
 
   public getIsGoal(
@@ -41,7 +48,7 @@ class HaxRUStadium implements IStadium {
 
       if (ballPosition.x > this._goalLineX && ballPosition.x < goalEndX) {
         if (
-          distanceBetweenBallAndGoalLine >= this._miniAreaDistance &&
+          distanceBetweenBallAndGoalLine >= this._miniAreaX &&
           ballXSpeed > 0
         ) {
           return TeamEnum.TEAM_A;
@@ -51,7 +58,7 @@ class HaxRUStadium implements IStadium {
         ballPosition.x > -goalEndX
       ) {
         if (
-          distanceBetweenBallAndGoalLine >= this._miniAreaDistance &&
+          distanceBetweenBallAndGoalLine >= this._miniAreaX &&
           ballXSpeed < 0
         ) {
           return TeamEnum.TEAM_B;
@@ -59,6 +66,10 @@ class HaxRUStadium implements IStadium {
       }
     }
     return false;
+  }
+
+  public getIsBallBetweenKickoffLines(ballPosition: IPosition): boolean {
+    return Math.abs(ballPosition.x) < this._kickoffLineX;
   }
 }
 

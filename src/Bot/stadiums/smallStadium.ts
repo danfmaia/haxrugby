@@ -5,7 +5,8 @@ import map_B from './small/map_B';
 
 const goalLineX = 300;
 const goalPostY = 50;
-const miniAreaDistance = 45;
+const miniAreaX = 45;
+const kickoffLineX = 100;
 
 const maps = {
   A: map_A,
@@ -15,7 +16,8 @@ const maps = {
 const smallStadium = new SmallStadium(
   goalLineX,
   goalPostY,
-  miniAreaDistance,
+  miniAreaX,
+  kickoffLineX,
   maps.A,
   maps.B
 );

@@ -24,6 +24,7 @@ import smallStadium from '../stadiums/smallStadium';
 import TeamEnum from '../enums/TeamEnum';
 import Physics from '../util/Physics';
 import TouchInfo from '../models/physics/TouchInfo';
+import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
 
 export class SmallHaxRURoom
   extends RoomBase<CustomPlayer>
@@ -40,17 +41,17 @@ export class SmallHaxRURoom
   private _isMatchInProgress: boolean = false;
   private _isBeforeKickoff: boolean = true;
   private _isTimeRunning: boolean = false;
+  private _isOvertime: boolean = false;
 
   private _lastTouchInfo: TouchInfo;
-  private _lastBallXSpeedWhenTouched: number;
-
-  // private _lastPlayerIdThatTouchedBall: number;
-  // private _lastTouchPosition: IPosition;
-  // private _lastBallPositionWhenTouched: IPosition;
 
   public get matchConfig(): MatchConfig {
     return this._matchConfig;
   }
+  public set matchConfig(value: MatchConfig) {
+    this._matchConfig = value;
+  }
+
   public get isMatchInProgress(): boolean {
     return this._isMatchInProgress;
   }
@@ -87,7 +88,6 @@ export class SmallHaxRURoom
         );
         if (lastTouchInfos.length) {
           this._lastTouchInfo = lastTouchInfos[0];
-          this._lastBallXSpeedWhenTouched = this.getDiscProperties(0).xspeed;
         }
 
         // if (this._lastTouchInfo.length) {
@@ -115,21 +115,25 @@ export class SmallHaxRURoom
     this.onGameStop.addHandler((byPlayer) => {
       if (this._isTimeRunning) {
         this._isTimeRunning = false;
-        this.sendStatus();
+        this.sendMatchStatus(2);
       }
     });
 
     this.onGamePause.addHandler((byPlayer) => {
       if (this._isMatchInProgress && this._isTimeRunning) {
         this._isTimeRunning = false;
-        this.sendStatus();
+        this.sendMatchStatus(2);
       }
     });
 
     this.onGameUnpause.addHandler((byPlayer) => {
-      if (this._isMatchInProgress && !this._isTimeRunning) {
+      if (
+        this._isMatchInProgress &&
+        this._isTimeRunning === false &&
+        this._isBeforeKickoff === false
+      ) {
         this._isTimeRunning = true;
-        this.sendStatus();
+        this.sendMatchStatus(2);
       }
     });
 
@@ -137,13 +141,14 @@ export class SmallHaxRURoom
       if (this.getPlayerList().length === 2) {
         this.setPlayerAdmin(player.id, true);
       }
-      this.sendBoldAnnouncement(
-        'Bem vindo(a) ao HaxBall Rugby Union (HaxRU)!',
-        player.id
-      );
+      this.sendBoldAnnouncement(MSG_GREETING_1, 2, player.id);
+      this.sendNormalAnnouncement(MSG_GREETING_2, 0, player.id);
       if (this._isMatchInProgress) {
-        this.sendStatus(player.id);
+        this.sendMatchStatus(0, player.id);
       }
+      Util.timeout(10000, () => {
+        this.sendPromotionLinks(player.id);
+      });
     });
 
     this.onPlayerBallKick.addHandler((player) => {
@@ -152,7 +157,7 @@ export class SmallHaxRURoom
         this._isTimeRunning = true;
       }
 
-      // inform that this player touched the ball
+      // report that this player touched the ball
       const ballPosition = this.getBallPosition();
       const touchPosition = Physics.getTouchPosition(
         player.position,
@@ -163,7 +168,6 @@ export class SmallHaxRURoom
         touchPosition: touchPosition,
         ballPosition: ballPosition
       };
-      this._lastBallXSpeedWhenTouched = this.getDiscProperties(0).xspeed;
       // this.sendChat(
       //   // prettier-ignore
       //   `${this.getPlayer(this._lastPlayerIdThatTouchedBall).name} tocou na bola!`
@@ -181,61 +185,72 @@ export class SmallHaxRURoom
   }
 
   private getRemainingTimeString(): string {
-    const remaniningTime = moment.duration(this._remainingTime);
+    const remaniningTime = moment.duration(Math.abs(this._remainingTime));
     return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
-  }
-
-  private sendStatus(playerId?: number) {
-    this.sendBoldAnnouncement(
-      // prettier-ignore
-      `Placar e Tempo restante: ${this._scoreA}-${this._scoreB} | ${this.getRemainingTimeString()}`,
-      playerId
-    );
   }
 
   private sendNormalAnnouncement(
     message: string,
-    playerId?: number,
-    sound: number = 2
+    sound: number = 0,
+    playerId?: number
   ) {
     this.sendAnnouncement(message, playerId, styles.haxruGreen, null, sound);
   }
 
   private sendBoldAnnouncement(
     message: string,
-    playerId?: number,
-    sound: number = 2
+    sound: number = 0,
+    playerId?: number
   ) {
     this.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
   }
 
-  private sendPromotionLinks() {
-    this.sendBoldAnnouncement('Regras do jogo:');
+  private sendMatchStatus(sound: number = 0, playerId?: number) {
+    let timeString: string;
+    if (this._isOvertime === false) {
+      timeString = this.getRemainingTimeString();
+    } else {
+      timeString = `${this.getRemainingTimeString()} do overtime`;
+    }
+
+    this.sendBoldAnnouncement(
+      // prettier-ignore
+      `Placar e Tempo restante: ${this._scoreA}-${this._scoreB} | ${timeString}`,
+      sound,
+      playerId
+    );
+  }
+
+  private sendPromotionLinks(playerId?: number) {
+    this.sendBoldAnnouncement('Regras do jogo:', 2, playerId);
     this.sendNormalAnnouncement(
       '    sites.google.com/site/haxrugby/regras-completas',
-      null,
-      0
+      0,
+      playerId
     );
 
-    this.sendBoldAnnouncement('Server no DISCORD:', null, 0);
-    this.sendNormalAnnouncement('    discord.io/HaxRU', null, 0);
+    this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
+    this.sendNormalAnnouncement('    discord.io/HaxRU', 0, playerId);
 
-    this.sendBoldAnnouncement('Grupo no FACEBOOK:', null, 0);
-    this.sendNormalAnnouncement('    fb.com/groups/rugbyu', null, 0);
+    this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
+    this.sendNormalAnnouncement('    fb.com/groups/rugbyu', 0, playerId);
   }
 
   public initializeMatch(player?: CustomPlayer) {
     this._remainingTime = this._matchConfig.getTimeLimitInMs();
     this._isMatchInProgress = true;
+    this._isOvertime = false;
+    this._scoreA = 0;
+    this._scoreB = 0;
     this.startGame();
 
     if (player) {
-      this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`);
+      this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
     } else {
-      this.sendBoldAnnouncement('Iniciando nova partida!');
+      this.sendBoldAnnouncement('Iniciando nova partida!', 2);
     }
     this.sendNormalAnnouncement(
-      `Duração:  ${this._matchConfig.timeLimit} minutos`
+      Util.getDurationString(this._matchConfig.timeLimit)
     );
     this.sendNormalAnnouncement(
       `Limite de pontos:  ${this._matchConfig.scoreLimit}`
@@ -248,10 +263,31 @@ export class SmallHaxRURoom
     this.pauseGame(true);
     Util.timeout(5000, () => this.stopGame());
 
-    this.sendBoldAnnouncement('Fim da partida!');
+    this.sendBoldAnnouncement('Fim da partida!', 2);
     this.sendNormalAnnouncement(
       `Placar final: ${this._scoreA}-${this._scoreB}`
     );
+  }
+
+  private reportRegularOvertime() {
+    this._isOvertime = true;
+
+    this.sendBoldAnnouncement('OVERTIME!', 2);
+    this.sendNormalAnnouncement('O primeiro time que pontuar ganha!');
+    this.sendMatchStatus();
+  }
+
+  private reportBallPositionOvertime() {
+    this._isOvertime = true;
+
+    this.sendBoldAnnouncement('OVERTIME!', 2);
+    this.sendNormalAnnouncement(
+      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!'
+    );
+    this.sendNormalAnnouncement(
+      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.'
+    );
+    this.sendMatchStatus();
   }
 
   public cancelMatch(player: CustomPlayer, callback: () => void) {
@@ -263,14 +299,14 @@ export class SmallHaxRURoom
       callback();
     });
 
-    this.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`);
+    this.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
     this.sendNormalAnnouncement(
       `Tempo restante:  ${this.getRemainingTimeString()}`
     );
     this.sendNormalAnnouncement(
       `Placar parcial:  ${this._scoreA}-${this._scoreB}`
     );
-    this.sendNormalAnnouncement('', null, 0);
+    this.sendNormalAnnouncement('');
     this.sendNormalAnnouncement(`Iniciando nova partida em 5 segundos...`);
   }
 
@@ -286,7 +322,7 @@ export class SmallHaxRURoom
       this._remainingTime === MINUTE_IN_MS / 2 ||
       this._remainingTime === MINUTE_IN_MS / 4
     ) {
-      this.sendStatus();
+      this.sendMatchStatus(2);
     }
 
     if (this._remainingTime === this._matchConfig.getTimeLimitInMs() - 5000) {
@@ -294,11 +330,26 @@ export class SmallHaxRURoom
     }
 
     if ([5000, 4000, 3000, 2000, 1000].includes(this._remainingTime)) {
-      this.sendNormalAnnouncement(`${this._remainingTime / 1000}...`);
+      this.sendNormalAnnouncement(`${this._remainingTime / 1000}...`, 2);
     }
 
-    if (this._remainingTime <= 0 && this._isMatchInProgress) {
-      this.finalizeMatch();
+    if (this._isMatchInProgress && this._remainingTime <= 0) {
+      if (this._scoreA !== this._scoreB) {
+        const ballPosition = this.getBallPosition();
+        const canLosingTeamTieOrTurn =
+          (this._scoreA > this._scoreB &&
+            ballPosition.x < -this._stadium.kickoffLineX) ||
+          (this._scoreA < this._scoreB &&
+            ballPosition.x > this._stadium.kickoffLineX);
+
+        if (canLosingTeamTieOrTurn === false) {
+          this.finalizeMatch();
+        } else if (this._isOvertime === false) {
+          this.reportBallPositionOvertime();
+        }
+      } else if (this._isOvertime === false) {
+        this.reportRegularOvertime();
+      }
     }
   }
 
@@ -326,9 +377,8 @@ export class SmallHaxRURoom
       }
 
       // send announcements and restart game
-      this.sendBoldAnnouncement(`Gol do ${teamName}!`);
-      this.sendStatus();
-
+      this.sendBoldAnnouncement(`Gol do ${teamName}!`, 2);
+      this.sendMatchStatus();
       Util.timeout(3000, () => {
         this.stopGame();
         this.setCustomStadium(map);

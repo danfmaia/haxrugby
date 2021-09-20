@@ -7,11 +7,12 @@ class SmallStadium extends HaxRUStadium {
   constructor(
     goalLineX: number,
     goalPostY: number,
-    miniAreaDistance: number,
+    miniAreaX: number,
+    kickoffLineX: number,
     map_A: string,
     map_B: string
   ) {
-    super(goalLineX, goalPostY, miniAreaDistance);
+    super(goalLineX, goalPostY, miniAreaX, kickoffLineX);
     this._map_A = map_A;
     this._map_B = map_B;
   }
