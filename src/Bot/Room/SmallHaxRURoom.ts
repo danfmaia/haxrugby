@@ -30,7 +30,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
   private _matchConfig: MatchConfig = smallConfig;
 
   private _tickCount: number = 0;
-  private _remainingTime: number;
+  private _remainingTime: number = this._matchConfig.getTimeLimitInMs();
   private _scoreA: number = 0;
   private _scoreB: number = 0;
 
@@ -39,7 +39,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
   private _isTimeRunning: boolean = false;
   private _isOvertime: boolean = false;
 
-  private _lastTouchInfo: TouchInfo;
+  private _lastTouchInfo: TouchInfo | null = null;
 
   public get matchConfig(): MatchConfig {
     return this._matchConfig;
@@ -57,7 +57,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
     @inject(Types.IPlayerService) playerService: IPlayerService<CustomPlayer>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser
+    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
   ) {
     super(roomConfig, playerService, chatMessageInterceptorFactory, chatMessageParser);
 
@@ -86,9 +86,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
         // }
 
         // check for goal
-        if (this._lastTouchInfo) {
-          this.checkForGoal();
-        }
+        this.checkForGoal();
       }
     });
 
@@ -175,7 +173,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
   }
 
   private sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number) {
-    this.sendAnnouncement(message, playerId, styles.haxruGreen, null, sound);
+    this.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
   }
 
   private sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number) {
@@ -194,7 +192,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
       // prettier-ignore
       `Placar e Tempo restante: ${this._scoreA}-${this._scoreB} | ${timeString}`,
       sound,
-      playerId
+      playerId,
     );
   }
 
@@ -249,10 +247,10 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
 
     this.sendBoldAnnouncement('OVERTIME!', 2);
     this.sendNormalAnnouncement(
-      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!'
+      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!',
     );
     this.sendNormalAnnouncement(
-      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.'
+      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.',
     );
     this.sendMatchStatus();
   }
@@ -315,11 +313,15 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
   }
 
   private checkForGoal() {
+    if (!this._lastTouchInfo) {
+      return;
+    }
+
     let isGoal: false | TeamEnum = false;
     isGoal = this._stadium.getIsGoal(
       this.getBallPosition(),
       this.getDiscProperties(0).xspeed,
-      this._lastTouchInfo.ballPosition
+      this._lastTouchInfo.ballPosition,
     );
 
     if (isGoal) {
@@ -331,7 +333,7 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
         this._scoreA = this._scoreA + 3;
         teamName = this._matchConfig.teamA.name;
         map = this._stadium._map_B;
-      } else if (isGoal === TeamEnum.TEAM_B) {
+      } else {
         this._scoreB = this._scoreB + 3;
         teamName = this._matchConfig.teamB.name;
         map = this._stadium._map_A;

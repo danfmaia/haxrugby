@@ -9,9 +9,8 @@ interface IHaxRUStadium {
   getIsGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
-    lastBallPositionWhenTouched: IPosition
+    lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum;
-  getIsBallBetweenKickoffLines(ballPosition: IPosition): boolean;
 }
 
 class HaxRUStadium implements IHaxRUStadium {
@@ -34,7 +33,7 @@ class HaxRUStadium implements IHaxRUStadium {
   public getIsGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
-    lastBallPositionWhenTouched: IPosition
+    lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum {
     const distanceBetweenBallAndGoalLine =
       this._goalLineX - (Math.abs(lastBallPositionWhenTouched.x) + BALL_RADIUS);
@@ -43,15 +42,14 @@ class HaxRUStadium implements IHaxRUStadium {
       const goalEndX = this._goalLineX + 0.9 * BALL_RADIUS;
 
       if (
-        this.getIsBallInsideGoalInYAxis(TeamEnum.TEAM_A, ballPosition, goalEndX) &&
+        this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_A, ballPosition, goalEndX) &&
         ballXSpeed > 0
       ) {
         if (distanceBetweenBallAndGoalLine > this._miniAreaX) {
           return TeamEnum.TEAM_A;
         }
       } else if (
-        ballPosition.x < -this._goalLineX &&
-        ballPosition.x > -goalEndX &&
+        this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_B, ballPosition, goalEndX) &&
         ballXSpeed < 0
       ) {
         if (distanceBetweenBallAndGoalLine > this._miniAreaX) {
@@ -62,38 +60,35 @@ class HaxRUStadium implements IHaxRUStadium {
     return false;
   }
 
-  private getIsBallInsideGoalInYAxis(
+  private getIsBallInsideGoalInXAxis(
     team: TeamEnum,
     ballPosition: IPosition,
-    goalEndX: number
+    goalEndX: number,
   ): boolean {
     if (team === TeamEnum.TEAM_A) {
       return ballPosition.x > this._goalLineX && ballPosition.x < goalEndX;
     }
+    return ballPosition.x < -this._goalLineX && ballPosition.x > -goalEndX;
   }
 
-  private isBallAfterMiniAreaXButOutsideMiniArea(
-    team: TeamEnum,
-    distanceBetweenBallAndGoalLine: number,
-    ballPosition: IPosition
-  ): boolean {
-    const distanceBetweenBallAndClosestGoalPost = Physics.calcDistanceBetweenPositions(
-      ballPosition,
-      this.getClosestGoalPostPosition(ballPosition)
-    );
+  // private isBallAfterMiniAreaXButOutsideMiniArea(
+  //   team: TeamEnum,
+  //   distanceBetweenBallAndGoalLine: number,
+  //   ballPosition: IPosition,
+  // ): boolean {
+  //   const distanceBetweenBallAndClosestGoalPost = Physics.calcDistanceBetweenPositions(
+  //     ballPosition,
+  //     this.getClosestGoalPostPosition(ballPosition),
+  //   );
 
-    if (team === TeamEnum.TEAM_A) {
-      if (distanceBetweenBallAndGoalLine < this._miniAreaX) {
-        if (ballPosition.y > 0 && distanceBetweenBallAndClosestGoalPost > this._miniAreaX) {
-          return true;
-        }
-      }
-    }
-  }
-
-  public getIsBallBetweenKickoffLines(ballPosition: IPosition): boolean {
-    return Math.abs(ballPosition.x) < this._kickoffLineX;
-  }
+  //   if (team === TeamEnum.TEAM_A) {
+  //     if (distanceBetweenBallAndGoalLine < this._miniAreaX) {
+  //       if (ballPosition.y > 0 && distanceBetweenBallAndClosestGoalPost > this._miniAreaX) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  // }
 
   private getClosestGoalPostPosition(position: IPosition): IPosition {
     const xSign = Math.sign(position.x);
