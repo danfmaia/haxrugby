@@ -1,6 +1,6 @@
 module.exports = {
   ignorePatterns: ['.eslintrc.js'],
-  extends: ['prettier'],
+  extends: ['airbnb-typescript/base', 'prettier'],
   env: {
     browser: true,
     es6: true,
@@ -11,31 +11,13 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: [
-    'eslint-plugin-import',
-    '@typescript-eslint',
-    '@typescript-eslint/tslint',
-    'prettier',
-  ],
+  plugins: ['eslint-plugin-import', '@typescript-eslint', '@typescript-eslint/tslint', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/array-type': [
       'warn',
       {
         default: 'array-simple',
-      },
-    ],
-    '@typescript-eslint/member-delimiter-style': [
-      'warn',
-      {
-        multiline: {
-          delimiter: 'semi',
-          requireLast: true,
-        },
-        singleline: {
-          delimiter: 'semi',
-          requireLast: false,
-        },
       },
     ],
     '@typescript-eslint/naming-convention': 'off',
@@ -61,12 +43,6 @@ module.exports = {
     ],
     'id-match': 'warn',
     'import/order': 'warn',
-    'max-len': [
-      'warn',
-      {
-        code: 140,
-      },
-    ],
     'no-eval': 'warn',
     'no-multiple-empty-lines': 'warn',
     'no-trailing-spaces': 'warn',
