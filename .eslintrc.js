@@ -1,5 +1,6 @@
 module.exports = {
-  extends: ['prettier', 'prettier/@typescript-eslint'],
+  ignorePatterns: ['.eslintrc.js'],
+  extends: ['prettier'],
   env: {
     browser: true,
     es6: true,
@@ -24,7 +25,6 @@ module.exports = {
         default: 'array-simple',
       },
     ],
-    '@typescript-eslint/indent': 'warn',
     '@typescript-eslint/member-delimiter-style': [
       'warn',
       {
@@ -38,14 +38,13 @@ module.exports = {
         },
       },
     ],
-    '@typescript-eslint/naming-convention': 'warn',
+    '@typescript-eslint/naming-convention': 'off',
     '@typescript-eslint/no-use-before-define': 'warn',
     '@typescript-eslint/prefer-namespace-keyword': 'warn',
-    '@typescript-eslint/quotes': ['warn', 'double'],
     '@typescript-eslint/semi': ['warn', 'always'],
     '@typescript-eslint/type-annotation-spacing': 'warn',
     'arrow-parens': ['warn', 'always'],
-    'brace-style': ['warn', '1tbs'],
+    'brace-style': 'off',
     'comma-dangle': ['warn', 'always-multiline'],
     eqeqeq: ['warn', 'smart'],
     'id-denylist': [
@@ -62,7 +61,6 @@ module.exports = {
     ],
     'id-match': 'warn',
     'import/order': 'warn',
-    indent: 'warn',
     'max-len': [
       'warn',
       {
@@ -72,11 +70,9 @@ module.exports = {
     'no-eval': 'warn',
     'no-multiple-empty-lines': 'warn',
     'no-trailing-spaces': 'warn',
-    'no-underscore-dangle': 'warn',
     'no-unsafe-finally': 'warn',
     'no-use-before-define': 'warn',
     'no-var': 'warn',
-    quotes: 'warn',
     semi: 'warn',
     'spaced-comment': [
       'warn',

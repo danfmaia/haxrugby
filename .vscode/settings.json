@@ -13,5 +13,6 @@
     "titleBar.activeBackground": "#4A3C43",
     "titleBar.activeForeground": "#FBFAFA"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.rulers": [100, 120]
 }
