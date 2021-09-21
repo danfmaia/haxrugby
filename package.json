@@ -1,6 +1,6 @@
 {
-  "name": "haxru-hostbot",
-  "description": "The HaxRU hostbot. Based on HaxBall Headless API.",
+  "name": "haxrugby",
+  "description": "The HaxRugby hostbot. Based on HaxBall Headless API.",
   "version": "0.0.1",
   "author": "Dan Maia (aka JP)",
   "scripts": {

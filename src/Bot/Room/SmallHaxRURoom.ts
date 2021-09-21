@@ -1,30 +1,30 @@
-import { inject } from 'inversify';
+import { inject } from "inversify";
 import {
   IChatMessageParser,
   IPlayerService,
   IPosition,
   IRoomConfigObject,
   RoomBase,
-  Types
-} from 'inversihax';
-import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
-import * as moment from 'moment';
+  Types,
+} from "inversihax";
+import { IChatMessageInterceptorFactoryType } from "inversihax/lib/Core/Utility/Types";
+import * as moment from "moment";
 
-import { ISmallHaxRURoom } from './ISmallHaxRURoom';
+import { ISmallHaxRURoom } from "./ISmallHaxRURoom";
 
-import { CustomPlayer } from '../models/CustomPlayer';
-import MatchConfig from '../models/match/MatchConfig';
+import { CustomPlayer } from "../models/CustomPlayer";
+import MatchConfig from "../models/match/MatchConfig";
 
-import { MINUTE_IN_MS } from '../constants/general';
-import smallConfig from '../constants/config/smallConfig';
-import styles from '../constants/styles';
-import Util from '../util/Util';
-import SmallStadium from '../models/stadium/SmallStadium';
-import smallStadium from '../stadiums/smallStadium';
-import TeamEnum from '../enums/TeamEnum';
-import Physics from '../util/Physics';
-import TouchInfo from '../models/physics/TouchInfo';
-import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
+import { MINUTE_IN_MS } from "../constants/general";
+import smallConfig from "../constants/config/smallConfig";
+import styles from "../constants/styles";
+import Util from "../util/Util";
+import SmallStadium from "../models/stadium/SmallStadium";
+import smallStadium from "../stadiums/smallStadium";
+import TeamEnum from "../enums/TeamEnum";
+import Physics from "../util/Physics";
+import TouchInfo from "../models/physics/TouchInfo";
+import { MSG_GREETING_1, MSG_GREETING_2 } from "../constants/dictionary";
 
 export class SmallHaxRURoom
   extends RoomBase<CustomPlayer>
@@ -166,7 +166,7 @@ export class SmallHaxRURoom
       this._lastTouchInfo = {
         playerId: player.id,
         touchPosition: touchPosition,
-        ballPosition: ballPosition
+        ballPosition: ballPosition,
       };
       // this.sendChat(
       //   // prettier-ignore
@@ -186,7 +186,7 @@ export class SmallHaxRURoom
 
   private getRemainingTimeString(): string {
     const remaniningTime = moment.duration(Math.abs(this._remainingTime));
-    return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
+    return moment.utc(remaniningTime.as("milliseconds")).format("mm:ss");
   }
 
   private sendNormalAnnouncement(
@@ -202,7 +202,7 @@ export class SmallHaxRURoom
     sound: number = 0,
     playerId?: number
   ) {
-    this.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
+    this.sendAnnouncement(message, playerId, styles.haxruGreen, "bold", sound);
   }
 
   private sendMatchStatus(sound: number = 0, playerId?: number) {
@@ -222,18 +222,18 @@ export class SmallHaxRURoom
   }
 
   private sendPromotionLinks(playerId?: number) {
-    this.sendBoldAnnouncement('Regras do jogo:', 2, playerId);
+    this.sendBoldAnnouncement("Regras do jogo:", 2, playerId);
     this.sendNormalAnnouncement(
-      '    sites.google.com/site/haxrugby/regras-completas',
+      "    sites.google.com/site/haxrugby/regras-completas",
       0,
       playerId
     );
 
-    this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
-    this.sendNormalAnnouncement('    discord.io/HaxRU', 0, playerId);
+    this.sendBoldAnnouncement("Server no DISCORD:", 0, playerId);
+    this.sendNormalAnnouncement("    discord.io/HaxRU", 0, playerId);
 
-    this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
-    this.sendNormalAnnouncement('    fb.com/groups/rugbyu', 0, playerId);
+    this.sendBoldAnnouncement("Grupo no FACEBOOK:", 0, playerId);
+    this.sendNormalAnnouncement("    fb.com/groups/rugbyu", 0, playerId);
   }
 
   public initializeMatch(player?: CustomPlayer) {
@@ -247,7 +247,7 @@ export class SmallHaxRURoom
     if (player) {
       this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
     } else {
-      this.sendBoldAnnouncement('Iniciando nova partida!', 2);
+      this.sendBoldAnnouncement("Iniciando nova partida!", 2);
     }
     this.sendNormalAnnouncement(
       Util.getDurationString(this._matchConfig.timeLimit)
@@ -263,7 +263,7 @@ export class SmallHaxRURoom
     this.pauseGame(true);
     Util.timeout(5000, () => this.stopGame());
 
-    this.sendBoldAnnouncement('Fim da partida!', 2);
+    this.sendBoldAnnouncement("Fim da partida!", 2);
     this.sendNormalAnnouncement(
       `Placar final: ${this._scoreA}-${this._scoreB}`
     );
@@ -272,20 +272,20 @@ export class SmallHaxRURoom
   private reportRegularOvertime() {
     this._isOvertime = true;
 
-    this.sendBoldAnnouncement('OVERTIME!', 2);
-    this.sendNormalAnnouncement('O primeiro time que pontuar ganha!');
+    this.sendBoldAnnouncement("OVERTIME!", 2);
+    this.sendNormalAnnouncement("O primeiro time que pontuar ganha!");
     this.sendMatchStatus();
   }
 
   private reportBallPositionOvertime() {
     this._isOvertime = true;
 
-    this.sendBoldAnnouncement('OVERTIME!', 2);
+    this.sendBoldAnnouncement("OVERTIME!", 2);
     this.sendNormalAnnouncement(
-      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!'
+      "O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!"
     );
     this.sendNormalAnnouncement(
-      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.'
+      "No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário."
     );
     this.sendMatchStatus();
   }
@@ -306,7 +306,7 @@ export class SmallHaxRURoom
     this.sendNormalAnnouncement(
       `Placar parcial:  ${this._scoreA}-${this._scoreB}`
     );
-    this.sendNormalAnnouncement('');
+    this.sendNormalAnnouncement("");
     this.sendNormalAnnouncement(`Iniciando nova partida em 5 segundos...`);
   }
 

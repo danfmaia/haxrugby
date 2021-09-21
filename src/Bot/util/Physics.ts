@@ -1,11 +1,11 @@
-import { IPosition } from 'inversihax';
+import { IPosition } from "inversihax";
 import {
   BALL_RADIUS,
   BALL_TOUCH_EPSILON,
-  PLAYER_RADIUS
-} from '../constants/general';
-import { CustomPlayer } from '../models/CustomPlayer';
-import TouchInfo from '../models/physics/TouchInfo';
+  PLAYER_RADIUS,
+} from "../constants/general";
+import { CustomPlayer } from "../models/CustomPlayer";
+import TouchInfo from "../models/physics/TouchInfo";
 
 function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition) {
   var d1 = p1.x - p2.x;
@@ -20,7 +20,7 @@ function getTouchPosition(playerPos: IPosition, ballPos: IPosition) {
       (BALL_RADIUS + PLAYER_RADIUS),
     y:
       (playerPos.y * BALL_RADIUS + ballPos.y * PLAYER_RADIUS) /
-      (BALL_RADIUS + PLAYER_RADIUS)
+      (BALL_RADIUS + PLAYER_RADIUS),
   };
   return position;
 }
@@ -54,7 +54,7 @@ function getTouchPositionAndPlayers(
         touchPlayersAndPositions.unshift({
           playerId: player.id,
           touchPosition: touchPosition,
-          ballPosition
+          ballPosition,
         });
       }
     } else {
@@ -70,6 +70,10 @@ function getTouchPositionAndPlayers(
   return touchPlayersAndPositions;
 }
 
-const Physics = { getTouchPosition, getTouchPositionAndPlayers };
+const Physics = {
+  calcDistanceBetweenPositions,
+  getTouchPosition,
+  getTouchPositionAndPlayers,
+};
 
 export default Physics;
