@@ -7,7 +7,8 @@
     "test": "mocha --require ts-node/register src/**/*.test.ts",
     "build": "browserify src/Bot/Main.ts -p [tsify] > dist/bundle.js",
     "build-uglify": "browserify src/Bot/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js",
-    "lint": "eslint -c .eslintrc.js --ext .ts src"
+    "lint": "eslint -c .eslintrc.js --ext .ts src",
+    "lint-fix": "eslint -c .eslintrc.js --ext .ts src --fix"
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
