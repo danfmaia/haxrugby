@@ -1,4 +1,4 @@
-import HaxRUStadium from "./HaxRUStadium";
+import HaxRUStadium from './HaxRUStadium';
 
 class SmallStadium extends HaxRUStadium {
   _map_A: string;
