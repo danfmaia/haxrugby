@@ -5,7 +5,7 @@ import {
   IPlayerService,
   IRoomConfigObject,
   RoomBase,
-  Types
+  Types,
 } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
 import { ICustomRoom } from './ICustomRoom';
@@ -24,21 +24,12 @@ export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser
   ) {
-    super(
-      roomConfig,
-      playerService,
-      chatMessageInterceptorFactory,
-      chatMessageParser
-    );
+    super(roomConfig, playerService, chatMessageInterceptorFactory, chatMessageParser);
 
     this.onGameStart.addHandler((byPlayer) => (this.mIsGameInProgress = true));
     this.onGameStop.addHandler((byPlayer) => (this.mIsGameInProgress = false));
     this.onGamePause.addHandler((byPlayer) => (this.mIsGameInProgress = false));
-    this.onGameUnpause.addHandler(
-      (byPlayer) => (this.mIsGameInProgress = true)
-    );
-    this.onPlayerJoin.addHandler((player) =>
-      this.setPlayerAdmin(player.id, true)
-    );
+    this.onGameUnpause.addHandler((byPlayer) => (this.mIsGameInProgress = true));
+    this.onPlayerJoin.addHandler((player) => this.setPlayerAdmin(player.id, true));
   }
 }

@@ -8,7 +8,7 @@ import {
   Types,
   IBackgroundTask,
   IChatMessageInterceptor,
-  ChatMessage
+  ChatMessage,
 } from 'inversihax';
 import { CustomPlayer } from './models/CustomPlayer';
 import { CustomPlayerService } from './Services/CustomPlayerService';
@@ -34,24 +34,18 @@ const services = new ContainerModule((bind) => {
     playerName: 'HaxRugby®',
     roomName: 'HaxRugby® by JP - TESTE ABERTO',
     public: false,
-    noPlayer: false
+    noPlayer: false,
   });
 
   bind<IPlayerService<CustomPlayer>>(Types.IPlayerService)
     .to(CustomPlayerService)
     .inSingletonScope();
 
-  bind<IBackgroundTask>(Types.IBackgroundTask)
-    .to(InfoBackgroundTask)
-    .inSingletonScope();
+  bind<IBackgroundTask>(Types.IBackgroundTask).to(InfoBackgroundTask).inSingletonScope();
 
-  bind<IChatMessageInterceptor<ChatMessage<CustomPlayer>>>(
-    Types.IChatMessageInterceptor
-  )
+  bind<IChatMessageInterceptor<ChatMessage<CustomPlayer>>>(Types.IChatMessageInterceptor)
     .to(ExecuteCommandInterceptor)
     .inRequestScope();
 });
 
-new RoomHostBuilder(Startup, SmallHaxRURoom, services)
-  .useCommands(true)
-  .buildAndRun();
+new RoomHostBuilder(Startup, SmallHaxRURoom, services).useCommands(true).buildAndRun();

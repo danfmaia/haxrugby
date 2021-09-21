@@ -8,7 +8,7 @@ import { ISmallHaxRURoom } from '../Room/ISmallHaxRURoom';
 import Util from '../util/Util';
 
 @CommandDecorator({
-  names: ['new-match', 'new']
+  names: ['new-match', 'new'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
   private readonly room: ISmallHaxRURoom;

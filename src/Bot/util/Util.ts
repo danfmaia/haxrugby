@@ -39,7 +39,7 @@ const Util = {
   timeout,
   timeoutAsync,
   validatePositiveNumericInput,
-  getDurationString
+  getDurationString,
 };
 
 export default Util;

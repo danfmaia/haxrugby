@@ -10,7 +10,7 @@ const kickoffLineX = 100;
 
 const maps = {
   A: map_A,
-  B: map_B
+  B: map_B,
 };
 
 const smallStadium = new SmallStadium(

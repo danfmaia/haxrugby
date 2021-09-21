@@ -1,7 +1,7 @@
-import { IPosition } from "inversihax";
-import { BALL_RADIUS } from "../../constants/general";
-import TeamEnum from "../../enums/TeamEnum";
-import Physics from "../../util/Physics";
+import { IPosition } from 'inversihax';
+import { BALL_RADIUS } from '../../constants/general';
+import TeamEnum from '../../enums/TeamEnum';
+import Physics from '../../util/Physics';
 
 interface IHaxRUStadium {
   kickoffLineX: number;
@@ -24,12 +24,7 @@ class HaxRUStadium implements IHaxRUStadium {
     return this._kickoffLineX;
   }
 
-  constructor(
-    goalLineX: number,
-    goalPostY: number,
-    miniAreaX: number,
-    kickoffLineX: number
-  ) {
+  constructor(goalLineX: number, goalPostY: number, miniAreaX: number, kickoffLineX: number) {
     this._goalLineX = goalLineX;
     this._goalPostY = goalPostY;
     this._miniAreaX = miniAreaX;
@@ -48,11 +43,7 @@ class HaxRUStadium implements IHaxRUStadium {
       const goalEndX = this._goalLineX + 0.9 * BALL_RADIUS;
 
       if (
-        this.getIsBallInsideGoalInYAxis(
-          TeamEnum.TEAM_A,
-          ballPosition,
-          goalEndX
-        ) &&
+        this.getIsBallInsideGoalInYAxis(TeamEnum.TEAM_A, ballPosition, goalEndX) &&
         ballXSpeed > 0
       ) {
         if (distanceBetweenBallAndGoalLine > this._miniAreaX) {
@@ -86,18 +77,14 @@ class HaxRUStadium implements IHaxRUStadium {
     distanceBetweenBallAndGoalLine: number,
     ballPosition: IPosition
   ): boolean {
-    const distanceBetweenBallAndClosestGoalPost =
-      Physics.calcDistanceBetweenPositions(
-        ballPosition,
-        this.getClosestGoalPostPosition(ballPosition)
-      );
+    const distanceBetweenBallAndClosestGoalPost = Physics.calcDistanceBetweenPositions(
+      ballPosition,
+      this.getClosestGoalPostPosition(ballPosition)
+    );
 
     if (team === TeamEnum.TEAM_A) {
       if (distanceBetweenBallAndGoalLine < this._miniAreaX) {
-        if (
-          ballPosition.y > 0 &&
-          distanceBetweenBallAndClosestGoalPost > this._miniAreaX
-        ) {
+        if (ballPosition.y > 0 && distanceBetweenBallAndClosestGoalPost > this._miniAreaX) {
           return true;
         }
       }

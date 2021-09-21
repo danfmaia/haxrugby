@@ -1,34 +1,23 @@
-import { IPosition } from "inversihax";
-import {
-  BALL_RADIUS,
-  BALL_TOUCH_EPSILON,
-  PLAYER_RADIUS,
-} from "../constants/general";
-import { CustomPlayer } from "../models/CustomPlayer";
-import TouchInfo from "../models/physics/TouchInfo";
+import { IPosition } from 'inversihax';
+import { BALL_RADIUS, BALL_TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/general';
+import { CustomPlayer } from '../models/CustomPlayer';
+import TouchInfo from '../models/physics/TouchInfo';
 
 function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition) {
-  var d1 = p1.x - p2.x;
-  var d2 = p1.y - p2.y;
+  let d1 = p1.x - p2.x;
+  let d2 = p1.y - p2.y;
   return Math.sqrt(d1 * d1 + d2 * d2);
 }
 
 function getTouchPosition(playerPos: IPosition, ballPos: IPosition) {
   const position: IPosition = {
-    x:
-      (playerPos.x * BALL_RADIUS + ballPos.x * PLAYER_RADIUS) /
-      (BALL_RADIUS + PLAYER_RADIUS),
-    y:
-      (playerPos.y * BALL_RADIUS + ballPos.y * PLAYER_RADIUS) /
-      (BALL_RADIUS + PLAYER_RADIUS),
+    x: (playerPos.x * BALL_RADIUS + ballPos.x * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
+    y: (playerPos.y * BALL_RADIUS + ballPos.y * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
   };
   return position;
 }
 
-function getTouchPositionAndPlayers(
-  players: CustomPlayer[],
-  ballPosition: IPosition
-): TouchInfo[] {
+function getTouchPositionAndPlayers(players: CustomPlayer[], ballPosition: IPosition): TouchInfo[] {
   const touchPlayersAndPositions: TouchInfo[] = [];
   const triggerDistance = BALL_RADIUS + PLAYER_RADIUS + BALL_TOUCH_EPSILON;
 
@@ -38,10 +27,7 @@ function getTouchPositionAndPlayers(
     // Skip players that don't have a position
     if (player.position == null) continue;
 
-    const distanceToBall = calcDistanceBetweenPositions(
-      player.position,
-      ballPosition
-    );
+    const distanceToBall = calcDistanceBetweenPositions(player.position, ballPosition);
 
     const hadTouchedTheBall = touchPlayersAndPositions.find(
       (playerAndPosition) => playerAndPosition.playerId === player.id
