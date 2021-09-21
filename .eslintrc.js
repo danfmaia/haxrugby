@@ -1,6 +1,6 @@
 module.exports = {
   ignorePatterns: ['.eslintrc.js'],
-  extends: ['airbnb-typescript/base', 'prettier'],
+  extends: ['prettier'],
   env: {
     browser: true,
     es6: true,
