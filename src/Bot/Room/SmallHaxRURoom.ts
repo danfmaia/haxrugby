@@ -1,12 +1,5 @@
 import { inject } from 'inversify';
-import {
-  IChatMessageParser,
-  IPlayerService,
-  IPosition,
-  IRoomConfigObject,
-  RoomBase,
-  Types,
-} from 'inversihax';
+import { IChatMessageParser, IPlayerService, IRoomConfigObject, RoomBase, Types } from 'inversihax';
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
 import * as moment from 'moment';
 

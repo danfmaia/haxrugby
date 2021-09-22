@@ -1,17 +1,27 @@
 module.exports = {
   ignorePatterns: ['.eslintrc.js'],
-  extends: ['prettier'],
-  env: {
-    browser: true,
-    es6: true,
-    node: true,
-  },
+  // plugins: ['eslint-plugin-import', '@typescript-eslint', '@typescript-eslint/tslint', 'prettier'],
+  extends: [
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript',
+  ],
+  plugins: ['prettier', '@typescript-eslint', 'import'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['eslint-plugin-import', '@typescript-eslint', '@typescript-eslint/tslint', 'prettier'],
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
+  },
+  overrides: {
+    files: ['src/**/*.js'],
+  },
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/array-type': [
@@ -21,6 +31,16 @@ module.exports = {
       },
     ],
     '@typescript-eslint/naming-convention': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-inferrable-types': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        vars: 'all',
+        args: 'none',
+        ignoreRestSiblings: false,
+      },
+    ],
     '@typescript-eslint/no-use-before-define': 'warn',
     '@typescript-eslint/prefer-namespace-keyword': 'warn',
     '@typescript-eslint/semi': ['warn', 'always'],
@@ -42,7 +62,7 @@ module.exports = {
       'undefined',
     ],
     'id-match': 'warn',
-    'import/order': 'warn',
+    // 'import/order': 'warn',
     'no-eval': 'warn',
     'no-multiple-empty-lines': 'warn',
     'no-trailing-spaces': 'warn',
@@ -57,21 +77,27 @@ module.exports = {
         markers: ['/'],
       },
     ],
-    '@typescript-eslint/tslint/config': [
-      'error',
-      {
-        rules: {
-          whitespace: [
-            true,
-            'check-branch',
-            'check-decl',
-            'check-operator',
-            'check-separator',
-            'check-type',
-          ],
-        },
-      },
-    ],
+    // '@typescript-eslint/explicit-module-boundary-types': [
+    //   'error',
+    //   {
+    //     allowVoid: true,
+    //   },
+    // ],
+    // '@typescript-eslint/tslint/config': [
+    //   'error',
+    //   {
+    //     rules: {
+    //       whitespace: [
+    //         true,
+    //         'check-branch',
+    //         'check-decl',
+    //         'check-operator',
+    //         'check-separator',
+    //         'check-type',
+    //       ],
+    //     },
+    //   },
+    // ],
   },
 };
 

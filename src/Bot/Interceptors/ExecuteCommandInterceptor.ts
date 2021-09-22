@@ -7,10 +7,10 @@ import { ICustomRoom } from '../Room/ICustomRoom';
 export class ExecuteCommandInterceptor
   implements IChatMessageInterceptor<ChatMessage<CustomPlayer>>
 {
-  private readonly mRoom: ICustomRoom;
+  // private readonly mRoom: ICustomRoom;
 
   public constructor(@inject(Types.IRoom) room: ICustomRoom) {
-    this.mRoom = room;
+    // this.mRoom = room;
   }
 
   intercept(message: ChatMessage<CustomPlayer>): boolean {

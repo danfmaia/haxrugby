@@ -1,14 +1,13 @@
 import { injectable } from 'inversify';
 import { IPlayerObject, IPlayerService } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
-import { newGuid } from '../Utilities';
 
 @injectable()
 export class CustomPlayerService implements IPlayerService<CustomPlayer> {
   public cast(player: IPlayerObject): CustomPlayer {
-    if (player == null) {
-      return null;
-    }
+    // if (player === null) {
+    //   return;
+    // }
 
     return new CustomPlayer(
       player.id,
@@ -18,7 +17,6 @@ export class CustomPlayerService implements IPlayerService<CustomPlayer> {
       player.position,
       player.conn,
       player.auth,
-      newGuid()
     );
   }
 }

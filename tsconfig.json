@@ -13,7 +13,8 @@
     "lib": ["es2018", "dom"],
     "types": ["reflect-metadata"],
     "typeRoots": ["node_modules/@types", "node_modules/@types/node"],
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "noUnusedLocals": true
   },
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

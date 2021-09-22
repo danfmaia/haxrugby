@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { IBackgroundTask, IPlayerService, Types } from 'inversihax';
+import { IBackgroundTask, Types } from 'inversihax';
 import { ICustomRoom } from '../Room/ICustomRoom';
 
 @injectable()
@@ -22,7 +22,7 @@ export class InfoBackgroundTask implements IBackgroundTask {
     const players = this.mRoom.getPlayerList();
 
     let message = '';
-    players.forEach((player) => (message += player.guid));
+    players.forEach((player) => (message += player.id));
 
     // this.mRoom.sendChat(`Is game in progress: ${this.mRoom.isGameInProgress}`);
     // this.mRoom.sendChat(message);
