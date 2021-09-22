@@ -17,7 +17,7 @@ import { ExecuteCommandInterceptor } from './Interceptors/ExecuteCommandIntercep
 import { PhysicsCommand } from './Commands/PhysicsCommand';
 import { InfoCommand } from './Commands/InfoCommand';
 
-import { SmallHaxRURoom } from './Room/SmallHaxRURoom';
+import { HaxRugbyRoom } from './Room/HaxRURoom';
 import { NewMatchCommand } from './Commands/NewMatchCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
@@ -46,4 +46,4 @@ const services = new ContainerModule((bind) => {
     .inRequestScope();
 });
 
-new RoomHostBuilder(Startup, SmallHaxRURoom, services).useCommands(true).buildAndRun();
+new RoomHostBuilder(Startup, HaxRugbyRoom, services).useCommands(true).buildAndRun();

@@ -16,9 +16,9 @@ import TeamEnum from '../enums/TeamEnum';
 import Physics from '../util/Physics';
 import TouchInfo from '../models/physics/TouchInfo';
 import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
-import { ISmallHaxRURoom } from './ISmallHaxRURoom';
+import { IHaxRURoom } from './IHaxRURoom';
 
-export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxRURoom {
+export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
   private _stadium: SmallStadium = smallStadium;
   private _matchConfig: MatchConfig = smallConfig;
 
