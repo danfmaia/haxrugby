@@ -1,6 +1,9 @@
 import HaxRUStadium from './HaxRUStadium';
 
-export interface ISmallStadium {}
+export interface ISmallStadium {
+  _map_A: string;
+  _map_B: string;
+}
 
 export default class SmallStadium extends HaxRUStadium {
   private _map_A: string;

@@ -14,5 +14,7 @@
     "titleBar.activeForeground": "#FBFAFA"
   },
   "editor.formatOnSave": true,
-  "editor.rulers": [100, 120]
+  "editor.rulers": [100, 120],
+
+  "typescript.format.placeOpenBraceOnNewLineForFunctions": false
 }

@@ -5,7 +5,13 @@ import { IHaxRugbyRoom } from '../../rooms/IHaxRugbyRoom';
 import Util from '../../util/Util';
 import HaxRugbyRoomMessager, { IHaxRugbyRoomMessager } from './HaxRugbyRoomMessager';
 
-export interface IHaxRugbyRoomService {}
+export interface IHaxRugbyRoomService {
+  initializeMatch(player?: CustomPlayer): void;
+  cancelMatch(player: CustomPlayer, callback: () => void): void;
+
+  checkForTimeEvents(): void;
+  checkForGoal(): void;
+}
 
 export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
   private _room: IHaxRugbyRoom;
@@ -49,42 +55,64 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
     );
   }
 
-  public checkForTimeEvents(room: IHaxRugbyRoom) {
-    if (room.isTimeRunning) {
-      room.remainingTime = room.remainingTime - 1000 / 10;
+  public cancelMatch(player: CustomPlayer, callback: () => void) {
+    this._room.isMatchInProgress = false;
+    this._room.isTimeRunning = false;
+    this._room.pauseGame(true);
+    Util.timeout(3500, () => {
+      this._room.stopGame();
+      callback();
+    });
+
+    this._roomMessager.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
+    this._roomMessager.sendNormalAnnouncement(
+      `Tempo restante:  ${Util.getRemainingTimeString(this._room.remainingTime)}`,
+    );
+    this._roomMessager.sendNormalAnnouncement(
+      `Placar parcial:  ${this._room.scoreA}-${this._room.scoreB}`,
+    );
+    this._roomMessager.sendNormalAnnouncement('');
+    this._roomMessager.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
+  }
+
+  public checkForTimeEvents() {
+    if (this._room.isTimeRunning) {
+      this._room.remainingTime = this._room.remainingTime - 1000 / 10;
     }
 
     if (
-      (room.remainingTime < room.matchConfig.getTimeLimitInMs() &&
-        room.remainingTime > 0 &&
-        room.remainingTime % MINUTE_IN_MS === 0) ||
-      room.remainingTime === MINUTE_IN_MS / 2 ||
-      room.remainingTime === MINUTE_IN_MS / 4
+      (this._room.remainingTime < this._room.matchConfig.getTimeLimitInMs() &&
+        this._room.remainingTime > 0 &&
+        this._room.remainingTime % MINUTE_IN_MS === 0) ||
+      this._room.remainingTime === MINUTE_IN_MS / 2 ||
+      this._room.remainingTime === MINUTE_IN_MS / 4
     ) {
       this._roomMessager.sendMatchStatus(2);
     }
 
-    if (room.remainingTime === room.matchConfig.getTimeLimitInMs() - 5000) {
+    if (this._room.remainingTime === this._room.matchConfig.getTimeLimitInMs() - 5000) {
       this._roomMessager.sendPromotionLinks();
     }
 
-    if ([5000, 4000, 3000, 2000, 1000].includes(room.remainingTime)) {
-      this._roomMessager.sendNormalAnnouncement(`${room.remainingTime / 1000}...`, 2);
+    if ([5000, 4000, 3000, 2000, 1000].includes(this._room.remainingTime)) {
+      this._roomMessager.sendNormalAnnouncement(`${this._room.remainingTime / 1000}...`, 2);
     }
 
-    if (room.isMatchInProgress && room.remainingTime <= 0) {
-      if (room.scoreA !== room.scoreB) {
-        const ballPosition = room.getBallPosition();
+    if (this._room.isMatchInProgress && this._room.remainingTime <= 0) {
+      if (this._room.scoreA !== this._room.scoreB) {
+        const ballPosition = this._room.getBallPosition();
         const canLosingTeamTieOrTurn =
-          (room.scoreA - room.scoreB <= 7 && ballPosition.x < -room.stadium.kickoffLineX) ||
-          (room.scoreB - room.scoreA <= 7 && ballPosition.x > room.stadium.kickoffLineX);
+          (this._room.scoreA - this._room.scoreB <= 7 &&
+            ballPosition.x < -this._room.stadium.kickoffLineX) ||
+          (this._room.scoreB - this._room.scoreA <= 7 &&
+            ballPosition.x > this._room.stadium.kickoffLineX);
 
         if (canLosingTeamTieOrTurn === false) {
           this.finalizeMatch();
-        } else if (room.isOvertime === false) {
-          this.startBallPositionOvertime(room);
+        } else if (this._room.isOvertime === false) {
+          this.startBallPositionOvertime(this._room);
         }
-      } else if (room.isOvertime === false) {
+      } else if (this._room.isOvertime === false) {
         this.startRegularOvertime();
       }
     }
@@ -112,7 +140,7 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
     this._roomMessager.sendMatchStatus();
   }
 
-  private checkForGoal() {
+  public checkForGoal() {
     if (!this._room.lastTouchInfo) {
       return;
     }

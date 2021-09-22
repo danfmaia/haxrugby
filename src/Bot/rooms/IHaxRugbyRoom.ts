@@ -18,7 +18,4 @@ export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
   isOvertime: boolean;
 
   lastTouchInfo: TouchInfo | null;
-
-  initializeMatch(player?: CustomPlayer): void;
-  cancelMatch(player: CustomPlayer, callback: () => void): void;
 }
