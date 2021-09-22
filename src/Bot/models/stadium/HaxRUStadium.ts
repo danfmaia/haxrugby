@@ -1,7 +1,7 @@
 import { IPosition } from 'inversihax';
 import { BALL_RADIUS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
-import Physics from '../../util/Physics';
+// import Physics from '../../util/Physics';
 
 interface IHaxRUStadium {
   kickoffLineX: number;
@@ -39,19 +39,11 @@ class HaxRUStadium implements IHaxRUStadium {
       this._goalLineX - (Math.abs(lastBallPositionWhenTouched.x) + BALL_RADIUS);
 
     if (Math.abs(ballPosition.y) < this._goalPostY - BALL_RADIUS) {
-      const goalEndX = this._goalLineX + 0.9 * BALL_RADIUS;
-
-      if (
-        this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_A, ballPosition, goalEndX) &&
-        ballXSpeed > 0
-      ) {
+      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_A, ballPosition)) {
         if (distanceBetweenBallAndGoalLine > this._miniAreaX) {
           return TeamEnum.TEAM_A;
         }
-      } else if (
-        this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_B, ballPosition, goalEndX) &&
-        ballXSpeed < 0
-      ) {
+      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_B, ballPosition)) {
         if (distanceBetweenBallAndGoalLine > this._miniAreaX) {
           return TeamEnum.TEAM_B;
         }
@@ -60,11 +52,9 @@ class HaxRUStadium implements IHaxRUStadium {
     return false;
   }
 
-  private getIsBallInsideGoalInXAxis(
-    team: TeamEnum,
-    ballPosition: IPosition,
-    goalEndX: number,
-  ): boolean {
+  private getIsBallInsideGoalInXAxis(team: TeamEnum, ballPosition: IPosition): boolean {
+    const goalEndX = this._goalLineX + 0.9 * BALL_RADIUS;
+
     if (team === TeamEnum.TEAM_A) {
       return ballPosition.x > this._goalLineX && ballPosition.x < goalEndX;
     }
@@ -90,12 +80,12 @@ class HaxRUStadium implements IHaxRUStadium {
   //   }
   // }
 
-  private getClosestGoalPostPosition(position: IPosition): IPosition {
-    const xSign = Math.sign(position.x);
-    const ySign = Math.sign(position.y);
+  // private getClosestGoalPostPosition(position: IPosition): IPosition {
+  //   const xSign = Math.sign(position.x);
+  //   const ySign = Math.sign(position.y);
 
-    return { x: xSign * this._goalLineX, y: ySign * this._goalPostY };
-  }
+  //   return { x: xSign * this._goalLineX, y: ySign * this._goalPostY };
+  // }
 }
 
 export default HaxRUStadium;
