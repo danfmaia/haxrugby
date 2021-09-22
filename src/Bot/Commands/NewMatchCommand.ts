@@ -4,16 +4,16 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
 
 import smallConfig from '../constants/config/smallConfig';
-import { ISmallHaxRURoom } from '../Room/ISmallHaxRURoom';
+import { IHaxRugbyRoom } from '../rooms/IHaxRugbyRoom';
 import Util from '../util/Util';
 
 @CommandDecorator({
   names: ['new-match', 'new'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
-  private readonly room: ISmallHaxRURoom;
+  private readonly room: IHaxRugbyRoom;
 
-  public constructor(@inject(Types.IRoom) room: ISmallHaxRURoom) {
+  public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
 
     this.room = room;

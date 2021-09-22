@@ -10,14 +10,14 @@ import {
   ChatMessage,
 } from 'inversihax';
 import { CustomPlayer } from './models/CustomPlayer';
-import { CustomPlayerService } from './Services/CustomPlayerService';
+import { CustomPlayerService } from './services/CustomPlayerService';
 import { Startup } from './Startup';
 import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './Interceptors/ExecuteCommandInterceptor';
 import { PhysicsCommand } from './Commands/PhysicsCommand';
 import { InfoCommand } from './Commands/InfoCommand';
 
-import { HaxRugbyRoom } from './Room/HaxRURoom';
+import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './Commands/NewMatchCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands

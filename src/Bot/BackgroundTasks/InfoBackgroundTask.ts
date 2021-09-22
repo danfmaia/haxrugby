@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { IBackgroundTask, Types } from 'inversihax';
-import { ICustomRoom } from '../Room/ICustomRoom';
+import { ICustomRoom } from '../rooms/ICustomRoom';
 
 @injectable()
 export class InfoBackgroundTask implements IBackgroundTask {

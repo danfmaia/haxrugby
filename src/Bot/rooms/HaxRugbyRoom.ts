@@ -1,24 +1,27 @@
 import { inject } from 'inversify';
 import { IChatMessageParser, IPlayerService, IRoomConfigObject, RoomBase, Types } from 'inversihax';
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
-import * as moment from 'moment';
 
 import { CustomPlayer } from '../models/CustomPlayer';
 import MatchConfig from '../models/match/MatchConfig';
 
 import { MINUTE_IN_MS } from '../constants/general';
 import smallConfig from '../constants/config/smallConfig';
-import styles from '../constants/styles';
 import Util from '../util/Util';
 import SmallStadium from '../models/stadium/SmallStadium';
 import smallStadium from '../stadiums/smallStadium';
-import TeamEnum from '../enums/TeamEnum';
 import Physics from '../util/Physics';
 import TouchInfo from '../models/physics/TouchInfo';
 import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
-import { IHaxRURoom } from './IHaxRURoom';
+import { IHaxRugbyRoom } from './IHaxRugbyRoom';
+import RoomService, { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
+import HaxRugbyRoomMessager, { IHaxRugbyRoomMessager } from '../services/room/HaxRugbyRoomMessager';
+import HaxRugbyRoomService from '../services/room/HaxRugbyRoomService';
 
-export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
+export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoom {
+  private _roomMessager: IHaxRugbyRoomMessager = new HaxRugbyRoomMessager(this);
+  private _roomService: IHaxRugbyRoomService = new HaxRugbyRoomService(this);
+
   private _stadium: SmallStadium = smallStadium;
   private _matchConfig: MatchConfig = smallConfig;
 
@@ -34,15 +37,49 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
 
   private _lastTouchInfo: TouchInfo | null = null;
 
+  public get stadium(): SmallStadium {
+    return this._stadium;
+  }
+
   public get matchConfig(): MatchConfig {
     return this._matchConfig;
   }
-  public set matchConfig(value: MatchConfig) {
-    this._matchConfig = value;
+
+  public get remainingTime(): number {
+    return this._remainingTime;
+  }
+  public set remainingTime(value: number) {
+    this._remainingTime = value;
+  }
+
+  public get scoreA(): number {
+    return this._scoreA;
+  }
+  public set scoreA(value: number) {
+    this._scoreA = value;
+  }
+
+  public get scoreB(): number {
+    return this._scoreB;
+  }
+  public set scoreB(value: number) {
+    this._scoreB = value;
   }
 
   public get isMatchInProgress(): boolean {
     return this._isMatchInProgress;
+  }
+
+  public get isTimeRunning(): boolean {
+    return this._isTimeRunning;
+  }
+
+  public get isOvertime(): boolean {
+    return this._isOvertime;
+  }
+
+  public get lastTouchInfo(): TouchInfo | null {
+    return this._lastTouchInfo;
   }
 
   public constructor(
@@ -78,8 +115,7 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
         // );
         // }
 
-        // check for goal
-        this.checkForGoal();
+        this._roomService.checkForGoal(this);
       }
     });
 
@@ -94,14 +130,14 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
     this.onGameStop.addHandler((byPlayer) => {
       if (this._isTimeRunning) {
         this._isTimeRunning = false;
-        this.sendMatchStatus(2);
+        this._roomMessager.sendMatchStatus(2);
       }
     });
 
     this.onGamePause.addHandler((byPlayer) => {
       if (this._isMatchInProgress && this._isTimeRunning) {
         this._isTimeRunning = false;
-        this.sendMatchStatus(2);
+        this._roomMessager.sendMatchStatus(2);
       }
     });
 
@@ -112,7 +148,7 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
         this._isBeforeKickoff === false
       ) {
         this._isTimeRunning = true;
-        this.sendMatchStatus(2);
+        this._roomMessager.sendMatchStatus(2);
       }
     });
 
@@ -120,13 +156,13 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
       if (this.getPlayerList().length === 2) {
         this.setPlayerAdmin(player.id, true);
       }
-      this.sendBoldAnnouncement(MSG_GREETING_1, 2, player.id);
-      this.sendNormalAnnouncement(MSG_GREETING_2, 0, player.id);
+      this._roomMessager.sendBoldAnnouncement(MSG_GREETING_1, 2, player.id);
+      this._roomMessager.sendNormalAnnouncement(MSG_GREETING_2, 0, player.id);
       if (this._isMatchInProgress) {
-        this.sendMatchStatus(0, player.id);
+        this._roomMessager.sendMatchStatus(0, player.id);
       }
       Util.timeout(10000, () => {
-        this.sendPromotionLinks(player.id);
+        this._roomMessager.sendPromotionLinks(player.id);
       });
     });
 
@@ -160,46 +196,6 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
     this.setScoreLimit(this._matchConfig.scoreLimit);
   }
 
-  private getRemainingTimeString(): string {
-    const remaniningTime = moment.duration(Math.abs(this._remainingTime));
-    return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
-  }
-
-  private sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number) {
-    this.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
-  }
-
-  private sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number) {
-    this.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
-  }
-
-  private sendMatchStatus(sound: number = 0, playerId?: number) {
-    let timeString: string;
-    if (this._isOvertime === false) {
-      timeString = this.getRemainingTimeString();
-    } else {
-      timeString = `${this.getRemainingTimeString()} do overtime`;
-    }
-
-    this.sendBoldAnnouncement(
-      // prettier-ignore
-      `Placar e Tempo restante: ${this._scoreA}-${this._scoreB} | ${timeString}`,
-      sound,
-      playerId,
-    );
-  }
-
-  private sendPromotionLinks(playerId?: number) {
-    this.sendBoldAnnouncement('Regras do jogo:', 2, playerId);
-    this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras-completas', 0, playerId);
-
-    this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
-    this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
-
-    this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
-    this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
-  }
-
   public initializeMatch(player?: CustomPlayer) {
     this._remainingTime = this._matchConfig.getTimeLimitInMs();
     this._isMatchInProgress = true;
@@ -209,12 +205,12 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
     this.startGame();
 
     if (player) {
-      this.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
+      this._roomMessager.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
     } else {
-      this.sendBoldAnnouncement('Iniciando nova partida!', 2);
+      this._roomMessager.sendBoldAnnouncement('Iniciando nova partida!', 2);
     }
-    this.sendNormalAnnouncement(Util.getDurationString(this._matchConfig.timeLimit));
-    this.sendNormalAnnouncement(`Limite de pontos:  ${this._matchConfig.scoreLimit}`);
+    this._roomMessager.sendNormalAnnouncement(Util.getDurationString(this._matchConfig.timeLimit));
+    this._roomMessager.sendNormalAnnouncement(`Limite de pontos:  ${this._matchConfig.scoreLimit}`);
   }
 
   private finalizeMatch() {
@@ -223,29 +219,8 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
     this.pauseGame(true);
     Util.timeout(5000, () => this.stopGame());
 
-    this.sendBoldAnnouncement('Fim da partida!', 2);
-    this.sendNormalAnnouncement(`Placar final: ${this._scoreA}-${this._scoreB}`);
-  }
-
-  private reportRegularOvertime() {
-    this._isOvertime = true;
-
-    this.sendBoldAnnouncement('OVERTIME!', 2);
-    this.sendNormalAnnouncement('O primeiro time que pontuar ganha!');
-    this.sendMatchStatus();
-  }
-
-  private reportBallPositionOvertime() {
-    this._isOvertime = true;
-
-    this.sendBoldAnnouncement('OVERTIME!', 2);
-    this.sendNormalAnnouncement(
-      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!',
-    );
-    this.sendNormalAnnouncement(
-      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.',
-    );
-    this.sendMatchStatus();
+    this._roomMessager.sendBoldAnnouncement('Fim da partida!', 2);
+    this._roomMessager.sendNormalAnnouncement(`Placar final: ${this._scoreA}-${this._scoreB}`);
   }
 
   public cancelMatch(player: CustomPlayer, callback: () => void) {
@@ -257,11 +232,13 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
       callback();
     });
 
-    this.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
-    this.sendNormalAnnouncement(`Tempo restante:  ${this.getRemainingTimeString()}`);
-    this.sendNormalAnnouncement(`Placar parcial:  ${this._scoreA}-${this._scoreB}`);
-    this.sendNormalAnnouncement('');
-    this.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
+    this._roomMessager.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
+    this._roomMessager.sendNormalAnnouncement(
+      `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
+    );
+    this._roomMessager.sendNormalAnnouncement(`Placar parcial:  ${this._scoreA}-${this._scoreB}`);
+    this._roomMessager.sendNormalAnnouncement('');
+    this._roomMessager.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
   }
 
   private checkForTimeEvents() {
@@ -276,15 +253,15 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
       this._remainingTime === MINUTE_IN_MS / 2 ||
       this._remainingTime === MINUTE_IN_MS / 4
     ) {
-      this.sendMatchStatus(2);
+      this._roomMessager.sendMatchStatus(2);
     }
 
     if (this._remainingTime === this._matchConfig.getTimeLimitInMs() - 5000) {
-      this.sendPromotionLinks();
+      this._roomMessager.sendPromotionLinks();
     }
 
     if ([5000, 4000, 3000, 2000, 1000].includes(this._remainingTime)) {
-      this.sendNormalAnnouncement(`${this._remainingTime / 1000}...`, 2);
+      this._roomMessager.sendNormalAnnouncement(`${this._remainingTime / 1000}...`, 2);
     }
 
     if (this._isMatchInProgress && this._remainingTime <= 0) {
@@ -302,44 +279,6 @@ export class HaxRURoom extends RoomBase<CustomPlayer> implements IHaxRURoom {
       } else if (this._isOvertime === false) {
         this.reportRegularOvertime();
       }
-    }
-  }
-
-  private checkForGoal() {
-    if (!this._lastTouchInfo) {
-      return;
-    }
-
-    let isGoal: false | TeamEnum = false;
-    isGoal = this._stadium.getIsGoal(
-      this.getBallPosition(),
-      this.getDiscProperties(0).xspeed,
-      this._lastTouchInfo.ballPosition,
-    );
-
-    if (isGoal) {
-      this._isTimeRunning = false;
-      let teamName: string;
-      let map: string;
-
-      if (isGoal === TeamEnum.TEAM_A) {
-        this._scoreA = this._scoreA + 3;
-        teamName = this._matchConfig.teamA.name;
-        map = this._stadium._map_B;
-      } else {
-        this._scoreB = this._scoreB + 3;
-        teamName = this._matchConfig.teamB.name;
-        map = this._stadium._map_A;
-      }
-
-      // send announcements and restart game
-      this.sendBoldAnnouncement(`Gol do ${teamName}!`, 2);
-      this.sendMatchStatus();
-      Util.timeout(3000, () => {
-        this.stopGame();
-        this.setCustomStadium(map);
-        this.startGame();
-      });
     }
   }
 }

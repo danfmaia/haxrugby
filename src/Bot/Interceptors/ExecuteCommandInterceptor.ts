@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { ChatMessage, IChatMessageInterceptor, Types } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
-import { ICustomRoom } from '../Room/ICustomRoom';
+import { ICustomRoom } from '../rooms/ICustomRoom';
 
 @injectable()
 export class ExecuteCommandInterceptor

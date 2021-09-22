@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 function timeout(ms: number, callback: () => void) {
   const timeout = setTimeout(() => {
     callback();
@@ -35,11 +37,17 @@ function getDurationString(timeLimit: number) {
   }
 }
 
+function getRemainingTimeString(remainingTimeInMs: number): string {
+  const remaniningTime = moment.duration(Math.abs(remainingTimeInMs));
+  return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
+}
+
 const Util = {
   timeout,
   timeoutAsync,
   validatePositiveNumericInput,
   getDurationString,
+  getRemainingTimeString,
 };
 
 export default Util;

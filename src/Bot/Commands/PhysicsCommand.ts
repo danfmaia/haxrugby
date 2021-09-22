@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, IDiscPropertiesObject, Types } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
-import { ICustomRoom } from '../Room/ICustomRoom';
+import { ICustomRoom } from '../rooms/ICustomRoom';
 
 @CommandDecorator({
   names: ['p'],
