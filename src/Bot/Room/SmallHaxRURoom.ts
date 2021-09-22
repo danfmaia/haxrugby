@@ -194,10 +194,10 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
     this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras-completas', 0, playerId);
 
     this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
-    this.sendNormalAnnouncement('    discord.io/HaxRU', 0, playerId);
+    this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
 
     this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
-    this.sendNormalAnnouncement('    fb.com/groups/rugbyu', 0, playerId);
+    this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
   }
 
   public initializeMatch(player?: CustomPlayer) {
@@ -291,8 +291,8 @@ export class SmallHaxRURoom extends RoomBase<CustomPlayer> implements ISmallHaxR
       if (this._scoreA !== this._scoreB) {
         const ballPosition = this.getBallPosition();
         const canLosingTeamTieOrTurn =
-          (this._scoreA > this._scoreB && ballPosition.x < -this._stadium.kickoffLineX) ||
-          (this._scoreA < this._scoreB && ballPosition.x > this._stadium.kickoffLineX);
+          (this._scoreA - this._scoreB <= 7 && ballPosition.x < -this._stadium.kickoffLineX) ||
+          (this._scoreB - this._scoreA <= 7 && ballPosition.x > this._stadium.kickoffLineX);
 
         if (canLosingTeamTieOrTurn === false) {
           this.finalizeMatch();
