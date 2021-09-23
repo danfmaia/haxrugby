@@ -4,9 +4,9 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { CustomPlayer } from '../models/CustomPlayer';
 
 import smallConfig from '../constants/config/smallConfig';
-import { IHaxRugbyRoom } from '../rooms/IHaxRugbyRoom';
 import Util from '../util/Util';
 import HaxRugbyRoomService, { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
+import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 @CommandDecorator({
   names: ['new-match', 'new'],

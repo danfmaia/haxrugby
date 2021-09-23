@@ -1,5 +1,5 @@
 import styles from '../../constants/styles';
-import { IHaxRugbyRoom } from '../../rooms/IHaxRugbyRoom';
+import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 
 export interface IHaxRugbyRoomMessager {
@@ -10,31 +10,31 @@ export interface IHaxRugbyRoomMessager {
 }
 
 export default class HaxRugbyRoomMessager implements IHaxRugbyRoomMessager {
-  private _room: IHaxRugbyRoom;
+  private room: IHaxRugbyRoom;
 
   constructor(room: IHaxRugbyRoom) {
-    this._room = room;
+    this.room = room;
   }
 
   public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number) {
-    this._room.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
+    this.room.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
   }
 
   public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number) {
-    this._room.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
+    this.room.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
   }
 
   public sendMatchStatus(sound: number = 0, playerId?: number) {
     let timeString: string;
-    if (this._room.isOvertime === false) {
-      timeString = Util.getRemainingTimeString(this._room.remainingTime);
+    if (this.room.isOvertime === false) {
+      timeString = Util.getRemainingTimeString(this.room.remainingTime);
     } else {
-      timeString = `${Util.getRemainingTimeString(this._room.remainingTime)} do overtime`;
+      timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
     }
 
     this.sendBoldAnnouncement(
       // prettier-ignore
-      `Placar e Tempo restante: ${this._room.scoreA}-${this._room.scoreB} | ${timeString}`,
+      `Placar e Tempo restante: ${this.room.scoreA}-${this.room.scoreB} | ${timeString}`,
       sound,
       playerId,
     );

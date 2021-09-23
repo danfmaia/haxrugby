@@ -3,7 +3,7 @@ import { BALL_RADIUS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
 import Physics from '../../util/Physics';
 
-interface IHaxRUStadium {
+interface IHaxRugbyStadium {
   kickoffLineX: number;
 
   getIsGoal(
@@ -13,21 +13,17 @@ interface IHaxRUStadium {
   ): false | TeamEnum;
 }
 
-class HaxRUStadium implements IHaxRUStadium {
-  private _goalLineX: number;
-  private _goalPostY: number;
-  private _miniAreaX: number;
-  private _kickoffLineX: number;
-
-  public get kickoffLineX(): number {
-    return this._kickoffLineX;
-  }
+class HaxRugbyStadium implements IHaxRugbyStadium {
+  private goalLineX: number;
+  private goalPostY: number;
+  private miniAreaX: number;
+  public kickoffLineX: number;
 
   constructor(goalLineX: number, goalPostY: number, miniAreaX: number, kickoffLineX: number) {
-    this._goalLineX = goalLineX;
-    this._goalPostY = goalPostY;
-    this._miniAreaX = miniAreaX;
-    this._kickoffLineX = kickoffLineX;
+    this.goalLineX = goalLineX;
+    this.goalPostY = goalPostY;
+    this.miniAreaX = miniAreaX;
+    this.kickoffLineX = kickoffLineX;
   }
 
   public getIsGoal(
@@ -56,28 +52,28 @@ class HaxRUStadium implements IHaxRUStadium {
   }
 
   private getIsBallInsideGoalInYAxis(ballPosition: IPosition): boolean {
-    return Math.abs(ballPosition.y) + BALL_RADIUS < this._goalPostY;
+    return Math.abs(ballPosition.y) + BALL_RADIUS < this.goalPostY;
   }
 
   private getIsBallInsideGoalInXAxis(team: TeamEnum, ballPosition: IPosition): boolean {
-    const goalEndX = this._goalLineX + 0.9 * BALL_RADIUS;
+    const goalEndX = this.goalLineX + 0.9 * BALL_RADIUS;
 
     if (team === TeamEnum.TEAM_A) {
-      return ballPosition.x > this._goalLineX && ballPosition.x < goalEndX;
+      return ballPosition.x > this.goalLineX && ballPosition.x < goalEndX;
     }
-    return ballPosition.x < -this._goalLineX && ballPosition.x > -goalEndX;
+    return ballPosition.x < -this.goalLineX && ballPosition.x > -goalEndX;
   }
 
   private getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched: IPosition): boolean {
     const distanceBetweenBallAndGoalLine =
-      this._goalLineX - (Math.abs(lastBallPositionWhenTouched.x) + BALL_RADIUS);
-    return distanceBetweenBallAndGoalLine > this._miniAreaX;
+      this.goalLineX - (Math.abs(lastBallPositionWhenTouched.x) + BALL_RADIUS);
+    return distanceBetweenBallAndGoalLine > this.miniAreaX;
   }
 
   private getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(
     lastBallPositionWhenTouched: IPosition,
   ): boolean {
-    if (Math.abs(lastBallPositionWhenTouched.y) - BALL_RADIUS <= this._goalPostY) {
+    if (Math.abs(lastBallPositionWhenTouched.y) - BALL_RADIUS <= this.goalPostY) {
       return false;
     }
 
@@ -86,7 +82,7 @@ class HaxRUStadium implements IHaxRUStadium {
       this.getClosestGoalPostPosition(lastBallPositionWhenTouched),
     );
 
-    if (distanceBetweenBallAndClosestGoalPost - BALL_RADIUS > this._miniAreaX) {
+    if (distanceBetweenBallAndClosestGoalPost - BALL_RADIUS > this.miniAreaX) {
       return true;
     }
     return false;
@@ -96,8 +92,8 @@ class HaxRUStadium implements IHaxRUStadium {
     const xSign = Math.sign(position.x);
     const ySign = Math.sign(position.y);
 
-    return { x: xSign * this._goalLineX, y: ySign * this._goalPostY };
+    return { x: xSign * this.goalLineX, y: ySign * this.goalPostY };
   }
 }
 
-export default HaxRUStadium;
+export default HaxRugbyStadium;
