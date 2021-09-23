@@ -29,7 +29,11 @@ export default class HaxRugbyRoomMessager implements IHaxRugbyRoomMessager {
     if (this.room.isOvertime === false) {
       timeString = Util.getRemainingTimeString(this.room.remainingTime);
     } else {
-      timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
+      if (this.room.remainingTime === 0) {
+        timeString = 'Início do overtime';
+      } else {
+        timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
+      }
     }
 
     this.sendBoldAnnouncement(
