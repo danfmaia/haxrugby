@@ -133,6 +133,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     });
 
     this.onPlayerBallKick.addHandler((player) => {
+      // run time after kickoff
       if (this.isBeforeKickoff) {
         this.isBeforeKickoff = false;
         this.isTimeRunning = true;
@@ -146,6 +147,14 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
         touchPosition: touchPosition,
         ballPosition: ballPosition,
       };
+    });
+
+    this.onPlayerTeamChange.addHandler((player) => {
+      // pin host at top of spectators list
+      if (player.id === 0) {
+        this.setPlayerTeam(0, 0);
+        this.reorderPlayers([0], true);
+      }
     });
 
     this.initializeRoom();
