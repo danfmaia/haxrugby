@@ -9,7 +9,7 @@ import HaxRugbyRoomService, { IHaxRugbyRoomService } from '../services/room/HaxR
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 @CommandDecorator({
-  names: ['new-match', 'new'],
+  names: ['new', 'new-match'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
   private readonly _room: IHaxRugbyRoom;

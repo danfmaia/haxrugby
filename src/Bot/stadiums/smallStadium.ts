@@ -19,7 +19,7 @@ const smallStadium = new SmallStadium(
   miniAreaX,
   kickoffLineX,
   maps.A,
-  maps.B
+  maps.B,
 );
 
 export default smallStadium;

@@ -13,7 +13,7 @@ interface IHaxRugbyStadium {
   ): false | TeamEnum;
 }
 
-class HaxRugbyStadium implements IHaxRugbyStadium {
+abstract class HaxRugbyStadium implements IHaxRugbyStadium {
   private goalLineX: number;
   private goalPostY: number;
   private miniAreaX: number;

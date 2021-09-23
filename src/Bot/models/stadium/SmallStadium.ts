@@ -1,8 +1,6 @@
-import HaxRUStadium from './HaxRUStadium';
+import HaxRugbyStadium from './HaxRugbyStadium';
 
-export interface ISmallStadium {}
-
-export default class SmallStadium extends HaxRUStadium {
+export default class SmallStadium extends HaxRugbyStadium {
   public map_A: string;
   public map_B: string;
 

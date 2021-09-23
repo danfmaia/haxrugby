@@ -3,14 +3,10 @@ interface ITeam {
 }
 
 class Team implements ITeam {
-  private _name: string;
-
-  public get name(): string {
-    return this._name;
-  }
+  public name: string;
 
   constructor(name: string) {
-    this._name = name;
+    this.name = name;
   }
 }
 

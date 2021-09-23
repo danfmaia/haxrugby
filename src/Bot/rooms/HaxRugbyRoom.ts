@@ -19,9 +19,8 @@ import smallStadium from '../stadiums/smallStadium';
 import Physics from '../util/Physics';
 import TouchInfo from '../models/physics/TouchInfo';
 import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
-import { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
+import HaxRugbyRoomService, { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
 import HaxRugbyRoomMessager, { IHaxRugbyRoomMessager } from '../services/room/HaxRugbyRoomMessager';
-import HaxRugbyRoomService from '../services/room/HaxRugbyRoomService';
 
 export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
   stadium: SmallStadium;
