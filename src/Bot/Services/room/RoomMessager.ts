@@ -1,15 +1,18 @@
+import { MSG_GREETING_1, MSG_GREETING_2 } from '../../constants/dictionary';
 import styles from '../../constants/styles';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 
-export interface IHaxRugbyRoomMessager {
+export interface IRoomMessager {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+
+  sendGreetingsToIncomingPlayer(playerId: number): void;
   sendMatchStatus(sound?: number, playerId?: number): void;
   sendPromotionLinks(playerId?: number): void;
 }
 
-export default class HaxRugbyRoomMessager implements IHaxRugbyRoomMessager {
+export default class RoomMessager implements IRoomMessager {
   private room: IHaxRugbyRoom;
 
   constructor(room: IHaxRugbyRoom) {
@@ -24,21 +27,28 @@ export default class HaxRugbyRoomMessager implements IHaxRugbyRoomMessager {
     this.room.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
   }
 
+  public sendGreetingsToIncomingPlayer(playerId: number) {
+    this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
+    this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
+    if (this.room.isMatchInProgress) {
+      this.sendMatchStatus(0, playerId);
+    }
+    Util.timeout(10000, () => {
+      this.sendPromotionLinks(playerId);
+    });
+  }
+
   public sendMatchStatus(sound: number = 0, playerId?: number) {
     let timeString: string;
     if (this.room.isOvertime === false) {
       timeString = Util.getRemainingTimeString(this.room.remainingTime);
     } else {
-      if (this.room.remainingTime === 0) {
-        timeString = 'Início do overtime';
-      } else {
-        timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
-      }
+      timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
     }
 
     this.sendBoldAnnouncement(
       // prettier-ignore
-      `Placar e Tempo restante: ${this.room.scoreA}-${this.room.scoreB} | ${timeString}`,
+      `Placar e Tempo restante: ${this.room.score.a}-${this.room.score.b} | ${timeString}`,
       sound,
       playerId,
     );

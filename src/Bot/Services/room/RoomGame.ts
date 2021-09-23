@@ -3,9 +3,9 @@ import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
-import HaxRugbyRoomMessager, { IHaxRugbyRoomMessager } from './HaxRugbyRoomMessager';
+import RoomMessager, { IRoomMessager } from './RoomMessager';
 
-export interface IHaxRugbyRoomService {
+export interface IRoomGame {
   initializeMatch(player?: CustomPlayer): void;
   cancelMatch(player: CustomPlayer, callback: () => void): void;
 
@@ -13,21 +13,20 @@ export interface IHaxRugbyRoomService {
   checkForGoal(): void;
 }
 
-export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
+export default class RoomGame implements IRoomGame {
   private room: IHaxRugbyRoom;
-  private roomMessager: IHaxRugbyRoomMessager;
+  private roomMessager: IRoomMessager;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
-    this.roomMessager = new HaxRugbyRoomMessager(room);
+    this.roomMessager = new RoomMessager(room);
   }
 
   public initializeMatch(player?: CustomPlayer) {
     this.room.remainingTime = this.room.matchConfig.getTimeLimitInMs();
     this.room.isMatchInProgress = true;
     this.room.isOvertime = false;
-    this.room.scoreA = 0;
-    this.room.scoreB = 0;
+    this.room.score = { a: 0, b: 0 };
     this.room.startGame();
 
     if (player) {
@@ -46,12 +45,24 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
   public finalizeMatch() {
     this.room.isMatchInProgress = false;
     this.room.isTimeRunning = false;
+    this.room.isFinalizing = true;
     this.room.pauseGame(true);
-    Util.timeout(5000, () => this.room.stopGame());
+    this.room.lastScores.unshift(this.room.score);
+    Util.timeout(5000, () => {
+      if (this.room.isFinalizing) {
+        this.room.stopGame();
+        const lastWinner = this.getLastWinner();
+        if (lastWinner === TeamEnum.TEAM_A) {
+          this.room.setCustomStadium(this.room.stadium.map_A)
+        } else if (lastWinner === TeamEnum.TEAM_B) {
+          this.room.setCustomStadium(this.room.stadium.map_B)
+        }
+      }
+    });
 
     this.roomMessager.sendBoldAnnouncement('Fim da partida!', 2);
     this.roomMessager.sendNormalAnnouncement(
-      `Placar final: ${this.room.scoreA}-${this.room.scoreB}`,
+      `Placar final: ${this.room.score.a}-${this.room.score.b}`,
     );
   }
 
@@ -69,7 +80,7 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
       `Tempo restante:  ${Util.getRemainingTimeString(this.room.remainingTime)}`,
     );
     this.roomMessager.sendNormalAnnouncement(
-      `Placar parcial:  ${this.room.scoreA}-${this.room.scoreB}`,
+      `Placar parcial:  ${this.room.score.a}-${this.room.score.b}`,
     );
     this.roomMessager.sendNormalAnnouncement('');
     this.roomMessager.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
@@ -99,12 +110,12 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
     }
 
     if (this.room.isMatchInProgress && this.room.remainingTime <= 0) {
-      if (this.room.scoreA !== this.room.scoreB) {
+      if (this.room.score.a !== this.room.score.b) {
         const ballPosition = this.room.getBallPosition();
         const canLosingTeamTieOrTurn =
-          (this.room.scoreA - this.room.scoreB <= 7 &&
+          (this.room.score.a - this.room.score.b <= 7 &&
             ballPosition.x < -this.room.stadium.kickoffLineX) ||
-          (this.room.scoreB - this.room.scoreA <= 7 &&
+          (this.room.score.b - this.room.score.a <= 7 &&
             ballPosition.x > this.room.stadium.kickoffLineX);
 
         if (canLosingTeamTieOrTurn === false) {
@@ -158,11 +169,11 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
       let map: string;
 
       if (isGoal === TeamEnum.TEAM_A) {
-        this.room.scoreA = this.room.scoreA + 3;
+        this.room.score.a = this.room.score.a + 3;
         teamName = this.room.matchConfig.teamA.name;
         map = this.room.stadium.map_B;
       } else {
-        this.room.scoreB = this.room.scoreB + 3;
+        this.room.score.b = this.room.score.b + 3;
         teamName = this.room.matchConfig.teamB.name;
         map = this.room.stadium.map_A;
       }
@@ -176,5 +187,18 @@ export default class HaxRugbyRoomService implements IHaxRugbyRoomService {
         this.room.startGame();
       });
     }
+  }
+
+  public getLastWinner(): TeamEnum | null | 0 {
+    const lastScore = this.room.lastScores[0];
+    if (!lastScore) {
+      return null;
+    }
+    if (lastScore.a > lastScore.b) {
+      return TeamEnum.TEAM_A;
+    } else if (lastScore.a < lastScore.b) {
+      return TeamEnum.TEAM_B;
+    }
+    return 0;
   }
 }

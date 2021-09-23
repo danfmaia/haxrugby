@@ -13,46 +13,49 @@ import { CustomPlayer } from '../models/CustomPlayer';
 import MatchConfig from '../models/match/MatchConfig';
 
 import smallConfig from '../constants/config/smallConfig';
-import Util from '../util/Util';
 import SmallStadium from '../models/stadium/SmallStadium';
 import smallStadium from '../stadiums/smallStadium';
 import Physics from '../util/Physics';
 import TouchInfo from '../models/physics/TouchInfo';
-import { MSG_GREETING_1, MSG_GREETING_2 } from '../constants/dictionary';
-import HaxRugbyRoomService, { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
-import HaxRugbyRoomMessager, { IHaxRugbyRoomMessager } from '../services/room/HaxRugbyRoomMessager';
+import RoomGame, { IRoomGame } from '../services/room/RoomGame';
+import RoomMessager, { IRoomMessager } from '../services/room/RoomMessager';
+import RoomAdmin, { IRoomAdmin } from '../services/room/RoomAdmin';
+import { Score } from '../models/match/Score';
 
 export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
   stadium: SmallStadium;
   matchConfig: MatchConfig;
 
   remainingTime: number;
-  scoreA: number;
-  scoreB: number;
+  score: Score;
+  lastScores: Score[];
 
   isMatchInProgress: boolean;
   isTimeRunning: boolean;
   isOvertime: boolean;
+  isFinalizing: boolean;
 
   lastTouchInfo: TouchInfo | null;
 }
 
 export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoom {
-  private roomService: IHaxRugbyRoomService = new HaxRugbyRoomService(this);
-  private roomMessager: IHaxRugbyRoomMessager = new HaxRugbyRoomMessager(this);
+  private roomService: IRoomGame = new RoomGame(this);
+  private roomAdmin: IRoomAdmin = new RoomAdmin(this);
+  private roomMessager: IRoomMessager = new RoomMessager(this);
 
   public stadium: SmallStadium = smallStadium;
   public matchConfig: MatchConfig = smallConfig;
 
   private tickCount: number = 0;
   public remainingTime: number = this.matchConfig.getTimeLimitInMs();
-  public scoreA: number = 0;
-  public scoreB: number = 0;
+  public score: Score = { a: 0, b: 0 };
+  public lastScores: Score[] = [];
 
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
   public isTimeRunning: boolean = false;
   public isOvertime: boolean = false;
+  public isFinalizing: boolean = false;
 
   public lastTouchInfo: TouchInfo | null = null;
 
@@ -82,13 +85,6 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
           this.lastTouchInfo = lastTouchInfos[0];
         }
 
-        // if (this._lastTouchInfo.length) {
-        // this.sendChat(
-        //   // prettier-ignore
-        //   `${this.getPlayer(this._lastPlayerIdThatTouchedBall).name} tocou na bola!`
-        // );
-        // }
-
         this.roomService.checkForGoal();
       }
     });
@@ -96,6 +92,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     this.onGameStart.addHandler((byPlayer) => {
       this.isBeforeKickoff = true;
       this.isTimeRunning = false;
+      this.isFinalizing = false;
       if (!this.isMatchInProgress) {
         this.roomService.initializeMatch(byPlayer);
       }
@@ -127,17 +124,12 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     });
 
     this.onPlayerJoin.addHandler((player) => {
-      if (this.getPlayerList().length === 2) {
-        this.setPlayerAdmin(player.id, true);
-      }
-      this.roomMessager.sendBoldAnnouncement(MSG_GREETING_1, 2, player.id);
-      this.roomMessager.sendNormalAnnouncement(MSG_GREETING_2, 0, player.id);
-      if (this.isMatchInProgress) {
-        this.roomMessager.sendMatchStatus(0, player.id);
-      }
-      Util.timeout(10000, () => {
-        this.roomMessager.sendPromotionLinks(player.id);
-      });
+      this.roomAdmin.setFirstPlayerAsAdmin(player.id);
+      this.roomMessager.sendGreetingsToIncomingPlayer(player.id);
+    });
+
+    this.onPlayerLeave.addHandler((player) => {
+      this.roomAdmin.setEarliestPlayerAsAdmin();
     });
 
     this.onPlayerBallKick.addHandler((player) => {
@@ -146,7 +138,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
         this.isTimeRunning = true;
       }
 
-      // report that this player touched the ball
+      // register that this player touched the ball
       const ballPosition = this.getBallPosition();
       const touchPosition = Physics.getTouchPosition(player.position, ballPosition);
       this.lastTouchInfo = {
@@ -154,10 +146,6 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
         touchPosition: touchPosition,
         ballPosition: ballPosition,
       };
-      // this.sendChat(
-      //   // prettier-ignore
-      //   `${this.getPlayer(this._lastPlayerIdThatTouchedBall).name} tocou na bola!`
-      // );
     });
 
     this.initializeRoom();

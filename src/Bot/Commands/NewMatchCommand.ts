@@ -5,21 +5,21 @@ import { CustomPlayer } from '../models/CustomPlayer';
 
 import smallConfig from '../constants/config/smallConfig';
 import Util from '../util/Util';
-import HaxRugbyRoomService, { IHaxRugbyRoomService } from '../services/room/HaxRugbyRoomService';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
+import RoomGame, { IRoomGame } from '../services/room/RoomGame';
 
 @CommandDecorator({
   names: ['new', 'new-match'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
   private readonly _room: IHaxRugbyRoom;
-  private readonly _roomService: IHaxRugbyRoomService;
+  private readonly _roomGame: IRoomGame;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
 
     this._room = room;
-    this._roomService = new HaxRugbyRoomService(room);
+    this._roomGame = new RoomGame(room);
   }
 
   public canExecute(player: CustomPlayer): boolean {
@@ -47,11 +47,11 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
       this._room.matchConfig = matchConfig;
       this._room.setTimeLimit(matchConfig.timeLimit);
       this._room.setScoreLimit(matchConfig.scoreLimit);
-      Util.timeout(1500, () => this._roomService.initializeMatch(player));
+      Util.timeout(1500, () => this._roomGame.initializeMatch(player));
     };
 
     if (this._room.isMatchInProgress) {
-      this._roomService.cancelMatch(player, callback);
+      this._roomGame.cancelMatch(player, callback);
     } else {
       callback();
     }
