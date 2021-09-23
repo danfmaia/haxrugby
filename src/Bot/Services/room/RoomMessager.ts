@@ -28,11 +28,15 @@ export default class RoomMessager implements IRoomMessager {
   }
 
   public sendGreetingsToIncomingPlayer(playerId: number) {
-    this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
-    this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
-    if (this.room.isMatchInProgress) {
-      this.sendMatchStatus(0, playerId);
-    }
+    Util.timeout(1000, () => {
+      this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
+      this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
+    });
+    Util.timeout(3000, () => {
+      if (this.room.isMatchInProgress) {
+        this.sendMatchStatus(2, playerId);
+      }
+    });
     Util.timeout(10000, () => {
       this.sendPromotionLinks(playerId);
     });
