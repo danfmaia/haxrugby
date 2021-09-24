@@ -1,4 +1,4 @@
-export type Score = {
+export type IScore = {
   a: number;
   b: number;
 };

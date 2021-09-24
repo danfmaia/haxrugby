@@ -15,31 +15,30 @@ import MatchConfig from '../models/match/MatchConfig';
 import smallConfig from '../constants/config/smallConfig';
 import SmallStadium from '../models/stadium/SmallStadium';
 import smallStadium from '../stadiums/smallStadium';
-import Physics from '../util/Physics';
-import TouchInfo from '../models/physics/TouchInfo';
+import ITouchInfo from '../models/physics/ITouchInfo';
 import RoomGame, { IRoomGame } from '../services/room/RoomGame';
 import RoomMessager, { IRoomMessager } from '../services/room/RoomMessager';
 import RoomAdmin, { IRoomAdmin } from '../services/room/RoomAdmin';
-import { Score } from '../models/match/Score';
+import { IScore } from '../models/match/Score';
 
 export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
   stadium: SmallStadium;
   matchConfig: MatchConfig;
 
   remainingTime: number;
-  score: Score;
-  lastScores: Score[];
+  score: IScore;
+  lastScores: IScore[];
 
   isMatchInProgress: boolean;
   isTimeRunning: boolean;
   isOvertime: boolean;
   isFinalizing: boolean;
 
-  lastTouchInfo: TouchInfo | null;
+  lastTouchInfoList: ITouchInfo[];
 }
 
 export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoom {
-  private roomService: IRoomGame = new RoomGame(this);
+  private roomGame: IRoomGame = new RoomGame(this);
   private roomAdmin: IRoomAdmin = new RoomAdmin(this);
   private roomMessager: IRoomMessager = new RoomMessager(this);
 
@@ -48,8 +47,8 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
 
   private tickCount: number = 0;
   public remainingTime: number = this.matchConfig.getTimeLimitInMs();
-  public score: Score = { a: 0, b: 0 };
-  public lastScores: Score[] = [];
+  public score: IScore = { a: 0, b: 0 };
+  public lastScores: IScore[] = [];
 
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
@@ -57,7 +56,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
   public isOvertime: boolean = false;
   public isFinalizing: boolean = false;
 
-  public lastTouchInfo: TouchInfo | null = null;
+  public lastTouchInfoList: ITouchInfo[] = [];
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
@@ -69,23 +68,13 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     super(roomConfig, playerService, chatMessageInterceptorFactory, chatMessageParser);
 
     this.onGameTick.addHandler(() => {
-      // check for time events and send announcements
       this.tickCount = this.tickCount + 1;
       if (this.tickCount % 6 === 0) {
-        this.roomService.checkForTimeEvents();
+        this.roomGame.checkForTimeEvents();
       }
 
-      // check for scoring
       if (this.isTimeRunning) {
-        const players = this.getPlayerList();
-        const ballPosition = this.getBallPosition();
-
-        const lastTouchInfos = Physics.getTouchPositionAndPlayers(players, ballPosition);
-        if (lastTouchInfos.length) {
-          this.lastTouchInfo = lastTouchInfos[0];
-        }
-
-        this.roomService.checkForGoal();
+        this.roomGame.checkForScoring();
       }
     });
 
@@ -94,7 +83,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
       this.isTimeRunning = false;
       this.isFinalizing = false;
       if (!this.isMatchInProgress) {
-        this.roomService.initializeMatch(byPlayer);
+        this.roomGame.initializeMatch(byPlayer);
       }
     });
 
@@ -139,14 +128,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
         this.isTimeRunning = true;
       }
 
-      // register that this player touched the ball
-      const ballPosition = this.getBallPosition();
-      const touchPosition = Physics.getTouchPosition(player.position, ballPosition);
-      this.lastTouchInfo = {
-        playerId: player.id,
-        touchPosition: touchPosition,
-        ballPosition: ballPosition,
-      };
+      this.roomGame.registerKickAsTouch(player.id);
     });
 
     this.onPlayerTeamChange.addHandler((player) => {

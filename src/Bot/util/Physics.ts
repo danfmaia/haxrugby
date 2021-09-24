@@ -1,7 +1,8 @@
 import { IPosition } from 'inversihax';
+
 import { BALL_RADIUS, BALL_TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/general';
 import { CustomPlayer } from '../models/CustomPlayer';
-import TouchInfo from '../models/physics/TouchInfo';
+import ITouchInfo from '../models/physics/ITouchInfo';
 
 function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition): number {
   const d1 = p1.x - p2.x;
@@ -17,8 +18,8 @@ function getTouchPosition(playerPos: IPosition, ballPos: IPosition): IPosition {
   return position;
 }
 
-function getTouchPositionAndPlayers(players: CustomPlayer[], ballPosition: IPosition): TouchInfo[] {
-  const touchPlayersAndPositions: TouchInfo[] = [];
+function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITouchInfo | null {
+  const toucherIds: number[] = [];
   const triggerDistance = BALL_RADIUS + PLAYER_RADIUS + BALL_TOUCH_EPSILON;
 
   for (let i = 0; i < players.length; i++) {
@@ -29,37 +30,66 @@ function getTouchPositionAndPlayers(players: CustomPlayer[], ballPosition: IPosi
 
     const distanceToBall = calcDistanceBetweenPositions(player.position, ballPosition);
 
-    const hadTouchedTheBall = touchPlayersAndPositions.find(
-      (playerAndPosition) => playerAndPosition.playerId === player.id,
-    );
-
-    // This check is here so that the event is only notified the first game tick in which the player is touching the ball.
-    if (!hadTouchedTheBall) {
-      if (distanceToBall < triggerDistance) {
-        const touchPosition = getTouchPosition(player.position, ballPosition);
-        touchPlayersAndPositions.unshift({
-          playerId: player.id,
-          touchPosition: touchPosition,
-          ballPosition,
-        });
-      }
-    } else {
-      // If a player that had touched the ball moves away from the ball remove him from the set to allow the event to be notified again.
-      if (distanceToBall > triggerDistance + 4) {
-        touchPlayersAndPositions.filter(
-          (playerAndPosition) => playerAndPosition.playerId !== player.id,
-        );
-      }
+    if (distanceToBall < triggerDistance) {
+      toucherIds.push(player.id);
     }
   }
 
-  return touchPlayersAndPositions;
+  if (toucherIds.length) {
+    return {
+      toucherIds: toucherIds,
+      ballPosition: ballPosition,
+    };
+  }
+  return null;
 }
+
+// function getTouchPositionAndPlayers(
+//   players: CustomPlayer[],
+//   ballPosition: IPosition,
+// ): ITouchInfo[] {
+//   const touchPlayersAndPositions: ITouchInfo[] = [];
+//   const triggerDistance = BALL_RADIUS + PLAYER_RADIUS + BALL_TOUCH_EPSILON;
+
+//   for (let i = 0; i < players.length; i++) {
+//     const player = players[i];
+
+//     // Skip players that don't have a position
+//     if (player.position === null) continue;
+
+//     const distanceToBall = calcDistanceBetweenPositions(player.position, ballPosition);
+
+//     const hadTouchedTheBall = touchPlayersAndPositions.find(
+//       (playerAndPosition) => playerAndPosition.playerId === player.id,
+//     );
+
+//     // This check is here so that the event is only notified the first game tick in which the player is touching the ball.
+//     if (!hadTouchedTheBall) {
+//       if (distanceToBall < triggerDistance) {
+//         const touchPosition = getTouchPosition(player.position, ballPosition);
+//         touchPlayersAndPositions.unshift({
+//           playerId: player.id,
+//           touchPosition: touchPosition,
+//           ballPosition,
+//         });
+//       }
+//     } else {
+//       // If a player that had touched the ball moves away from the ball remove him from the set to allow the event to be notified again.
+//       if (distanceToBall > triggerDistance + 4) {
+//         touchPlayersAndPositions.filter(
+//           (playerAndPosition) => playerAndPosition.playerId !== player.id,
+//         );
+//       }
+//     }
+//   }
+
+//   return touchPlayersAndPositions;
+// }
 
 const Physics = {
   calcDistanceBetweenPositions,
   getTouchPosition,
-  getTouchPositionAndPlayers,
+  getTouchPositionAndPlayers: getTouchInfoList,
 };
 
 export default Physics;

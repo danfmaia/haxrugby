@@ -1,7 +1,9 @@
 import { MINUTE_IN_MS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
+import ITouchInfo from '../../models/physics/ITouchInfo';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
+import Physics from '../../util/Physics';
 import Util from '../../util/Util';
 import RoomMessager, { IRoomMessager } from './RoomMessager';
 
@@ -10,7 +12,8 @@ export interface IRoomGame {
   cancelMatch(player: CustomPlayer, callback: () => void): void;
 
   checkForTimeEvents(): void;
-  checkForGoal(): void;
+  checkForScoring(): void;
+  registerKickAsTouch(playerId: number): void;
 }
 
 export default class RoomGame implements IRoomGame {
@@ -53,9 +56,9 @@ export default class RoomGame implements IRoomGame {
         this.room.stopGame();
         const lastWinner = this.getLastWinner();
         if (lastWinner === TeamEnum.TEAM_A) {
-          this.room.setCustomStadium(this.room.stadium.map_A)
+          this.room.setCustomStadium(this.room.stadium.map_A);
         } else if (lastWinner === TeamEnum.TEAM_B) {
-          this.room.setCustomStadium(this.room.stadium.map_B)
+          this.room.setCustomStadium(this.room.stadium.map_B);
         }
       }
     });
@@ -151,8 +154,20 @@ export default class RoomGame implements IRoomGame {
     this.roomMessager.sendMatchStatus();
   }
 
-  public checkForGoal() {
-    if (!this.room.lastTouchInfo) {
+  public checkForScoring() {
+    const players = this.room.getPlayerList();
+    const ballPosition = this.room.getBallPosition();
+
+    const newTouchInfo = Physics.getTouchPositionAndPlayers(players, ballPosition);
+    if (newTouchInfo) {
+      this.registerTouchInfo(newTouchInfo);
+    }
+
+    this.checkForGoal();
+  }
+
+  private checkForGoal() {
+    if (this.room.lastTouchInfoList.length === 0) {
       return;
     }
 
@@ -160,7 +175,7 @@ export default class RoomGame implements IRoomGame {
     isGoal = this.room.stadium.getIsGoal(
       this.room.getBallPosition(),
       this.room.getDiscProperties(0).xspeed,
-      this.room.lastTouchInfo.ballPosition,
+      this.room.lastTouchInfoList[0].ballPosition,
     );
 
     if (isGoal) {
@@ -189,7 +204,7 @@ export default class RoomGame implements IRoomGame {
     }
   }
 
-  public getLastWinner(): TeamEnum | null | 0 {
+  private getLastWinner(): TeamEnum | null | 0 {
     const lastScore = this.room.lastScores[0];
     if (!lastScore) {
       return null;
@@ -200,5 +215,25 @@ export default class RoomGame implements IRoomGame {
       return TeamEnum.TEAM_B;
     }
     return 0;
+  }
+
+  public registerKickAsTouch(playerId: number) {
+    const ballPosition = this.room.getBallPosition();
+
+    let updatedToucherIds =
+      this.room.lastTouchInfoList.length > 0 ? this.room.lastTouchInfoList[0].toucherIds : [];
+    updatedToucherIds.push(playerId);
+
+    this.registerTouchInfo({
+      toucherIds: updatedToucherIds,
+      ballPosition: ballPosition,
+    });
+  }
+
+  private registerTouchInfo(newTouchInfo: ITouchInfo) {
+    this.room.lastTouchInfoList.unshift(newTouchInfo);
+    if (this.room.lastTouchInfoList.length > 20) {
+      this.room.lastTouchInfoList.pop();
+    }
   }
 }
