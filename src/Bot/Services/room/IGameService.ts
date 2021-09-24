@@ -39,5 +39,4 @@ export interface IGameService {
 
   checkForTimeEvents(): void;
   checkForGameEvents(): void;
-  registerKickAsTouch(playerId: number): void;
 }

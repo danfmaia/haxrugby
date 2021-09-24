@@ -7,17 +7,19 @@ export class RoomUtil {
     this.room = room;
   }
 
-  public countPlayersByTeam(playerIds: number[]) {
+  public countPlayersByTeam(playerIds: (number | null)[]) {
     const playerCount = {
       red: 0,
       blue: 0,
     };
 
     playerIds.forEach((playerId) => {
-      if (this.room.getPlayer(playerId).team === 1) {
-        playerCount.red = playerCount.red + 1;
-      } else if (this.room.getPlayer(playerId).team === 2) {
-        playerCount.blue = playerCount.blue + 1;
+      if (playerId) {
+        if (this.room.getPlayer(playerId).team === 1) {
+          playerCount.red = playerCount.red + 1;
+        } else if (this.room.getPlayer(playerId).team === 2) {
+          playerCount.blue = playerCount.blue + 1;
+        }
       }
     });
 

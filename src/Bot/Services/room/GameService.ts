@@ -38,7 +38,7 @@ export default class GameService implements IGameService {
   private isFinalizing: boolean = false;
 
   private lastTouchInfo: ITouchInfo | null = null;
-  public touchInfoList: (ITouchInfo | null)[] = [];
+  private touchInfoList: (ITouchInfo | null)[] = [];
   private driverIds: number[] = [];
 
   constructor(room: IHaxRugbyRoom) {
@@ -99,6 +99,7 @@ export default class GameService implements IGameService {
   }
 
   public handlePlayerLeave(player: CustomPlayer) {
+    this.unregisterPlayerFromMatchData(player.id);
     this.adminService.setEarliestPlayerAsAdmin();
   }
 
@@ -232,31 +233,42 @@ export default class GameService implements IGameService {
     const players = this.room.getPlayerList();
     const ballPosition = this.room.getBallPosition();
 
-    const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
-    this.registerTouchInfo(newTouchInfo);
+    this.checkForTouches(players, ballPosition);
 
-    this.checkForGoal(ballPosition);
+    if (this.lastTouchInfo) {
+      this.checkForGoal(ballPosition, this.lastTouchInfo);
+    }
 
+    // check for ball drives
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
+
     if (this.driverIds.length) {
-      // this.room.sendChat('driverIds: ' + this.driverIds.toString());
       this.checkForTry(ballPosition);
     }
   }
 
-  private checkForGoal(ballPosition: IPosition) {
-    if (this.lastTouchInfo === null) {
-      return;
+  private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
+    const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
+    if (newTouchInfo) {
+      this.lastTouchInfo = newTouchInfo;
     }
 
+    this.touchInfoList.unshift(newTouchInfo);
+    if (this.touchInfoList.length > 20) {
+      this.touchInfoList.pop();
+    }
+  }
+
+  private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo) {
     const isGoal = this.stadium.getIsGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
-      this.lastTouchInfo.ballPosition,
+      lastTouchInfo.ballPosition,
     );
 
     if (isGoal) {
       this.isTimeRunning = false;
+      this.room.pauseGame(true);
       let teamName: string;
       let map: string;
 
@@ -288,6 +300,7 @@ export default class GameService implements IGameService {
 
     if (isTry) {
       this.isTimeRunning = false;
+      this.room.pauseGame(true);
       let teamName: string;
       let map: string;
 
@@ -325,23 +338,39 @@ export default class GameService implements IGameService {
     return 0;
   }
 
-  public registerKickAsTouch(playerId: number) {
+  // TODO: Consider concurrence, that is, 2 or more players kicking the ball simultaneously.
+  private registerKickAsTouch(playerId: number) {
     const ballPosition = this.room.getBallPosition();
 
-    let updatedToucherIds = this.lastTouchInfo ? this.lastTouchInfo.toucherIds : [];
-    updatedToucherIds.push(playerId);
+    // let updatedToucherIds = this.lastTouchInfo ? this.lastTouchInfo.toucherIds : [];
+    // updatedToucherIds.push(playerId);
 
-    this.registerTouchInfo({
-      toucherIds: updatedToucherIds,
+    this.lastTouchInfo = {
+      toucherIds: [playerId],
       ballPosition: ballPosition,
       hasKick: true,
-    });
+    };
   }
 
-  private registerTouchInfo(newTouchInfo: ITouchInfo | null) {
-    this.touchInfoList.unshift(newTouchInfo);
-    if (this.touchInfoList.length > 20) {
-      this.touchInfoList.pop();
+  private unregisterPlayerFromMatchData(playerId: number) {
+    // unregister player from lastTouchInfo
+    if (this.lastTouchInfo) {
+      this.lastTouchInfo.toucherIds = this.lastTouchInfo.toucherIds.filter(
+        (toucherId) => toucherId !== playerId,
+      );
     }
+
+    // unregister player from touchInfoList
+    this.touchInfoList.map((touchInfo) => {
+      if (touchInfo) {
+        return {
+          ...touchInfo,
+          toucherIds: touchInfo.toucherIds.filter((toucherId) => toucherId !== playerId),
+        };
+      }
+    });
+
+    // unregister player from driverIds
+    this.driverIds = this.driverIds.filter((driverId) => driverId !== playerId);
   }
 }
