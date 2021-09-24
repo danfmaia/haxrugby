@@ -2,6 +2,7 @@ import { IPosition } from 'inversihax';
 import { BALL_RADIUS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
 import Physics from '../../util/Physics';
+import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 
 interface IHaxRugbyStadium {
   kickoffLineX: number;
@@ -32,19 +33,19 @@ abstract class HaxRugbyStadium implements IHaxRugbyStadium {
     lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum {
     if (this.getIsBallInsideGoalInYAxis(ballPosition)) {
-      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_A, ballPosition)) {
+      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)) {
         if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
-          return TeamEnum.TEAM_A;
+          return TeamEnum.RED;
         }
         if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
-          return TeamEnum.TEAM_A;
+          return TeamEnum.RED;
         }
-      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.TEAM_B, ballPosition)) {
+      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)) {
         if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
-          return TeamEnum.TEAM_B;
+          return TeamEnum.BLUE;
         }
         if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
-          return TeamEnum.TEAM_B;
+          return TeamEnum.BLUE;
         }
       }
     }
@@ -58,7 +59,7 @@ abstract class HaxRugbyStadium implements IHaxRugbyStadium {
   private getIsBallInsideGoalInXAxis(team: TeamEnum, ballPosition: IPosition): boolean {
     const goalEndX = this.goalLineX + 0.9 * BALL_RADIUS;
 
-    if (team === TeamEnum.TEAM_A) {
+    if (team === TeamEnum.RED) {
       return ballPosition.x > this.goalLineX && ballPosition.x < goalEndX;
     }
     return ballPosition.x < -this.goalLineX && ballPosition.x > -goalEndX;
@@ -93,6 +94,22 @@ abstract class HaxRugbyStadium implements IHaxRugbyStadium {
     const ySign = Math.sign(position.y);
 
     return { x: xSign * this.goalLineX, y: ySign * this.goalPostY };
+  }
+
+  public getIsTry(
+    ballPosition: IPosition,
+    playerCountByTeam: IPlayerCountByTeam,
+  ): false | TeamEnum {
+    if (ballPosition.x >= this.goalLineX - BALL_RADIUS) {
+      if (playerCountByTeam.red > 0) {
+        return TeamEnum.RED;
+      }
+    } else if (ballPosition.x <= -(this.goalLineX - BALL_RADIUS)) {
+      if (playerCountByTeam.blue > 0) {
+        return TeamEnum.BLUE;
+      }
+    }
+    return false;
   }
 }
 

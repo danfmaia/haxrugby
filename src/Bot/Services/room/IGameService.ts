@@ -38,6 +38,6 @@ export interface IGameService {
   cancelMatch(player: CustomPlayer, callback: () => void): void;
 
   checkForTimeEvents(): void;
-  checkForScoring(): void;
+  checkForGameEvents(): void;
   registerKickAsTouch(playerId: number): void;
 }

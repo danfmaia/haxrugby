@@ -1,4 +1,4 @@
-import { IPlayerObject } from 'inversihax';
+import { IPlayerObject, IPosition } from 'inversihax';
 
 import smallConfig from '../../singletons/smallConfig';
 import { MINUTE_IN_MS } from '../../constants/general';
@@ -15,11 +15,13 @@ import Util from '../../util/Util';
 import { IGameService } from './IGameService';
 import AdminService, { IAdminService } from './RoomAdmin';
 import ChatService, { IChatService } from './RoomMessager';
+import { RoomUtil } from '../../util/RoomUtil';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
   private adminService: IAdminService;
   private chatService: IChatService;
+  private roomUtil: RoomUtil;
 
   private stadium: SmallStadium = smallStadium;
   public matchConfig: MatchConfig = smallConfig;
@@ -35,12 +37,15 @@ export default class GameService implements IGameService {
   public isOvertime: boolean = false;
   private isFinalizing: boolean = false;
 
-  public lastTouchInfoList: ITouchInfo[] = [];
+  private lastTouchInfo: ITouchInfo | null = null;
+  public touchInfoList: (ITouchInfo | null)[] = [];
+  private driverIds: number[] = [];
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
     this.adminService = new AdminService(room);
     this.chatService = new ChatService(room, this);
+    this.roomUtil = new RoomUtil(room);
   }
 
   /**
@@ -54,7 +59,7 @@ export default class GameService implements IGameService {
     }
 
     if (this.isTimeRunning) {
-      this.checkForScoring();
+      this.checkForGameEvents();
     }
   }
 
@@ -124,6 +129,11 @@ export default class GameService implements IGameService {
     this.isMatchInProgress = true;
     this.isOvertime = false;
     this.score = { a: 0, b: 0 };
+
+    this.lastTouchInfo = null;
+    this.touchInfoList = [];
+    this.driverIds = [];
+
     this.room.startGame();
 
     if (player) {
@@ -145,9 +155,9 @@ export default class GameService implements IGameService {
       if (this.isFinalizing) {
         this.room.stopGame();
         const lastWinner = this.getLastWinner();
-        if (lastWinner === TeamEnum.TEAM_A) {
+        if (lastWinner === TeamEnum.RED) {
           this.room.setCustomStadium(this.stadium.map_A);
-        } else if (lastWinner === TeamEnum.TEAM_B) {
+        } else if (lastWinner === TeamEnum.BLUE) {
           this.room.setCustomStadium(this.stadium.map_B);
         }
       }
@@ -218,28 +228,31 @@ export default class GameService implements IGameService {
     }
   }
 
-  public checkForScoring() {
+  public checkForGameEvents() {
     const players = this.room.getPlayerList();
     const ballPosition = this.room.getBallPosition();
 
-    const newTouchInfo = Physics.getTouchPositionAndPlayers(players, ballPosition);
-    if (newTouchInfo) {
-      this.registerTouchInfo(newTouchInfo);
-    }
+    const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
+    this.registerTouchInfo(newTouchInfo);
 
-    this.checkForGoal();
+    this.checkForGoal(ballPosition);
+
+    this.driverIds = Physics.getDriverIds(this.touchInfoList);
+    if (this.driverIds.length) {
+      // this.room.sendChat('driverIds: ' + this.driverIds.toString());
+      this.checkForTry(ballPosition);
+    }
   }
 
-  private checkForGoal() {
-    if (this.lastTouchInfoList.length === 0) {
+  private checkForGoal(ballPosition: IPosition) {
+    if (this.lastTouchInfo === null) {
       return;
     }
 
-    let isGoal: false | TeamEnum = false;
-    isGoal = this.stadium.getIsGoal(
-      this.room.getBallPosition(),
+    const isGoal = this.stadium.getIsGoal(
+      ballPosition,
       this.room.getDiscProperties(0).xspeed,
-      this.lastTouchInfoList[0].ballPosition,
+      this.lastTouchInfo.ballPosition,
     );
 
     if (isGoal) {
@@ -247,7 +260,7 @@ export default class GameService implements IGameService {
       let teamName: string;
       let map: string;
 
-      if (isGoal === TeamEnum.TEAM_A) {
+      if (isGoal === TeamEnum.RED) {
         this.score.a = this.score.a + 3;
         teamName = this.matchConfig.teamA.name;
         map = this.stadium.map_B;
@@ -268,15 +281,46 @@ export default class GameService implements IGameService {
     }
   }
 
+  private checkForTry(ballPosition: IPosition) {
+    const playerCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+
+    const isTry = this.stadium.getIsTry(ballPosition, playerCountByTeam);
+
+    if (isTry) {
+      this.isTimeRunning = false;
+      let teamName: string;
+      let map: string;
+
+      if (isTry === TeamEnum.RED) {
+        this.score.a = this.score.a + 5;
+        teamName = this.matchConfig.teamA.name;
+        map = this.stadium.map_B;
+      } else {
+        this.score.b = this.score.b + 5;
+        teamName = this.matchConfig.teamB.name;
+        map = this.stadium.map_A;
+      }
+
+      // send announcements and restart game
+      this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
+      this.chatService.sendMatchStatus();
+      Util.timeout(3000, () => {
+        this.room.stopGame();
+        this.room.setCustomStadium(map);
+        this.room.startGame();
+      });
+    }
+  }
+
   private getLastWinner(): TeamEnum | null | 0 {
     const lastScore = this.lastScores[0];
     if (!lastScore) {
       return null;
     }
     if (lastScore.a > lastScore.b) {
-      return TeamEnum.TEAM_A;
+      return TeamEnum.RED;
     } else if (lastScore.a < lastScore.b) {
-      return TeamEnum.TEAM_B;
+      return TeamEnum.BLUE;
     }
     return 0;
   }
@@ -284,20 +328,20 @@ export default class GameService implements IGameService {
   public registerKickAsTouch(playerId: number) {
     const ballPosition = this.room.getBallPosition();
 
-    let updatedToucherIds =
-      this.lastTouchInfoList.length > 0 ? this.lastTouchInfoList[0].toucherIds : [];
+    let updatedToucherIds = this.lastTouchInfo ? this.lastTouchInfo.toucherIds : [];
     updatedToucherIds.push(playerId);
 
     this.registerTouchInfo({
       toucherIds: updatedToucherIds,
       ballPosition: ballPosition,
+      hasKick: true,
     });
   }
 
-  private registerTouchInfo(newTouchInfo: ITouchInfo) {
-    this.lastTouchInfoList.unshift(newTouchInfo);
-    if (this.lastTouchInfoList.length > 20) {
-      this.lastTouchInfoList.pop();
+  private registerTouchInfo(newTouchInfo: ITouchInfo | null) {
+    this.touchInfoList.unshift(newTouchInfo);
+    if (this.touchInfoList.length > 20) {
+      this.touchInfoList.pop();
     }
   }
 }

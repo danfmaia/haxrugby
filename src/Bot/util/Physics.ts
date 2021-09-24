@@ -39,9 +39,47 @@ function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITo
     return {
       toucherIds: toucherIds,
       ballPosition: ballPosition,
+      hasKick: false,
     };
   }
   return null;
+}
+
+type ITouchCount = {
+  toucherId: number;
+  count: number;
+};
+
+function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
+  const driverIds: number[] = [];
+  const touchCountList: ITouchCount[] = [];
+
+  touchInfoList.forEach((touchInfo) => {
+    if (touchInfo && touchInfo.hasKick === false) {
+      touchInfo.toucherIds.forEach((toucherId) => {
+        const index = touchCountList.findIndex((touchInfo) => touchInfo.toucherId === toucherId);
+        if (index === -1) {
+          touchCountList.push({
+            toucherId,
+            count: 1,
+          });
+        } else {
+          touchCountList[index] = {
+            toucherId,
+            count: touchCountList[index].count + 1,
+          };
+        }
+      });
+    }
+  });
+
+  touchCountList.forEach((touchCount) => {
+    if (touchCount.count >= 10) {
+      driverIds.push(touchCount.toucherId);
+    }
+  });
+
+  return driverIds;
 }
 
 // function getTouchPositionAndPlayers(
@@ -89,7 +127,8 @@ function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITo
 const Physics = {
   calcDistanceBetweenPositions,
   getTouchPosition,
-  getTouchPositionAndPlayers: getTouchInfoList,
+  getTouchInfoList,
+  getDriverIds,
 };
 
 export default Physics;
