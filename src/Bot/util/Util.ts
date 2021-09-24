@@ -33,7 +33,7 @@ function getDurationString(timeLimit: number) {
   if (timeLimit > 1) {
     return `Duração:  ${timeLimit} minutos`;
   } else {
-    return 'Duração: 1 minuto';
+    return 'Duração:  1 minuto';
   }
 }
 

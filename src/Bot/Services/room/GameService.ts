@@ -13,7 +13,7 @@ import smallStadium from '../../singletons/smallStadium';
 import Physics from '../../util/Physics';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
-import AdminService, { IAdminService } from './RoomAdmin';
+import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './RoomMessager';
 import { RoomUtil } from '../../util/RoomUtil';
 
