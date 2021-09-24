@@ -53,7 +53,11 @@ export default class ChatService implements IChatService {
     if (this.gameService.isOvertime === false) {
       timeString = Util.getRemainingTimeString(this.gameService.remainingTime);
     } else {
-      timeString = `${Util.getRemainingTimeString(this.gameService.remainingTime)} do overtime`;
+      if (this.gameService.remainingTime === 0) {
+        timeString = 'Início do overtime';
+      } else {
+        timeString = `${Util.getRemainingTimeString(this.gameService.remainingTime)} do overtime`;
+      }
     }
 
     this.sendBoldAnnouncement(
