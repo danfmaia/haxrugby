@@ -14,7 +14,7 @@ import Physics from '../../util/Physics';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
 import AdminService, { IAdminService } from './AdminService';
-import ChatService, { IChatService } from './RoomMessager';
+import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
 
 export default class GameService implements IGameService {
