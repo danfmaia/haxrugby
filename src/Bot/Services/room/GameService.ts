@@ -152,10 +152,22 @@ export default class GameService implements IGameService {
     this.isFinalizing = true;
     this.room.pauseGame(true);
     this.lastScores.unshift(this.score);
+
+    const lastWinner = this.getLastWinner();
+    if (!lastWinner) {
+      Util.timeout(5000, () => {
+        if (this.isFinalizing) {
+          this.room.stopGame();
+        }
+      });
+      return;
+    }
+
+    const winnerTeam = this.matchConfig.getTeamBySide(lastWinner);
+
     Util.timeout(5000, () => {
       if (this.isFinalizing) {
         this.room.stopGame();
-        const lastWinner = this.getLastWinner();
         if (lastWinner === TeamEnum.RED) {
           this.room.setCustomStadium(this.stadium.map_A);
         } else if (lastWinner === TeamEnum.BLUE) {
@@ -164,7 +176,7 @@ export default class GameService implements IGameService {
       }
     });
 
-    this.chatService.sendBoldAnnouncement('Fim da partida!', 2);
+    this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
     this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.a}-${this.score.b}`);
   }
 
@@ -274,22 +286,18 @@ export default class GameService implements IGameService {
 
       if (isGoal === TeamEnum.RED) {
         this.score.a = this.score.a + 3;
-        teamName = this.matchConfig.teamA.name;
+        teamName = this.matchConfig.redTeam.name;
         map = this.stadium.map_B;
       } else {
         this.score.b = this.score.b + 3;
-        teamName = this.matchConfig.teamB.name;
+        teamName = this.matchConfig.blueTeam.name;
         map = this.stadium.map_A;
       }
 
-      // send announcements and restart game
+      // announce goal
       this.chatService.sendBoldAnnouncement(`Gol do ${teamName}!`, 2);
-      this.chatService.sendMatchStatus();
-      Util.timeout(3000, () => {
-        this.room.stopGame();
-        this.room.setCustomStadium(map);
-        this.room.startGame();
-      });
+
+      this.handleScoreChange(map);
     }
   }
 
@@ -306,23 +314,42 @@ export default class GameService implements IGameService {
 
       if (isTry === TeamEnum.RED) {
         this.score.a = this.score.a + 5;
-        teamName = this.matchConfig.teamA.name;
+        teamName = this.matchConfig.redTeam.name;
         map = this.stadium.map_B;
       } else {
         this.score.b = this.score.b + 5;
-        teamName = this.matchConfig.teamB.name;
+        teamName = this.matchConfig.blueTeam.name;
         map = this.stadium.map_A;
       }
 
-      // send announcements and restart game
+      // announce try
       this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
+
+      this.handleScoreChange(map);
+    }
+  }
+
+  private handleScoreChange(map: string) {
+    if (this.getIsVictoryByScore() === false) {
       this.chatService.sendMatchStatus();
       Util.timeout(3000, () => {
         this.room.stopGame();
         this.room.setCustomStadium(map);
         this.room.startGame();
       });
+    } else {
+      this.finalizeMatch();
     }
+  }
+
+  private getIsVictoryByScore(): boolean {
+    if (
+      this.score.a >= this.matchConfig.scoreLimit ||
+      this.score.b >= this.matchConfig.scoreLimit
+    ) {
+      return true;
+    }
+    return false;
   }
 
   private getLastWinner(): TeamEnum | null | 0 {

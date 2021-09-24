@@ -1,2 +1,2 @@
-export const TEAM_A_NAME = 'Red';
-export const TEAM_B_NAME = 'Blue';
+export const RED_TEAM_NAME = 'Red';
+export const BLUE_TEAM_NAME = 'Blue';

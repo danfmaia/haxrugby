@@ -1,10 +1,11 @@
 import { MINUTE_IN_MS } from '../../constants/general';
+import TeamEnum from '../../enums/TeamEnum';
 
 import Team from '../team/Team';
 
 export interface IMatchConfig {
-  teamA: Team;
-  teamB: Team;
+  redTeam: Team;
+  blueTeam: Team;
   timeLimit: number;
   scoreLimit: number;
 
@@ -12,20 +13,27 @@ export interface IMatchConfig {
 }
 
 class MatchConfig implements IMatchConfig {
-  public teamA: Team;
-  public teamB: Team;
+  public redTeam: Team;
+  public blueTeam: Team;
   public timeLimit: number;
   public scoreLimit: number;
 
-  constructor(teamA: Team, teamB: Team, timeLimit: number, scoreLimit: number) {
-    this.teamA = teamA;
-    this.teamB = teamB;
+  constructor(redTeam: Team, blueTeam: Team, timeLimit: number, scoreLimit: number) {
+    this.redTeam = redTeam;
+    this.blueTeam = blueTeam;
     this.timeLimit = timeLimit;
     this.scoreLimit = scoreLimit;
   }
 
   public getTimeLimitInMs(): number {
     return this.timeLimit * MINUTE_IN_MS;
+  }
+
+  public getTeamBySide(team: TeamEnum) {
+    if (team === TeamEnum.RED) {
+      return this.redTeam;
+    }
+    return this.blueTeam;
   }
 }
 
