@@ -2,21 +2,27 @@ import { MSG_GREETING_1, MSG_GREETING_2 } from '../../constants/dictionary';
 import styles from '../../constants/styles';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
+import { IGameService } from './IGameService';
 
-export interface IRoomMessager {
+export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
   sendMatchStatus(sound?: number, playerId?: number): void;
   sendPromotionLinks(playerId?: number): void;
+
+  announceRegularOvertime(): void;
+  announceBallPositionOvertime(): void;
 }
 
-export default class RoomMessager implements IRoomMessager {
+export default class ChatService implements IChatService {
   private room: IHaxRugbyRoom;
+  private gameService: IGameService;
 
-  constructor(room: IHaxRugbyRoom) {
+  constructor(room: IHaxRugbyRoom, gameService: IGameService) {
     this.room = room;
+    this.gameService = gameService;
   }
 
   public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number) {
@@ -33,7 +39,7 @@ export default class RoomMessager implements IRoomMessager {
       this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
     });
     Util.timeout(3000, () => {
-      if (this.room.isMatchInProgress) {
+      if (this.gameService.isMatchInProgress) {
         this.sendMatchStatus(2, playerId);
       }
     });
@@ -44,15 +50,15 @@ export default class RoomMessager implements IRoomMessager {
 
   public sendMatchStatus(sound: number = 0, playerId?: number) {
     let timeString: string;
-    if (this.room.isOvertime === false) {
-      timeString = Util.getRemainingTimeString(this.room.remainingTime);
+    if (this.gameService.isOvertime === false) {
+      timeString = Util.getRemainingTimeString(this.gameService.remainingTime);
     } else {
-      timeString = `${Util.getRemainingTimeString(this.room.remainingTime)} do overtime`;
+      timeString = `${Util.getRemainingTimeString(this.gameService.remainingTime)} do overtime`;
     }
 
     this.sendBoldAnnouncement(
       // prettier-ignore
-      `Placar e Tempo restante: ${this.room.score.a}-${this.room.score.b} | ${timeString}`,
+      `Placar e Tempo restante: ${this.gameService.score.a}-${this.gameService.score.b} | ${timeString}`,
       sound,
       playerId,
     );
@@ -67,5 +73,22 @@ export default class RoomMessager implements IRoomMessager {
 
     this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
     this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
+  }
+
+  public announceRegularOvertime() {
+    this.sendBoldAnnouncement('OVERTIME!', 2);
+    this.sendNormalAnnouncement('O primeiro time que pontuar ganha!');
+    this.sendMatchStatus();
+  }
+
+  public announceBallPositionOvertime() {
+    this.sendBoldAnnouncement('OVERTIME!', 2);
+    this.sendNormalAnnouncement(
+      'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!',
+    );
+    this.sendNormalAnnouncement(
+      'No ataque, para efeito de regra, significa à frente da linha de kickoff do campo adversário.',
+    );
+    this.sendMatchStatus();
   }
 }

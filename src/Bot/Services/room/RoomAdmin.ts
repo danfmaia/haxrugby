@@ -1,11 +1,11 @@
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 
-export interface IRoomAdmin {
+export interface IAdminService {
   setFirstPlayerAsAdmin(playerId: number): void;
   setEarliestPlayerAsAdmin(): void;
 }
 
-export default class RoomAdmin implements IRoomAdmin {
+export default class AdminService implements IAdminService {
   private room: IHaxRugbyRoom;
 
   constructor(room: IHaxRugbyRoom) {

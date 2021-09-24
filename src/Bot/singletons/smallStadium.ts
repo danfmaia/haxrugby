@@ -1,7 +1,7 @@
 import SmallStadium from '../models/stadium/SmallStadium';
 
-import map_A from './small/map_A';
-import map_B from './small/map_B';
+import map_A from '../stadiums/small/map_A';
+import map_B from '../stadiums/small/map_B';
 
 const goalLineX = 300;
 const goalPostY = 50;
