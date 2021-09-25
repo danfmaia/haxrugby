@@ -1,7 +1,7 @@
 import { IPlayerObject, IPosition } from 'inversihax';
 
 import defaultConfig from '../../singletons/defaultConfig';
-import { MINUTE_IN_MS } from '../../constants/general';
+import { MINUTE_IN_MS } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
@@ -20,7 +20,7 @@ import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
   private adminService: IAdminService;
-  private chatService: IChatService;
+  public chatService: IChatService;
   private roomUtil: RoomUtil;
 
   public stadium: HaxRugbyStadium = smallStadium;
@@ -310,11 +310,11 @@ export default class GameService implements IGameService {
     const lastNullableTouchInfo = this.touchInfoList[0];
     if (lastNullableTouchInfo) {
       const toucherCountByTeam = this.roomUtil.countPlayersByTeam(lastNullableTouchInfo.toucherIds);
-      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, toucherCountByTeam, this.room);
+      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, toucherCountByTeam);
     }
 
+    // check for try on ingoal
     if (isTry === false) {
-      // check for try on ingoal
       const driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
       isTry = this.stadium.getIsTry(ballPosition, driverCountByTeam);
     }

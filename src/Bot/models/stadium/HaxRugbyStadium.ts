@@ -1,6 +1,6 @@
-import AbstractHaxRugbyStadium from './AbstractHaxRugbyStadium';
+import AHaxRugbyStadium from './AHaxRugbyStadium';
 
-export default class HaxRugbyStadium extends AbstractHaxRugbyStadium {
+export default class HaxRugbyStadium extends AHaxRugbyStadium {
   public map_red: string;
   public map_blue: string;
 

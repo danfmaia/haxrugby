@@ -1,3 +1,5 @@
+export const APP_VERSION = '0.5.0';
+
 export const MINUTE_IN_MS = 60 * 1000;
 
 export const BALL_RADIUS = 10;

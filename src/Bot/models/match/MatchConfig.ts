@@ -1,4 +1,4 @@
-import { MINUTE_IN_MS } from '../../constants/general';
+import { MINUTE_IN_MS } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 
 import Team from '../team/Team';

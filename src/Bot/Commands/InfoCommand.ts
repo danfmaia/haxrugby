@@ -7,12 +7,12 @@ import { ICustomRoom } from '../rooms/ICustomRoom';
   names: ['info', 'i'],
 })
 export class InfoCommand extends CommandBase<CustomPlayer> {
-  private readonly mRoom: ICustomRoom;
+  private readonly room: ICustomRoom;
 
   public constructor(@inject(Types.IRoom) room: ICustomRoom) {
     super();
 
-    this.mRoom = room;
+    this.room = room;
   }
 
   public canExecute(player: CustomPlayer): boolean {
@@ -20,6 +20,6 @@ export class InfoCommand extends CommandBase<CustomPlayer> {
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
-    this.mRoom.sendChat('This is just a simple command that shows how to implement a command');
+    this.room.sendChat('This is just a simple command that shows how to implement a command');
   }
 }

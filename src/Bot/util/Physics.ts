@@ -1,6 +1,6 @@
 import { IPosition } from 'inversihax';
 
-import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/general';
+import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/constants';
 import { CustomPlayer } from '../models/CustomPlayer';
 import ITouchInfo from '../models/physics/ITouchInfo';
 

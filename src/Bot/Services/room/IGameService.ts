@@ -4,8 +4,11 @@ import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import { IChatService } from './ChatService';
 
 export interface IGameService {
+  chatService: IChatService;
+
   stadium: HaxRugbyStadium;
   matchConfig: MatchConfig;
 

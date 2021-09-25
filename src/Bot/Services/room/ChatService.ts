@@ -10,7 +10,7 @@ export interface IChatService {
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
   sendMatchStatus(sound?: number, playerId?: number): void;
-  sendPromotionLinks(playerId?: number): void;
+  sendPromotionLinks(sound?: number, playerId?: number): void;
 
   announceRegularOvertime(): void;
   announceBallPositionOvertime(): void;
@@ -45,7 +45,7 @@ export default class ChatService implements IChatService {
       }
     });
     Util.timeout(10000, () => {
-      this.sendPromotionLinks(playerId);
+      this.sendPromotionLinks(2, playerId);
     });
   }
 
@@ -69,8 +69,8 @@ export default class ChatService implements IChatService {
     );
   }
 
-  public sendPromotionLinks(playerId?: number) {
-    this.sendBoldAnnouncement('Regras do jogo:', 2, playerId);
+  public sendPromotionLinks(sound: number = 2, playerId?: number) {
+    this.sendBoldAnnouncement('Regras do jogo:', sound, playerId);
     this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras-completas', 0, playerId);
 
     this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);

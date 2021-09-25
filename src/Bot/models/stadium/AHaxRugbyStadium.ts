@@ -1,6 +1,6 @@
 import { IPosition } from 'inversihax';
 
-import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/general';
+import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
@@ -24,7 +24,7 @@ interface IHaxRugbyStadium {
   getIsTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam): false | TeamEnum;
 }
 
-abstract class AbstractHaxRugbyStadium implements IHaxRugbyStadium {
+abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   private goalLineX: number;
   private goalPostY: number;
   private miniAreaX: number;
@@ -109,7 +109,6 @@ abstract class AbstractHaxRugbyStadium implements IHaxRugbyStadium {
   public getIsTryOnGoalPost(
     ballPosition: IPosition,
     toucherCountByTeam: IPlayerCountByTeam,
-    room: IHaxRugbyRoom,
   ): false | TeamEnum {
     if (
       Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
@@ -129,9 +128,9 @@ abstract class AbstractHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
-    if (toucherCountByTeam.red > 0) {
+    if (toucherCountByTeam.red > 0 && ballPosition.x > 0) {
       return TeamEnum.RED;
-    } else if (toucherCountByTeam.blue > 0) {
+    } else if (toucherCountByTeam.blue > 0 && ballPosition.x < 0) {
       return TeamEnum.BLUE;
     }
     return false;
@@ -154,4 +153,4 @@ abstract class AbstractHaxRugbyStadium implements IHaxRugbyStadium {
   }
 }
 
-export default AbstractHaxRugbyStadium;
+export default AHaxRugbyStadium;
