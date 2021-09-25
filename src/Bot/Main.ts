@@ -30,7 +30,7 @@ NewMatchCommand;
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     playerName: 'HaxRugby®',
-    roomName: 'HaxRugby® by JP - TESTE ABERTO',
+    roomName: 'HaxRugby® by JP v0.4.0 - TESTE ABERTO',
     public: false,
     noPlayer: false,
   });

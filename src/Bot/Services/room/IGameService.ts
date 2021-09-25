@@ -38,7 +38,4 @@ export interface IGameService {
 
   initializeMatch(player?: CustomPlayer): void;
   cancelMatch(player: CustomPlayer, callback: () => void): void;
-
-  checkForTimeEvents(): void;
-  checkForGameEvents(): void;
 }

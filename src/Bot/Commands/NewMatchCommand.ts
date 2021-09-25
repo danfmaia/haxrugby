@@ -55,11 +55,12 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
       this.room.setTimeLimit(matchConfig.timeLimit);
       this.room.setScoreLimit(matchConfig.scoreLimit);
 
-      Util.timeout(1500, () => this.room.gameService.initializeMatch(player));
+      Util.timeout(1500, () => {
+        this.room.gameService.initializeMatch(player);
+      });
     };
 
     if (this.room.gameService.isMatchInProgress) {
-      this.room.sendChat('passed 1');
       this.room.gameService.cancelMatch(player, callback);
     } else {
       callback();

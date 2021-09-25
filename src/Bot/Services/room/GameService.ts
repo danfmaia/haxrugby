@@ -45,7 +45,7 @@ export default class GameService implements IGameService {
     this.room = room;
     this.adminService = new AdminService(room);
     this.chatService = new ChatService(room, this);
-    this.roomUtil = new RoomUtil(room);
+    this.roomUtil = new RoomUtil(room, this);
   }
 
   /**
@@ -57,12 +57,14 @@ export default class GameService implements IGameService {
       return;
     }
 
+    const ballPosition = this.room.getBallPosition();
+
     this.tickCount = this.tickCount + 1;
     if (this.tickCount % 6 === 0) {
-      this.checkForTimeEvents();
+      this.checkForTimeEvents(ballPosition);
     }
 
-    this.checkForGameEvents();
+    this.checkForGameEvents(ballPosition);
   }
 
   public handleGameStart(byPlayer: CustomPlayer) {
@@ -202,33 +204,32 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
   }
 
-  public checkForTimeEvents() {
+  private checkForTimeEvents(ballPosition: IPosition) {
     this.remainingTime = this.remainingTime - 1000 / 10;
 
-    if (
-      (this.remainingTime < this.matchConfig.getTimeLimitInMs() &&
-        this.remainingTime > 0 &&
-        this.remainingTime % MINUTE_IN_MS === 0) ||
-      this.remainingTime === MINUTE_IN_MS / 2 ||
-      this.remainingTime === MINUTE_IN_MS / 4
-    ) {
-      this.chatService.sendMatchStatus(2);
-    }
+    if (this.isOvertime === false) {
+      if (
+        (this.remainingTime < this.matchConfig.getTimeLimitInMs() &&
+          this.remainingTime > 0 &&
+          this.remainingTime % MINUTE_IN_MS === 0) ||
+        this.remainingTime === MINUTE_IN_MS / 2 ||
+        this.remainingTime === MINUTE_IN_MS / 4
+      ) {
+        this.chatService.sendMatchStatus(2);
+      }
 
-    if (this.remainingTime === this.matchConfig.getTimeLimitInMs() - 5000) {
-      this.chatService.sendPromotionLinks();
-    }
+      if (this.remainingTime === this.matchConfig.getTimeLimitInMs() - 5000) {
+        this.chatService.sendPromotionLinks();
+      }
 
-    if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
-      this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
+      if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
+        this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
+      }
     }
 
     if (this.remainingTime <= 0) {
       if (this.score.red !== this.score.blue) {
-        const ballPosition = this.room.getBallPosition();
-        const canLosingTeamTieOrTurn =
-          (this.score.red - this.score.blue <= 7 && ballPosition.x < -this.stadium.kickoffLineX) ||
-          (this.score.blue - this.score.red <= 7 && ballPosition.x > this.stadium.kickoffLineX);
+        const canLosingTeamTieOrTurn = this.roomUtil.getCanLosingTeamTieOrTurn(ballPosition);
 
         if (canLosingTeamTieOrTurn === false) {
           this.finalizeMatch();
@@ -243,9 +244,8 @@ export default class GameService implements IGameService {
     }
   }
 
-  public checkForGameEvents() {
+  public checkForGameEvents(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
-    const ballPosition = this.room.getBallPosition();
 
     this.checkForTouches(players, ballPosition);
 
