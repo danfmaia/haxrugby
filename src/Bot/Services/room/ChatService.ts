@@ -1,4 +1,4 @@
-import { MSG_GREETING_1, MSG_GREETING_2 } from '../../constants/dictionary';
+import { MSG_GREETING_1, MSG_GREETING_2, MSG_GREETING_3 } from '../../constants/dictionary';
 import styles from '../../constants/styles';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
@@ -37,6 +37,7 @@ export default class ChatService implements IChatService {
     Util.timeout(1000, () => {
       this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
       this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
+      this.sendNormalAnnouncement(MSG_GREETING_3, 0, playerId);
     });
     Util.timeout(3000, () => {
       if (this.gameService.isMatchInProgress) {

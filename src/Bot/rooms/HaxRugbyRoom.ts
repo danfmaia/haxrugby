@@ -9,7 +9,7 @@ import {
 } from 'inversihax';
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
 
-import smallConfig from '../singletons/smallConfig';
+import defaultConfig from '../singletons/defaultConfig';
 import { CustomPlayer } from '../models/CustomPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
@@ -71,9 +71,9 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
   }
 
   private initializeRoom() {
-    this.setCustomStadium(smallStadium.map_A);
+    this.setCustomStadium(smallStadium.map_red);
     this.setTeamsLock(true);
-    this.setTimeLimit(smallConfig.timeLimit);
-    this.setScoreLimit(smallConfig.scoreLimit);
+    this.setTimeLimit(defaultConfig.timeLimit);
+    this.setScoreLimit(defaultConfig.scoreLimit);
   }
 }

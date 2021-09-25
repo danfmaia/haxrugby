@@ -1,13 +1,12 @@
 import { IPlayerObject, IPosition } from 'inversihax';
 
-import smallConfig from '../../singletons/smallConfig';
+import defaultConfig from '../../singletons/defaultConfig';
 import { MINUTE_IN_MS } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import ITouchInfo from '../../models/physics/ITouchInfo';
-import SmallStadium from '../../models/stadium/SmallStadium';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import smallStadium from '../../singletons/smallStadium';
 import Physics from '../../util/Physics';
@@ -16,6 +15,7 @@ import { IGameService } from './IGameService';
 import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
+import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -23,8 +23,8 @@ export default class GameService implements IGameService {
   private chatService: IChatService;
   private roomUtil: RoomUtil;
 
-  private stadium: SmallStadium = smallStadium;
-  public matchConfig: MatchConfig = smallConfig;
+  public stadium: HaxRugbyStadium = smallStadium;
+  public matchConfig: MatchConfig = defaultConfig;
 
   private tickCount: number = 0;
   public remainingTime: number = this.matchConfig.getTimeLimitInMs();
@@ -171,9 +171,9 @@ export default class GameService implements IGameService {
       if (this.isFinalizing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
-          this.room.setCustomStadium(this.stadium.map_A);
+          this.room.setCustomStadium(this.stadium.map_red);
         } else if (lastWinner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.stadium.map_B);
+          this.room.setCustomStadium(this.stadium.map_blue);
         }
       }
     });
@@ -289,11 +289,11 @@ export default class GameService implements IGameService {
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
         teamName = this.matchConfig.redTeam.name;
-        map = this.stadium.map_B;
+        map = this.stadium.map_blue;
       } else {
         this.score.blue = this.score.blue + 3;
         teamName = this.matchConfig.blueTeam.name;
-        map = this.stadium.map_A;
+        map = this.stadium.map_red;
       }
 
       // announce goal
@@ -328,11 +328,11 @@ export default class GameService implements IGameService {
       if (isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 7;
         teamName = this.matchConfig.redTeam.name;
-        map = this.stadium.map_B;
+        map = this.stadium.map_blue;
       } else {
         this.score.blue = this.score.blue + 7;
         teamName = this.matchConfig.blueTeam.name;
-        map = this.stadium.map_A;
+        map = this.stadium.map_red;
       }
 
       // announce try
@@ -356,10 +356,17 @@ export default class GameService implements IGameService {
   }
 
   private getIsVictoryByScore(): boolean {
-    if (
-      this.score.red >= this.matchConfig.scoreLimit ||
-      this.score.blue >= this.matchConfig.scoreLimit
-    ) {
+    if (this.isOvertime === false) {
+      if (
+        this.score.red >= this.matchConfig.scoreLimit ||
+        this.score.blue >= this.matchConfig.scoreLimit
+      ) {
+        return true;
+      }
+      return false;
+    }
+
+    if (this.score.red !== this.score.blue) {
       return true;
     }
     return false;

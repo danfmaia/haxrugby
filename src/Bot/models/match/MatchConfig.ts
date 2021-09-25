@@ -4,10 +4,10 @@ import TeamEnum from '../../enums/TeamEnum';
 import Team from '../team/Team';
 
 export interface IMatchConfig {
-  redTeam: Team;
-  blueTeam: Team;
-  timeLimit: number;
-  scoreLimit: number;
+  // redTeam: Team;
+  // blueTeam: Team;
+  // timeLimit: number;
+  // scoreLimit: number;
 
   getTimeLimitInMs(): number;
 }

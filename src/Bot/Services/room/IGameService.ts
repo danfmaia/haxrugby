@@ -3,8 +3,10 @@ import { IPlayerObject } from 'inversihax';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
+import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 
 export interface IGameService {
+  stadium: HaxRugbyStadium;
   matchConfig: MatchConfig;
 
   remainingTime: number;

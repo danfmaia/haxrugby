@@ -1,4 +1,4 @@
-const map_A = `{
+const map_red = `{
 	"name" : "SmallRU 0.07 red by JP",
 	
 	"width" : 420,
@@ -132,4 +132,4 @@ const map_A = `{
 	}
 }`;
 
-export default map_A;
+export default map_red;
