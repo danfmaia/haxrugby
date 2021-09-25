@@ -6,7 +6,7 @@ import {
   MSG_GREETING_5,
   MSG_HELP,
   MSG_RULES,
-} from '../../constants/dictionary';
+} from '../../constants/dictionary/dictionary';
 import styles from '../../constants/styles';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';

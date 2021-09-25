@@ -4,6 +4,7 @@
 
 - Implementados os comandos !help, !rules, !score, !links, !admin e !password;
 - Melhorias e correções de erros;
+- Implementado suporte à internacionalização;
 - Mais por vir...
 
 ### v0.4.0:
