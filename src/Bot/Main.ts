@@ -21,12 +21,16 @@ import { ScoreCommand } from './Commands/ScoreCommand';
 import { LinksCommand } from './Commands/LinksCommand';
 import { AdminCommand } from './Commands/AdminCommand';
 import { PasswordCommand } from './Commands/PasswordCommand';
+import { RulesCommand } from './Commands/RulesCommand';
+import { HelpCommand } from './Commands/HelpCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
 // TODO: maybe find a better way of bundling everything up for the browser, however, this is up to the user of the framework...
 
 // PhysicsCommand;
+HelpCommand;
+RulesCommand;
 NewMatchCommand;
 ScoreCommand;
 LinksCommand;
@@ -38,7 +42,7 @@ const services = new ContainerModule((bind) => {
     playerName: 'HaxRugby®',
     roomName: `HaxRugby® by JP v${APP_VERSION} - Desenvolvendo`,
     public: true,
-    password: 'h667NT:nx9`C=g3h',
+    password: 'WJ-wges!B3J)M/Tx',
     noPlayer: false,
   });
 
