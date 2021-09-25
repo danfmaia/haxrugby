@@ -1,6 +1,6 @@
 import { IPosition } from 'inversihax';
 
-import { BALL_RADIUS, BALL_TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/general';
+import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/general';
 import { CustomPlayer } from '../models/CustomPlayer';
 import ITouchInfo from '../models/physics/ITouchInfo';
 
@@ -10,17 +10,26 @@ function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition): number {
   return Math.sqrt(d1 * d1 + d2 * d2);
 }
 
-function getTouchPosition(playerPos: IPosition, ballPos: IPosition): IPosition {
-  const position: IPosition = {
-    x: (playerPos.x * BALL_RADIUS + ballPos.x * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
-    y: (playerPos.y * BALL_RADIUS + ballPos.y * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
-  };
-  return position;
+// function getTouchPosition(playerPos: IPosition, ballPos: IPosition): IPosition {
+//   const position: IPosition = {
+//     x: (playerPos.x * BALL_RADIUS + ballPos.x * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
+//     y: (playerPos.y * BALL_RADIUS + ballPos.y * PLAYER_RADIUS) / (BALL_RADIUS + PLAYER_RADIUS),
+//   };
+//   return position;
+// }
+
+function getTouchTriggerDistance(radius1: number, radius2: number) {
+  return radius1 + radius2 + TOUCH_EPSILON;
+}
+
+function getIsTouching(triggerDistance: number, position1: IPosition, position2: IPosition) {
+  const distance = calcDistanceBetweenPositions(position1, position2);
+  return distance < triggerDistance;
 }
 
 function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITouchInfo | null {
   const toucherIds: number[] = [];
-  const triggerDistance = BALL_RADIUS + PLAYER_RADIUS + BALL_TOUCH_EPSILON;
+  const triggerDistance = getTouchTriggerDistance(BALL_RADIUS, PLAYER_RADIUS);
 
   for (let i = 0; i < players.length; i++) {
     const player = players[i];
@@ -28,9 +37,8 @@ function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITo
     // Skip players that don't have a position
     if (player.position === null) continue;
 
-    const distanceToBall = calcDistanceBetweenPositions(player.position, ballPosition);
-
-    if (distanceToBall < triggerDistance) {
+    const isTouching = getIsTouching(triggerDistance, player.position, ballPosition);
+    if (isTouching) {
       toucherIds.push(player.id);
     }
   }
@@ -126,7 +134,8 @@ function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
 
 const Physics = {
   calcDistanceBetweenPositions,
-  getTouchPosition,
+  getTouchTriggerDistance,
+  getIsTouching,
   getTouchInfoList,
   getDriverIds,
 };

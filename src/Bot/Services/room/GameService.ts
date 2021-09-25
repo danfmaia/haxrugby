@@ -28,7 +28,7 @@ export default class GameService implements IGameService {
 
   private tickCount: number = 0;
   public remainingTime: number = this.matchConfig.getTimeLimitInMs();
-  public score: IScore = { a: 0, b: 0 };
+  public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
 
   public isMatchInProgress: boolean = false;
@@ -53,14 +53,16 @@ export default class GameService implements IGameService {
    */
 
   public handleGameTick() {
+    if (this.isMatchInProgress === false || this.isTimeRunning === false) {
+      return;
+    }
+
     this.tickCount = this.tickCount + 1;
     if (this.tickCount % 6 === 0) {
       this.checkForTimeEvents();
     }
 
-    if (this.isTimeRunning) {
-      this.checkForGameEvents();
-    }
+    this.checkForGameEvents();
   }
 
   public handleGameStart(byPlayer: CustomPlayer) {
@@ -129,7 +131,7 @@ export default class GameService implements IGameService {
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
     this.isMatchInProgress = true;
     this.isOvertime = false;
-    this.score = { a: 0, b: 0 };
+    this.score = { red: 0, blue: 0 };
 
     this.lastTouchInfo = null;
     this.touchInfoList = [];
@@ -177,7 +179,7 @@ export default class GameService implements IGameService {
     });
 
     this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
-    this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.a}-${this.score.b}`);
+    this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
   }
 
   public cancelMatch(player: CustomPlayer, callback: () => void) {
@@ -193,15 +195,15 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(
       `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
     );
-    this.chatService.sendNormalAnnouncement(`Placar parcial:  ${this.score.a}-${this.score.b}`);
+    this.chatService.sendNormalAnnouncement(
+      `Placar parcial:  ${this.score.red}-${this.score.blue}`,
+    );
     this.chatService.sendNormalAnnouncement('');
     this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
   }
 
   public checkForTimeEvents() {
-    if (this.isTimeRunning) {
-      this.remainingTime = this.remainingTime - 1000 / 10;
-    }
+    this.remainingTime = this.remainingTime - 1000 / 10;
 
     if (
       (this.remainingTime < this.matchConfig.getTimeLimitInMs() &&
@@ -221,12 +223,12 @@ export default class GameService implements IGameService {
       this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
     }
 
-    if (this.isMatchInProgress && this.remainingTime <= 0) {
-      if (this.score.a !== this.score.b) {
+    if (this.remainingTime <= 0) {
+      if (this.score.red !== this.score.blue) {
         const ballPosition = this.room.getBallPosition();
         const canLosingTeamTieOrTurn =
-          (this.score.a - this.score.b <= 7 && ballPosition.x < -this.stadium.kickoffLineX) ||
-          (this.score.b - this.score.a <= 7 && ballPosition.x > this.stadium.kickoffLineX);
+          (this.score.red - this.score.blue <= 7 && ballPosition.x < -this.stadium.kickoffLineX) ||
+          (this.score.blue - this.score.red <= 7 && ballPosition.x > this.stadium.kickoffLineX);
 
         if (canLosingTeamTieOrTurn === false) {
           this.finalizeMatch();
@@ -285,11 +287,11 @@ export default class GameService implements IGameService {
       let map: string;
 
       if (isGoal === TeamEnum.RED) {
-        this.score.a = this.score.a + 3;
+        this.score.red = this.score.red + 3;
         teamName = this.matchConfig.redTeam.name;
         map = this.stadium.map_B;
       } else {
-        this.score.b = this.score.b + 3;
+        this.score.blue = this.score.blue + 3;
         teamName = this.matchConfig.blueTeam.name;
         map = this.stadium.map_A;
       }
@@ -302,9 +304,20 @@ export default class GameService implements IGameService {
   }
 
   private checkForTry(ballPosition: IPosition) {
-    const playerCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+    let isTry: false | TeamEnum = false;
 
-    const isTry = this.stadium.getIsTry(ballPosition, playerCountByTeam);
+    // check for try on goal post
+    const lastNullableTouchInfo = this.touchInfoList[0];
+    if (lastNullableTouchInfo) {
+      const toucherCountByTeam = this.roomUtil.countPlayersByTeam(lastNullableTouchInfo.toucherIds);
+      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, toucherCountByTeam, this.room);
+    }
+
+    if (isTry === false) {
+      // check for try on ingoal
+      const driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+      isTry = this.stadium.getIsTry(ballPosition, driverCountByTeam);
+    }
 
     if (isTry) {
       this.isTimeRunning = false;
@@ -313,11 +326,11 @@ export default class GameService implements IGameService {
       let map: string;
 
       if (isTry === TeamEnum.RED) {
-        this.score.a = this.score.a + 5;
+        this.score.red = this.score.red + 7;
         teamName = this.matchConfig.redTeam.name;
         map = this.stadium.map_B;
       } else {
-        this.score.b = this.score.b + 5;
+        this.score.blue = this.score.blue + 7;
         teamName = this.matchConfig.blueTeam.name;
         map = this.stadium.map_A;
       }
@@ -344,8 +357,8 @@ export default class GameService implements IGameService {
 
   private getIsVictoryByScore(): boolean {
     if (
-      this.score.a >= this.matchConfig.scoreLimit ||
-      this.score.b >= this.matchConfig.scoreLimit
+      this.score.red >= this.matchConfig.scoreLimit ||
+      this.score.blue >= this.matchConfig.scoreLimit
     ) {
       return true;
     }
@@ -357,9 +370,9 @@ export default class GameService implements IGameService {
     if (!lastScore) {
       return null;
     }
-    if (lastScore.a > lastScore.b) {
+    if (lastScore.red > lastScore.blue) {
       return TeamEnum.RED;
-    } else if (lastScore.a < lastScore.b) {
+    } else if (lastScore.red < lastScore.blue) {
       return TeamEnum.BLUE;
     }
     return 0;

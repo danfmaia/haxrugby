@@ -62,7 +62,7 @@ export default class ChatService implements IChatService {
 
     this.sendBoldAnnouncement(
       // prettier-ignore
-      `Placar e Tempo restante: ${this.gameService.score.a}-${this.gameService.score.b} | ${timeString}`,
+      `Placar e Tempo restante: ${this.gameService.score.red}-${this.gameService.score.blue} | ${timeString}`,
       sound,
       playerId,
     );

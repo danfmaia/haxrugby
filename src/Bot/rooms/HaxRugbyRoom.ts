@@ -15,10 +15,12 @@ import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
 import smallStadium from '../singletons/smallStadium';
 
-export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {}
+export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
+  gameService: IGameService;
+}
 
 export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoom {
-  private gameService: IGameService = new GameService(this);
+  public gameService: IGameService = new GameService(this);
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,

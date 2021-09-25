@@ -5,21 +5,17 @@ import { CustomPlayer } from '../models/CustomPlayer';
 import smallConfig from '../singletons/smallConfig';
 import Util from '../util/Util';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
-import GameService from '../services/room/GameService';
-import { IGameService } from '../services/room/IGameService';
 
 @CommandDecorator({
   names: ['new', 'new-match'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
   private readonly room: IHaxRugbyRoom;
-  private readonly gameService: IGameService;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
 
     this.room = room;
-    this.gameService = new GameService(room);
   }
 
   public canExecute(player: CustomPlayer): boolean {
@@ -44,14 +40,15 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
         matchConfig.scoreLimit = scoreLimit;
       }
 
-      this.gameService.matchConfig = matchConfig;
+      this.room.gameService.matchConfig = matchConfig;
       this.room.setTimeLimit(matchConfig.timeLimit);
       this.room.setScoreLimit(matchConfig.scoreLimit);
-      Util.timeout(1500, () => this.gameService.initializeMatch(player));
+      Util.timeout(1500, () => this.room.gameService.initializeMatch(player));
     };
 
-    if (this.gameService.isMatchInProgress) {
-      this.gameService.cancelMatch(player, callback);
+    if (this.room.gameService.isMatchInProgress) {
+      this.room.sendChat('passed 1');
+      this.room.gameService.cancelMatch(player, callback);
     } else {
       callback();
     }

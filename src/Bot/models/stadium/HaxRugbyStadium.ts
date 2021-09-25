@@ -1,6 +1,8 @@
 import { IPosition } from 'inversihax';
-import { BALL_RADIUS } from '../../constants/general';
+
+import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/general';
 import TeamEnum from '../../enums/TeamEnum';
+import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
 import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 
@@ -12,6 +14,14 @@ interface IHaxRugbyStadium {
     ballXSpeed: number,
     lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum;
+
+  getIsTryOnGoalPost(
+    ballPosition: IPosition,
+    toucherCountByTeam: IPlayerCountByTeam,
+    room: IHaxRugbyRoom,
+  ): false | TeamEnum;
+
+  getIsTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam): false | TeamEnum;
 }
 
 abstract class HaxRugbyStadium implements IHaxRugbyStadium {
@@ -96,16 +106,47 @@ abstract class HaxRugbyStadium implements IHaxRugbyStadium {
     return { x: xSign * this.goalLineX, y: ySign * this.goalPostY };
   }
 
+  public getIsTryOnGoalPost(
+    ballPosition: IPosition,
+    toucherCountByTeam: IPlayerCountByTeam,
+    room: IHaxRugbyRoom,
+  ): false | TeamEnum {
+    if (
+      Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
+      BALL_RADIUS + GOAL_POST_RADIUS + 5 * TOUCH_EPSILON
+    ) {
+      return false;
+    }
+
+    const closestGoalPostPosition = this.getClosestGoalPostPosition(ballPosition);
+    const triggerDistance = Physics.getTouchTriggerDistance(BALL_RADIUS, GOAL_POST_RADIUS);
+    const isBallTouchingGoalPost = Physics.getIsTouching(
+      triggerDistance,
+      ballPosition,
+      closestGoalPostPosition,
+    );
+    if (isBallTouchingGoalPost === false) {
+      return false;
+    }
+
+    if (toucherCountByTeam.red > 0) {
+      return TeamEnum.RED;
+    } else if (toucherCountByTeam.blue > 0) {
+      return TeamEnum.BLUE;
+    }
+    return false;
+  }
+
   public getIsTry(
     ballPosition: IPosition,
-    playerCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (ballPosition.x >= this.goalLineX - BALL_RADIUS) {
-      if (playerCountByTeam.red > 0) {
+    if (driverCountByTeam.red > 0) {
+      if (ballPosition.x >= this.goalLineX - BALL_RADIUS) {
         return TeamEnum.RED;
       }
-    } else if (ballPosition.x <= -(this.goalLineX - BALL_RADIUS)) {
-      if (playerCountByTeam.blue > 0) {
+    } else if (driverCountByTeam.blue > 0) {
+      if (ballPosition.x <= -(this.goalLineX - BALL_RADIUS)) {
         return TeamEnum.BLUE;
       }
     }
