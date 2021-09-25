@@ -18,7 +18,7 @@ import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './Commands/NewMatchCommand';
 import { APP_VERSION } from './constants/constants';
 import { ScoreCommand } from './Commands/ScoreCommand';
-import { PromotionCommand } from './Commands/PromotionCommand';
+import { LinksCommand } from './Commands/LinksCommand';
 import { AdminCommand } from './Commands/AdminCommand';
 import { PasswordCommand } from './Commands/PasswordCommand';
 
@@ -29,7 +29,7 @@ import { PasswordCommand } from './Commands/PasswordCommand';
 // PhysicsCommand;
 NewMatchCommand;
 ScoreCommand;
-PromotionCommand;
+LinksCommand;
 AdminCommand;
 PasswordCommand;
 

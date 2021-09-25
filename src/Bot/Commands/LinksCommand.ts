@@ -5,9 +5,9 @@ import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IChatService } from '../services/room/ChatService';
 
 @CommandDecorator({
-  names: ['promo'],
+  names: ['links', 'promo'],
 })
-export class PromotionCommand extends CommandBase<CustomPlayer> {
+export class LinksCommand extends CommandBase<CustomPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
