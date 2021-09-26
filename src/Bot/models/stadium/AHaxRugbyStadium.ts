@@ -9,6 +9,11 @@ import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 interface IHaxRugbyStadium {
   kickoffLineX: number;
 
+  getDidBallEnterOrLeaveIngoal(
+    ballPosition: IPosition,
+    lastBallPosition: IPosition,
+  ): 'enter' | 'leave' | false;
+
   getIsGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
@@ -30,11 +35,36 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   private miniAreaX: number;
   public kickoffLineX: number;
 
+  private get goalLineForBall(): number {
+    return this.goalLineX - BALL_RADIUS;
+  }
+
   constructor(goalLineX: number, goalPostY: number, miniAreaX: number, kickoffLineX: number) {
     this.goalLineX = goalLineX;
     this.goalPostY = goalPostY;
     this.miniAreaX = miniAreaX;
     this.kickoffLineX = kickoffLineX;
+  }
+
+  public getDidBallEnterOrLeaveIngoal(
+    ballPosition: IPosition,
+    lastBallPosition: IPosition,
+  ): 'enter' | 'leave' | false {
+    if (
+      Math.abs(lastBallPosition.x) < this.goalLineForBall &&
+      Math.abs(ballPosition.x) >= this.goalLineForBall
+    ) {
+      return 'enter';
+    }
+
+    if (
+      Math.abs(lastBallPosition.x) >= this.goalLineForBall &&
+      Math.abs(ballPosition.x) < this.goalLineForBall
+    ) {
+      return 'leave';
+    }
+
+    return false;
   }
 
   public getIsGoal(
@@ -141,11 +171,11 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
     if (driverCountByTeam.red > 0) {
-      if (ballPosition.x >= this.goalLineX - BALL_RADIUS) {
+      if (ballPosition.x >= this.goalLineForBall) {
         return TeamEnum.RED;
       }
     } else if (driverCountByTeam.blue > 0) {
-      if (ballPosition.x <= -(this.goalLineX - BALL_RADIUS)) {
+      if (ballPosition.x <= -this.goalLineForBall) {
         return TeamEnum.BLUE;
       }
     }

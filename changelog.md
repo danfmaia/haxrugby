@@ -2,9 +2,9 @@
 
 ### v0.5.0 _(loading...)_:
 
-- Implementados os comandos !help, !rules, !score, !links, !admin e !password;
+- Adicionados os comandos !help, !rules, !score, !links, !admin e !password;
+- Adicionado suporte à internacionalização;
 - Melhorias e correções de erros;
-- Implementado suporte à internacionalização;
 - Mais por vir...
 
 ### v0.4.0:
@@ -25,4 +25,4 @@
 
 - Implementado o ciclo básico de partida;
 - Implementado o Overtime (OT);
-- Implementado o comando de nova partida (!new).
+- Adicionado o comando de nova partida (!new).

@@ -30,6 +30,10 @@ type DictionaryKeys = {
     PASSWORD: string;
     PASSWORD_DESCRIPTION: string;
   };
+
+  MSG_DEF_REC: [string, string];
+  MSG_BALL_LEAVE_INGOAL: string;
+  MSG_SAFETY_ALLOWED: string;
 };
 
 export default DictionaryKeys;

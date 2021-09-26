@@ -57,6 +57,13 @@ const ptBr: DictionaryKeys = {
     PASSWORD_DESCRIPTION:
       'Coloca ou retira senha na/da sala. Se o jogador não é admin, recebe admin. Omitir o 2º argumento funciona como `on`.',
   },
+
+  MSG_DEF_REC: [
+    'DESVIO / RECUO',
+    'A bola sofreu desvio ou foi recuada. Não tem safety! A defesa deve tentar tirar a bola!',
+  ],
+  MSG_BALL_LEAVE_INGOAL: 'A bola saiu do ingoal.',
+  MSG_SAFETY_ALLOWED: 'Safety permitido.',
 };
 
 const Dict = getDict();
@@ -68,8 +75,11 @@ export const MSG_GREETING_4 = Dict['MSG_GREETING_4'];
 export const MSG_GREETING_5 = Dict['MSG_GREETING_5'];
 
 export const MSG_RULES = Dict['MSG_RULES'];
-
 export const MSG_HELP = Dict['MSG_HELP'];
+
+export const MSG_DEF_REC = Dict['MSG_DEF_REC'];
+export const MSG_BALL_LEAVE_INGOAL = Dict['MSG_BALL_LEAVE_INGOAL'];
+export const MSG_SAFETY_ALLOWED = Dict['MSG_SAFETY_ALLOWED'];
 
 function getDict() {
   switch (lang) {

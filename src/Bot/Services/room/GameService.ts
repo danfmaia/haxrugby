@@ -16,6 +16,11 @@ import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import {
+  MSG_BALL_LEAVE_INGOAL,
+  MSG_DEF_REC,
+  MSG_SAFETY_ALLOWED,
+} from '../../constants/dictionary/dictionary';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -41,6 +46,9 @@ export default class GameService implements IGameService {
   private touchInfoList: (ITouchInfo | null)[] = [];
   private driverIds: number[] = [];
 
+  private lastBallPosition: IPosition = { x: 0, y: 0 };
+  private isDefRec: boolean = false;
+
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
     this.adminService = new AdminService(room);
@@ -65,6 +73,8 @@ export default class GameService implements IGameService {
     }
 
     this.checkForGameEvents(ballPosition);
+
+    this.lastBallPosition = ballPosition;
   }
 
   public handleGameStart(byPlayer: CustomPlayer) {
@@ -86,14 +96,14 @@ export default class GameService implements IGameService {
   public handleGamePause(byPlayer: CustomPlayer) {
     if (this.isMatchInProgress && this.isTimeRunning) {
       this.isTimeRunning = false;
-      this.chatService.sendMatchStatus(2);
+      this.chatService.sendMatchStatus();
     }
   }
 
   public handleGameUnpause(byPlayer: CustomPlayer) {
     if (this.isMatchInProgress && this.isTimeRunning === false && this.isBeforeKickoff === false) {
       this.isTimeRunning = true;
-      this.chatService.sendMatchStatus(2);
+      this.chatService.sendMatchStatus();
     }
   }
 
@@ -249,6 +259,8 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
+    this.checkForDefRec(ballPosition, this.lastBallPosition);
+
     if (this.lastTouchInfo) {
       this.checkForGoal(ballPosition, this.lastTouchInfo);
     }
@@ -271,6 +283,41 @@ export default class GameService implements IGameService {
     if (this.touchInfoList.length > 20) {
       this.touchInfoList.pop();
     }
+  }
+
+  private checkForDefRec(ballPosition: IPosition, lastBallPosition: IPosition) {
+    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
+      ballPosition,
+      lastBallPosition,
+    );
+    if (didBallEnterOrLeaveIngoal === 'enter') {
+      this.isDefRec = this.getIsDefRec(ballPosition);
+      if (this.isDefRec) {
+        this.isDefRec = true;
+        this.chatService.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
+        this.chatService.sendNormalAnnouncement(MSG_DEF_REC[1]);
+      } else {
+        this.chatService.sendNormalAnnouncement(MSG_SAFETY_ALLOWED);
+      }
+    } else if (didBallEnterOrLeaveIngoal === 'leave') {
+      this.isDefRec = false;
+      this.chatService.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
+    }
+  }
+
+  private getIsDefRec(ballPosition: IPosition) {
+    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.lastTouchInfo);
+    if (typeof lastTeamThatTouchedBall === 'boolean') {
+      return false;
+    }
+
+    if (
+      (ballPosition.x < 0 && lastTeamThatTouchedBall === TeamEnum.RED) ||
+      (ballPosition.x > 0 && lastTeamThatTouchedBall === TeamEnum.BLUE)
+    ) {
+      return true;
+    }
+    return false;
   }
 
   private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo) {

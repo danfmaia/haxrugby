@@ -1,4 +1,6 @@
-import { IPosition } from 'inversihax';
+import { IPosition, TeamID } from 'inversihax';
+import TeamEnum from '../enums/TeamEnum';
+import ITouchInfo from '../models/physics/ITouchInfo';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IGameService } from '../services/room/IGameService';
 
@@ -41,5 +43,30 @@ export class RoomUtil {
         blueMinusRed > 0 &&
         ballPosition.x > this.gameService.stadium.kickoffLineX)
     );
+  }
+
+  public getLastTeamThatTouchedBall(lastTouchInfo: ITouchInfo | null): boolean | TeamEnum {
+    if (!lastTouchInfo) {
+      return false;
+    }
+
+    let hasRedTouched: Boolean = false;
+    let hasBlueTouched: Boolean = false;
+
+    lastTouchInfo.toucherIds.forEach((toucherId) => {
+      const team = this.room.getPlayer(toucherId).team;
+      if (team === TeamID.RedTeam) {
+        hasRedTouched = true;
+      } else if (team === TeamID.BlueTeam) {
+        hasBlueTouched = true;
+      }
+    });
+
+    if (hasRedTouched === true && hasBlueTouched === false) {
+      return TeamEnum.RED;
+    } else if (hasRedTouched === false && hasBlueTouched === true) {
+      return TeamEnum.BLUE;
+    }
+    return true;
   }
 }
