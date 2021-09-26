@@ -1,6 +1,6 @@
 import { IPosition } from 'inversihax';
 
-import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/constants';
+import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS, TOUCH_MIN_TICKS } from '../constants/constants';
 import { CustomPlayer } from '../models/CustomPlayer';
 import ITouchInfo from '../models/physics/ITouchInfo';
 
@@ -82,7 +82,7 @@ function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
   });
 
   touchCountList.forEach((touchCount) => {
-    if (touchCount.count >= 10) {
+    if (touchCount.count >= TOUCH_MIN_TICKS) {
       driverIds.push(touchCount.toucherId);
     }
   });

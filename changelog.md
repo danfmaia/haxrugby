@@ -1,6 +1,11 @@
 ## CHANGELOG
 
-### v0.5.0 _(loading...)_:
+### v0.6.0 _(loading...)_:
+
+- Implementado o desvio/recuo de bola;
+- Implementado o Safety (SF).
+
+### v0.5.0:
 
 - Adicionados os comandos !help, !rules, !score, !links, !admin e !password;
 - Adicionado suporte à internacionalização;

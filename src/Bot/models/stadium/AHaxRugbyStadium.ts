@@ -20,6 +20,18 @@ interface IHaxRugbyStadium {
     lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum;
 
+  getIsSafetyOnGoalPost(
+    ballPosition: IPosition,
+    toucherCountByTeam: IPlayerCountByTeam,
+    isDefRec: boolean,
+  ): false | TeamEnum;
+
+  getIsSafety(
+    ballPosition: IPosition,
+    driverCountByTeam: IPlayerCountByTeam,
+    isDefRec: boolean,
+  ): false | TeamEnum;
+
   getIsTryOnGoalPost(
     ballPosition: IPosition,
     toucherCountByTeam: IPlayerCountByTeam,
@@ -134,6 +146,63 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     const ySign = Math.sign(position.y);
 
     return { x: xSign * this.goalLineX, y: ySign * this.goalPostY };
+  }
+
+  public getIsSafetyOnGoalPost(
+    ballPosition: IPosition,
+    toucherCountByTeam: IPlayerCountByTeam,
+    isDefRec: boolean,
+  ): false | TeamEnum {
+    if (isDefRec) {
+      return false;
+    }
+
+    // TODO: This logic can be improved. At least for safety on goal post.
+    if (
+      Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
+      BALL_RADIUS + GOAL_POST_RADIUS + 5 * TOUCH_EPSILON
+    ) {
+      return false;
+    }
+
+    const closestGoalPostPosition = this.getClosestGoalPostPosition(ballPosition);
+    const triggerDistance = Physics.getTouchTriggerDistance(BALL_RADIUS, GOAL_POST_RADIUS);
+    const isBallTouchingGoalPost = Physics.getIsTouching(
+      triggerDistance,
+      ballPosition,
+      closestGoalPostPosition,
+    );
+    if (isBallTouchingGoalPost === false) {
+      return false;
+    }
+
+    if (toucherCountByTeam.red > 0 && ballPosition.x <= -this.goalLineForBall) {
+      return TeamEnum.RED;
+    } else if (toucherCountByTeam.blue > 0 && ballPosition.x >= this.goalLineForBall) {
+      return TeamEnum.BLUE;
+    }
+    return false;
+  }
+
+  public getIsSafety(
+    ballPosition: IPosition,
+    driverCountByTeam: IPlayerCountByTeam,
+    isDefRec: boolean,
+  ): false | TeamEnum {
+    if (isDefRec) {
+      return false;
+    }
+
+    if (driverCountByTeam.red > 0) {
+      if (ballPosition.x <= -this.goalLineForBall) {
+        return TeamEnum.RED;
+      }
+    } else if (driverCountByTeam.blue > 0) {
+      if (ballPosition.x >= this.goalLineForBall) {
+        return TeamEnum.BLUE;
+      }
+    }
+    return false;
   }
 
   public getIsTryOnGoalPost(

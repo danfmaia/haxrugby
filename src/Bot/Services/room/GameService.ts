@@ -21,6 +21,7 @@ import {
   MSG_DEF_REC,
   MSG_SAFETY_ALLOWED,
 } from '../../constants/dictionary/dictionary';
+import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -45,6 +46,8 @@ export default class GameService implements IGameService {
   private lastTouchInfo: ITouchInfo | null = null;
   private touchInfoList: (ITouchInfo | null)[] = [];
   private driverIds: number[] = [];
+  private toucherCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
+  private driverCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
 
   private lastBallPosition: IPosition = { x: 0, y: 0 };
   private isDefRec: boolean = false;
@@ -259,8 +262,6 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    this.checkForDefRec(ballPosition, this.lastBallPosition);
-
     if (this.lastTouchInfo) {
       this.checkForGoal(ballPosition, this.lastTouchInfo);
     }
@@ -268,9 +269,21 @@ export default class GameService implements IGameService {
     // check for ball drives
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
 
-    if (this.driverIds.length) {
-      this.checkForTry(ballPosition);
+    this.checkForDefRec(ballPosition, this.lastBallPosition);
+
+    // count current ball drivers
+    this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+
+    // count current ball touchers
+    const lastNullableTouchInfo = this.touchInfoList[0];
+    if (lastNullableTouchInfo) {
+      this.toucherCountByTeam = this.roomUtil.countPlayersByTeam(lastNullableTouchInfo.toucherIds);
+    } else {
+      this.toucherCountByTeam = { red: 0, blue: 0 };
     }
+
+    this.checkForSafety(ballPosition);
+    this.checkForTry(ballPosition);
   }
 
   private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
@@ -283,41 +296,6 @@ export default class GameService implements IGameService {
     if (this.touchInfoList.length > 20) {
       this.touchInfoList.pop();
     }
-  }
-
-  private checkForDefRec(ballPosition: IPosition, lastBallPosition: IPosition) {
-    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
-      ballPosition,
-      lastBallPosition,
-    );
-    if (didBallEnterOrLeaveIngoal === 'enter') {
-      this.isDefRec = this.getIsDefRec(ballPosition);
-      if (this.isDefRec) {
-        this.isDefRec = true;
-        this.chatService.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
-        this.chatService.sendNormalAnnouncement(MSG_DEF_REC[1]);
-      } else {
-        this.chatService.sendNormalAnnouncement(MSG_SAFETY_ALLOWED);
-      }
-    } else if (didBallEnterOrLeaveIngoal === 'leave') {
-      this.isDefRec = false;
-      this.chatService.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
-    }
-  }
-
-  private getIsDefRec(ballPosition: IPosition) {
-    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.lastTouchInfo);
-    if (typeof lastTeamThatTouchedBall === 'boolean') {
-      return false;
-    }
-
-    if (
-      (ballPosition.x < 0 && lastTeamThatTouchedBall === TeamEnum.RED) ||
-      (ballPosition.x > 0 && lastTeamThatTouchedBall === TeamEnum.BLUE)
-    ) {
-      return true;
-    }
-    return false;
   }
 
   private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo) {
@@ -350,20 +328,91 @@ export default class GameService implements IGameService {
     }
   }
 
+  private checkForDefRec(ballPosition: IPosition, lastBallPosition: IPosition) {
+    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
+      ballPosition,
+      lastBallPosition,
+    );
+    if (didBallEnterOrLeaveIngoal === 'enter') {
+      this.isDefRec = this.getIsDefRec(ballPosition);
+      console.log('isDefRec: ', this.isDefRec);
+
+      if (this.isDefRec) {
+        this.chatService.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
+        this.chatService.sendNormalAnnouncement(MSG_DEF_REC[1]);
+      } else {
+        this.chatService.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
+      }
+    } else if (didBallEnterOrLeaveIngoal === 'leave') {
+      this.isDefRec = false;
+      this.chatService.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
+    }
+  }
+
+  private getIsDefRec(ballPosition: IPosition) {
+    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.lastTouchInfo);
+    if (typeof lastTeamThatTouchedBall === 'boolean') {
+      return false;
+    }
+
+    if (
+      (ballPosition.x < 0 && lastTeamThatTouchedBall === TeamEnum.RED) ||
+      (ballPosition.x > 0 && lastTeamThatTouchedBall === TeamEnum.BLUE)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  private checkForSafety(ballPosition: IPosition) {
+    let isSafety: false | TeamEnum = this.stadium.getIsSafety(
+      ballPosition,
+      this.driverCountByTeam,
+      this.isDefRec,
+    );
+
+    // check for safety on goal post
+    isSafety = this.stadium.getIsSafetyOnGoalPost(
+      ballPosition,
+      this.toucherCountByTeam,
+      this.isDefRec,
+    );
+
+    // check for safety on ingoal
+    if (isSafety === false) {
+      isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam, this.isDefRec);
+    }
+
+    if (isSafety) {
+      this.isTimeRunning = false;
+      this.room.pauseGame(true);
+      let teamName: string;
+      let map: string;
+
+      if (isSafety === TeamEnum.RED) {
+        teamName = this.matchConfig.redTeam.name;
+        map = this.stadium.map_red;
+      } else {
+        teamName = this.matchConfig.blueTeam.name;
+        map = this.stadium.map_blue;
+      }
+
+      // announce safety
+      this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
+
+      this.restartGame(map);
+    }
+  }
+
   private checkForTry(ballPosition: IPosition) {
     let isTry: false | TeamEnum = false;
 
     // check for try on goal post
-    const lastNullableTouchInfo = this.touchInfoList[0];
-    if (lastNullableTouchInfo) {
-      const toucherCountByTeam = this.roomUtil.countPlayersByTeam(lastNullableTouchInfo.toucherIds);
-      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, toucherCountByTeam);
-    }
+    isTry = this.stadium.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
 
     // check for try on ingoal
     if (isTry === false) {
-      const driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
-      isTry = this.stadium.getIsTry(ballPosition, driverCountByTeam);
+      isTry = this.stadium.getIsTry(ballPosition, this.driverCountByTeam);
     }
 
     if (isTry) {
@@ -391,12 +440,7 @@ export default class GameService implements IGameService {
 
   private handleScoreChange(map: string) {
     if (this.getIsVictoryByScore() === false) {
-      this.chatService.sendMatchStatus();
-      Util.timeout(3000, () => {
-        this.room.stopGame();
-        this.room.setCustomStadium(map);
-        this.room.startGame();
-      });
+      this.restartGame(map);
     } else {
       this.finalizeMatch();
     }
@@ -417,6 +461,15 @@ export default class GameService implements IGameService {
       return true;
     }
     return false;
+  }
+
+  private restartGame(map: string) {
+    this.chatService.sendMatchStatus();
+    Util.timeout(3000, () => {
+      this.room.stopGame();
+      this.room.setCustomStadium(map);
+      this.room.startGame();
+    });
   }
 
   private getLastWinner(): TeamEnum | null | 0 {
