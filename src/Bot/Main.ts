@@ -40,10 +40,11 @@ PasswordCommand;
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     playerName: 'HaxRugby®',
-    roomName: `HaxRugby® by JP v${APP_VERSION} - Desenvolvendo`,
+    roomName: `HaxRugby® by JP v${APP_VERSION} - TESTE ABERTO`,
     public: true,
     password: 'WJ-wges!B3J)M/Tx',
     noPlayer: false,
+    maxPlayers: 15,
   });
 
   bind<IPlayerService<CustomPlayer>>(Types.IPlayerService)

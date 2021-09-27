@@ -106,7 +106,7 @@ export default class ChatService implements IChatService {
 
   public sendPromotionLinks(sound: number = 2, playerId?: number) {
     this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);
-    this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras-completas', 0, playerId);
+    this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
 
     this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
     this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
@@ -132,7 +132,7 @@ export default class ChatService implements IChatService {
     });
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement('SAFETY (SF) - Ainda não implementado', 0, playerId);
+    this.sendBoldAnnouncement('SAFETY (SF)', 0, playerId);
     MSG_RULES.SAFETY.forEach((rule) => {
       this.sendNormalAnnouncement(rule, 0, playerId);
     });

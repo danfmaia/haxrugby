@@ -29,7 +29,7 @@ export class PasswordCommand extends CommandBase<CustomPlayer> {
     }
 
     if (!args[1] || args[1] === 'on') {
-      this.room.setPassword('h667NT:nx9`C=g3h');
+      this.room.setPassword('WJ-wges!B3J)M/Tx');
     } else if (args[1] === 'off') {
       // @ts-ignore: Unreachable code error
       this.room.setPassword(null);
