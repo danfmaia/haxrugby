@@ -9,16 +9,16 @@ import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 interface IHaxRugbyStadium {
   kickoffLineX: number;
 
-  getDidBallEnterOrLeaveIngoal(
-    ballPosition: IPosition,
-    lastBallPosition: IPosition,
-  ): 'enter' | 'leave' | false;
-
   getIsGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastBallPositionWhenTouched: IPosition,
   ): false | TeamEnum;
+
+  getDidBallEnterOrLeaveIngoal(
+    ballPosition: IPosition,
+    lastBallPosition: IPosition,
+  ): 'enter' | 'leave' | false;
 
   getIsSafetyOnGoalPost(
     ballPosition: IPosition,
@@ -51,6 +51,31 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return this.goalLineX - BALL_RADIUS;
   }
 
+  public getIsGoal(
+    ballPosition: IPosition,
+    ballXSpeed: number,
+    lastBallPositionWhenTouched: IPosition,
+  ): false | TeamEnum {
+    if (this.getIsBallInsideGoalInYAxis(ballPosition)) {
+      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)) {
+        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
+          return TeamEnum.RED;
+        }
+        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
+          return TeamEnum.RED;
+        }
+      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)) {
+        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
+          return TeamEnum.BLUE;
+        }
+        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
+          return TeamEnum.BLUE;
+        }
+      }
+    }
+    return false;
+  }
+
   constructor(goalLineX: number, goalPostY: number, miniAreaX: number, kickoffLineX: number) {
     this.goalLineX = goalLineX;
     this.goalPostY = goalPostY;
@@ -76,31 +101,6 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return 'leave';
     }
 
-    return false;
-  }
-
-  public getIsGoal(
-    ballPosition: IPosition,
-    ballXSpeed: number,
-    lastBallPositionWhenTouched: IPosition,
-  ): false | TeamEnum {
-    if (this.getIsBallInsideGoalInYAxis(ballPosition)) {
-      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)) {
-        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
-          return TeamEnum.RED;
-        }
-        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
-          return TeamEnum.RED;
-        }
-      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)) {
-        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
-          return TeamEnum.BLUE;
-        }
-        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
-          return TeamEnum.BLUE;
-        }
-      }
-    }
     return false;
   }
 
@@ -151,12 +151,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   public getIsSafetyOnGoalPost(
     ballPosition: IPosition,
     toucherCountByTeam: IPlayerCountByTeam,
-    isDefRec: boolean,
   ): false | TeamEnum {
-    if (isDefRec) {
-      return false;
-    }
-
     // TODO: This logic can be improved. At least for safety on goal post.
     if (
       Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
@@ -187,12 +182,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   public getIsSafety(
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
-    isDefRec: boolean,
   ): false | TeamEnum {
-    if (isDefRec) {
-      return false;
-    }
-
     if (driverCountByTeam.red > 0) {
       if (ballPosition.x <= -this.goalLineForBall) {
         return TeamEnum.RED;

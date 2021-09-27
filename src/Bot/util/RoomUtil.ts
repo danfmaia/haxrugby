@@ -13,7 +13,7 @@ export class RoomUtil {
     this.gameService = gameService;
   }
 
-  public countPlayersByTeam(playerIds: (number | null)[]) {
+  public countPlayersByTeam(playerIds: number[]) {
     const playerCount = {
       red: 0,
       blue: 0,

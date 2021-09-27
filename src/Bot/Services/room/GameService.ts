@@ -282,7 +282,12 @@ export default class GameService implements IGameService {
       this.toucherCountByTeam = { red: 0, blue: 0 };
     }
 
-    this.checkForSafety(ballPosition);
+    if (this.isDefRec === false) {
+      if (this.checkForSafety(ballPosition)) {
+        return;
+      }
+    }
+
     this.checkForTry(ballPosition);
   }
 
@@ -335,8 +340,6 @@ export default class GameService implements IGameService {
     );
     if (didBallEnterOrLeaveIngoal === 'enter') {
       this.isDefRec = this.getIsDefRec(ballPosition);
-      console.log('isDefRec: ', this.isDefRec);
-
       if (this.isDefRec) {
         this.chatService.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
         this.chatService.sendNormalAnnouncement(MSG_DEF_REC[1]);
@@ -364,23 +367,15 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private checkForSafety(ballPosition: IPosition) {
-    let isSafety: false | TeamEnum = this.stadium.getIsSafety(
-      ballPosition,
-      this.driverCountByTeam,
-      this.isDefRec,
-    );
+  private checkForSafety(ballPosition: IPosition): boolean {
+    let isSafety: false | TeamEnum = false;
 
     // check for safety on goal post
-    isSafety = this.stadium.getIsSafetyOnGoalPost(
-      ballPosition,
-      this.toucherCountByTeam,
-      this.isDefRec,
-    );
+    isSafety = this.stadium.getIsSafetyOnGoalPost(ballPosition, this.toucherCountByTeam);
 
-    // check for safety on ingoal
+    // check for safety on in-goal
     if (isSafety === false) {
-      isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam, this.isDefRec);
+      isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam);
     }
 
     if (isSafety) {
@@ -401,7 +396,9 @@ export default class GameService implements IGameService {
       this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
 
       this.restartGame(map);
+      return true;
     }
+    return false;
   }
 
   private checkForTry(ballPosition: IPosition) {
@@ -410,7 +407,7 @@ export default class GameService implements IGameService {
     // check for try on goal post
     isTry = this.stadium.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
 
-    // check for try on ingoal
+    // check for try on in-goal
     if (isTry === false) {
       isTry = this.stadium.getIsTry(ballPosition, this.driverCountByTeam);
     }
