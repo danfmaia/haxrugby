@@ -41,7 +41,7 @@ export default class GameService implements IGameService {
   private isBeforeKickoff: boolean = true;
   private isTimeRunning: boolean = false;
   public isOvertime: boolean = false;
-  private isFinalizing: boolean = false;
+  private isCompleting: boolean = false;
 
   private lastTouchInfo: ITouchInfo | null = null;
   private touchInfoList: (ITouchInfo | null)[] = [];
@@ -83,7 +83,9 @@ export default class GameService implements IGameService {
   public handleGameStart(byPlayer: CustomPlayer) {
     this.isBeforeKickoff = true;
     this.isTimeRunning = false;
-    this.isFinalizing = false;
+    this.isCompleting = false;
+    this.lastBallPosition = { x: 0, y: 0 };
+
     if (!this.isMatchInProgress) {
       this.initializeMatch(byPlayer);
     }
@@ -163,17 +165,17 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
   }
 
-  public finalizeMatch() {
+  private completeMatch() {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
-    this.isFinalizing = true;
+    this.isCompleting = true;
     this.room.pauseGame(true);
     this.lastScores.unshift(this.score);
 
     const lastWinner = this.getLastWinner();
     if (!lastWinner) {
       Util.timeout(5000, () => {
-        if (this.isFinalizing) {
+        if (this.isCompleting) {
           this.room.stopGame();
         }
       });
@@ -183,7 +185,7 @@ export default class GameService implements IGameService {
     const winnerTeam = this.matchConfig.getTeamBySide(lastWinner);
 
     Util.timeout(5000, () => {
-      if (this.isFinalizing) {
+      if (this.isCompleting) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
           this.room.setCustomStadium(this.stadium.map_red);
@@ -245,7 +247,7 @@ export default class GameService implements IGameService {
         const canLosingTeamTieOrTurn = this.roomUtil.getCanLosingTeamTieOrTurn(ballPosition);
 
         if (canLosingTeamTieOrTurn === false) {
-          this.finalizeMatch();
+          this.completeMatch();
         } else if (this.isOvertime === false) {
           this.isOvertime = true;
           this.chatService.announceBallPositionOvertime();
@@ -257,7 +259,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  public checkForGameEvents(ballPosition: IPosition) {
+  private checkForGameEvents(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
     this.checkForTouches(players, ballPosition);
@@ -329,7 +331,7 @@ export default class GameService implements IGameService {
       // announce goal
       this.chatService.sendBoldAnnouncement(`Gol do ${teamName}!`, 2);
 
-      this.handleScoreChange(map);
+      this.handleRestartOrCompletion(map);
     }
   }
 
@@ -431,15 +433,15 @@ export default class GameService implements IGameService {
       // announce try
       this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
 
-      this.handleScoreChange(map);
+      this.handleRestartOrCompletion(map);
     }
   }
 
-  private handleScoreChange(map: string) {
+  private handleRestartOrCompletion(map: string) {
     if (this.getIsVictoryByScore() === false) {
       this.restartGame(map);
     } else {
-      this.finalizeMatch();
+      this.completeMatch();
     }
   }
 
