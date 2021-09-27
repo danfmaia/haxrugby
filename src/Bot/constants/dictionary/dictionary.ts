@@ -13,20 +13,22 @@ const ptBr: DictionaryKeys = {
   MSG_RULES: {
     TITLE: 'Resumo das REGRAS do jogo:',
     TRY: [
-      'É o tento mais importante do rugby. Vale 5 pontos e dá direito a uma conversão de 2 pontos.',
-      'A conversão ainda não foi implementada',
+      'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
+      'O in-goal é a região do campo atrás da linha de gol de cada time.',
+      'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
+      'A conversão ainda não foi implementada.',
     ],
     GOAL: [
       'É o tento secundário do rugby. Vale 3 pontos.',
-      'Só pode ser feito de fora da pequena área. Qualquer contato dentro dessa área invalida o gol.',
+      'Só pode ser feito de fora da pequena área. Qualquer contato na bola dentro dessa área invalida o Field Goal.',
     ],
     SAFETY: [
-      'É a jogada de segurança da defesa.',
-      'Se o último toque na bola antes dela entrar no ingoal for do ataque, a defesa pode conduzir a bola.',
+      'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
+      'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
     ],
     LINK_FOR_COMPLETE_RULES:
-      'Para as regras completas, acesse sites.google.com/site/haxrugby/regras-completas',
+      'Para as regras completas, acesse sites.google.com/site/haxrugby/regras',
   },
 
   MSG_HELP: {
@@ -62,7 +64,7 @@ const ptBr: DictionaryKeys = {
     'DESVIO / RECUO',
     'A bola sofreu desvio ou foi recuada. Não tem safety! A defesa deve tentar tirar a bola!',
   ],
-  MSG_BALL_LEAVE_INGOAL: 'A bola saiu do ingoal.',
+  MSG_BALL_LEAVE_INGOAL: 'A bola saiu do in-goal.',
   MSG_SAFETY_ALLOWED: 'Safety permitido.',
 };
 
