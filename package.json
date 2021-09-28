@@ -1,7 +1,7 @@
 {
   "name": "haxrugby",
   "description": "The HaxRugby hostbot. Based on HaxBall Headless API and Inversihax.",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "author": "Dan Maia (aka JP)",
   "scripts": {
     "test": "mocha --require ts-node/register src/**/*.test.ts",

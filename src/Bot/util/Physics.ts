@@ -1,6 +1,6 @@
 import { IPosition } from 'inversihax';
 
-import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS, DRIVE_MIN_TICKS } from '../constants/constants';
+import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/constants';
 import { CustomPlayer } from '../models/CustomPlayer';
 import ITouchInfo from '../models/physics/ITouchInfo';
 
@@ -57,39 +57,29 @@ function getTouchInfoList(players: CustomPlayer[], ballPosition: IPosition): ITo
   return null;
 }
 
-type ITouchCount = {
-  toucherId: number;
-  count: number;
-};
-
 function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
-  const driverIds: number[] = [];
-  const touchCountList: ITouchCount[] = [];
+  let driverIds: number[] = [];
+  let firstTouchInfo: ITouchInfo;
 
-  touchInfoList.forEach((touchInfo) => {
-    if (touchInfo && touchInfo.hasKick === false) {
-      touchInfo.toucherIds.forEach((toucherId) => {
-        const index = touchCountList.findIndex((touchInfo) => touchInfo.toucherId === toucherId);
-        if (index === -1) {
-          touchCountList.push({
-            toucherId,
-            count: 1,
-          });
-        } else {
-          touchCountList[index] = {
-            toucherId,
-            count: touchCountList[index].count + 1,
-          };
+  for (let index = 0; index < touchInfoList.length; index++) {
+    const touchInfo = touchInfoList[index];
+    // TODO: Improve hasKick logic to only discard kicker's toucherId.
+    if (!touchInfo || touchInfo.toucherIds.length === 0 || touchInfo.hasKick) {
+      return [];
+    }
+    if (index === 0) {
+      firstTouchInfo = touchInfo;
+    }
+    touchInfo.toucherIds.forEach((toucherId) => {
+      if (index === 0) {
+        driverIds = [...touchInfo.toucherIds];
+      } else {
+        if (firstTouchInfo.toucherIds.includes(toucherId) === false) {
+          driverIds = driverIds.filter((driverId) => driverId !== toucherId);
         }
-      });
-    }
-  });
-
-  touchCountList.forEach((touchCount) => {
-    if (touchCount.count >= DRIVE_MIN_TICKS) {
-      driverIds.push(touchCount.toucherId);
-    }
-  });
+      }
+    });
+  }
 
   return driverIds;
 }

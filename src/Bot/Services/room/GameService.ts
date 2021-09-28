@@ -1,7 +1,7 @@
 import { IPlayerObject, IPosition } from 'inversihax';
 
 import defaultConfig from '../../singletons/defaultConfig';
-import { MINUTE_IN_MS } from '../../constants/constants';
+import { MINUTE_IN_MS, DRIVE_MIN_TICKS } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
@@ -301,7 +301,7 @@ export default class GameService implements IGameService {
     }
 
     this.touchInfoList.unshift(newTouchInfo);
-    if (this.touchInfoList.length > 20) {
+    if (this.touchInfoList.length > DRIVE_MIN_TICKS) {
       this.touchInfoList.pop();
     }
   }

@@ -224,7 +224,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     const redCondition = ballPosition.x > 0 && toucherCountByTeam.red > 0;
     const blueCondition = ballPosition.x < 0 && toucherCountByTeam.blue > 0;
 
-    if (redCondition === false && redCondition === false) {
+    if (redCondition === false && blueCondition === false) {
       return false;
     }
 
