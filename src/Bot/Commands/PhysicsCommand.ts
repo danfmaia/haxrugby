@@ -29,8 +29,8 @@ export class PhysicsCommand extends CommandBase<CustomPlayer> {
       return;
     }
 
-    let playerDiscProps = this.mRoom.getPlayerDiscProperties(player.id);
-    let props = <IDiscPropertiesObject>{};
+    const playerDiscProps = this.mRoom.getPlayerDiscProperties(player.id);
+    const props = <IDiscPropertiesObject>{};
 
     if (increase) {
       props.xgravity = playerDiscProps.xgravity + 0.01;

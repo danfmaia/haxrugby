@@ -6,5 +6,6 @@ export class Startup extends StartupBase {
     super(room);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public configure(): void {}
 }

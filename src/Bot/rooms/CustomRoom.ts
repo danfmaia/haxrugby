@@ -22,7 +22,7 @@ export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
     @inject(Types.IPlayerService) playerService: IPlayerService<CustomPlayer>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser
+    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
   ) {
     super(roomConfig, playerService, chatMessageInterceptorFactory, chatMessageParser);
 

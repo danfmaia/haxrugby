@@ -18,11 +18,15 @@ function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition): number {
 //   return position;
 // }
 
-function getTouchTriggerDistance(radius1: number, radius2: number) {
+function getTouchTriggerDistance(radius1: number, radius2: number): number {
   return radius1 + radius2 + TOUCH_EPSILON;
 }
 
-function getIsTouching(triggerDistance: number, position1: IPosition, position2: IPosition) {
+function getIsTouching(
+  triggerDistance: number,
+  position1: IPosition,
+  position2: IPosition,
+): boolean {
   const distance = calcDistanceBetweenPositions(position1, position2);
   return distance < triggerDistance;
 }

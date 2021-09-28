@@ -2,11 +2,15 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   // plugins: ['eslint-plugin-import', '@typescript-eslint', '@typescript-eslint/tslint', 'prettier'],
   extends: [
-    'prettier',
+    // 'airbnb-typescript/base',
+    // 'plugin:@typescript-eslint/recommended',
+    // 'prettier',
+
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/typescript',
+    'prettier',
   ],
   plugins: ['prettier', '@typescript-eslint', 'import'],
   parser: '@typescript-eslint/parser',
@@ -19,17 +23,20 @@ module.exports = {
     es6: true,
     node: true,
   },
-  overrides: {
-    files: ['src/**/*.js'],
-  },
+  overrides: [
+    {
+      files: ['src/**/*.js'],
+    },
+  ],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/array-type': [
       'warn',
       {
-        default: 'array-simple',
+        default: 'array',
       },
     ],
+    '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/naming-convention': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
@@ -43,11 +50,13 @@ module.exports = {
     ],
     '@typescript-eslint/no-use-before-define': 'warn',
     '@typescript-eslint/prefer-namespace-keyword': 'warn',
+    '@typescript-eslint/require-await': 'error',
     '@typescript-eslint/semi': ['warn', 'always'],
     '@typescript-eslint/type-annotation-spacing': 'warn',
     'arrow-parens': ['warn', 'always'],
     'brace-style': 'off',
     'comma-dangle': ['warn', 'always-multiline'],
+    // 'default-case': 'error',
     eqeqeq: ['warn', 'smart'],
     'id-denylist': [
       'warn',

@@ -63,7 +63,7 @@ export default class GameService implements IGameService {
    *  ROOM EVENT HANDLERS
    */
 
-  public handleGameTick() {
+  public handleGameTick(): void {
     if (this.isMatchInProgress === false || this.isTimeRunning === false) {
       return;
     }
@@ -80,7 +80,7 @@ export default class GameService implements IGameService {
     this.lastBallPosition = ballPosition;
   }
 
-  public handleGameStart(byPlayer: CustomPlayer) {
+  public handleGameStart(byPlayer: CustomPlayer): void {
     this.isBeforeKickoff = true;
     this.isTimeRunning = false;
     this.isCompleting = false;
@@ -91,38 +91,38 @@ export default class GameService implements IGameService {
     }
   }
 
-  public handleGameStop(byPlayer: CustomPlayer) {
+  public handleGameStop(byPlayer: CustomPlayer): void {
     if (this.isTimeRunning) {
       this.isTimeRunning = false;
       this.chatService.sendMatchStatus(2);
     }
   }
 
-  public handleGamePause(byPlayer: CustomPlayer) {
+  public handleGamePause(byPlayer: CustomPlayer): void {
     if (this.isMatchInProgress && this.isTimeRunning) {
       this.isTimeRunning = false;
       this.chatService.sendMatchStatus();
     }
   }
 
-  public handleGameUnpause(byPlayer: CustomPlayer) {
+  public handleGameUnpause(byPlayer: CustomPlayer): void {
     if (this.isMatchInProgress && this.isTimeRunning === false && this.isBeforeKickoff === false) {
       this.isTimeRunning = true;
       this.chatService.sendMatchStatus();
     }
   }
 
-  public handlePlayerJoin(player: IPlayerObject) {
+  public handlePlayerJoin(player: IPlayerObject): void {
     this.adminService.setFirstPlayerAsAdmin(player.id);
     this.chatService.sendGreetingsToIncomingPlayer(player.id);
   }
 
-  public handlePlayerLeave(player: CustomPlayer) {
+  public handlePlayerLeave(player: CustomPlayer): void {
     this.unregisterPlayerFromMatchData(player.id);
     this.adminService.setEarliestPlayerAsAdmin();
   }
 
-  public handlePlayerBallKick(player: CustomPlayer) {
+  public handlePlayerBallKick(player: CustomPlayer): void {
     // run time after kickoff
     if (this.isBeforeKickoff) {
       this.isBeforeKickoff = false;
@@ -132,7 +132,7 @@ export default class GameService implements IGameService {
     this.registerKickAsTouch(player.id);
   }
 
-  public handlePlayerTeamChange(player: CustomPlayer) {
+  public handlePlayerTeamChange(player: CustomPlayer): void {
     // pin host at top of spectators list
     if (player.id === 0) {
       this.room.setPlayerTeam(0, 0);
@@ -144,7 +144,7 @@ export default class GameService implements IGameService {
    *  OWN METHODS
    */
 
-  public initializeMatch(player?: CustomPlayer) {
+  public initializeMatch(player?: CustomPlayer): void {
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
     this.isMatchInProgress = true;
     this.isOvertime = false;
@@ -199,7 +199,7 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
   }
 
-  public cancelMatch(player: CustomPlayer, callback: () => void) {
+  public cancelMatch(player: CustomPlayer, callback: () => void): void {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
@@ -234,7 +234,7 @@ export default class GameService implements IGameService {
       }
 
       if (this.remainingTime === this.matchConfig.getTimeLimitInMs() - 5000) {
-        this.chatService.sendPromotionLinks();
+        this.chatService.sendMainPromotionLinks();
       }
 
       if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {

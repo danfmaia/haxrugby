@@ -1,13 +1,13 @@
 import * as moment from 'moment';
 
-function timeout(ms: number, callback: () => void) {
+function timeout(ms: number, callback: () => void): void {
   const timeout = setTimeout(() => {
     callback();
     clearTimeout(timeout);
   }, ms);
 }
 
-function timeoutAsync(ms: number, callback: () => void) {
+function timeoutAsync(ms: number, callback: () => void): Promise<unknown> {
   return new Promise(() => {
     const timeout = setTimeout(() => {
       callback();
@@ -29,7 +29,7 @@ function validatePositiveNumericInput(input?: string): number | false {
   return false;
 }
 
-function getDurationString(timeLimit: number) {
+function getDurationString(timeLimit: number): string {
   if (timeLimit > 1) {
     return `Duração:  ${timeLimit} minutos`;
   } else {

@@ -29,7 +29,7 @@ class MatchConfig implements IMatchConfig {
     return this.timeLimit * MINUTE_IN_MS;
   }
 
-  public getTeamBySide(team: TeamEnum) {
+  public getTeamBySide(team: TeamEnum): Team {
     if (team === TeamEnum.RED) {
       return this.redTeam;
     }

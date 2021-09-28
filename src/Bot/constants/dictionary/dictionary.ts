@@ -68,6 +68,15 @@ const ptBr: DictionaryKeys = {
   MSG_SAFETY_ALLOWED: 'Safety permitido.',
 };
 
+function getDict() {
+  switch (lang) {
+    case LanguageEnum['pt-BR']:
+      return ptBr;
+    default:
+      return ptBr;
+  }
+}
+
 const Dict = getDict();
 
 export const MSG_GREETING_1 = Dict['MSG_GREETING_1'];
@@ -82,12 +91,3 @@ export const MSG_HELP = Dict['MSG_HELP'];
 export const MSG_DEF_REC = Dict['MSG_DEF_REC'];
 export const MSG_BALL_LEAVE_INGOAL = Dict['MSG_BALL_LEAVE_INGOAL'];
 export const MSG_SAFETY_ALLOWED = Dict['MSG_SAFETY_ALLOWED'];
-
-function getDict() {
-  switch (lang) {
-    case LanguageEnum['pt-BR']:
-      return ptBr;
-    default:
-      return ptBr;
-  }
-}

@@ -1,6 +1,7 @@
 import { IPosition, TeamID } from 'inversihax';
 import TeamEnum from '../enums/TeamEnum';
 import ITouchInfo from '../models/physics/ITouchInfo';
+import IPlayerCountByTeam from '../models/team/IPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IGameService } from '../services/room/IGameService';
 
@@ -13,7 +14,7 @@ export class RoomUtil {
     this.gameService = gameService;
   }
 
-  public countPlayersByTeam(playerIds: number[]) {
+  public countPlayersByTeam(playerIds: number[]): IPlayerCountByTeam {
     const playerCount = {
       red: 0,
       blue: 0,
@@ -50,8 +51,8 @@ export class RoomUtil {
       return false;
     }
 
-    let hasRedTouched: Boolean = false;
-    let hasBlueTouched: Boolean = false;
+    let hasRedTouched = false as boolean;
+    let hasBlueTouched = false as boolean;
 
     lastTouchInfo.toucherIds.forEach((toucherId) => {
       const team = this.room.getPlayer(toucherId).team;

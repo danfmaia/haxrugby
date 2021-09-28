@@ -21,7 +21,7 @@ export interface IChatService {
   announceBallPositionOvertime(): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
-  sendPromotionLinks(sound?: number, playerId?: number): void;
+  sendMainPromotionLinks(sound?: number, playerId?: number): void;
   sendRules(sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
 }
@@ -35,11 +35,11 @@ export default class ChatService implements IChatService {
     this.gameService = gameService;
   }
 
-  public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number) {
+  public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
   }
 
-  public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number) {
+  public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
   }
 
@@ -47,7 +47,7 @@ export default class ChatService implements IChatService {
     this.sendNormalAnnouncement('', 0, playerId);
   }
 
-  public sendMatchStatus(sound: number = 0, playerId?: number) {
+  public sendMatchStatus(sound: number = 0, playerId?: number): void {
     let timeString: string;
     if (this.gameService.isOvertime === false) {
       timeString = Util.getRemainingTimeString(this.gameService.remainingTime);
@@ -67,13 +67,13 @@ export default class ChatService implements IChatService {
     );
   }
 
-  public announceRegularOvertime() {
+  public announceRegularOvertime(): void {
     this.sendBoldAnnouncement('OVERTIME!', 2);
     this.sendNormalAnnouncement('O primeiro time que pontuar ganha!');
     this.sendMatchStatus();
   }
 
-  public announceBallPositionOvertime() {
+  public announceBallPositionOvertime(): void {
     this.sendBoldAnnouncement('OVERTIME!', 2);
     this.sendNormalAnnouncement(
       'O jogo não termina enquanto o time perdedor estiver no ataque e ainda puder empatar ou virar o jogo!',
@@ -84,7 +84,7 @@ export default class ChatService implements IChatService {
     this.sendMatchStatus();
   }
 
-  public sendGreetingsToIncomingPlayer(playerId: number) {
+  public sendGreetingsToIncomingPlayer(playerId: number): void {
     Util.timeout(1000, () => {
       this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
       this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
@@ -100,11 +100,11 @@ export default class ChatService implements IChatService {
       }
     });
     Util.timeout(10000, () => {
-      this.sendPromotionLinks(2, playerId);
+      this.sendMainPromotionLinks(2, playerId);
     });
   }
 
-  public sendPromotionLinks(sound: number = 2, playerId?: number) {
+  public sendMainPromotionLinks(sound: number = 2, playerId?: number): void {
     this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);
     this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
 
@@ -115,7 +115,7 @@ export default class ChatService implements IChatService {
     this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
   }
 
-  public sendRules(sound: number = 2, playerId?: number) {
+  public sendRules(sound: number = 2, playerId?: number): void {
     this.sendSpace(playerId);
     this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId);
     this.sendSpace(playerId);
@@ -142,7 +142,7 @@ export default class ChatService implements IChatService {
     this.sendSpace(playerId);
   }
 
-  public sendHelp(sound: number = 2, playerId?: number) {
+  public sendHelp(sound: number = 2, playerId?: number): void {
     this.sendSpace(playerId);
     this.sendBoldAnnouncement(MSG_HELP.TITLE, sound, playerId);
     this.sendSpace(playerId);
