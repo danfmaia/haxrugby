@@ -127,6 +127,7 @@ export default class GameService implements IGameService {
     if (this.isBeforeKickoff) {
       this.isBeforeKickoff = false;
       this.isTimeRunning = true;
+      this.chatService.sendMatchStatus();
     }
 
     this.registerKickAsTouch(player.id);
@@ -329,7 +330,7 @@ export default class GameService implements IGameService {
       }
 
       // announce goal
-      this.chatService.sendBoldAnnouncement(`Gol do ${teamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(`Field Goal do ${teamName}!`, 2);
 
       this.handleRestartOrCompletion(map);
     }
@@ -372,12 +373,12 @@ export default class GameService implements IGameService {
   private checkForSafety(ballPosition: IPosition): boolean {
     let isSafety: false | TeamEnum = false;
 
-    // check for safety on goal post
-    isSafety = this.stadium.getIsSafetyOnGoalPost(ballPosition, this.toucherCountByTeam);
-
     // check for safety on in-goal
+    isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam);
+
+    // check for safety on goal post
     if (isSafety === false) {
-      isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam);
+      isSafety = this.stadium.getIsSafetyOnGoalPost(ballPosition, this.toucherCountByTeam);
     }
 
     if (isSafety) {
@@ -406,12 +407,12 @@ export default class GameService implements IGameService {
   private checkForTry(ballPosition: IPosition) {
     let isTry: false | TeamEnum = false;
 
-    // check for try on goal post
-    isTry = this.stadium.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
-
     // check for try on in-goal
+    isTry = this.stadium.getIsTry(ballPosition, this.driverCountByTeam);
+
+    // check for try on goal post
     if (isTry === false) {
-      isTry = this.stadium.getIsTry(ballPosition, this.driverCountByTeam);
+      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
     }
 
     if (isTry) {

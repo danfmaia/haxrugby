@@ -20,25 +20,25 @@ interface IHaxRugbyStadium {
     lastBallPosition: IPosition,
   ): 'enter' | 'leave' | false;
 
-  getIsSafetyOnGoalPost(
-    ballPosition: IPosition,
-    toucherCountByTeam: IPlayerCountByTeam,
-    isDefRec: boolean,
-  ): false | TeamEnum;
-
   getIsSafety(
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
     isDefRec: boolean,
   ): false | TeamEnum;
 
+  getIsSafetyOnGoalPost(
+    ballPosition: IPosition,
+    toucherCountByTeam: IPlayerCountByTeam,
+    isDefRec: boolean,
+  ): false | TeamEnum;
+
+  getIsTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam): false | TeamEnum;
+
   getIsTryOnGoalPost(
     ballPosition: IPosition,
     toucherCountByTeam: IPlayerCountByTeam,
     room: IHaxRugbyRoom,
   ): false | TeamEnum;
-
-  getIsTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam): false | TeamEnum;
 }
 
 abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
@@ -148,6 +148,18 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return { x: xSign * this.goalLineX, y: ySign * this.goalPostY };
   }
 
+  public getIsSafety(
+    ballPosition: IPosition,
+    driverCountByTeam: IPlayerCountByTeam,
+  ): false | TeamEnum {
+    if (ballPosition.x <= -this.goalLineForBall && driverCountByTeam.red > 0) {
+      return TeamEnum.RED;
+    } else if (ballPosition.x >= this.goalLineForBall && driverCountByTeam.blue > 0) {
+      return TeamEnum.BLUE;
+    }
+    return false;
+  }
+
   public getIsSafetyOnGoalPost(
     ballPosition: IPosition,
     toucherCountByTeam: IPlayerCountByTeam,
@@ -157,6 +169,13 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
       BALL_RADIUS + GOAL_POST_RADIUS + 5 * TOUCH_EPSILON
     ) {
+      return false;
+    }
+
+    const redCondition = ballPosition.x <= -this.goalLineForBall && toucherCountByTeam.red > 0;
+    const blueCondition = ballPosition.x >= this.goalLineForBall && toucherCountByTeam.blue > 0;
+
+    if (redCondition === false && blueCondition === false) {
       return false;
     }
 
@@ -171,26 +190,22 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
-    if (toucherCountByTeam.red > 0 && ballPosition.x <= -this.goalLineForBall) {
+    if (redCondition) {
       return TeamEnum.RED;
-    } else if (toucherCountByTeam.blue > 0 && ballPosition.x >= this.goalLineForBall) {
+    } else if (blueCondition) {
       return TeamEnum.BLUE;
     }
     return false;
   }
 
-  public getIsSafety(
+  public getIsTry(
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (driverCountByTeam.red > 0) {
-      if (ballPosition.x <= -this.goalLineForBall) {
-        return TeamEnum.RED;
-      }
-    } else if (driverCountByTeam.blue > 0) {
-      if (ballPosition.x >= this.goalLineForBall) {
-        return TeamEnum.BLUE;
-      }
+    if (ballPosition.x >= this.goalLineForBall && driverCountByTeam.red > 0) {
+      return TeamEnum.RED;
+    } else if (ballPosition.x <= -this.goalLineForBall && driverCountByTeam.blue > 0) {
+      return TeamEnum.BLUE;
     }
     return false;
   }
@@ -206,6 +221,13 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
+    const redCondition = ballPosition.x > 0 && toucherCountByTeam.red > 0;
+    const blueCondition = ballPosition.x < 0 && toucherCountByTeam.blue > 0;
+
+    if (redCondition === false && redCondition === false) {
+      return false;
+    }
+
     const closestGoalPostPosition = this.getClosestGoalPostPosition(ballPosition);
     const triggerDistance = Physics.getTouchTriggerDistance(BALL_RADIUS, GOAL_POST_RADIUS);
     const isBallTouchingGoalPost = Physics.getIsTouching(
@@ -217,26 +239,10 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
-    if (toucherCountByTeam.red > 0 && ballPosition.x > 0) {
+    if (redCondition) {
       return TeamEnum.RED;
-    } else if (toucherCountByTeam.blue > 0 && ballPosition.x < 0) {
+    } else if (blueCondition) {
       return TeamEnum.BLUE;
-    }
-    return false;
-  }
-
-  public getIsTry(
-    ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
-  ): false | TeamEnum {
-    if (driverCountByTeam.red > 0) {
-      if (ballPosition.x >= this.goalLineForBall) {
-        return TeamEnum.RED;
-      }
-    } else if (driverCountByTeam.blue > 0) {
-      if (ballPosition.x <= -this.goalLineForBall) {
-        return TeamEnum.BLUE;
-      }
     }
     return false;
   }

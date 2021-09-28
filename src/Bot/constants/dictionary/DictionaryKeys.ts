@@ -7,9 +7,12 @@ type DictionaryKeys = {
 
   MSG_RULES: {
     TITLE: string;
-    TRY: [string, string, string, string, string];
-    FIELD_GOAL: [string, string, string];
-    SAFETY: [string, string, string, string];
+    TRY_TITLE: string;
+    TRY: [string, string, string, string];
+    FIELD_GOAL_TITLE: string;
+    FIELD_GOAL: [string, string];
+    SAFETY_TITLE: string;
+    SAFETY: [string, string, string];
     LINK_FOR_COMPLETE_RULES: string;
   };
 

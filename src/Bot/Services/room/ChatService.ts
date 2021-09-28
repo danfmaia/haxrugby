@@ -110,8 +110,8 @@ export default class ChatService implements IChatService {
 
   public sendMainPromotionLinks(sound: number = 2, playerId?: number): void {
     this.sendSinglePromotionLink(LinkEnum.RULES, sound, playerId);
-    this.sendSinglePromotionLink(LinkEnum.DISCORD, sound, playerId);
-    this.sendSinglePromotionLink(LinkEnum.FACEBOOK, sound, playerId);
+    this.sendSinglePromotionLink(LinkEnum.DISCORD, 0, playerId);
+    this.sendSinglePromotionLink(LinkEnum.FACEBOOK, 0, playerId);
   }
 
   public sendSinglePromotionLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
@@ -121,11 +121,11 @@ export default class ChatService implements IChatService {
         this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
         return;
       case LinkEnum.DISCORD:
-        this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
+        this.sendBoldAnnouncement('Server no DISCORD:', sound, playerId);
         this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
         return;
       case LinkEnum.FACEBOOK:
-        this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
+        this.sendBoldAnnouncement('Grupo no FACEBOOK:', sound, playerId);
         this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
         return;
       default:
@@ -137,13 +137,13 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId);
     this.sendSpace(playerId);
 
-    this.sendSingleRule(RuleEnum.TRY, sound, playerId);
+    this.sendSingleRule(RuleEnum.TRY, 0, playerId);
     this.sendSpace(playerId);
 
-    this.sendSingleRule(RuleEnum.FIELD_GOAL, sound, playerId);
+    this.sendSingleRule(RuleEnum.FIELD_GOAL, 0, playerId);
     this.sendSpace(playerId);
 
-    this.sendSingleRule(RuleEnum.SAFETY, sound, playerId);
+    this.sendSingleRule(RuleEnum.SAFETY, 0, playerId);
     this.sendSpace(playerId);
 
     this.sendBoldAnnouncement(MSG_RULES.LINK_FOR_COMPLETE_RULES, 0, playerId);
@@ -153,19 +153,19 @@ export default class ChatService implements IChatService {
   public sendSingleRule(rule: RuleEnum, sound: number = 2, playerId?: number): void {
     switch (rule) {
       case RuleEnum.TRY:
-        this.sendBoldAnnouncement('TRY', 0, playerId);
+        this.sendBoldAnnouncement(MSG_RULES.TRY_TITLE, sound, playerId);
         MSG_RULES.TRY.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         return;
       case RuleEnum.FIELD_GOAL:
-        this.sendBoldAnnouncement('FIELD GOAL (FG)', 0, playerId);
+        this.sendBoldAnnouncement(MSG_RULES.FIELD_GOAL_TITLE, sound, playerId);
         MSG_RULES.FIELD_GOAL.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         return;
       case RuleEnum.SAFETY:
-        this.sendBoldAnnouncement('SAFETY (SF)', 0, playerId);
+        this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
         MSG_RULES.SAFETY.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });

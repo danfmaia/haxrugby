@@ -16,7 +16,7 @@ import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './Interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './Commands/NewMatchCommand';
-import { APP_VERSION } from './constants/constants';
+import { APP_VERSION, ROOM_SUBTITLE } from './constants/constants';
 import { ScoreCommand } from './Commands/ScoreCommand';
 import { LinksCommand } from './Commands/links/LinksCommand';
 import { AdminCommand } from './Commands/AdminCommand';
@@ -53,7 +53,7 @@ PasswordCommand;
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     playerName: 'HaxRugby®',
-    roomName: `HaxRugby® by JP v${APP_VERSION} - Já vou abrir!`,
+    roomName: `🏉 HaxRugby® by JP v${APP_VERSION} ${ROOM_SUBTITLE}`,
     public: true,
     password: 'WJ-wges!B3J)M/Tx',
     noPlayer: false,

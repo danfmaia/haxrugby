@@ -1,4 +1,5 @@
-export const APP_VERSION = '0.6.0';
+export const APP_VERSION = '0.6.1';
+export const ROOM_SUBTITLE = '- NOVA VERSÃO!';
 
 export const MINUTE_IN_MS = 60 * 1000;
 
