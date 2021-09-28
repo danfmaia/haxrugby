@@ -1,13 +1,14 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import { CustomPlayer } from '../models/CustomPlayer';
-import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
-import { IChatService } from '../services/room/ChatService';
+import RuleEnum from '../../enums/RuleEnum';
+import { CustomPlayer } from '../../models/CustomPlayer';
+import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
+import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
-  names: ['discord', 'dc'],
+  names: ['try'],
 })
-export class LinksCommand extends CommandBase<CustomPlayer> {
+export class TryCommand extends CommandBase<CustomPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -24,9 +25,9 @@ export class LinksCommand extends CommandBase<CustomPlayer> {
 
   public execute(player: CustomPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendMainPromotionLinks();
+      this.chatService.sendSingleRule(RuleEnum.TRY);
     } else {
-      this.chatService.sendMainPromotionLinks(0, player.id);
+      this.chatService.sendSingleRule(RuleEnum.TRY, 0, player.id);
     }
   }
 }

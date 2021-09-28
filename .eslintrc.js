@@ -56,7 +56,7 @@ module.exports = {
     'arrow-parens': ['warn', 'always'],
     'brace-style': 'off',
     'comma-dangle': ['warn', 'always-multiline'],
-    // 'default-case': 'error',
+    'default-case': 'error',
     eqeqeq: ['warn', 'smart'],
     'id-denylist': [
       'warn',

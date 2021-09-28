@@ -8,6 +8,8 @@ import {
   MSG_RULES,
 } from '../../constants/dictionary/dictionary';
 import styles from '../../constants/styles';
+import LinkEnum from '../../enums/LinkEnum';
+import RuleEnum from '../../enums/RuleEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
@@ -22,7 +24,9 @@ export interface IChatService {
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
   sendMainPromotionLinks(sound?: number, playerId?: number): void;
-  sendRules(sound?: number, playerId?: number): void;
+  sendSinglePromotionLink(link: LinkEnum, sound?: number, playerId?: number): void;
+  sendMainRules(sound?: number, playerId?: number): void;
+  sendSingleRule(rule: RuleEnum, sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
 }
 
@@ -105,41 +109,69 @@ export default class ChatService implements IChatService {
   }
 
   public sendMainPromotionLinks(sound: number = 2, playerId?: number): void {
-    this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);
-    this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
-
-    this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
-    this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
-
-    this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
-    this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
+    this.sendSinglePromotionLink(LinkEnum.RULES, sound, playerId);
+    this.sendSinglePromotionLink(LinkEnum.DISCORD, sound, playerId);
+    this.sendSinglePromotionLink(LinkEnum.FACEBOOK, sound, playerId);
   }
 
-  public sendRules(sound: number = 2, playerId?: number): void {
+  public sendSinglePromotionLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
+    switch (link) {
+      case LinkEnum.RULES:
+        this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);
+        this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
+        return;
+      case LinkEnum.DISCORD:
+        this.sendBoldAnnouncement('Server no DISCORD:', 0, playerId);
+        this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
+        return;
+      case LinkEnum.FACEBOOK:
+        this.sendBoldAnnouncement('Grupo no FACEBOOK:', 0, playerId);
+        this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
+        return;
+      default:
+    }
+  }
+
+  public sendMainRules(sound: number = 2, playerId?: number): void {
     this.sendSpace(playerId);
     this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId);
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement('TRY', 0, playerId);
-    MSG_RULES.TRY.forEach((rule) => {
-      this.sendNormalAnnouncement(rule, 0, playerId);
-    });
+    this.sendSingleRule(RuleEnum.TRY, sound, playerId);
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement('FIELD GOAL (FG)', 0, playerId);
-    MSG_RULES.GOAL.forEach((rule) => {
-      this.sendNormalAnnouncement(rule, 0, playerId);
-    });
+    this.sendSingleRule(RuleEnum.FIELD_GOAL, sound, playerId);
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement('SAFETY (SF)', 0, playerId);
-    MSG_RULES.SAFETY.forEach((rule) => {
-      this.sendNormalAnnouncement(rule, 0, playerId);
-    });
+    this.sendSingleRule(RuleEnum.SAFETY, sound, playerId);
     this.sendSpace(playerId);
 
     this.sendBoldAnnouncement(MSG_RULES.LINK_FOR_COMPLETE_RULES, 0, playerId);
     this.sendSpace(playerId);
+  }
+
+  public sendSingleRule(rule: RuleEnum, sound: number = 2, playerId?: number): void {
+    switch (rule) {
+      case RuleEnum.TRY:
+        this.sendBoldAnnouncement('TRY', 0, playerId);
+        MSG_RULES.TRY.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        return;
+      case RuleEnum.FIELD_GOAL:
+        this.sendBoldAnnouncement('FIELD GOAL (FG)', 0, playerId);
+        MSG_RULES.FIELD_GOAL.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        return;
+      case RuleEnum.SAFETY:
+        this.sendBoldAnnouncement('SAFETY (SF)', 0, playerId);
+        MSG_RULES.SAFETY.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        return;
+      default:
+    }
   }
 
   public sendHelp(sound: number = 2, playerId?: number): void {
