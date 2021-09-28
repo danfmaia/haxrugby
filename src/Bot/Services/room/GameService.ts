@@ -397,7 +397,7 @@ export default class GameService implements IGameService {
       // announce safety
       this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
 
-      this.restartGame(map);
+      this.handleRestartOrCompletion(map);
       return true;
     }
     return false;
@@ -438,14 +438,14 @@ export default class GameService implements IGameService {
   }
 
   private handleRestartOrCompletion(map: string) {
-    if (this.getIsVictoryByScore() === false) {
+    if (this.getIsMatchCompleted() === false) {
       this.restartGame(map);
     } else {
       this.completeMatch();
     }
   }
 
-  private getIsVictoryByScore(): boolean {
+  private getIsMatchCompleted(): boolean {
     if (this.isOvertime === false) {
       if (
         this.score.red >= this.matchConfig.scoreLimit ||
