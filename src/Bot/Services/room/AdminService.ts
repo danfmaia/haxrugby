@@ -13,17 +13,17 @@ export default class AdminService implements IAdminService {
   }
 
   public setFirstPlayerAsAdmin(playerId: number): void {
-    if (this.room.getPlayerList().length === 2) {
+    if (this.room.getPlayerList().length === 1) {
       this.room.setPlayerAdmin(playerId, true);
     }
   }
 
   public setEarliestPlayerAsAdmin(): void {
     const remainingPlayers = this.room.getPlayerList();
-    if (remainingPlayers.length === 1) {
+    if (remainingPlayers.length === 0) {
       return;
     }
-    remainingPlayers.shift();
+    // remainingPlayers.shift();
     const isTherePlayerAdmin = remainingPlayers.some((player) => player.admin);
     if (isTherePlayerAdmin === false) {
       if (remainingPlayers.length >= 2) {

@@ -27,7 +27,7 @@ export class AdminCommand extends CommandBase<CustomPlayer> {
     if (args[1] === 'reclaim') {
       // set all players (except self) as non-admins
       const allPlayers = this.room.getPlayerList().filter((_player) => _player.id !== player.id);
-      allPlayers.shift();
+      // allPlayers.shift();
       allPlayers.forEach((player) => {
         this.room.setPlayerAdmin(player.id, false);
       });

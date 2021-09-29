@@ -56,7 +56,7 @@ const services = new ContainerModule((bind) => {
     roomName: `🏉 HaxRugby® v${APP_VERSION} ${ROOM_SUBTITLE}`,
     public: true,
     password: 'WJ-wges!B3J)M/Tx',
-    noPlayer: false,
+    noPlayer: true,
     maxPlayers: 15,
   });
 

@@ -1,6 +1,21 @@
 ## CHANGELOG
 
-### v0.6.0 _(loading...)_:
+### v0.6.2 (_loading..._):
+
+- Corrigido o erro do Try que não era Try;
+- Retirado player do host;
+
+### v0.6.1:
+
+- Aprimoradas as lógicas do Try e do Safety;
+- Melhoradas as descrições do Try e do Safety (do comando !h);
+- Corrigido mensagem "A bola saiu do ingoal." aparecendo após o reinício de jogo;
+- Anúncio de placar agora também é exibido após o kickoff de reinício;
+- Corrigido jogo reiniciando, ao invés de finalizando, após Safety no overtime;
+- Aprimorados comandos existentes;
+- Criado comando para cada regra ou link (!dc, !fb, !try, !fg e !sf).
+
+### v0.6.0:
 
 - Implementado o desvio/recuo de bola;
 - Implementado o Safety (SF).
@@ -9,8 +24,7 @@
 
 - Adicionados os comandos !help, !rules, !score, !links, !admin e !password;
 - Adicionado suporte à internacionalização;
-- Melhorias e correções de erros;
-- Mais por vir...
+- Melhorias e correções de erros.
 
 ### v0.4.0:
 

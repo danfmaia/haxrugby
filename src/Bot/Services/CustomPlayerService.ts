@@ -5,9 +5,10 @@ import { CustomPlayer } from '../models/CustomPlayer';
 @injectable()
 export class CustomPlayerService implements IPlayerService<CustomPlayer> {
   public cast(player: IPlayerObject): CustomPlayer {
-    // if (player === null) {
-    //   return;
-    // }
+    if (player === null) {
+      // @ts-ignore: Unreachable code error
+      return;
+    }
 
     return new CustomPlayer(
       player.id,
