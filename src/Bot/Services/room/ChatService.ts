@@ -1,4 +1,6 @@
 import {
+  MSG_BALL_LEAVE_INGOAL,
+  MSG_DEF_REC,
   MSG_GREETING_1,
   MSG_GREETING_2,
   MSG_GREETING_3,
@@ -6,10 +8,12 @@ import {
   MSG_GREETING_5,
   MSG_HELP,
   MSG_RULES,
+  MSG_SAFETY_ALLOWED,
 } from '../../constants/dictionary/dictionary';
 import styles from '../../constants/styles';
 import LinkEnum from '../../enums/LinkEnum';
 import RuleEnum from '../../enums/RuleEnum';
+import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
@@ -19,6 +23,7 @@ export interface IChatService {
   sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
 
   sendMatchStatus(sound?: number, playerId?: number): void;
+  announceDefRec(didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal, isDefRec: boolean): void;
   announceRegularOvertime(): void;
   announceBallPositionOvertime(): void;
 
@@ -70,6 +75,22 @@ export default class ChatService implements IChatService {
       sound,
       playerId,
     );
+  }
+
+  public announceDefRec(
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+    isDefRec: boolean,
+  ): void {
+    if (didBallEnterOrLeaveIngoal === 'enter') {
+      if (isDefRec) {
+        this.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
+        this.sendNormalAnnouncement(MSG_DEF_REC[1]);
+      } else {
+        this.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
+      }
+    } else if (didBallEnterOrLeaveIngoal === 'leave') {
+      this.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
+    }
   }
 
   public announceRegularOvertime(): void {

@@ -6,6 +6,8 @@ import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
 import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 
+export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
+
 interface IHaxRugbyStadium {
   kickoffLineX: number;
 
@@ -18,7 +20,7 @@ interface IHaxRugbyStadium {
   getDidBallEnterOrLeaveIngoal(
     ballPosition: IPosition,
     lastBallPosition: IPosition,
-  ): 'enter' | 'leave' | false;
+  ): IBallEnterOrLeaveIngoal;
 
   getIsSafety(
     ballPosition: IPosition,
@@ -39,6 +41,12 @@ interface IHaxRugbyStadium {
     toucherCountByTeam: IPlayerCountByTeam,
     room: IHaxRugbyRoom,
   ): false | TeamEnum;
+
+  getIsTryOnGoalLine(
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+    ballPosition: IPosition,
+    driverCountByTeam: IPlayerCountByTeam,
+  ): boolean;
 }
 
 abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
@@ -86,7 +94,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   public getDidBallEnterOrLeaveIngoal(
     ballPosition: IPosition,
     lastBallPosition: IPosition,
-  ): 'enter' | 'leave' | false {
+  ): IBallEnterOrLeaveIngoal {
     if (
       Math.abs(lastBallPosition.x) < this.goalLineForBall &&
       Math.abs(ballPosition.x) >= this.goalLineForBall
@@ -243,6 +251,24 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return TeamEnum.RED;
     } else if (blueCondition) {
       return TeamEnum.BLUE;
+    }
+    return false;
+  }
+
+  public getIsTryOnGoalLine(
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+    ballPosition: IPosition,
+    driverCountByTeam: IPlayerCountByTeam,
+  ): boolean {
+    if (didBallEnterOrLeaveIngoal !== 'enter') {
+      return false;
+    }
+
+    if (ballPosition.x > 0 && driverCountByTeam.red > 0) {
+      return true;
+    }
+    if (ballPosition.x < 0 && driverCountByTeam.blue > 0) {
+      return true;
     }
     return false;
   }

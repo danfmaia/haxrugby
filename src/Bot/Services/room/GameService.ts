@@ -16,12 +16,8 @@ import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
-import {
-  MSG_BALL_LEAVE_INGOAL,
-  MSG_DEF_REC,
-  MSG_SAFETY_ALLOWED,
-} from '../../constants/dictionary/dictionary';
 import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
+import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -274,7 +270,11 @@ export default class GameService implements IGameService {
     // check for ball drives
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
 
-    this.checkForDefRec(ballPosition, this.lastBallPosition);
+    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
+      ballPosition,
+      this.lastBallPosition,
+    );
+    this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
     // count current ball drivers
     this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
@@ -288,12 +288,23 @@ export default class GameService implements IGameService {
     }
 
     if (this.isDefRec === false) {
-      if (this.checkForSafety(ballPosition)) {
-        return;
+      const getIsTryOnGoalLine = this.stadium.getIsTryOnGoalLine(
+        didBallEnterOrLeaveIngoal,
+        ballPosition,
+        this.driverCountByTeam,
+      );
+      if (getIsTryOnGoalLine === false) {
+        if (this.checkForSafety(ballPosition)) {
+          return;
+        }
       }
     }
 
-    this.checkForTry(ballPosition);
+    if (this.checkForTry(ballPosition)) {
+      return;
+    }
+
+    this.chatService.announceDefRec(didBallEnterOrLeaveIngoal, this.isDefRec);
   }
 
   private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
@@ -340,22 +351,14 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private checkForDefRec(ballPosition: IPosition, lastBallPosition: IPosition) {
-    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
-      ballPosition,
-      lastBallPosition,
-    );
+  private checkForDefRec(
+    ballPosition: IPosition,
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+  ) {
     if (didBallEnterOrLeaveIngoal === 'enter') {
       this.isDefRec = this.getIsDefRec(ballPosition);
-      if (this.isDefRec) {
-        this.chatService.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
-        this.chatService.sendNormalAnnouncement(MSG_DEF_REC[1]);
-      } else {
-        this.chatService.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
-      }
     } else if (didBallEnterOrLeaveIngoal === 'leave') {
       this.isDefRec = false;
-      this.chatService.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
     }
   }
 
@@ -408,7 +411,7 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private checkForTry(ballPosition: IPosition) {
+  private checkForTry(ballPosition: IPosition): boolean {
     let isTry: false | TeamEnum = false;
 
     // check for try on in-goal
@@ -439,7 +442,9 @@ export default class GameService implements IGameService {
       this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
 
       this.handleRestartOrCompletion(map);
+      return true;
     }
+    return false;
   }
 
   private handleRestartOrCompletion(map: string) {

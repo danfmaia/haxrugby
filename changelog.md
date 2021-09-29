@@ -2,10 +2,12 @@
 
 ### v0.7.0 (_loading..._):
 
+- Corrigido o erro do Try que não era Try;
+- Corrigido alerta "Safety permitido." sendo disparado na ocasião de um Try na linha de gol;
+- [Teste pendente] Tentando corrigir o erro do Safety sendo dado quando a bola entra no in-goal sendo conduzida simultaneamente pelo ataque e pela defesa;
 - Criado comando para alterar o placar (!set-score);
 - Aprimorados comandos existentes;
-- Corrigido o erro do Try que não era Try;
-- Retirado player do host;
+- Retirado o player do host;
 - O anúncio de links dos 5s de partida agora é enviado apenas para os espectadores;
 - Aprimorada a lógica de gol (nenhuma alteração na jogabilidade);
 
