@@ -9,6 +9,7 @@ import smallStadium from '../../singletons/smallStadium';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 import normalStadium from '../../singletons/normalStadium';
 import { IGameService } from '../../services/room/IGameService';
+import TeamEnum from '../../enums/TeamEnum';
 
 @CommandDecorator({
   names: ['new', 'new-match'],
@@ -48,6 +49,15 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
         this.room.setCustomStadium(stadium.map_red);
       } else {
         this.room.setCustomStadium(this.gameService.stadium.map_red);
+      }
+
+      if (args[3]) {
+        const teamArg = args[3].toUpperCase();
+        if (teamArg === TeamEnum.RED) {
+          this.room.setCustomStadium(this.gameService.stadium.map_red);
+        } else if (teamArg === TeamEnum.BLUE) {
+          this.room.setCustomStadium(this.gameService.stadium.map_blue);
+        }
       }
 
       this.gameService.matchConfig = matchConfig;

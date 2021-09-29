@@ -39,9 +39,9 @@ const ptBr: DictionaryKeys = {
 
     ADMIN_COMMANDS: '  Administrativos:',
 
-    NEW_MATCH: '    !new [<tempo>] [<pontos>] [small/normal]',
+    NEW_MATCH: '    !new [<tempo>] [<pontos>] [small/normal] [red/blue]',
     NEW_MATCH_DESCRIPTION:
-      'Cancela a partida atual (se houver), começa uma nova partida, e configura os limites de tempo e de pontos e o tamanho de mapa da nova partida e das próximas. Só pode ser usado por admins. Se o 3º argumento for omitido, mantém o tamanho de mapa atual.',
+      'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, configura os limites de tempo e de pontos, o tamanho de mapa da nova partida e das próximas, e a posse de bola inicial. Só pode ser usado por admins.',
 
     ADMIN: '    !admin <senha> [reclaim]',
     ADMIN_DESCRIPTION:
@@ -67,7 +67,7 @@ const ptBr: DictionaryKeys = {
     RULES: '    !r ou !regras ou !rules',
     RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',
 
-    LINKS: '    !links ou !promo',
+    LINKS: '    !links ou !link ou !promo',
     LINKS_DESCRIPTION:
       'Exibe o link das regras, do Discord e do grupo no Facebook. Se for admin, exibe para todos os jogadores.',
   },
