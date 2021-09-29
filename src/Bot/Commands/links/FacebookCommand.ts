@@ -25,9 +25,9 @@ export class FacebookCommand extends CommandBase<CustomPlayer> {
 
   public execute(player: CustomPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSinglePromotionLink(LinkEnum.FACEBOOK);
+      this.chatService.sendSinglePromoLink(LinkEnum.FACEBOOK);
     } else {
-      this.chatService.sendSinglePromotionLink(LinkEnum.FACEBOOK, 0, player.id);
+      this.chatService.sendSinglePromoLink(LinkEnum.FACEBOOK, 0, player.id);
     }
   }
 }

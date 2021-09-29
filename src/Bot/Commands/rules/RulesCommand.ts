@@ -32,9 +32,9 @@ export class RulesCommand extends CommandBase<CustomPlayer> {
       }
     } else {
       if (player.admin) {
-        this.chatService.sendSinglePromotionLink(LinkEnum.RULES);
+        this.chatService.sendSinglePromoLink(LinkEnum.RULES);
       } else {
-        this.chatService.sendSinglePromotionLink(LinkEnum.RULES, 0, player.id);
+        this.chatService.sendSinglePromoLink(LinkEnum.RULES, 0, player.id);
       }
     }
   }

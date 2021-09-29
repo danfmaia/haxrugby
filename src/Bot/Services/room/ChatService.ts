@@ -23,8 +23,9 @@ export interface IChatService {
   announceBallPositionOvertime(): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
-  sendMainPromotionLinks(sound?: number, playerId?: number): void;
-  sendSinglePromotionLink(link: LinkEnum, sound?: number, playerId?: number): void;
+  sendMainPromoLinks(sound?: number, playerId?: number): void;
+  sendMainPromoLinksForSpectators(): void;
+  sendSinglePromoLink(link: LinkEnum, sound?: number, playerId?: number): void;
   sendMainRules(sound?: number, playerId?: number): void;
   sendSingleRule(rule: RuleEnum, sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
@@ -104,17 +105,24 @@ export default class ChatService implements IChatService {
       }
     });
     Util.timeout(10000, () => {
-      this.sendMainPromotionLinks(2, playerId);
+      this.sendMainPromoLinks(2, playerId);
     });
   }
 
-  public sendMainPromotionLinks(sound: number = 2, playerId?: number): void {
-    this.sendSinglePromotionLink(LinkEnum.RULES, sound, playerId);
-    this.sendSinglePromotionLink(LinkEnum.DISCORD, 0, playerId);
-    this.sendSinglePromotionLink(LinkEnum.FACEBOOK, 0, playerId);
+  public sendMainPromoLinks(sound: number = 2, playerId?: number): void {
+    this.sendSinglePromoLink(LinkEnum.RULES, sound, playerId);
+    this.sendSinglePromoLink(LinkEnum.DISCORD, 0, playerId);
+    this.sendSinglePromoLink(LinkEnum.FACEBOOK, 0, playerId);
   }
 
-  public sendSinglePromotionLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
+  public sendMainPromoLinksForSpectators(): void {
+    const spectators = this.room.getPlayerList().filter((player) => player.team === 0);
+    spectators.forEach((spectator) => {
+      this.sendMainPromoLinks(2, spectator.id);
+    });
+  }
+
+  public sendSinglePromoLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
     switch (link) {
       case LinkEnum.RULES:
         this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);

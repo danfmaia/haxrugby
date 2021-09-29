@@ -24,9 +24,9 @@ export class LinksCommand extends CommandBase<CustomPlayer> {
 
   public execute(player: CustomPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendMainPromotionLinks();
+      this.chatService.sendMainPromoLinks();
     } else {
-      this.chatService.sendMainPromotionLinks(0, player.id);
+      this.chatService.sendMainPromoLinks(0, player.id);
     }
   }
 }

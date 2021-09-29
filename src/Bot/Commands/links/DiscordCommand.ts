@@ -25,9 +25,9 @@ export class DiscordCommand extends CommandBase<CustomPlayer> {
 
   public execute(player: CustomPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSinglePromotionLink(LinkEnum.DISCORD);
+      this.chatService.sendSinglePromoLink(LinkEnum.DISCORD);
     } else {
-      this.chatService.sendSinglePromotionLink(LinkEnum.DISCORD, 0, player.id);
+      this.chatService.sendSinglePromoLink(LinkEnum.DISCORD, 0, player.id);
     }
   }
 }

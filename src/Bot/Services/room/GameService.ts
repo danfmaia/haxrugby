@@ -235,7 +235,7 @@ export default class GameService implements IGameService {
       }
 
       if (this.remainingTime === this.matchConfig.getTimeLimitInMs() - 5000) {
-        this.chatService.sendMainPromotionLinks();
+        this.chatService.sendMainPromoLinksForSpectators();
       }
 
       if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
