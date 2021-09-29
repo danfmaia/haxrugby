@@ -4,6 +4,8 @@
 
 - Corrigido o erro do Try que não era Try;
 - Retirado player do host;
+- O anúncio de links dos 5s de partida agora é enviado apenas para os espectadores;
+- Aprimorada a lógica de gol (nenhuma alteração de jogabilidade);
 
 ### v0.6.1:
 

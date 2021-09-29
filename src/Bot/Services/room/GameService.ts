@@ -266,7 +266,9 @@ export default class GameService implements IGameService {
     this.checkForTouches(players, ballPosition);
 
     if (this.lastTouchInfo) {
-      this.checkForGoal(ballPosition, this.lastTouchInfo);
+      if (this.checkForGoal(ballPosition, this.lastTouchInfo)) {
+        return;
+      }
     }
 
     // check for ball drives
@@ -306,7 +308,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo) {
+  private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
     const isGoal = this.stadium.getIsGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
@@ -333,7 +335,9 @@ export default class GameService implements IGameService {
       this.chatService.sendBoldAnnouncement(`Field Goal do ${teamName}!`, 2);
 
       this.handleRestartOrCompletion(map);
+      return true;
     }
+    return false;
   }
 
   private checkForDefRec(ballPosition: IPosition, lastBallPosition: IPosition) {
