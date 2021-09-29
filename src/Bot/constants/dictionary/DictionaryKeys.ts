@@ -18,20 +18,34 @@ type DictionaryKeys = {
 
   MSG_HELP: {
     TITLE: string;
-    HELP: string;
-    HELP_DESCRIPTION: string;
-    RULES: string;
-    RULES_DESCRIPTION: string;
+
+    ADMIN_COMMANDS: string;
+
     NEW_MATCH: string;
     NEW_MATCH_DESCRIPTION: string;
-    SCORE: string;
-    SCORE_DESCRIPTION: string;
-    LINKS: string;
-    LINKS_DESCRIPTION: string;
+
     ADMIN: string;
     ADMIN_DESCRIPTION: string;
+
     PASSWORD: string;
     PASSWORD_DESCRIPTION: string;
+
+    SET_SCORE: string;
+    SET_SCORE_DESCRIPTION: string;
+
+    OTHER_COMMANDS: string;
+
+    HELP: string;
+    HELP_DESCRIPTION: string;
+
+    SCORE: string;
+    SCORE_DESCRIPTION: string;
+
+    RULES: string;
+    RULES_DESCRIPTION: string;
+
+    LINKS: string;
+    LINKS_DESCRIPTION: string;
   };
 
   MSG_DEF_REC: [string, string];

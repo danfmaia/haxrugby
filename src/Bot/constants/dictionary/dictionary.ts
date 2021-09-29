@@ -35,32 +35,41 @@ const ptBr: DictionaryKeys = {
   },
 
   MSG_HELP: {
-    TITLE: 'Lista de comandos:',
+    TITLE: 'LISTA DE COMANDOS:',
 
-    HELP: '!h ou !help ou !ajuda',
-    HELP_DESCRIPTION: 'Exibe essa lista de comandos. Se for admin, exibe para todos os jogadores.',
+    ADMIN_COMMANDS: '  Administrativos:',
 
-    RULES: '!r ou !regras ou !rules',
-    RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',
-
-    NEW_MATCH: '!new [<tempo>] [<pontos>] [small/normal]',
+    NEW_MATCH: '    !new [<tempo>] [<pontos>] [small/normal]',
     NEW_MATCH_DESCRIPTION:
       'Cancela a partida atual (se houver), começa uma nova partida, e configura os limites de tempo e de pontos e o tamanho de mapa da nova partida e das próximas. Só pode ser usado por admins. Se o 3º argumento for omitido, mantém o tamanho de mapa atual.',
 
-    SCORE: '!s ou !score ou !placar',
-    SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
-
-    LINKS: '!links ou !promo',
-    LINKS_DESCRIPTION:
-      'Exibe o link das regras, do Discord e do grupo no Facebook. Se for admin, exibe para todos os jogadores.',
-
-    ADMIN: '!admin <senha> [reclaim]',
+    ADMIN: '    !admin <senha> [reclaim]',
     ADMIN_DESCRIPTION:
       'Concede admin para o jogador. Se usar o argumento `reclaim`, retira o admin de todos os demais jogadores da sala.',
 
-    PASSWORD: '!pw ou !password <senha> [on/off]',
+    PASSWORD: '    !pw ou !password <senha> [on/off]',
     PASSWORD_DESCRIPTION:
       'Coloca ou retira senha na/da sala. Se o jogador não é admin, recebe admin. Omitir o 2º argumento funciona como `on`.',
+
+    SET_SCORE: '    !set-score <pontos_do_red> <pontos_do_blue> [red/blue] [<tempo>]',
+    SET_SCORE_DESCRIPTION:
+      'Alterar o placar da partida e, opcionalmente, o mapa de reinício e o tempo restante. Formato do tempo: m:ss',
+
+    OTHER_COMMANDS: '  Outros:',
+
+    HELP: '    !h ou !help ou !ajuda [forall]',
+    HELP_DESCRIPTION:
+      'Exibe essa lista de comandos. Se for admin e usar o argumento `forall`, exibe a lista para todos os jogadores.',
+
+    SCORE: '    !s ou !score ou !placar',
+    SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
+
+    RULES: '    !r ou !regras ou !rules',
+    RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',
+
+    LINKS: '    !links ou !promo',
+    LINKS_DESCRIPTION:
+      'Exibe o link das regras, do Discord e do grupo no Facebook. Se for admin, exibe para todos os jogadores.',
   },
 
   MSG_DEF_REC: [

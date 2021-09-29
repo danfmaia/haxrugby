@@ -187,28 +187,37 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_HELP.TITLE, sound, playerId);
     this.sendSpace(playerId);
 
+    if (typeof playerId !== 'undefined' && this.room.getPlayer(playerId).admin) {
+      this.sendBoldAnnouncement(MSG_HELP.ADMIN_COMMANDS, 0, playerId);
+      this.sendSpace(playerId);
+
+      this.sendBoldAnnouncement(MSG_HELP.NEW_MATCH, 0, playerId);
+      this.sendNormalAnnouncement(MSG_HELP.NEW_MATCH_DESCRIPTION, 0, playerId);
+
+      this.sendBoldAnnouncement(MSG_HELP.ADMIN, 0, playerId);
+      this.sendNormalAnnouncement(MSG_HELP.ADMIN_DESCRIPTION, 0, playerId);
+
+      this.sendBoldAnnouncement(MSG_HELP.PASSWORD, 0, playerId);
+      this.sendNormalAnnouncement(MSG_HELP.PASSWORD_DESCRIPTION, 0, playerId);
+      this.sendSpace(playerId);
+
+      this.sendBoldAnnouncement(MSG_HELP.OTHER_COMMANDS, 0, playerId);
+      this.sendSpace(playerId);
+    }
+
     if (!playerId) {
       this.sendBoldAnnouncement(MSG_HELP.HELP, 0, playerId);
       this.sendNormalAnnouncement(MSG_HELP.HELP_DESCRIPTION, 0, playerId);
     }
 
-    this.sendBoldAnnouncement(MSG_HELP.RULES, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.RULES_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.NEW_MATCH, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.NEW_MATCH_DESCRIPTION, 0, playerId);
-
     this.sendBoldAnnouncement(MSG_HELP.SCORE, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.SCORE_DESCRIPTION, 0, playerId);
 
+    this.sendBoldAnnouncement(MSG_HELP.RULES, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.RULES_DESCRIPTION, 0, playerId);
+
     this.sendBoldAnnouncement(MSG_HELP.LINKS, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.LINKS_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.ADMIN, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.ADMIN_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.PASSWORD, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.PASSWORD_DESCRIPTION, 0, playerId);
 
     this.sendSpace(playerId);
   }

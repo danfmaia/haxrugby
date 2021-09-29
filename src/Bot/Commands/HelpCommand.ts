@@ -23,7 +23,7 @@ export class HelpCommand extends CommandBase<CustomPlayer> {
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
-    if (player.admin) {
+    if (player.admin && args[0] === 'forall') {
       this.chatService.sendHelp(2);
     } else {
       this.chatService.sendHelp(0, player.id);

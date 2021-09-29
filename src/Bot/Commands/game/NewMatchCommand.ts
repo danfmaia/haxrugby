@@ -1,14 +1,14 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 
-import { CustomPlayer } from '../models/CustomPlayer';
-import Util from '../util/Util';
-import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
-import StadiumEnum from '../enums/StadiumEnum';
-import smallStadium from '../singletons/smallStadium';
-import HaxRugbyStadium from '../models/stadium/HaxRugbyStadium';
-import normalStadium from '../singletons/normalStadium';
-import { IGameService } from '../services/room/IGameService';
+import { CustomPlayer } from '../../models/CustomPlayer';
+import Util from '../../util/Util';
+import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
+import StadiumEnum from '../../enums/StadiumEnum';
+import smallStadium from '../../singletons/smallStadium';
+import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import normalStadium from '../../singletons/normalStadium';
+import { IGameService } from '../../services/room/IGameService';
 
 @CommandDecorator({
   names: ['new', 'new-match'],
@@ -32,12 +32,12 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
     const callback = () => {
       const matchConfig = this.gameService.matchConfig;
 
-      const timeLimit = Util.validatePositiveNumericInput(args[0]);
+      const timeLimit = Util.parseNumericInput(args[0], true);
       if (timeLimit) {
         matchConfig.timeLimit = timeLimit;
       }
 
-      const scoreLimit = Util.validatePositiveNumericInput(args[1]);
+      const scoreLimit = Util.parseNumericInput(args[1], true);
       if (scoreLimit) {
         matchConfig.scoreLimit = scoreLimit;
       }

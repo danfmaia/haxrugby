@@ -1,11 +1,13 @@
 ## CHANGELOG
 
-### v0.6.2 (_loading..._):
+### v0.7.0 (_loading..._):
 
+- Criado comando para alterar o placar (!set-score);
+- Aprimorados comandos existentes;
 - Corrigido o erro do Try que não era Try;
 - Retirado player do host;
 - O anúncio de links dos 5s de partida agora é enviado apenas para os espectadores;
-- Aprimorada a lógica de gol (nenhuma alteração de jogabilidade);
+- Aprimorada a lógica de gol (nenhuma alteração na jogabilidade);
 
 ### v0.6.1:
 

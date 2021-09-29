@@ -16,12 +16,16 @@ function timeoutAsync(ms: number, callback: () => void): Promise<unknown> {
   });
 }
 
-function validatePositiveNumericInput(input?: string): number | false {
+function parseNumericInput(input?: string, positive: boolean = false): number | false {
   if (input) {
     const parsed = parseInt(input);
-    if (parsed) {
+    if (positive && parsed < 1) {
+      return false;
+    } else {
       const floored = Math.floor(parsed);
-      if (floored > 0) {
+      if (positive && floored < 1) {
+        return false;
+      } else {
         return floored;
       }
     }
@@ -45,7 +49,7 @@ function getRemainingTimeString(remainingTimeInMs: number): string {
 const Util = {
   timeout,
   timeoutAsync,
-  validatePositiveNumericInput,
+  parseNumericInput,
   getDurationString,
   getRemainingTimeString,
 };
