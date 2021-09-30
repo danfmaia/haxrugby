@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 
-import { CustomPlayer } from '../../models/CustomPlayer';
+import { CustomPlayer } from '../../models/player/CustomPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IGameService } from '../../services/room/IGameService';

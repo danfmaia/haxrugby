@@ -1,6 +1,6 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import { CustomPlayer } from '../models/CustomPlayer';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 @CommandDecorator({

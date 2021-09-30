@@ -1,17 +1,17 @@
 import AHaxRugbyStadium from './AHaxRugbyStadium';
-import HaxRugbyMaps from './HaxRugbyMaps';
+import THaxRugbyMaps from './HaxRugbyMaps';
 
 export default class HaxRugbyStadium extends AHaxRugbyStadium {
-  public redMaps: HaxRugbyMaps;
-  public blueMaps: HaxRugbyMaps;
+  public redMaps: THaxRugbyMaps;
+  public blueMaps: THaxRugbyMaps;
 
   constructor(
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,
     kickoffLineX: number,
-    redMaps: HaxRugbyMaps,
-    blueMaps: HaxRugbyMaps,
+    redMaps: THaxRugbyMaps,
+    blueMaps: THaxRugbyMaps,
   ) {
     super(goalLineX, goalPostY, miniAreaX, kickoffLineX);
 

@@ -9,7 +9,7 @@ import {
   IChatMessageInterceptor,
   ChatMessage,
 } from 'inversihax';
-import { CustomPlayer } from './models/CustomPlayer';
+import { CustomPlayer } from './models/player/CustomPlayer';
 import { CustomPlayerService } from './services/CustomPlayerService';
 import { Startup } from './Startup';
 import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';

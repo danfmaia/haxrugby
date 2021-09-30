@@ -1,6 +1,6 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, IDiscPropertiesObject, Types } from 'inversihax';
-import { CustomPlayer } from '../models/CustomPlayer';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 import { ICustomRoom } from '../rooms/ICustomRoom';
 
 @CommandDecorator({

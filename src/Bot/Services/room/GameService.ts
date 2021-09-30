@@ -1,6 +1,5 @@
 import { IPlayerObject, IPosition } from 'inversihax';
 
-import defaultConfig from '../../singletons/defaultConfig';
 import {
   MINUTE_IN_MS,
   DRIVE_MIN_TICKS,
@@ -8,7 +7,7 @@ import {
   AFTER_TRY_MAX_TICKS,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
-import { CustomPlayer } from '../../models/CustomPlayer';
+import { CustomPlayer } from '../../models/player/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import ITouchInfo from '../../models/physics/ITouchInfo';
@@ -23,6 +22,7 @@ import { RoomUtil } from '../../util/RoomUtil';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
 import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
+import getDefaultConfig from '../../singletons/getDefaultConfig';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -31,10 +31,10 @@ export default class GameService implements IGameService {
   private roomUtil: RoomUtil;
 
   public stadium: HaxRugbyStadium = smallStadium;
-  public matchConfig: MatchConfig = defaultConfig;
+  public matchConfig: MatchConfig;
 
   private tickCount: number = 0;
-  public remainingTime: number = this.matchConfig.getTimeLimitInMs();
+  public remainingTime: number;
   public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
 
@@ -44,7 +44,7 @@ export default class GameService implements IGameService {
   public isOvertime: boolean = false;
   private isFinishing: boolean = false;
 
-  private currTouchInfo: ITouchInfo | null = null;
+  private lastTouchInfo: ITouchInfo | null = null;
   private touchInfoList: (ITouchInfo | null)[] = [];
   private driverIds: number[] = [];
   private toucherCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
@@ -56,6 +56,7 @@ export default class GameService implements IGameService {
   private isTry: false | TeamEnum = false;
   private tryY: number | null = null;
   private afterTryTickCount: number = 0;
+
   private isConversionAttempt: false | TeamEnum = false;
 
   constructor(room: IHaxRugbyRoom) {
@@ -63,6 +64,9 @@ export default class GameService implements IGameService {
     this.adminService = new AdminService(room);
     this.chatService = new ChatService(room, this);
     this.roomUtil = new RoomUtil(room, this);
+
+    this.matchConfig = getDefaultConfig(this.chatService);
+    this.remainingTime = this.matchConfig.getTimeLimitInMs();
   }
 
   /**
@@ -100,11 +104,8 @@ export default class GameService implements IGameService {
       this.initializeMatch(byPlayer);
     }
 
-    // place ball on try Y for conversion
     if (this.isConversionAttempt && this.tryY) {
-      const updatedBallProps = this.room.getDiscProperties(0);
-      updatedBallProps.y = this.tryY;
-      this.room.setDiscProperties(0, updatedBallProps);
+      this.initializeConversion(this.isConversionAttempt, this.tryY);
     }
   }
 
@@ -137,6 +138,7 @@ export default class GameService implements IGameService {
   public handlePlayerLeave(player: CustomPlayer): void {
     this.unregisterPlayerFromMatchData(player.id);
     this.adminService.setEarliestPlayerAsAdmin();
+    this.matchConfig.teams.fillPositions(this.room.getPlayerList());
   }
 
   public handlePlayerBallKick(player: CustomPlayer): void {
@@ -168,9 +170,13 @@ export default class GameService implements IGameService {
     this.isOvertime = false;
     this.score = { red: 0, blue: 0 };
 
-    this.currTouchInfo = null;
+    this.lastTouchInfo = null;
     this.touchInfoList = [];
     this.driverIds = [];
+    this.tryY = null;
+    this.isTry = false;
+    this.isConversionAttempt = false;
+    this.matchConfig.teams.fillPositions(this.room.getPlayerList());
 
     this.room.startGame();
 
@@ -237,6 +243,25 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
   }
 
+  private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
+    const teams = this.matchConfig.teams;
+
+    // place ball on tryY
+    const updatedBallProps = this.room.getDiscProperties(0);
+    updatedBallProps.y = tryY;
+    this.room.setDiscProperties(0, updatedBallProps);
+
+    // place kicker on tryY
+    const kickerId = teams.getKickerByTeam(kickingTeam);
+
+    if (kickerId !== null) {
+      console.log('kickerName: ', this.room.getPlayer(kickerId).name);
+      const updatedKickerProps = this.room.getPlayerDiscProperties(kickerId);
+      updatedKickerProps.y = updatedKickerProps.y + tryY;
+      this.room.setPlayerDiscProperties(kickerId, updatedKickerProps);
+    }
+  }
+
   private checkForTimeEvents(ballPosition: IPosition) {
     this.remainingTime = this.remainingTime - 1000 / 10;
 
@@ -282,8 +307,8 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    if (this.currTouchInfo && this.tryY === null) {
-      if (this.checkForFieldGoal(ballPosition, this.currTouchInfo)) {
+    if (this.lastTouchInfo && this.tryY === null) {
+      if (this.checkForFieldGoal(ballPosition, this.lastTouchInfo)) {
         return;
       }
     }
@@ -296,7 +321,7 @@ export default class GameService implements IGameService {
 
     // in case of try, let the scorer attempt to take the ball more to the middle
     if (this.isTry) {
-      this.handleAfterTry(ballPosition, this.currTouchInfo, this.driverCountByTeam);
+      this.handleAfterTry(ballPosition, this.driverCountByTeam);
       return;
     }
 
@@ -337,7 +362,7 @@ export default class GameService implements IGameService {
   private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
     const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
     if (newTouchInfo) {
-      this.currTouchInfo = newTouchInfo;
+      this.lastTouchInfo = newTouchInfo;
     }
 
     this.touchInfoList.unshift(newTouchInfo);
@@ -346,11 +371,11 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForFieldGoal(ballPosition: IPosition, currentTouchInfo: ITouchInfo): boolean {
+  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
     const isGoal = this.stadium.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
-      currentTouchInfo.ballPosition,
+      lastTouchInfo.ballPosition,
     );
 
     if (isGoal) {
@@ -361,11 +386,11 @@ export default class GameService implements IGameService {
 
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
-        teamName = this.matchConfig.redTeam.name;
+        teamName = this.matchConfig.teams.red.name;
         map = this.stadium.blueMaps.kickoff;
       } else {
         this.score.blue = this.score.blue + 3;
-        teamName = this.matchConfig.blueTeam.name;
+        teamName = this.matchConfig.teams.blue.name;
         map = this.stadium.redMaps.kickoff;
       }
 
@@ -390,7 +415,7 @@ export default class GameService implements IGameService {
   }
 
   private getIsDefRec(ballPosition: IPosition) {
-    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.currTouchInfo);
+    const lastTeamThatTouchedBall = this.roomUtil.getTeamThatTouchedBall(this.lastTouchInfo);
     if (typeof lastTeamThatTouchedBall === 'boolean') {
       return false;
     }
@@ -422,10 +447,10 @@ export default class GameService implements IGameService {
       let map: string;
 
       if (isSafety === TeamEnum.RED) {
-        teamName = this.matchConfig.redTeam.name;
+        teamName = this.matchConfig.teams.red.name;
         map = this.stadium.redMaps.kickoff;
       } else {
-        teamName = this.matchConfig.blueTeam.name;
+        teamName = this.matchConfig.teams.blue.name;
         map = this.stadium.blueMaps.kickoff;
       }
 
@@ -456,10 +481,10 @@ export default class GameService implements IGameService {
 
       if (isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 7;
-        teamName = this.matchConfig.redTeam.name;
+        teamName = this.matchConfig.teams.red.name;
       } else {
         this.score.blue = this.score.blue + 7;
-        teamName = this.matchConfig.blueTeam.name;
+        teamName = this.matchConfig.teams.blue.name;
       }
 
       // announce try
@@ -473,12 +498,8 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private handleAfterTry(
-    ballPosition: IPosition,
-    currTouchInfo: ITouchInfo | null,
-    driverCountByTeam: IPlayerCountByTeam,
-  ) {
-    if (this.isTry === false) {
+  private handleAfterTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam) {
+    if (this.isTry === false || this.tryY === null) {
       return;
     }
 
@@ -489,8 +510,17 @@ export default class GameService implements IGameService {
       isStillAttempting = false;
     }
 
+    const teamTouchingBall = this.roomUtil.getTeamThatTouchedBall(this.touchInfoList[0]);
+
+    if (
+      (ballPosition.x > 0 && teamTouchingBall === TeamEnum.BLUE) ||
+      (ballPosition.x < 0 && teamTouchingBall === TeamEnum.RED)
+    ) {
+      // finish attempt when defense touches the ball
+      isStillAttempting = false;
+    }
+
     if (isStillAttempting) {
-      const teamTouchingBall = this.roomUtil.getLastTeamThatTouchedBall(currTouchInfo);
       if (
         (ballPosition.x > 0 && teamTouchingBall !== TeamEnum.RED) ||
         (ballPosition.x < 0 && teamTouchingBall !== TeamEnum.BLUE)
@@ -508,13 +538,13 @@ export default class GameService implements IGameService {
           // 1: finish attempt when ball was driven close to center
           this.tryY = 0;
           isStillAttempting = false;
-        } else if (Math.abs(ballPosition.y) < Math.abs(this.lastBallPosition.y)) {
-          // 2: continue attempt when ball is being driven towards the center, without increasing the tick count
-          //    in this case, update tryY
+        } else if (Math.abs(ballPosition.y) < Math.abs(this.tryY)) {
+          // 2: Continue attempt when ball is being driven towards the center, without increasing the tick count.
+          //    In this case, update tryY.
           this.tryY = ballPosition.y;
         } else {
-          // 3: continue attempt when ball is being driven away from the center, but increase the tick count
-          //    in this case, do not update tryY
+          // 3: Continue attempt when ball is being driven away from the center, but increase the tick count.
+          //    In this case, do not update tryY.
           this.afterTryTickCount = this.afterTryTickCount + 1;
         }
       }
@@ -528,10 +558,10 @@ export default class GameService implements IGameService {
       let map: string;
       if (this.isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 5;
-        map = this.stadium.redMaps.conversion;
+        map = this.stadium.redMaps.getConversion(this.tryY);
       } else {
         this.score.blue = this.score.blue + 5;
-        map = this.stadium.blueMaps.conversion;
+        map = this.stadium.blueMaps.getConversion(this.tryY);
       }
       this.isConversionAttempt = this.isTry;
       this.isTry = false;
@@ -579,7 +609,7 @@ export default class GameService implements IGameService {
     // let updatedToucherIds = this.currentTouchInfo ? this.currentTouchInfo.toucherIds : [];
     // updatedToucherIds.push(playerId);
 
-    this.currTouchInfo = {
+    this.lastTouchInfo = {
       toucherIds: [playerId],
       ballPosition: ballPosition,
       hasKick: true,
@@ -588,8 +618,8 @@ export default class GameService implements IGameService {
 
   private unregisterPlayerFromMatchData(playerId: number) {
     // unregister player from currentTouchInfo
-    if (this.currTouchInfo) {
-      this.currTouchInfo.toucherIds = this.currTouchInfo.toucherIds.filter(
+    if (this.lastTouchInfo) {
+      this.lastTouchInfo.toucherIds = this.lastTouchInfo.toucherIds.filter(
         (toucherId) => toucherId !== playerId,
       );
     }

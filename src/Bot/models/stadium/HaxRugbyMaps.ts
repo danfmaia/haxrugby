@@ -1,6 +1,6 @@
-type HaxRugbyMaps = {
+type THaxRugbyMaps = {
   kickoff: string;
-  conversion: string;
+  getConversion: (tryY: number) => string;
 };
 
-export default HaxRugbyMaps;
+export default THaxRugbyMaps;

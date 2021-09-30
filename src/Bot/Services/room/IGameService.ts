@@ -1,6 +1,6 @@
 import { IPlayerObject } from 'inversihax';
 
-import { CustomPlayer } from '../../models/CustomPlayer';
+import { CustomPlayer } from '../../models/player/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';

@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 
-import { CustomPlayer } from '../../models/CustomPlayer';
+import { CustomPlayer } from '../../models/player/CustomPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import StadiumEnum from '../../enums/StadiumEnum';
@@ -31,16 +31,16 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
 
   public execute(player: CustomPlayer, args: string[]): void {
     const callback = () => {
-      const matchConfig = this.gameService.matchConfig;
+      const updatedMatchConfig = this.gameService.matchConfig;
 
       const timeLimit = Util.parseNumericInput(args[0], true);
       if (timeLimit) {
-        matchConfig.timeLimit = timeLimit;
+        updatedMatchConfig.timeLimit = timeLimit;
       }
 
       const scoreLimit = Util.parseNumericInput(args[1], true);
       if (scoreLimit) {
-        matchConfig.scoreLimit = scoreLimit;
+        updatedMatchConfig.scoreLimit = scoreLimit;
       }
 
       const stadium = this.getStadiumFromInput(args[2]);
@@ -60,9 +60,9 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
         }
       }
 
-      this.gameService.matchConfig = matchConfig;
-      this.room.setTimeLimit(matchConfig.timeLimit);
-      this.room.setScoreLimit(matchConfig.scoreLimit);
+      this.gameService.matchConfig = updatedMatchConfig;
+      this.room.setTimeLimit(updatedMatchConfig.timeLimit);
+      this.room.setScoreLimit(updatedMatchConfig.scoreLimit);
 
       Util.timeout(1500, () => {
         this.gameService.initializeMatch(player);

@@ -1,7 +1,7 @@
 import { IPosition } from 'inversihax';
 
 import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/constants';
-import { CustomPlayer } from '../models/CustomPlayer';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 import ITouchInfo from '../models/physics/ITouchInfo';
 
 function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition): number {

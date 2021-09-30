@@ -7,7 +7,7 @@ import {
   RoomBase,
   Types,
 } from 'inversihax';
-import { CustomPlayer } from '../models/CustomPlayer';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 import { ICustomRoom } from './ICustomRoom';
 
 export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {

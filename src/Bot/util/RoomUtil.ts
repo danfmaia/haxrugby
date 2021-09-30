@@ -46,15 +46,15 @@ export class RoomUtil {
     );
   }
 
-  public getLastTeamThatTouchedBall(currentTouchInfo: ITouchInfo | null): boolean | TeamEnum {
-    if (!currentTouchInfo) {
+  public getTeamThatTouchedBall(touchInfo: ITouchInfo | null): boolean | TeamEnum {
+    if (!touchInfo) {
       return false;
     }
 
     let hasRedTouched = false as boolean;
     let hasBlueTouched = false as boolean;
 
-    currentTouchInfo.toucherIds.forEach((toucherId) => {
+    touchInfo.toucherIds.forEach((toucherId) => {
       const team = this.room.getPlayer(toucherId).team;
       if (team === TeamID.RedTeam) {
         hasRedTouched = true;

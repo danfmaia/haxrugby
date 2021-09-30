@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { IPlayerObject, IPlayerService } from 'inversihax';
-import { CustomPlayer } from '../models/CustomPlayer';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 
 @injectable()
 export class CustomPlayerService implements IPlayerService<CustomPlayer> {
