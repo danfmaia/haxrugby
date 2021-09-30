@@ -10,6 +10,7 @@ export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
 
 interface IHaxRugbyStadium {
   kickoffLineX: number;
+  tryLine: number;
 
   getIsFieldGoal(
     ballPosition: IPosition,
@@ -55,7 +56,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   private miniAreaX: number;
   public kickoffLineX: number;
 
-  private get goalLineForBall(): number {
+  public get tryLine(): number {
     return this.goalLineX - BALL_RADIUS;
   }
 
@@ -95,17 +96,11 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     ballPosition: IPosition,
     lastBallPosition: IPosition,
   ): IBallEnterOrLeaveIngoal {
-    if (
-      Math.abs(lastBallPosition.x) < this.goalLineForBall &&
-      Math.abs(ballPosition.x) >= this.goalLineForBall
-    ) {
+    if (Math.abs(lastBallPosition.x) < this.tryLine && Math.abs(ballPosition.x) >= this.tryLine) {
       return 'enter';
     }
 
-    if (
-      Math.abs(lastBallPosition.x) >= this.goalLineForBall &&
-      Math.abs(ballPosition.x) < this.goalLineForBall
-    ) {
+    if (Math.abs(lastBallPosition.x) >= this.tryLine && Math.abs(ballPosition.x) < this.tryLine) {
       return 'leave';
     }
 
@@ -160,9 +155,9 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (ballPosition.x <= -this.goalLineForBall && driverCountByTeam.red > 0) {
+    if (ballPosition.x <= -this.tryLine && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
-    } else if (ballPosition.x >= this.goalLineForBall && driverCountByTeam.blue > 0) {
+    } else if (ballPosition.x >= this.tryLine && driverCountByTeam.blue > 0) {
       return TeamEnum.BLUE;
     }
     return false;
@@ -180,8 +175,8 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
-    const redCondition = ballPosition.x <= -this.goalLineForBall && toucherCountByTeam.red > 0;
-    const blueCondition = ballPosition.x >= this.goalLineForBall && toucherCountByTeam.blue > 0;
+    const redCondition = ballPosition.x <= -this.tryLine && toucherCountByTeam.red > 0;
+    const blueCondition = ballPosition.x >= this.tryLine && toucherCountByTeam.blue > 0;
 
     if (redCondition === false && blueCondition === false) {
       return false;
@@ -210,9 +205,9 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (ballPosition.x >= this.goalLineForBall && driverCountByTeam.red > 0) {
+    if (ballPosition.x >= this.tryLine && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
-    } else if (ballPosition.x <= -this.goalLineForBall && driverCountByTeam.blue > 0) {
+    } else if (ballPosition.x <= -this.tryLine && driverCountByTeam.blue > 0) {
       return TeamEnum.BLUE;
     }
     return false;

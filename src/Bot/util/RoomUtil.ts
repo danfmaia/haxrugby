@@ -46,15 +46,15 @@ export class RoomUtil {
     );
   }
 
-  public getLastTeamThatTouchedBall(lastTouchInfo: ITouchInfo | null): boolean | TeamEnum {
-    if (!lastTouchInfo) {
+  public getLastTeamThatTouchedBall(currentTouchInfo: ITouchInfo | null): boolean | TeamEnum {
+    if (!currentTouchInfo) {
       return false;
     }
 
     let hasRedTouched = false as boolean;
     let hasBlueTouched = false as boolean;
 
-    lastTouchInfo.toucherIds.forEach((toucherId) => {
+    currentTouchInfo.toucherIds.forEach((toucherId) => {
       const team = this.room.getPlayer(toucherId).team;
       if (team === TeamID.RedTeam) {
         hasRedTouched = true;
@@ -69,5 +69,39 @@ export class RoomUtil {
       return TeamEnum.BLUE;
     }
     return true;
+  }
+
+  public getIsMatchFinished(redScore: number, blueScore: number, isTry: false | TeamEnum): boolean {
+    if (this.gameService.isOvertime === false) {
+      if (
+        redScore >= this.gameService.matchConfig.scoreLimit ||
+        blueScore >= this.gameService.matchConfig.scoreLimit
+      ) {
+        return true;
+      }
+      return false;
+    }
+
+    if (isTry === false) {
+      if (redScore !== blueScore) {
+        return true;
+      }
+    } else {
+      const ballPosition = this.room.getBallPosition();
+      if (ballPosition.x > 0) {
+        if (redScore > blueScore) {
+          return true;
+        } else if (blueScore - redScore <= 2) {
+          return false;
+        }
+      } else {
+        if (blueScore > redScore) {
+          return true;
+        } else if (redScore - blueScore <= 2) {
+          return false;
+        }
+      }
+    }
+    return false;
   }
 }

@@ -46,17 +46,17 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
       const stadium = this.getStadiumFromInput(args[2]);
       if (stadium) {
         this.gameService.stadium = stadium;
-        this.room.setCustomStadium(stadium.map_red);
+        this.room.setCustomStadium(stadium.redMaps.kickoff);
       } else {
-        this.room.setCustomStadium(this.gameService.stadium.map_red);
+        this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
       }
 
       if (args[3]) {
         const teamArg = args[3].toUpperCase();
         if (teamArg === TeamEnum.RED) {
-          this.room.setCustomStadium(this.gameService.stadium.map_red);
+          this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
         } else if (teamArg === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.gameService.stadium.map_blue);
+          this.room.setCustomStadium(this.gameService.stadium.blueMaps.kickoff);
         }
       }
 

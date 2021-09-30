@@ -1,5 +1,6 @@
-export const APP_VERSION = '0.7.0';
-export const ROOM_SUBTITLE = '- Nova Versão!';
+export const APP_VERSION = '0.8.0';
+// export const ROOM_SUBTITLE = '- Nova Versão!';
+export const ROOM_SUBTITLE = '- Desenvolvendo…';
 
 export const MINUTE_IN_MS = 60 * 1000;
 
@@ -11,3 +12,4 @@ export const GOAL_POST_RADIUS = 2;
 export const TOUCH_EPSILON = 0.01;
 // minimal tick range for driving
 export const DRIVE_MIN_TICKS = 10;
+export const AFTER_TRY_MAX_TICKS = 120;

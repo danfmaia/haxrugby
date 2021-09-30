@@ -1,7 +1,12 @@
 import { IPlayerObject, IPosition } from 'inversihax';
 
 import defaultConfig from '../../singletons/defaultConfig';
-import { MINUTE_IN_MS, DRIVE_MIN_TICKS } from '../../constants/constants';
+import {
+  MINUTE_IN_MS,
+  DRIVE_MIN_TICKS,
+  BALL_RADIUS,
+  AFTER_TRY_MAX_TICKS,
+} from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { CustomPlayer } from '../../models/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
@@ -37,9 +42,9 @@ export default class GameService implements IGameService {
   private isBeforeKickoff: boolean = true;
   private isTimeRunning: boolean = false;
   public isOvertime: boolean = false;
-  private isCompleting: boolean = false;
+  private isFinishing: boolean = false;
 
-  private lastTouchInfo: ITouchInfo | null = null;
+  private currTouchInfo: ITouchInfo | null = null;
   private touchInfoList: (ITouchInfo | null)[] = [];
   private driverIds: number[] = [];
   private toucherCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
@@ -47,6 +52,11 @@ export default class GameService implements IGameService {
 
   private lastBallPosition: IPosition = { x: 0, y: 0 };
   private isDefRec: boolean = false;
+
+  private isTry: false | TeamEnum = false;
+  private tryY: number | null = null;
+  private afterTryTickCount: number = 0;
+  private isConversionAttempt: false | TeamEnum = false;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
@@ -64,26 +74,37 @@ export default class GameService implements IGameService {
       return;
     }
 
-    const ballPosition = this.room.getBallPosition();
+    if (this.isConversionAttempt === false) {
+      const ballPosition = this.room.getBallPosition();
 
-    this.tickCount = this.tickCount + 1;
-    if (this.tickCount % 6 === 0) {
-      this.checkForTimeEvents(ballPosition);
+      this.tickCount = this.tickCount + 1;
+      if (this.tickCount % 6 === 0) {
+        this.checkForTimeEvents(ballPosition);
+      }
+
+      this.checkForGameEvents(ballPosition);
+
+      this.lastBallPosition = ballPosition;
     }
 
-    this.checkForGameEvents(ballPosition);
-
-    this.lastBallPosition = ballPosition;
+    // this.handleConversionAttempt();
   }
 
   public handleGameStart(byPlayer: CustomPlayer): void {
     this.isBeforeKickoff = true;
     this.isTimeRunning = false;
-    this.isCompleting = false;
+    this.isFinishing = false;
     this.lastBallPosition = { x: 0, y: 0 };
 
     if (!this.isMatchInProgress) {
       this.initializeMatch(byPlayer);
+    }
+
+    // place ball on try Y for conversion
+    if (this.isConversionAttempt && this.tryY) {
+      const updatedBallProps = this.room.getDiscProperties(0);
+      updatedBallProps.y = this.tryY;
+      this.room.setDiscProperties(0, updatedBallProps);
     }
   }
 
@@ -147,7 +168,7 @@ export default class GameService implements IGameService {
     this.isOvertime = false;
     this.score = { red: 0, blue: 0 };
 
-    this.lastTouchInfo = null;
+    this.currTouchInfo = null;
     this.touchInfoList = [];
     this.driverIds = [];
 
@@ -162,17 +183,17 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
   }
 
-  private completeMatch() {
+  private finishMatch() {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
-    this.isCompleting = true;
+    this.isFinishing = true;
     this.room.pauseGame(true);
     this.lastScores.unshift(this.score);
 
     const lastWinner = this.getLastWinner();
     if (!lastWinner) {
       Util.timeout(5000, () => {
-        if (this.isCompleting) {
+        if (this.isFinishing) {
           this.room.stopGame();
         }
       });
@@ -182,12 +203,12 @@ export default class GameService implements IGameService {
     const winnerTeam = this.matchConfig.getTeamBySide(lastWinner);
 
     Util.timeout(5000, () => {
-      if (this.isCompleting) {
+      if (this.isFinishing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
-          this.room.setCustomStadium(this.stadium.map_red);
+          this.room.setCustomStadium(this.stadium.redMaps.kickoff);
         } else if (lastWinner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.stadium.map_blue);
+          this.room.setCustomStadium(this.stadium.blueMaps.kickoff);
         }
       }
     });
@@ -244,7 +265,7 @@ export default class GameService implements IGameService {
         const canLosingTeamTieOrTurn = this.roomUtil.getCanLosingTeamTieOrTurn(ballPosition);
 
         if (canLosingTeamTieOrTurn === false) {
-          this.completeMatch();
+          this.finishMatch();
         } else if (this.isOvertime === false) {
           this.isOvertime = true;
           this.chatService.announceBallPositionOvertime();
@@ -261,8 +282,8 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    if (this.lastTouchInfo) {
-      if (this.checkForFieldGoal(ballPosition, this.lastTouchInfo)) {
+    if (this.currTouchInfo && this.tryY === null) {
+      if (this.checkForFieldGoal(ballPosition, this.currTouchInfo)) {
         return;
       }
     }
@@ -270,14 +291,20 @@ export default class GameService implements IGameService {
     // check for ball drives
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
 
+    // count current ball drivers
+    this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+
+    // in case of try, let the scorer attempt to take the ball more to the middle
+    if (this.isTry) {
+      this.handleAfterTry(ballPosition, this.currTouchInfo, this.driverCountByTeam);
+      return;
+    }
+
     const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
       ballPosition,
       this.lastBallPosition,
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
-
-    // count current ball drivers
-    this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
 
     // count current ball touchers
     const lastNullableTouchInfo = this.touchInfoList[0];
@@ -310,7 +337,7 @@ export default class GameService implements IGameService {
   private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
     const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
     if (newTouchInfo) {
-      this.lastTouchInfo = newTouchInfo;
+      this.currTouchInfo = newTouchInfo;
     }
 
     this.touchInfoList.unshift(newTouchInfo);
@@ -319,11 +346,11 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
+  private checkForFieldGoal(ballPosition: IPosition, currentTouchInfo: ITouchInfo): boolean {
     const isGoal = this.stadium.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
-      lastTouchInfo.ballPosition,
+      currentTouchInfo.ballPosition,
     );
 
     if (isGoal) {
@@ -335,17 +362,17 @@ export default class GameService implements IGameService {
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
         teamName = this.matchConfig.redTeam.name;
-        map = this.stadium.map_blue;
+        map = this.stadium.blueMaps.kickoff;
       } else {
         this.score.blue = this.score.blue + 3;
         teamName = this.matchConfig.blueTeam.name;
-        map = this.stadium.map_red;
+        map = this.stadium.redMaps.kickoff;
       }
 
       // announce goal
       this.chatService.sendBoldAnnouncement(`Field Goal do ${teamName}!`, 2);
 
-      this.handleRestartOrCompletion(map);
+      this.handleRestartOrFinishing(map);
       return true;
     }
     return false;
@@ -363,7 +390,7 @@ export default class GameService implements IGameService {
   }
 
   private getIsDefRec(ballPosition: IPosition) {
-    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.lastTouchInfo);
+    const lastTeamThatTouchedBall = this.roomUtil.getLastTeamThatTouchedBall(this.currTouchInfo);
     if (typeof lastTeamThatTouchedBall === 'boolean') {
       return false;
     }
@@ -396,16 +423,16 @@ export default class GameService implements IGameService {
 
       if (isSafety === TeamEnum.RED) {
         teamName = this.matchConfig.redTeam.name;
-        map = this.stadium.map_red;
+        map = this.stadium.redMaps.kickoff;
       } else {
         teamName = this.matchConfig.blueTeam.name;
-        map = this.stadium.map_blue;
+        map = this.stadium.blueMaps.kickoff;
       }
 
       // announce safety
       this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
 
-      this.handleRestartOrCompletion(map);
+      this.handleRestartOrFinishing(map);
       return true;
     }
     return false;
@@ -423,53 +450,104 @@ export default class GameService implements IGameService {
     }
 
     if (isTry) {
-      this.isTimeRunning = false;
-      this.room.pauseGame(true);
+      this.isTry = isTry;
+      this.tryY = ballPosition.y;
       let teamName: string;
-      let map: string;
 
       if (isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 7;
         teamName = this.matchConfig.redTeam.name;
-        map = this.stadium.map_blue;
       } else {
         this.score.blue = this.score.blue + 7;
         teamName = this.matchConfig.blueTeam.name;
-        map = this.stadium.map_red;
       }
 
       // announce try
       this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
+      this.chatService.sendNormalAnnouncement(
+        `O ${teamName} pode tentar levar a bola mais para o meio do campo.`,
+      );
 
-      this.handleRestartOrCompletion(map);
       return true;
     }
     return false;
   }
 
-  private handleRestartOrCompletion(map: string) {
-    if (this.getIsMatchCompleted() === false) {
+  private handleAfterTry(
+    ballPosition: IPosition,
+    currTouchInfo: ITouchInfo | null,
+    driverCountByTeam: IPlayerCountByTeam,
+  ) {
+    if (this.isTry === false) {
+      return;
+    }
+
+    let isStillAttempting: boolean = true;
+
+    if (Math.abs(ballPosition.x) < this.stadium.tryLine) {
+      // finish attempt when ball is moved out of the in-goal
+      isStillAttempting = false;
+    }
+
+    if (isStillAttempting) {
+      const teamTouchingBall = this.roomUtil.getLastTeamThatTouchedBall(currTouchInfo);
+      if (
+        (ballPosition.x > 0 && teamTouchingBall !== TeamEnum.RED) ||
+        (ballPosition.x < 0 && teamTouchingBall !== TeamEnum.BLUE)
+      ) {
+        // increase tick count when offense is not touching the ball
+        this.afterTryTickCount = this.afterTryTickCount + 1;
+      }
+
+      if (
+        (ballPosition.x > 0 && driverCountByTeam.red > 0) ||
+        (ballPosition.x < 0 && driverCountByTeam.blue > 0)
+      ) {
+        // 3 possibilities when ball is being driven by the offense
+        if (Math.abs(ballPosition.y) < BALL_RADIUS / 2) {
+          // 1: finish attempt when ball was driven close to center
+          this.tryY = 0;
+          isStillAttempting = false;
+        } else if (Math.abs(ballPosition.y) < Math.abs(this.lastBallPosition.y)) {
+          // 2: continue attempt when ball is being driven towards the center, without increasing the tick count
+          //    in this case, update tryY
+          this.tryY = ballPosition.y;
+        } else {
+          // 3: continue attempt when ball is being driven away from the center, but increase the tick count
+          //    in this case, do not update tryY
+          this.afterTryTickCount = this.afterTryTickCount + 1;
+        }
+      }
+    }
+
+    if (isStillAttempting === false || this.afterTryTickCount >= AFTER_TRY_MAX_TICKS) {
+      this.isTimeRunning = false;
+      this.afterTryTickCount = 0;
+      this.room.pauseGame(true);
+
+      let map: string;
+      if (this.isTry === TeamEnum.RED) {
+        this.score.red = this.score.red + 5;
+        map = this.stadium.redMaps.conversion;
+      } else {
+        this.score.blue = this.score.blue + 5;
+        map = this.stadium.blueMaps.conversion;
+      }
+      this.isConversionAttempt = this.isTry;
+      this.isTry = false;
+
+      this.handleRestartOrFinishing(map);
+    }
+  }
+
+  // private handleConversionAttempt() {}
+
+  private handleRestartOrFinishing(map: string) {
+    if (this.roomUtil.getIsMatchFinished(this.score.red, this.score.blue, this.isTry) === false) {
       this.restartGame(map);
     } else {
-      this.completeMatch();
+      this.finishMatch();
     }
-  }
-
-  private getIsMatchCompleted(): boolean {
-    if (this.isOvertime === false) {
-      if (
-        this.score.red >= this.matchConfig.scoreLimit ||
-        this.score.blue >= this.matchConfig.scoreLimit
-      ) {
-        return true;
-      }
-      return false;
-    }
-
-    if (this.score.red !== this.score.blue) {
-      return true;
-    }
-    return false;
   }
 
   private restartGame(map: string) {
@@ -498,10 +576,10 @@ export default class GameService implements IGameService {
   private registerKickAsTouch(playerId: number) {
     const ballPosition = this.room.getBallPosition();
 
-    // let updatedToucherIds = this.lastTouchInfo ? this.lastTouchInfo.toucherIds : [];
+    // let updatedToucherIds = this.currentTouchInfo ? this.currentTouchInfo.toucherIds : [];
     // updatedToucherIds.push(playerId);
 
-    this.lastTouchInfo = {
+    this.currTouchInfo = {
       toucherIds: [playerId],
       ballPosition: ballPosition,
       hasKick: true,
@@ -509,9 +587,9 @@ export default class GameService implements IGameService {
   }
 
   private unregisterPlayerFromMatchData(playerId: number) {
-    // unregister player from lastTouchInfo
-    if (this.lastTouchInfo) {
-      this.lastTouchInfo.toucherIds = this.lastTouchInfo.toucherIds.filter(
+    // unregister player from currentTouchInfo
+    if (this.currTouchInfo) {
+      this.currTouchInfo.toucherIds = this.currTouchInfo.toucherIds.filter(
         (toucherId) => toucherId !== playerId,
       );
     }

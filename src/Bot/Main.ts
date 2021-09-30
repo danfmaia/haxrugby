@@ -13,22 +13,22 @@ import { CustomPlayer } from './models/CustomPlayer';
 import { CustomPlayerService } from './services/CustomPlayerService';
 import { Startup } from './Startup';
 import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
-import { ExecuteCommandInterceptor } from './Interceptors/ExecuteCommandInterceptor';
+import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
-import { NewMatchCommand } from './Commands/game/NewMatchCommand';
+import { NewMatchCommand } from './commands/game/NewMatchCommand';
 import { APP_VERSION, ROOM_SUBTITLE } from './constants/constants';
-import { ScoreCommand } from './Commands/game/ScoreCommand';
-import { LinksCommand } from './Commands/links/LinksCommand';
-import { AdminCommand } from './Commands/AdminCommand';
-import { PasswordCommand } from './Commands/PasswordCommand';
-import { RulesCommand } from './Commands/rules/RulesCommand';
-import { HelpCommand } from './Commands/HelpCommand';
-import { TryCommand } from './Commands/rules/TryCommand';
-import { FieldGoalCommand } from './Commands/rules/FieldGoalCommand';
-import { SafetyCommand } from './Commands/rules/SafetyCommand';
-import { DiscordCommand } from './Commands/links/DiscordCommand';
-import { FacebookCommand } from './Commands/links/FacebookCommand';
-import { SetScoreCommand } from './Commands/game/SetScoreCommand';
+import { ScoreCommand } from './commands/game/ScoreCommand';
+import { LinksCommand } from './commands/links/LinksCommand';
+import { AdminCommand } from './commands/AdminCommand';
+import { PasswordCommand } from './commands/PasswordCommand';
+import { RulesCommand } from './commands/rules/RulesCommand';
+import { HelpCommand } from './commands/HelpCommand';
+import { TryCommand } from './commands/rules/TryCommand';
+import { FieldGoalCommand } from './commands/rules/FieldGoalCommand';
+import { SafetyCommand } from './commands/rules/SafetyCommand';
+import { DiscordCommand } from './commands/links/DiscordCommand';
+import { FacebookCommand } from './commands/links/FacebookCommand';
+import { SetScoreCommand } from './commands/game/SetScoreCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them

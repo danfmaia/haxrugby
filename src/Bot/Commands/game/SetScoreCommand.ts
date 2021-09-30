@@ -56,9 +56,9 @@ export class SetScoreCommand extends CommandBase<CustomPlayer> {
     if (args[2]) {
       const teamArg = args[2].toUpperCase();
       if (teamArg === TeamEnum.RED) {
-        this.room.setCustomStadium(this.gameService.stadium.map_red);
+        this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
       } else if (teamArg === TeamEnum.BLUE) {
-        this.room.setCustomStadium(this.gameService.stadium.map_blue);
+        this.room.setCustomStadium(this.gameService.stadium.blueMaps.kickoff);
       }
     }
 
