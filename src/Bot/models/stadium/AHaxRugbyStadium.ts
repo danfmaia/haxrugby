@@ -11,7 +11,7 @@ export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
 interface IHaxRugbyStadium {
   kickoffLineX: number;
 
-  getIsGoal(
+  getIsFieldGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastBallPositionWhenTouched: IPosition,
@@ -59,7 +59,7 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return this.goalLineX - BALL_RADIUS;
   }
 
-  public getIsGoal(
+  public getIsFieldGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastBallPositionWhenTouched: IPosition,

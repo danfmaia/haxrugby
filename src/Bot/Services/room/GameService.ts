@@ -262,7 +262,7 @@ export default class GameService implements IGameService {
     this.checkForTouches(players, ballPosition);
 
     if (this.lastTouchInfo) {
-      if (this.checkForGoal(ballPosition, this.lastTouchInfo)) {
+      if (this.checkForFieldGoal(ballPosition, this.lastTouchInfo)) {
         return;
       }
     }
@@ -288,12 +288,12 @@ export default class GameService implements IGameService {
     }
 
     if (this.isDefRec === false) {
-      const getIsTryOnGoalLine = this.stadium.getIsTryOnGoalLine(
+      const isTryOnGoalLine = this.stadium.getIsTryOnGoalLine(
         didBallEnterOrLeaveIngoal,
         ballPosition,
         this.driverCountByTeam,
       );
-      if (getIsTryOnGoalLine === false) {
+      if (isTryOnGoalLine === false) {
         if (this.checkForSafety(ballPosition)) {
           return;
         }
@@ -319,8 +319,8 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
-    const isGoal = this.stadium.getIsGoal(
+  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
+    const isGoal = this.stadium.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
       lastTouchInfo.ballPosition,

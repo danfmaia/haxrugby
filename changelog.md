@@ -4,8 +4,8 @@
 
 - Corrigido o erro do Try que não era Try;
 - Corrigido alerta "Safety permitido." sendo disparado na ocasião de um Try na linha de gol;
-- [Teste pendente] Tentando corrigir o erro do Safety sendo dado quando a bola entra no in-goal sendo conduzida simultaneamente pelo ataque e pela defesa;
-- Criado comando para alterar o placar (!set-score);
+- _[Teste pendente]_ Corrigido o erro do Safety (ao invés de Try) sendo dado quando a bola entra no in-goal sendo conduzida simultaneamente pelo ataque e pela defesa;
+- Criado comando para alterar o placar (`!set-score`);
 - Aprimorados comandos existentes;
 - Retirado o player do host;
 - O anúncio de links dos 5s de partida agora é enviado apenas para os espectadores;
@@ -14,12 +14,12 @@
 ### v0.6.1:
 
 - Aprimoradas as lógicas do Try e do Safety;
-- Melhoradas as descrições do Try e do Safety (do comando !h);
+- Melhoradas as descrições do Try e do Safety (do comando `!help`);
 - Corrigido mensagem "A bola saiu do ingoal." aparecendo após o reinício de jogo;
 - Anúncio de placar agora também é exibido após o kickoff de reinício;
 - Corrigido jogo reiniciando, ao invés de finalizando, após Safety no overtime;
 - Aprimorados comandos existentes;
-- Criado comando para cada regra ou link (!dc, !fb, !try, !fg e !sf).
+- Criado comando para cada regra ou link (`!dc`, `!fb`, `!try`, `!fg` e `!sf`).
 
 ### v0.6.0:
 
@@ -28,7 +28,7 @@
 
 ### v0.5.0:
 
-- Adicionados os comandos !help, !rules, !score, !links, !admin e !password;
+- Adicionados os comandos `!help`, `!rules`, `!score`, `!links`, `!admin` e `!password`;
 - Adicionado suporte à internacionalização;
 - Melhorias e correções de erros.
 
@@ -50,4 +50,4 @@
 
 - Implementado o ciclo básico de partida;
 - Implementado o Overtime (OT);
-- Adicionado o comando de nova partida (!new).
+- Adicionado o comando de nova partida (`!new`).

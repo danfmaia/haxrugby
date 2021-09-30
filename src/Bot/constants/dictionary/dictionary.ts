@@ -12,19 +12,19 @@ const ptBr: DictionaryKeys = {
 
   MSG_RULES: {
     TITLE: 'Resumo das REGRAS do jogo:',
-    TRY_TITLE: 'TRY                                 !try',
+    TRY_TITLE: 'TRY     !try',
     TRY: [
       'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
       'O in-goal é a região do campo atrás da linha de gol de cada time.',
       'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
       'A conversão ainda não foi implementada.',
     ],
-    FIELD_GOAL_TITLE: 'FIELD GOAL (FG)                 !fg !gol',
+    FIELD_GOAL_TITLE: 'FIELD GOAL (FG)     !fg !gol',
     FIELD_GOAL: [
       'É o tento secundário do rugby. Vale 3 pontos.',
       'Só pode ser feito de fora da pequena área. Qualquer contato na bola dentro dessa área invalida o Field Goal.',
     ],
-    SAFETY_TITLE: 'SAFETY (SF)                  !sf !safety',
+    SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
     SAFETY: [
       'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
       'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',

@@ -72,8 +72,10 @@ function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
     }
     touchInfo.toucherIds.forEach((toucherId) => {
       if (index === 0) {
+        // register all potential drivers
         driverIds = [...touchInfo.toucherIds];
       } else {
+        // unregister players that didn't touch the ball in a tick contained in the minimal tick range for driving (DRIVE_MIN_TICKS)
         if (firstTouchInfo.toucherIds.includes(toucherId) === false) {
           driverIds = driverIds.filter((driverId) => driverId !== toucherId);
         }
