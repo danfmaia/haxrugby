@@ -1,6 +1,6 @@
 const red_kickoff = `{
 
-	"name" : "RU 0.18 red by JP",
+	"name" : "HaxRugby v19 R by JP",
 
 	"width" : 720,
 

@@ -1,4 +1,4 @@
-import { IPosition } from 'inversihax';
+import { IDiscPropertiesObject, IPosition } from 'inversihax';
 
 import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
@@ -10,7 +10,9 @@ export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
 
 interface IHaxRugbyStadium {
   kickoffLineX: number;
-  tryLine: number;
+  areaLineX: number;
+
+  tryLineX: number;
 
   getIsFieldGoal(
     ballPosition: IPosition,
@@ -48,6 +50,8 @@ interface IHaxRugbyStadium {
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): boolean;
+
+  moveDiscInXAxis(disc: IDiscPropertiesObject, team: TeamEnum, deltaX: number): number;
 }
 
 abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
@@ -55,9 +59,24 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   private goalPostY: number;
   private miniAreaX: number;
   public kickoffLineX: number;
+  public areaLineX: number;
 
-  public get tryLine(): number {
+  public get tryLineX(): number {
     return this.goalLineX - BALL_RADIUS;
+  }
+
+  constructor(
+    goalLineX: number,
+    goalPostY: number,
+    miniAreaX: number,
+    kickoffLineX: number,
+    areaLineX: number,
+  ) {
+    this.goalLineX = goalLineX;
+    this.goalPostY = goalPostY;
+    this.miniAreaX = miniAreaX;
+    this.kickoffLineX = kickoffLineX;
+    this.areaLineX = areaLineX;
   }
 
   public getIsFieldGoal(
@@ -85,22 +104,15 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return false;
   }
 
-  constructor(goalLineX: number, goalPostY: number, miniAreaX: number, kickoffLineX: number) {
-    this.goalLineX = goalLineX;
-    this.goalPostY = goalPostY;
-    this.miniAreaX = miniAreaX;
-    this.kickoffLineX = kickoffLineX;
-  }
-
   public getDidBallEnterOrLeaveIngoal(
     ballPosition: IPosition,
     lastBallPosition: IPosition,
   ): IBallEnterOrLeaveIngoal {
-    if (Math.abs(lastBallPosition.x) < this.tryLine && Math.abs(ballPosition.x) >= this.tryLine) {
+    if (Math.abs(lastBallPosition.x) < this.tryLineX && Math.abs(ballPosition.x) >= this.tryLineX) {
       return 'enter';
     }
 
-    if (Math.abs(lastBallPosition.x) >= this.tryLine && Math.abs(ballPosition.x) < this.tryLine) {
+    if (Math.abs(lastBallPosition.x) >= this.tryLineX && Math.abs(ballPosition.x) < this.tryLineX) {
       return 'leave';
     }
 
@@ -155,9 +167,9 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (ballPosition.x <= -this.tryLine && driverCountByTeam.red > 0) {
+    if (ballPosition.x <= -this.tryLineX && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
-    } else if (ballPosition.x >= this.tryLine && driverCountByTeam.blue > 0) {
+    } else if (ballPosition.x >= this.tryLineX && driverCountByTeam.blue > 0) {
       return TeamEnum.BLUE;
     }
     return false;
@@ -175,8 +187,8 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return false;
     }
 
-    const redCondition = ballPosition.x <= -this.tryLine && toucherCountByTeam.red > 0;
-    const blueCondition = ballPosition.x >= this.tryLine && toucherCountByTeam.blue > 0;
+    const redCondition = ballPosition.x <= -this.tryLineX && toucherCountByTeam.red > 0;
+    const blueCondition = ballPosition.x >= this.tryLineX && toucherCountByTeam.blue > 0;
 
     if (redCondition === false && blueCondition === false) {
       return false;
@@ -205,9 +217,9 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     ballPosition: IPosition,
     driverCountByTeam: IPlayerCountByTeam,
   ): false | TeamEnum {
-    if (ballPosition.x >= this.tryLine && driverCountByTeam.red > 0) {
+    if (ballPosition.x >= this.tryLineX && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
-    } else if (ballPosition.x <= -this.tryLine && driverCountByTeam.blue > 0) {
+    } else if (ballPosition.x <= -this.tryLineX && driverCountByTeam.blue > 0) {
       return TeamEnum.BLUE;
     }
     return false;
@@ -266,6 +278,13 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
       return true;
     }
     return false;
+  }
+
+  public moveDiscInXAxis(disc: IDiscPropertiesObject, team: TeamEnum, deltaX: number): number {
+    if (team === TeamEnum.RED) {
+      return disc.x + deltaX;
+    }
+    return disc.x - deltaX;
   }
 }
 

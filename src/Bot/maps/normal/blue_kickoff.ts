@@ -1,6 +1,6 @@
 const blue_kickoff = `{
 
-	"name" : "RU 0.18 blue by JP",
+	"name" : "HaxRugby v19 B by JP",
 
 	"width" : 720,
 

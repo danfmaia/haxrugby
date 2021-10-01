@@ -5,14 +5,16 @@ const goalLineX = 562;
 const goalPostY = 60;
 const miniAreaX = 65;
 const kickoffLineX = 179;
+const areaLineX = 412;
 
 const normalStadium = new HaxRugbyStadium(
+  normalMaps.red,
+  normalMaps.blue,
   goalLineX,
   goalPostY,
   miniAreaX,
   kickoffLineX,
-  normalMaps.red,
-  normalMaps.blue,
+  areaLineX,
 );
 
 export default normalStadium;

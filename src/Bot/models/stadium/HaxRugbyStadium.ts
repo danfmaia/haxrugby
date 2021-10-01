@@ -6,14 +6,15 @@ export default class HaxRugbyStadium extends AHaxRugbyStadium {
   public blueMaps: THaxRugbyMaps;
 
   constructor(
+    redMaps: THaxRugbyMaps,
+    blueMaps: THaxRugbyMaps,
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,
     kickoffLineX: number,
-    redMaps: THaxRugbyMaps,
-    blueMaps: THaxRugbyMaps,
+    areaLineX: number,
   ) {
-    super(goalLineX, goalPostY, miniAreaX, kickoffLineX);
+    super(goalLineX, goalPostY, miniAreaX, kickoffLineX, areaLineX);
 
     this.redMaps = redMaps;
     this.blueMaps = blueMaps;

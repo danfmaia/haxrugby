@@ -1,81 +1,79 @@
 function blue_getConversion(tryY: number): string {
   const map = {
-    name: 'SmallRU 0.07 y3 by JP',
+    name: 'S-HaxRugby v8 BC by JP',
 
-    width: 640,
+    width: 420,
 
     height: 200,
 
-    spawnDistance: 145,
+    spawnDistance: 150,
 
-    bg: { type: 'grass', width: 590, height: 153, kickOffRadius: 0, cornerRadius: 0 },
+    bg: { type: 'grass', width: 390, height: 153, kickOffRadius: 0, cornerRadius: 0 },
 
     vertexes: [
-      /* 0 */ { x: -190, y: 153, trait: 'ballArea' },
+      /* 0 */ { x: -390, y: 153, trait: 'ballArea' },
 
-      /* 1 */ { x: -100, y: 153, trait: 'Line' },
-      /* 2 */ { x: -100, y: -153, trait: 'Line' },
+      /* 1 */ { x: -300, y: 153, trait: 'Line' },
+      /* 2 */ { x: -300, y: -153, trait: 'Line' },
 
-      /* 3 */ { x: -190, y: -153, trait: 'ballArea' },
-      /* 4 */ { x: 590, y: 153, trait: 'ballArea' },
+      /* 3 */ { x: -390, y: -153, trait: 'ballArea' },
+      /* 4 */ { x: 390, y: 153, trait: 'ballArea' },
 
-      /* 5 */ { x: 500, y: 153, trait: 'Line' },
-      /* 6 */ { x: 500, y: -153, trait: 'Line' },
+      /* 5 */ { x: 300, y: 153, trait: 'Line' },
+      /* 6 */ { x: 300, y: -153, trait: 'Line' },
 
-      /* 7 */ { x: 590, y: -153, trait: 'ballArea' },
+      /* 7 */ { x: 390, y: -153, trait: 'ballArea' },
 
-      /* 8 */ { x: 200, y: 153, trait: 'Line' },
-      /* 9 */ { x: 200, y: -153, trait: 'Line' },
+      /* 8 */ { x: 0, y: 153, trait: 'Line' },
+      /* 9 */ { x: 0, y: -153, trait: 'Line' },
 
-      /* 10 */ { x: -100, y: -200, trait: 'Barrier' },
-      /* 11 */ { x: -100, y: 200, trait: 'Barrier' },
+      /* 10 */ { x: -300, y: -200, trait: 'Barrier' },
+      /* 11 */ { x: -300, y: 200, trait: 'Barrier' },
 
-      /* 12 */ { x: -240, y: -200, trait: 'Line' },
-      /* 13 */ { x: -240, y: 200, trait: 'Line' },
-      /* 14 */ { x: 640, y: -200, trait: 'Line' },
-      /* 15 */ { x: 640, y: 200, trait: 'Line' },
+      /* 12 */ { x: -440, y: -200, trait: 'Line' },
+      /* 13 */ { x: -440, y: 200, trait: 'Line' },
+      /* 14 */ { x: 440, y: -200, trait: 'Line' },
+      /* 15 */ { x: 440, y: 200, trait: 'Line' },
 
-      /* 16 */ { x: -100, y: -50, trait: 'Barrier' },
-      /* 17 */ { x: -100, y: 50, trait: 'Barrier' },
+      /* 16 */ { x: -300, y: -50, trait: 'Barrier' },
+      /* 17 */ { x: -300, y: 50, trait: 'Barrier' },
 
-      /* 18 */ { x: 100, y: 148, trait: 'Line' },
-      /* 19 */ { x: 100, y: -148, trait: 'Line' },
-      /* 20 */ { x: 300, y: 148, trait: 'Line' },
-      /* 21 */ { x: 300, y: -148, trait: 'Line' },
+      /* 18 */ { x: -100, y: 148, trait: 'Line' },
+      /* 19 */ { x: -100, y: -148, trait: 'Line' },
+      /* 20 */ { x: 100, y: 148, trait: 'Line' },
+      /* 21 */ { x: 100, y: -148, trait: 'Line' },
 
-      /* 22 */ { x: 100, y: 200, trait: 'BlueKOBarrier' },
-      /* 23 */ { x: 100, y: -200, trait: 'BlueKOBarrier' },
+      /* 22 */ { x: -100, y: 200, trait: 'BlueKOBarrier' },
+      /* 23 */ { x: -100, y: -200, trait: 'BlueKOBarrier' },
 
-      /* 24 */ { x: 300, y: 200, trait: 'RedKOBarrier' },
-      /* 25 */ { x: 300, y: -200, trait: 'RedKOBarrier' },
+      /* 24 */ { x: 100, y: 200, trait: 'RedKOBarrier' },
+      /* 25 */ { x: 100, y: -200, trait: 'RedKOBarrier' },
 
-      /* 26 */ { x: -190, y: -50, trait: 'Line' },
-      /* 27 */ { x: -100, y: -50, trait: 'Line' },
-      /* 28 */ { x: 500, y: -50, trait: 'Line' },
-      /* 29 */ { x: 590, y: -50, trait: 'Line' },
-      /* 30 */ { x: -190, y: 50, trait: 'Line' },
-      /* 31 */ { x: -100, y: 50, trait: 'Line' },
-      /* 32 */ { x: 500, y: 50, trait: 'Line' },
-      /* 33 */ { x: 590, y: 50, trait: 'Line' },
+      /* 26 */ { x: -390, y: -50, trait: 'Line' },
+      /* 27 */ { x: -300, y: -50, trait: 'Line' },
+      /* 28 */ { x: 300, y: -50, trait: 'Line' },
+      /* 29 */ { x: 390, y: -50, trait: 'Line' },
+      /* 30 */ { x: -390, y: 50, trait: 'Line' },
+      /* 31 */ { x: -300, y: 50, trait: 'Line' },
+      /* 32 */ { x: 300, y: 50, trait: 'Line' },
+      /* 33 */ { x: 390, y: 50, trait: 'Line' },
+      /* 34 */ { x: -200, y: tryY - 12, trait: 'Line' },
+      /* 35 */ { x: -200, y: tryY + 12, trait: 'Line' },
+      /* 36 */ { x: -300, y: -95, trait: 'Line' },
+      /* 37 */ { x: -255, y: -50, trait: 'Line' },
+      /* 38 */ { x: -255, y: 50, trait: 'Line' },
+      /* 39 */ { x: -300, y: 95, trait: 'Line' },
+      /* 40 */ { x: 300, y: -95, trait: 'Line' },
+      /* 41 */ { x: 255, y: -50, trait: 'Line' },
+      /* 42 */ { x: 255, y: 50, trait: 'Line' },
+      /* 43 */ { x: 300, y: 95, trait: 'Line' },
+      /* 44 */ { x: -200, y: -153, trait: 'Line' },
+      /* 45 */ { x: -200, y: 153, trait: 'Line' },
+      /* 46 */ { x: 200, y: -153, trait: 'Line' },
+      /* 47 */ { x: 200, y: 153, trait: 'Line' },
 
-      /* 34 */ { x: 0, y: tryY - 12, trait: 'Line' },
-      /* 35 */ { x: 0, y: tryY + 12, trait: 'Line' },
-
-      /* 36 */ { x: -100, y: -95, trait: 'Line' },
-      /* 37 */ { x: -55, y: -50, trait: 'Line' },
-      /* 38 */ { x: -55, y: 50, trait: 'Line' },
-      /* 39 */ { x: -100, y: 95, trait: 'Line' },
-      /* 40 */ { x: 500, y: -95, trait: 'Line' },
-      /* 41 */ { x: 455, y: -50, trait: 'Line' },
-      /* 42 */ { x: 455, y: 50, trait: 'Line' },
-      /* 43 */ { x: 500, y: 95, trait: 'Line' },
-      /* 44 */ { x: 0, y: -153, trait: 'Line' },
-      /* 45 */ { x: 0, y: 153, trait: 'Line' },
-      /* 46 */ { x: 400, y: -153, trait: 'Line' },
-      /* 47 */ { x: 400, y: 153, trait: 'Line' },
-
-      /* 48 */ { x: -15, y: -200, trait: 'Barrier' },
-      /* 49 */ { x: -15, y: 200, trait: 'Barrier' },
+      /* 48 */ { x: -215, y: -200, trait: 'Barrier' },
+      /* 49 */ { x: -215, y: 200, trait: 'Barrier' },
     ],
 
     segments: [
@@ -113,17 +111,15 @@ function blue_getConversion(tryY: number): string {
       { v0: 42, v1: 43, trait: 'Line', curve: -90 },
       { v0: 44, v1: 45, trait: 'Line' },
       { v0: 46, v1: 47, trait: 'Line' },
-
-      { v0: 12, v1: 13, bCoef: 0.1 },
     ],
 
-    goals: [{ team: 'red', p0: [-100, -50], p1: [-100, 50] }],
+    goals: [{ team: 'red', p0: [-300, -50], p1: [-300, 50] }],
 
     discs: [
-      { pos: [-100, 50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },
-      { pos: [-100, -50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },
-      { pos: [500, 50], trait: 'goalPost', color: 'CCCCFF', cMask: ['ball'] },
-      { pos: [500, -50], trait: 'goalPost', color: 'CCCCFF', cMask: ['ball'] },
+      { pos: [-300, 50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },
+      { pos: [-300, -50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },
+      { pos: [300, 50], trait: 'goalPost', color: 'CCCCFF', cMask: ['ball'] },
+      { pos: [300, -50], trait: 'goalPost', color: 'CCCCFF', cMask: ['ball'] },
     ],
 
     planes: [
@@ -132,8 +128,8 @@ function blue_getConversion(tryY: number): string {
 
       { normal: [0, 1], dist: -200, bCoef: 0.1 },
       { normal: [0, -1], dist: -200, bCoef: 0.1 },
-      { normal: [1, 0], dist: -240, bCoef: 0.1 },
-      { normal: [-1, 0], dist: -640, bCoef: 0.1 },
+      { normal: [1, 0], dist: -440, bCoef: 0.1 },
+      { normal: [-1, 0], dist: -440, bCoef: 0.1 },
     ],
 
     traits: {

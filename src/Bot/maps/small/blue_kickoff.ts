@@ -1,5 +1,5 @@
 const blue_kickoff = `{
-	"name" : "SmallRU 0.07 blue by JP",
+	"name" : "S-HaxRugby v8 B by JP",
 	
 	"width" : 420,
 	"height" : 200,

@@ -1,6 +1,10 @@
 ## CHANGELOG
 
-### v0.7.0 (_loading..._):
+### v0.8 (_loading..._):
+
+- Implementada a conversão de 2 pontos.
+
+### v0.7:
 
 - Corrigido o erro do Try que não era Try;
 - Corrigido alerta "Safety permitido." sendo disparado na ocasião de um Try na linha de gol;
@@ -9,9 +13,9 @@
 - Aprimorados comandos existentes;
 - Retirado o player do host;
 - O anúncio de links dos 5s de partida agora é enviado apenas para os espectadores;
-- Aprimorada a lógica de gol (nenhuma alteração na jogabilidade);
+- Aprimorada a lógica de gol (nenhuma alteração na jogabilidade).
 
-### v0.6.1:
+### v0.6a:
 
 - Aprimoradas as lógicas do Try e do Safety;
 - Melhoradas as descrições do Try e do Safety (do comando `!help`);
@@ -21,32 +25,32 @@
 - Aprimorados comandos existentes;
 - Criado comando para cada regra ou link (`!dc`, `!fb`, `!try`, `!fg` e `!sf`).
 
-### v0.6.0:
+### v0.6:
 
 - Implementado o desvio/recuo de bola;
 - Implementado o Safety (SF).
 
-### v0.5.0:
+### v0.5:
 
 - Adicionados os comandos `!help`, `!rules`, `!score`, `!links`, `!admin` e `!password`;
 - Adicionado suporte à internacionalização;
 - Melhorias e correções de erros.
 
-### v0.4.0:
+### v0.4:
 
 - Implementado tamanho Normal de mapa;
 - Correções de erros.
 
-### v0.3.0:
+### v0.3:
 
 - Implementada condução de bola;
 - Implementado o Try (TRY).
 
-### v0.2.0:
+### v0.2:
 
 - Implementado o Field Goal (FG).
 
-### v0.1.0:
+### v0.1:
 
 - Implementado o ciclo básico de partida;
 - Implementado o Overtime (OT);
