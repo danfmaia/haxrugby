@@ -30,7 +30,6 @@ class CommandService implements ICommandService {
   }
 
   public setPlayerAsPosition(player: CustomPlayer, args: string[], position: PositionEnum): void {
-    console.log('args[0]: ', args[0]);
     const args0 = args[0];
 
     const team = this.gameService.teams.getTeamByTeamID(player.team);

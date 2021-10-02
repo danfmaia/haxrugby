@@ -1,6 +1,6 @@
 import { BALL_RADIUS } from '../../constants/constants';
 
-function red_getConversion(tryY: number): string {
+function red_getConversion(ballX: number, tryY: number): string {
   const map = {
     name: 'S-HaxRugby v8 RC by JP',
 
@@ -59,8 +59,8 @@ function red_getConversion(tryY: number): string {
       /* 31 */ { x: -300, y: 50, trait: 'Line' },
       /* 32 */ { x: 300, y: 50, trait: 'Line' },
       /* 33 */ { x: 390, y: 50, trait: 'Line' },
-      /* 34 */ { x: 200, y: tryY - (BALL_RADIUS + 2), trait: 'Line' },
-      /* 35 */ { x: 200, y: tryY + (BALL_RADIUS + 2), trait: 'Line' },
+      /* 34 */ { x: ballX, y: tryY - (BALL_RADIUS + 2), trait: 'Line' },
+      /* 35 */ { x: ballX, y: tryY + (BALL_RADIUS + 2), trait: 'Line' },
       /* 36 */ { x: -300, y: -95, trait: 'Line' },
       /* 37 */ { x: -255, y: -50, trait: 'Line' },
       /* 38 */ { x: -255, y: 50, trait: 'Line' },

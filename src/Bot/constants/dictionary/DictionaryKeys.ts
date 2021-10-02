@@ -38,6 +38,9 @@ type DictionaryKeys = {
     HELP: string;
     HELP_DESCRIPTION: string;
 
+    RULES: string;
+    RULES_DESCRIPTION: string;
+
     SCORE: string;
     SCORE_DESCRIPTION: string;
 
@@ -47,8 +50,8 @@ type DictionaryKeys = {
     GOALKEEPER: string;
     GOALKEEPER_DESCRIPTION: string;
 
-    RULES: string;
-    RULES_DESCRIPTION: string;
+    PLACE_BALL: string;
+    PLACE_BALL_DESCRIPTION: string;
 
     LINKS: string;
     LINKS_DESCRIPTION: string;

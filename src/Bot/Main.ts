@@ -29,8 +29,9 @@ import { SafetyCommand } from './commands/rules/SafetyCommand';
 import { DiscordCommand } from './commands/links/DiscordCommand';
 import { FacebookCommand } from './commands/links/FacebookCommand';
 import { SetScoreCommand } from './commands/game/SetScoreCommand';
-import { KickerCommand } from './commands/positions/KickerCommand';
-import { GoalkeeperCommand } from './commands/positions/GoalkeeperCommand';
+import { KickerCommand } from './commands/conversion/KickerCommand';
+import { GoalkeeperCommand } from './commands/conversion/GoalkeeperCommand';
+import { PlaceBallCommand } from './commands/conversion/PlaceBallCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -47,6 +48,7 @@ SetScoreCommand;
 
 KickerCommand;
 GoalkeeperCommand;
+PlaceBallCommand;
 
 RulesCommand;
 TryCommand;

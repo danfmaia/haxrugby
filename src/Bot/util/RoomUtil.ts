@@ -3,6 +3,7 @@ import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import ITouchInfo from '../models/physics/ITouchInfo';
 import { CustomPlayer } from '../models/player/CustomPlayer';
+import { TPlayerPropMap as TPlayerPropsMap } from '../models/player/PlayerPropMap';
 import IPlayerCountByTeam from '../models/team/IPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IGameService } from '../services/room/IGameService';
@@ -142,5 +143,25 @@ export class RoomUtil {
       this.room.setPlayerDiscProperties(oldPlayer.id, newPlayerProps);
       this.room.setPlayerDiscProperties(player.id, oldPlayerProps);
     }
+  }
+
+  public getAllPlayerPropsMaps(): TPlayerPropsMap[] {
+    const players = this.room.getPlayerList();
+    const result: TPlayerPropsMap[] = [];
+
+    players.forEach((player) => {
+      result.push({
+        playerId: player.id,
+        discProps: this.room.getPlayerDiscProperties(player.id),
+      });
+    });
+
+    return result;
+  }
+
+  public setAllPlayersProps(allPlayerPropsMaps: TPlayerPropsMap[]): void {
+    allPlayerPropsMaps.forEach((playerPropsMap) => {
+      this.room.setPlayerDiscProperties(playerPropsMap.playerId, playerPropsMap.discProps);
+    });
   }
 }

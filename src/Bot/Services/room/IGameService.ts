@@ -1,4 +1,4 @@
-import { IPlayerObject, TeamID } from 'inversihax';
+import { IPlayerObject, IPosition, TeamID } from 'inversihax';
 
 import { CustomPlayer } from '../../models/player/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
@@ -24,7 +24,12 @@ export interface IGameService {
   isMatchInProgress: boolean;
   isOvertime: boolean;
 
+  lastBallPosition: IPosition;
+
+  tryY: number | null;
+
   isConversionAttempt: false | TeamEnum;
+  isReplacingBall: boolean;
   isConversionShot: boolean;
 
   /**

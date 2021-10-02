@@ -55,14 +55,15 @@ export default class GameService implements IGameService {
   private toucherCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
 
-  private lastBallPosition: IPosition = { x: 0, y: 0 };
+  public lastBallPosition: IPosition = { x: 0, y: 0 };
   private isDefRec: boolean = false;
 
   private isTry: false | TeamEnum = false;
-  private tryY: number | null = null;
+  public tryY: number | null = null;
   private afterTryTickCount: number = 0;
 
   public isConversionAttempt: false | TeamEnum = false;
+  public isReplacingBall: boolean = false;
   public isConversionShot: boolean = false;
 
   constructor(room: IHaxRugbyRoom) {
@@ -112,13 +113,15 @@ export default class GameService implements IGameService {
     this.isBeforeKickoff = true;
     this.isTimeRunning = false;
     this.isFinishing = false;
-    this.lastBallPosition = { x: 0, y: 0 };
+    if (this.isReplacingBall === false) {
+      this.lastBallPosition = { x: 0, y: 0 };
+    }
 
     if (!this.isMatchInProgress) {
       this.initializeMatch(byPlayer);
     }
 
-    if (this.isConversionAttempt && this.tryY !== null) {
+    if (this.isConversionAttempt && this.tryY !== null && this.isReplacingBall === false) {
       this.initializeConversion(this.isConversionAttempt, this.tryY);
     }
   }
@@ -342,7 +345,7 @@ export default class GameService implements IGameService {
         updatedPlayerProps.x = this.stadium.moveDiscInXAxis(
           updatedPlayerProps,
           defendingTeam,
-          this.stadium.kickoffLineX,
+          this.stadium.miniAreaX,
         );
         this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
       }
@@ -366,7 +369,7 @@ export default class GameService implements IGameService {
       }
     }
 
-    // move defense bench player to right place
+    // move defending team's players to right place
     const defenseBenchPlayers = this.room
       .getPlayerList()
       .filter((player) => player.team === defendingTeamID && player.id !== goalkeeperId);
@@ -678,9 +681,9 @@ export default class GameService implements IGameService {
 
       let map: string;
       if (this.isTry === TeamEnum.RED) {
-        map = this.stadium.redMaps.getConversion(this.tryY);
+        map = this.stadium.redMaps.getConversion(this.stadium.areaLineX, this.tryY);
       } else {
-        map = this.stadium.blueMaps.getConversion(this.tryY);
+        map = this.stadium.blueMaps.getConversion(-this.stadium.areaLineX, this.tryY);
       }
 
       this.handleRestartOrFinishing(map, () => {
@@ -694,6 +697,7 @@ export default class GameService implements IGameService {
     // handle after shot
     if (
       this.isConversionShot === false &&
+      this.isReplacingBall === false &&
       ballPosition.x !== this.lastBallPosition.x &&
       ballPosition.y !== this.lastBallPosition.y
     ) {
@@ -704,6 +708,7 @@ export default class GameService implements IGameService {
         this.isConversionShot = false;
 
         if (isStillConversionAttempt) {
+          this.room.pauseGame(true);
           this.isConversionAttempt = false;
 
           let teamName: string;

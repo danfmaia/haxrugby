@@ -192,6 +192,11 @@ function red_getConversion(tryY: number): string {
       /* 159 */ { trait: 'fadeLine', x: -564, y: 240 },
       /* 160 */ { trait: 'fadeLine', x: 564, y: 240 },
       /* 161 */ { trait: 'fadeLine', x: 672, y: 240 },
+
+      /* 162 */ { x: -179, y: 350, trait: 'Barrier' },
+      /* 163 */ { x: -179, y: -350, trait: 'Barrier' },
+      /* 164 */ { x: 674, y: 350, trait: 'Barrier' },
+      /* 165 */ { x: 674, y: -350, trait: 'Barrier' },
     ],
 
     segments: [
@@ -301,6 +306,9 @@ function red_getConversion(tryY: number): string {
       { trait: 'fadeLine', v0: 156, v1: 157 },
       { trait: 'fadeLine', v0: 158, v1: 159 },
       { trait: 'fadeLine', v0: 160, v1: 161 },
+
+      { v0: 162, v1: 163, trait: 'Barrier' },
+      { v0: 164, v1: 165, trait: 'Barrier' },
     ],
 
     goals: [{ p0: [562, -60], p1: [562, 60], team: 'blue' }],
