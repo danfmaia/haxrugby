@@ -280,8 +280,8 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return false;
   }
 
-  public moveDiscInXAxis(disc: IDiscPropertiesObject, team: TeamEnum, deltaX: number): number {
-    if (team === TeamEnum.RED) {
+  public moveDiscInXAxis(disc: IDiscPropertiesObject, direction: TeamEnum, deltaX: number): number {
+    if (direction === TeamEnum.RED) {
       return disc.x + deltaX;
     }
     return disc.x - deltaX;

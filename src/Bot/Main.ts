@@ -16,7 +16,7 @@ import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './commands/game/NewMatchCommand';
-import { APP_VERSION, ROOM_SUBTITLE } from './constants/constants';
+import { APP_VERSION, ROOM_TITLE } from './constants/constants';
 import { ScoreCommand } from './commands/game/ScoreCommand';
 import { LinksCommand } from './commands/links/LinksCommand';
 import { AdminCommand } from './commands/AdminCommand';
@@ -29,6 +29,8 @@ import { SafetyCommand } from './commands/rules/SafetyCommand';
 import { DiscordCommand } from './commands/links/DiscordCommand';
 import { FacebookCommand } from './commands/links/FacebookCommand';
 import { SetScoreCommand } from './commands/game/SetScoreCommand';
+import { KickerCommand } from './commands/positions/KickerCommand';
+import { GoalkeeperCommand } from './commands/positions/GoalkeeperCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -43,6 +45,9 @@ NewMatchCommand;
 ScoreCommand;
 SetScoreCommand;
 
+KickerCommand;
+GoalkeeperCommand;
+
 RulesCommand;
 TryCommand;
 FieldGoalCommand;
@@ -54,10 +59,9 @@ FacebookCommand;
 
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
-    playerName: 'HaxRugby®',
-    roomName: `🏉 HaxRugby® v${APP_VERSION} ${ROOM_SUBTITLE}`,
-    public: true,
-    password: 'WJ-wges!B3J)M/Tx',
+    roomName: `${ROOM_TITLE} ${APP_VERSION}`,
+    public: false,
+    // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: true,
     maxPlayers: 15,
   });

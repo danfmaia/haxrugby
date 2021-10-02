@@ -5,18 +5,27 @@ import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 import { IChatService } from './ChatService';
+import { ITeams } from '../../models/team/Teams';
+import { RoomUtil } from '../../util/RoomUtil';
+import TeamEnum from '../../enums/TeamEnum';
 
 export interface IGameService {
   chatService: IChatService;
+  roomUtil: RoomUtil;
 
   stadium: HaxRugbyStadium;
   matchConfig: MatchConfig;
+  teams: ITeams;
 
   remainingTime: number;
   score: IScore;
 
+  isGameStopped: boolean;
   isMatchInProgress: boolean;
   isOvertime: boolean;
+
+  isConversionAttempt: false | TeamEnum;
+  isConversionShot: boolean;
 
   /**
    *  ROOM EVENT HANDLERS

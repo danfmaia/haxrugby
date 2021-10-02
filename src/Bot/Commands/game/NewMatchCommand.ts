@@ -12,7 +12,7 @@ import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
 
 @CommandDecorator({
-  names: ['new', 'new-match'],
+  names: ['new', 'rr', 'new-match'],
 })
 export class NewMatchCommand extends CommandBase<CustomPlayer> {
   private readonly room: IHaxRugbyRoom;

@@ -1,3 +1,4 @@
+import { TeamID } from 'inversihax';
 import TeamEnum from '../enums/TeamEnum';
 
 export function getOpposingTeam(team: TeamEnum): TeamEnum {
@@ -7,8 +8,24 @@ export function getOpposingTeam(team: TeamEnum): TeamEnum {
   return TeamEnum.RED;
 }
 
+export function getTeamID(team: TeamEnum): TeamID {
+  if (team === TeamEnum.RED) {
+    return TeamID.RedTeam;
+  }
+  return TeamID.BlueTeam;
+}
+
+export function getOpposingTeamID(team: TeamEnum): TeamID {
+  if (team === TeamEnum.RED) {
+    return TeamID.BlueTeam;
+  }
+  return TeamID.RedTeam;
+}
+
 const TeamUtil = {
   getOpposingTeam,
+  getTeamID,
+  getOpposingTeamID,
 };
 
 export default TeamUtil;

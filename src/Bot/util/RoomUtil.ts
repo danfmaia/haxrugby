@@ -1,13 +1,15 @@
 import { IPosition, TeamID } from 'inversihax';
+import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import ITouchInfo from '../models/physics/ITouchInfo';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 import IPlayerCountByTeam from '../models/team/IPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IGameService } from '../services/room/IGameService';
 
 export class RoomUtil {
-  room: IHaxRugbyRoom;
-  gameService: IGameService;
+  private room: IHaxRugbyRoom;
+  private gameService: IGameService;
 
   constructor(room: IHaxRugbyRoom, gameService: IGameService) {
     this.room = room;
@@ -103,5 +105,42 @@ export class RoomUtil {
       }
     }
     return false;
+  }
+
+  public setPlayerAsPosition(player: CustomPlayer, position: PositionEnum): void {
+    const team = this.room.gameService.teams.getTeamByTeamID(player.team);
+    if (!team || this.gameService.isConversionShot) {
+      return;
+    }
+
+    const oldPlayer = team.positions[position];
+
+    team.positions.setPlayerAsPosition(player, position, team.name);
+
+    if (
+      this.gameService.isConversionAttempt === team.teamEnum &&
+      position !== PositionEnum.KICKER
+    ) {
+      return;
+    }
+    if (
+      this.gameService.isConversionAttempt !== team.teamEnum &&
+      position !== PositionEnum.GOALKEEPER
+    ) {
+      return;
+    }
+
+    if (
+      oldPlayer &&
+      oldPlayer.team === player.team &&
+      this.gameService.isConversionAttempt &&
+      this.gameService.isGameStopped === false
+    ) {
+      const oldPlayerProps = this.room.getPlayerDiscProperties(oldPlayer.id);
+      const newPlayerProps = this.room.getPlayerDiscProperties(player.id);
+
+      this.room.setPlayerDiscProperties(oldPlayer.id, newPlayerProps);
+      this.room.setPlayerDiscProperties(player.id, oldPlayerProps);
+    }
   }
 }

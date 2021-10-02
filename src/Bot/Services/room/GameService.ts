@@ -25,23 +25,24 @@ import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
 import getDefaultConfig from '../../singletons/getDefaultConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
-import Teams, { ITeams } from '../../models/team/Team';
+import Teams, { ITeams } from '../../models/team/Teams';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
   private adminService: IAdminService;
   public chatService: IChatService;
-  private roomUtil: RoomUtil;
+  public roomUtil: RoomUtil;
 
   public stadium: HaxRugbyStadium = smallStadium;
   public matchConfig: MatchConfig;
-  private teams: ITeams;
+  public teams: ITeams;
 
   private tickCount: number = 0;
   public remainingTime: number;
   public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
 
+  public isGameStopped: boolean = true;
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
   private isTimeRunning: boolean = false;
@@ -61,8 +62,8 @@ export default class GameService implements IGameService {
   private tryY: number | null = null;
   private afterTryTickCount: number = 0;
 
-  private isConversionAttempt: false | TeamEnum = false;
-  private isConversionShot: boolean = false;
+  public isConversionAttempt: false | TeamEnum = false;
+  public isConversionShot: boolean = false;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
@@ -106,6 +107,8 @@ export default class GameService implements IGameService {
   }
 
   public handleGameStart(byPlayer: CustomPlayer): void {
+    this.isGameStopped = false;
+
     this.isBeforeKickoff = true;
     this.isTimeRunning = false;
     this.isFinishing = false;
@@ -116,13 +119,13 @@ export default class GameService implements IGameService {
     }
 
     if (this.isConversionAttempt && this.tryY !== null) {
-      console.log('banana');
-
       this.initializeConversion(this.isConversionAttempt, this.tryY);
     }
   }
 
   public handleGameStop(byPlayer: CustomPlayer): void {
+    this.isGameStopped = true;
+
     if (this.isTimeRunning) {
       this.isTimeRunning = false;
       this.chatService.sendMatchStatus();
@@ -151,21 +154,19 @@ export default class GameService implements IGameService {
   public handlePlayerLeave(player: CustomPlayer): void {
     this.adminService.setEarliestPlayerAsAdmin();
     this.unregisterPlayerFromMatchData(player.id);
-    this.teams.clearPositionsOnPlayerTeamChange(player);
+    this.teams.emptyPositionsOnPlayerTeamChange(player);
     this.teams.fillAllPositions(this.room.getPlayerList());
   }
 
   public handlePlayerTeamChange(player: CustomPlayer): void {
-    // pin host at top of spectators list
-    // if (player.id === 0) {
-    //   this.room.setPlayerTeam(0, 0);
-    //   this.room.reorderPlayers([0], true);
-    // }
-
-    this.teams.clearPositionsOnPlayerTeamChange(player);
+    this.teams.emptyPositionsOnPlayerTeamChange(player);
 
     if (this.isMatchInProgress) {
       this.teams.fillAllPositions(this.room.getPlayerList());
+    }
+
+    if (this.isConversionAttempt && this.isGameStopped === false) {
+      this.room.setPlayerTeam(player.id, TeamID.Spectators);
     }
   }
 
@@ -189,6 +190,7 @@ export default class GameService implements IGameService {
 
       Util.timeout(1000, () => {
         this.isConversionAttempt = false;
+        this.isConversionShot = false;
         this.room.pauseGame(true);
 
         let teamName: string;
@@ -296,8 +298,6 @@ export default class GameService implements IGameService {
   }
 
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
-    this.isConversionShot = false;
-
     // move ball to the right place
     const updatedBallProps = this.room.getDiscProperties(0);
     updatedBallProps.x = this.stadium.moveDiscInXAxis(
@@ -316,29 +316,71 @@ export default class GameService implements IGameService {
     const kickerId = this.teams.getPlayerByTeamAndPosition(kickingTeam, PositionEnum.KICKER);
     if (kickerId !== null) {
       const updatedKickerProps = this.room.getPlayerDiscProperties(kickerId);
-      updatedKickerProps.x = this.stadium.moveDiscInXAxis(
-        updatedKickerProps,
-        kickingTeam,
-        this.stadium.areaLineX,
-      );
-      updatedKickerProps.y = updatedKickerProps.y + tryY;
-      this.room.setPlayerDiscProperties(kickerId, updatedKickerProps);
+      if (updatedKickerProps) {
+        updatedKickerProps.x = this.stadium.moveDiscInXAxis(
+          updatedKickerProps,
+          kickingTeam,
+          this.stadium.areaLineX,
+        );
+        updatedKickerProps.y = updatedKickerProps.y + tryY;
+        this.room.setPlayerDiscProperties(kickerId, updatedKickerProps);
+      }
     }
+
+    const kickingTeamID = TeamUtil.getTeamID(kickingTeam);
+    const defendingTeam = TeamUtil.getOpposingTeam(kickingTeam);
+    const defendingTeamID = TeamUtil.getOpposingTeamID(kickingTeam);
+
+    // move kicking team's players to right place
+    const kickingTeamPlayers = this.room
+      .getPlayerList()
+      .filter((player) => player.team === kickingTeamID && player.id !== kickerId);
+
+    kickingTeamPlayers.forEach((player) => {
+      const updatedPlayerProps = this.room.getPlayerDiscProperties(player.id);
+      if (updatedPlayerProps) {
+        updatedPlayerProps.x = this.stadium.moveDiscInXAxis(
+          updatedPlayerProps,
+          defendingTeam,
+          this.stadium.kickoffLineX,
+        );
+        this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
+      }
+    });
 
     // move GK to the right place
     const goalkeeperId = this.teams.getPlayerByTeamAndPosition(
-      TeamUtil.getOpposingTeam(kickingTeam),
+      defendingTeam,
       PositionEnum.GOALKEEPER,
     );
     if (goalkeeperId !== null) {
       const updatedGoalkeeperProps = this.room.getPlayerDiscProperties(goalkeeperId);
-      updatedGoalkeeperProps.x = this.stadium.moveDiscInXAxis(
-        updatedGoalkeeperProps,
-        kickingTeam,
-        this.stadium.areaLineX,
-      );
-      this.room.setPlayerDiscProperties(goalkeeperId, updatedGoalkeeperProps);
+      if (updatedGoalkeeperProps) {
+        updatedGoalkeeperProps.x = this.stadium.moveDiscInXAxis(
+          updatedGoalkeeperProps,
+          kickingTeam,
+          this.stadium.areaLineX,
+        );
+        updatedGoalkeeperProps.y = 0;
+        this.room.setPlayerDiscProperties(goalkeeperId, updatedGoalkeeperProps);
+      }
     }
+
+    // move defense bench player to right place
+    const defenseBenchPlayers = this.room
+      .getPlayerList()
+      .filter((player) => player.team === defendingTeamID && player.id !== goalkeeperId);
+    defenseBenchPlayers.forEach((player) => {
+      const updatedPlayerProps = this.room.getPlayerDiscProperties(player.id);
+      if (updatedPlayerProps) {
+        updatedPlayerProps.x = this.stadium.moveDiscInXAxis(
+          updatedPlayerProps,
+          kickingTeam,
+          this.stadium.areaLineX + this.stadium.kickoffLineX,
+        );
+        this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
+      }
+    });
   }
 
   private checkForTimeEvents(ballPosition: IPosition) {
@@ -559,10 +601,10 @@ export default class GameService implements IGameService {
       let teamName: string;
 
       if (isTry === TeamEnum.RED) {
-        this.score.red = this.score.red + 7;
+        this.score.red = this.score.red + 5;
         teamName = this.teams.red.name;
       } else {
-        this.score.blue = this.score.blue + 7;
+        this.score.blue = this.score.blue + 5;
         teamName = this.teams.blue.name;
       }
 
@@ -636,10 +678,8 @@ export default class GameService implements IGameService {
 
       let map: string;
       if (this.isTry === TeamEnum.RED) {
-        this.score.red = this.score.red + 5;
         map = this.stadium.redMaps.getConversion(this.tryY);
       } else {
-        this.score.blue = this.score.blue + 5;
         map = this.stadium.blueMaps.getConversion(this.tryY);
       }
 
@@ -651,6 +691,7 @@ export default class GameService implements IGameService {
   }
 
   private handleConversion(ballPosition: IPosition) {
+    // handle after shot
     if (
       this.isConversionShot === false &&
       ballPosition.x !== this.lastBallPosition.x &&
@@ -660,6 +701,7 @@ export default class GameService implements IGameService {
 
       Util.timeout(2500, () => {
         const isStillConversionAttempt = this.isConversionAttempt;
+        this.isConversionShot = false;
 
         if (isStillConversionAttempt) {
           this.isConversionAttempt = false;

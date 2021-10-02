@@ -39,7 +39,7 @@ const ptBr: DictionaryKeys = {
 
     ADMIN_COMMANDS: '  Administrativos:',
 
-    NEW_MATCH: '    !new [<tempo>] [<pontos>] [small/normal] [red/blue]',
+    NEW_MATCH: '    !new ou !rr [<tempo>] [<pontos>] [small/normal] [red/blue]',
     NEW_MATCH_DESCRIPTION:
       'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, configura os limites de tempo e de pontos, o tamanho de mapa da nova partida e das próximas, e a posse de bola inicial. Só pode ser usado por admins.',
 
@@ -63,6 +63,12 @@ const ptBr: DictionaryKeys = {
 
     SCORE: '    !s ou !score ou !placar',
     SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
+
+    KICKER: '    !k ou !kicker [me/<#jogador>]',
+    KICKER_DESCRIPTION: 'Consulta ou altera o Kicker do time.',
+
+    GOALKEEPER: '    !gk ou !goalkeeper [me/<#jogador>]',
+    GOALKEEPER_DESCRIPTION: 'Consulta ou altera o GK do time.',
 
     RULES: '    !r ou !regras ou !rules',
     RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',

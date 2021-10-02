@@ -9,6 +9,7 @@ import TeamPositions, { ITeamPositions } from '../player/TeamPositions';
 
 export type TTeam = {
   name: string;
+  teamEnum: TeamEnum;
   teamID: TeamID;
   positions: ITeamPositions;
 };
@@ -18,9 +19,10 @@ export interface ITeams {
   blue: TTeam;
 
   getTeam(team: TeamEnum): TTeam;
+  getTeamByTeamID(teamID: TeamID): TTeam | null;
 
   fillAllPositions(players: CustomPlayer[]): void;
-  clearPositionsOnPlayerTeamChange(player: CustomPlayer): void;
+  emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void;
   getPlayerByTeamAndPosition(team: TeamEnum, position: PositionEnum): number | null;
 }
 
@@ -31,12 +33,14 @@ class Teams implements ITeams {
   constructor(chatService: IChatService, redTeamName?: string, blueTeamName?: string) {
     this.red = {
       name: !redTeamName ? RED_TEAM_NAME : redTeamName,
+      teamEnum: TeamEnum.RED,
       teamID: TeamID.RedTeam,
       positions: new TeamPositions(chatService),
     };
 
     this.blue = {
       name: !blueTeamName ? BLUE_TEAM_NAME : blueTeamName,
+      teamEnum: TeamEnum.BLUE,
       teamID: TeamID.BlueTeam,
       positions: new TeamPositions(chatService),
     };
@@ -49,9 +53,17 @@ class Teams implements ITeams {
     return this.blue;
   }
 
-  public fillAllPositions(players: CustomPlayer[]): void {
-    console.log('players: ', JSON.stringify(players));
+  public getTeamByTeamID(teamID: TeamID): TTeam | null {
+    if (teamID === TeamID.RedTeam) {
+      return this.red;
+    } else if (teamID === TeamID.BlueTeam) {
+      return this.blue;
+    } else {
+      return null;
+    }
+  }
 
+  public fillAllPositions(players: CustomPlayer[]): void {
     const redFirstPlayer = players.find((player) => player.team === TeamID.RedTeam);
     this.red.positions.fillAll(redFirstPlayer, this.red.name);
 
@@ -59,9 +71,9 @@ class Teams implements ITeams {
     this.blue.positions.fillAll(blueFirstPlayer, this.blue.name);
   }
 
-  public clearPositionsOnPlayerTeamChange(player: CustomPlayer): void {
-    this.red.positions.clearPositionsOnPlayerTeamChange(player, this.red);
-    this.blue.positions.clearPositionsOnPlayerTeamChange(player, this.blue);
+  public emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void {
+    this.red.positions.emptyPositionsOnPlayerTeamChange(player, this.red);
+    this.blue.positions.emptyPositionsOnPlayerTeamChange(player, this.blue);
   }
 
   public getPlayerByTeamAndPosition(team: TeamEnum, position: PositionEnum): number | null {
@@ -69,18 +81,18 @@ class Teams implements ITeams {
       case TeamEnum.RED:
         switch (position) {
           case PositionEnum.KICKER:
-            return this.red.positions.kickerId;
+            return this.red.positions.kicker ? this.red.positions.kicker.id : null;
           case PositionEnum.GOALKEEPER:
-            return this.red.positions.kickerId;
+            return this.red.positions.goalkeeper ? this.red.positions.goalkeeper.id : null;
           default:
         }
         break;
       case TeamEnum.BLUE:
         switch (position) {
           case PositionEnum.KICKER:
-            return this.blue.positions.kickerId;
+            return this.blue.positions.kicker ? this.blue.positions.kicker.id : null;
           case PositionEnum.GOALKEEPER:
-            return this.blue.positions.kickerId;
+            return this.blue.positions.goalkeeper ? this.blue.positions.goalkeeper.id : null;
           default:
         }
         break;

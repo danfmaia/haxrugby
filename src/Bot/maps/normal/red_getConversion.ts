@@ -1,3 +1,5 @@
+import { BALL_RADIUS } from '../../constants/constants';
+
 function red_getConversion(tryY: number): string {
   const map = {
     name: 'HaxRugby v19 RC by JP',
@@ -52,8 +54,8 @@ function red_getConversion(tryY: number): string {
       /* 27 */ { x: -562, y: 180, trait: 'Line' },
       /* 28 */ { x: 562, y: 180, trait: 'Line' },
       /* 29 */ { x: 674, y: 180, trait: 'Line' },
-      /* 30 */ { x: 412, y: tryY - 12, trait: 'Line' },
-      /* 31 */ { x: 412, y: tryY + 12, trait: 'Line' },
+      /* 30 */ { x: 412, y: tryY - (BALL_RADIUS + 2), trait: 'Line' },
+      /* 31 */ { x: 412, y: tryY + (BALL_RADIUS + 2), trait: 'Line' },
       /* 32 */ { x: -562, y: -131, trait: 'Line' },
       /* 33 */ { x: -497, y: -60, trait: 'Line' },
       /* 34 */ { x: -497, y: 60, trait: 'Line' },
@@ -336,6 +338,10 @@ function red_getConversion(tryY: number): string {
       BlueKOBarrier: { vis: false, bCoef: 0.1, cGroup: ['blueKO'], cMask: ['red', 'blue'] },
       Barrier: { vis: false, bCoef: 0.1, cMask: ['red', 'blue'] },
       powerboost: { vis: false, bCoef: -2.4, cMask: ['ball'] },
+    },
+
+    ballPhysics: {
+      radius: BALL_RADIUS,
     },
   };
 

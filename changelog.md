@@ -2,7 +2,8 @@
 
 ### v0.8 (_loading..._):
 
-- Implementada a conversão de 2 pontos.
+- Implementada a conversão de 2 pontos;
+- [experiência] Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5).
 
 ### v0.7:
 

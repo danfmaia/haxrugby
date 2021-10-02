@@ -1,6 +1,6 @@
 enum PositionEnum {
-  KICKER = 'KICKER',
-  GOALKEEPER = 'GOALKEEPER',
+  KICKER = 'kicker',
+  GOALKEEPER = 'goalkeeper',
 }
 
 export default PositionEnum;

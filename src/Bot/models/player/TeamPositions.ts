@@ -1,72 +1,85 @@
+import PositionEnum from '../../enums/PositionEnum';
 import { IChatService } from '../../services/room/ChatService';
-import { TTeam } from '../team/Team';
+import Util from '../../util/Util';
+import { TTeam } from '../team/Teams';
 import { CustomPlayer } from './CustomPlayer';
 
 export interface ITeamPositions {
   chatService: IChatService;
 
-  kickerId: number | null;
-  goalkeeperId: number | null;
+  kicker: CustomPlayer | null;
+  goalkeeper: CustomPlayer | null;
 
   fillAll(teamFirstPlayer: CustomPlayer | undefined, teamName: string): void;
-  clearPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void;
+  emptyPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void;
   clearAllPositions(): void;
+  setPlayerAsPosition(player: CustomPlayer, position: PositionEnum, teamName: string): void;
 }
 
 class TeamPositions implements ITeamPositions {
   public chatService: IChatService;
 
-  public kickerId: number | null = null;
-  public goalkeeperId: number | null = null;
+  public kicker: CustomPlayer | null = null;
+  public goalkeeper: CustomPlayer | null = null;
 
   constructor(chatService: IChatService) {
     this.chatService = chatService;
   }
 
   public fillAll(teamFirstPlayer: CustomPlayer | undefined, teamName: string): void {
-    console.log('PASSED 1');
-
     if (teamFirstPlayer) {
-      console.log('PASSED 2');
-      if (this.kickerId === null) {
-        console.log('PASSED 3');
-        this.kickerId = teamFirstPlayer.id;
+      if (this.kicker === null) {
+        this.kicker = teamFirstPlayer;
         this.chatService.sendNormalAnnouncement(
-          `${teamFirstPlayer.name} é o novo kicker do ${teamName}.`,
+          `${teamFirstPlayer.name} é o novo Kicker do ${teamName}.`,
         );
       }
-      if (this.goalkeeperId === null) {
-        this.goalkeeperId = teamFirstPlayer.id;
+      if (this.goalkeeper === null) {
+        this.goalkeeper = teamFirstPlayer;
         this.chatService.sendNormalAnnouncement(
           `${teamFirstPlayer.name} é o novo GK do ${teamName}.`,
         );
       }
     }
-
-    console.log('kickerId: ', this.kickerId);
-    console.log('goalkeeperId: ', this.goalkeeperId);
   }
 
-  public clearPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void {
+  public emptyPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void {
     if (player.team !== team.teamID) {
-      if (player.id === this.kickerId) {
-        this.kickerId = null;
+      if (this.kicker && player.id === this.kicker.id) {
+        this.kicker = null;
         this.chatService.sendNormalAnnouncement(
-          `O ${team.name} está sem kicker. Use \`!k me\` ou \`!k @jogador\` para selecionar um novo kicker.`,
+          `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#jogador>\` para selecionar um novo Kicker.`,
         );
       }
-      if (player.id === this.goalkeeperId) {
-        this.goalkeeperId = null;
+      if (this.goalkeeper && player.id === this.goalkeeper.id) {
+        this.goalkeeper = null;
         this.chatService.sendNormalAnnouncement(
-          `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk @jogador\` para selecionar um novo GK.`,
+          `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#jogador>\` para selecionar um novo GK.`,
         );
       }
     }
   }
 
   public clearAllPositions(): void {
-    this.kickerId = null;
-    this.goalkeeperId = null;
+    this.kicker = null;
+    this.goalkeeper = null;
+  }
+
+  public setPlayerAsPosition(player: CustomPlayer, position: PositionEnum, teamName: string): void {
+    const positionString = Util.getPositionString(position);
+    const takenPlayer = this[position];
+
+    if (takenPlayer === null) {
+      this.chatService.sendNormalAnnouncement(
+        `${player.name} é o novo ${positionString} do ${teamName}.`,
+      );
+    } else {
+      this.chatService.sendNormalAnnouncement(
+        `${player.name} é o novo ${positionString} do ${teamName} no lugar de ${takenPlayer.name}.`,
+      );
+    }
+
+    this[position] = player;
   }
 }
 

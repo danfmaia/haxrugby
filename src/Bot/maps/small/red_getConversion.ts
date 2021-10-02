@@ -1,3 +1,5 @@
+import { BALL_RADIUS } from '../../constants/constants';
+
 function red_getConversion(tryY: number): string {
   const map = {
     name: 'S-HaxRugby v8 RC by JP',
@@ -57,8 +59,8 @@ function red_getConversion(tryY: number): string {
       /* 31 */ { x: -300, y: 50, trait: 'Line' },
       /* 32 */ { x: 300, y: 50, trait: 'Line' },
       /* 33 */ { x: 390, y: 50, trait: 'Line' },
-      /* 34 */ { x: 200, y: tryY - 12, trait: 'Line' },
-      /* 35 */ { x: 200, y: tryY + 12, trait: 'Line' },
+      /* 34 */ { x: 200, y: tryY - (BALL_RADIUS + 2), trait: 'Line' },
+      /* 35 */ { x: 200, y: tryY + (BALL_RADIUS + 2), trait: 'Line' },
       /* 36 */ { x: -300, y: -95, trait: 'Line' },
       /* 37 */ { x: -255, y: -50, trait: 'Line' },
       /* 38 */ { x: -255, y: 50, trait: 'Line' },
@@ -74,6 +76,10 @@ function red_getConversion(tryY: number): string {
 
       /* 48 */ { x: 215, y: -200, trait: 'Barrier' },
       /* 49 */ { x: 215, y: 200, trait: 'Barrier' },
+      /* 50 */ { x: -100, y: -200, trait: 'Barrier' },
+      /* 51 */ { x: -100, y: 200, trait: 'Barrier' },
+      /* 52 */ { x: 390, y: -200, trait: 'Barrier' },
+      /* 53 */ { x: 390, y: 200, trait: 'Barrier' },
     ],
 
     segments: [
@@ -111,6 +117,9 @@ function red_getConversion(tryY: number): string {
       { v0: 42, v1: 43, trait: 'Line', curve: -90 },
       { v0: 44, v1: 45, trait: 'Line' },
       { v0: 46, v1: 47, trait: 'Line' },
+
+      { v0: 50, v1: 51, trait: 'Barrier' },
+      { v0: 52, v1: 53, trait: 'Barrier' },
     ],
 
     goals: [{ team: 'blue', p0: [300, -50], p1: [300, 50] }],
@@ -146,6 +155,10 @@ function red_getConversion(tryY: number): string {
       },
       Barrier: { vis: false, bCoef: 0.1, cMask: ['red', 'blue'] },
       powerboost: { vis: false, bCoef: -2.4, cMask: ['ball'] },
+    },
+
+    ballPhysics: {
+      radius: BALL_RADIUS,
     },
   };
 
