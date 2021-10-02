@@ -1,4 +1,4 @@
-import { IPlayerObject, IPosition } from 'inversihax';
+import { IPlayerObject, IPosition, TeamID } from 'inversihax';
 
 import {
   MINUTE_IN_MS,
@@ -62,6 +62,7 @@ export default class GameService implements IGameService {
   private afterTryTickCount: number = 0;
 
   private isConversionAttempt: false | TeamEnum = false;
+  private isConversionShot: boolean = false;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
@@ -79,13 +80,16 @@ export default class GameService implements IGameService {
    */
 
   public handleGameTick(): void {
-    if (this.isMatchInProgress === false || this.isTimeRunning === false) {
+    if (
+      this.isMatchInProgress === false ||
+      (this.isTimeRunning === false && this.isConversionAttempt === false)
+    ) {
       return;
     }
 
-    if (this.isConversionAttempt === false) {
-      const ballPosition = this.room.getBallPosition();
+    const ballPosition = this.room.getBallPosition();
 
+    if (this.isConversionAttempt === false) {
       this.tickCount = this.tickCount + 1;
       if (this.tickCount % 6 === 0) {
         this.checkForTimeEvents(ballPosition);
@@ -96,7 +100,9 @@ export default class GameService implements IGameService {
       this.lastBallPosition = ballPosition;
     }
 
-    // this.handleConversionAttempt();
+    if (this.isConversionAttempt) {
+      this.handleConversion(ballPosition);
+    }
   }
 
   public handleGameStart(byPlayer: CustomPlayer): void {
@@ -109,7 +115,9 @@ export default class GameService implements IGameService {
       this.initializeMatch(byPlayer);
     }
 
-    if (this.isConversionAttempt && this.tryY) {
+    if (this.isConversionAttempt && this.tryY !== null) {
+      console.log('banana');
+
       this.initializeConversion(this.isConversionAttempt, this.tryY);
     }
   }
@@ -117,7 +125,7 @@ export default class GameService implements IGameService {
   public handleGameStop(byPlayer: CustomPlayer): void {
     if (this.isTimeRunning) {
       this.isTimeRunning = false;
-      this.chatService.sendMatchStatus(2);
+      this.chatService.sendMatchStatus();
     }
   }
 
@@ -163,13 +171,44 @@ export default class GameService implements IGameService {
 
   public handlePlayerBallKick(player: CustomPlayer): void {
     // run time after kickoff
-    if (this.isBeforeKickoff) {
+    if (this.isBeforeKickoff && this.isConversionAttempt === false) {
       this.isBeforeKickoff = false;
       this.isTimeRunning = true;
       this.chatService.sendMatchStatus();
     }
 
     this.registerKickAsTouch(player.id);
+  }
+
+  public handleTeamGoal(team: TeamID): void {
+    // handle successful conversion
+    if (this.isConversionAttempt) {
+      if (team === TeamID.Spectators) {
+        return;
+      }
+
+      Util.timeout(1000, () => {
+        this.isConversionAttempt = false;
+        this.room.pauseGame(true);
+
+        let teamName: string;
+        let map: string;
+        if (team === TeamID.RedTeam) {
+          this.score.red = this.score.red + 2;
+          teamName = this.teams.red.name;
+          map = this.stadium.blueMaps.kickoff;
+        } else {
+          this.score.blue = this.score.blue + 2;
+          teamName = this.teams.blue.name;
+          map = this.stadium.redMaps.kickoff;
+        }
+
+        // announce successful conversion
+        this.chatService.sendBoldAnnouncement(`Conversão do ${teamName}!`, 2);
+
+        this.handleRestartOrFinishing(map);
+      });
+    }
   }
 
   /**
@@ -257,6 +296,8 @@ export default class GameService implements IGameService {
   }
 
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
+    this.isConversionShot = false;
+
     // move ball to the right place
     const updatedBallProps = this.room.getDiscProperties(0);
     updatedBallProps.x = this.stadium.moveDiscInXAxis(
@@ -265,6 +306,10 @@ export default class GameService implements IGameService {
       this.stadium.areaLineX,
     );
     updatedBallProps.y = tryY;
+    this.lastBallPosition = {
+      x: updatedBallProps.x,
+      y: updatedBallProps.y,
+    };
     this.room.setDiscProperties(0, updatedBallProps);
 
     // move kicker to the right place
@@ -597,28 +642,62 @@ export default class GameService implements IGameService {
         this.score.blue = this.score.blue + 5;
         map = this.stadium.blueMaps.getConversion(this.tryY);
       }
-      this.isConversionAttempt = this.isTry;
-      this.isTry = false;
 
-      this.handleRestartOrFinishing(map);
+      this.handleRestartOrFinishing(map, () => {
+        this.isConversionAttempt = this.isTry;
+        this.isTry = false;
+      });
     }
   }
 
-  // private handleConversionAttempt() {}
+  private handleConversion(ballPosition: IPosition) {
+    if (
+      this.isConversionShot === false &&
+      ballPosition.x !== this.lastBallPosition.x &&
+      ballPosition.y !== this.lastBallPosition.y
+    ) {
+      this.isConversionShot = true;
 
-  private handleRestartOrFinishing(map: string) {
+      Util.timeout(2500, () => {
+        const isStillConversionAttempt = this.isConversionAttempt;
+
+        if (isStillConversionAttempt) {
+          this.isConversionAttempt = false;
+
+          let teamName: string;
+          let map: string;
+
+          if (isStillConversionAttempt === TeamEnum.RED) {
+            teamName = this.teams.red.name;
+            map = this.stadium.blueMaps.kickoff;
+          } else {
+            teamName = this.teams.red.name;
+            map = this.stadium.redMaps.kickoff;
+          }
+
+          // announce missed conversion
+          this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
+
+          this.handleRestartOrFinishing(map);
+        }
+      });
+    }
+  }
+
+  private handleRestartOrFinishing(map: string, handleGameStop?: () => void) {
     if (this.roomUtil.getIsMatchFinished(this.score.red, this.score.blue, this.isTry) === false) {
-      this.restartGame(map);
+      this.restartGame(map, handleGameStop);
     } else {
       this.finishMatch();
     }
   }
 
-  private restartGame(map: string) {
+  private restartGame(map: string, handleGameStop?: () => void) {
     this.chatService.sendMatchStatus();
     Util.timeout(3000, () => {
       this.room.stopGame();
       this.room.setCustomStadium(map);
+      if (handleGameStop) handleGameStop();
       this.room.startGame();
     });
   }

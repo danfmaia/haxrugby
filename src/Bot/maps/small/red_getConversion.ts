@@ -113,7 +113,7 @@ function red_getConversion(tryY: number): string {
       { v0: 46, v1: 47, trait: 'Line' },
     ],
 
-    goals: [{ team: 'red', p0: [300, -50], p1: [300, 50] }],
+    goals: [{ team: 'blue', p0: [300, -50], p1: [300, 50] }],
 
     discs: [
       { pos: [-300, 50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },

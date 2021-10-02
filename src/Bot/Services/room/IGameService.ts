@@ -1,4 +1,4 @@
-import { IPlayerObject } from 'inversihax';
+import { IPlayerObject, TeamID } from 'inversihax';
 
 import { CustomPlayer } from '../../models/player/CustomPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
@@ -32,8 +32,10 @@ export interface IGameService {
   // player event handlers
   handlePlayerJoin(player: IPlayerObject): void;
   handlePlayerLeave(player: CustomPlayer): void;
-  handlePlayerBallKick(player: CustomPlayer): void;
   handlePlayerTeamChange(player: CustomPlayer): void;
+  handlePlayerBallKick(player: CustomPlayer): void;
+
+  handleTeamGoal(team: TeamID): void;
 
   /**
    *  OWN METHODS
