@@ -19,10 +19,14 @@ export class KickerCommand extends CommandBase<CustomPlayer> {
   }
 
   public canExecute(player: CustomPlayer): boolean {
-    return player.team !== TeamID.Spectators;
+    return true;
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
+    if (player.team === TeamID.Spectators) {
+      return;
+    }
+
     this.commandService.setPlayerAsPosition(player, args, PositionEnum.KICKER);
   }
 }

@@ -150,10 +150,12 @@ export class RoomUtil {
     const result: TPlayerPropsMap[] = [];
 
     players.forEach((player) => {
-      result.push({
-        playerId: player.id,
-        discProps: this.room.getPlayerDiscProperties(player.id),
-      });
+      if (player.team !== TeamID.Spectators) {
+        result.push({
+          playerId: player.id,
+          discProps: this.room.getPlayerDiscProperties(player.id),
+        });
+      }
     });
 
     return result;

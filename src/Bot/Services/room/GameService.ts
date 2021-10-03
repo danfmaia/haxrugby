@@ -98,13 +98,13 @@ export default class GameService implements IGameService {
       }
 
       this.checkForGameEvents(ballPosition);
-
-      this.lastBallPosition = ballPosition;
     }
 
     if (this.isConversionAttempt) {
       this.handleConversion(ballPosition);
     }
+
+    this.lastBallPosition = ballPosition;
   }
 
   public handleGameStart(byPlayer: CustomPlayer): void {
@@ -157,7 +157,7 @@ export default class GameService implements IGameService {
   public handlePlayerLeave(player: CustomPlayer): void {
     this.adminService.setEarliestPlayerAsAdmin();
     this.unregisterPlayerFromMatchData(player.id);
-    this.teams.emptyPositionsOnPlayerTeamChange(player);
+    this.teams.removePlayerFromPositions(player);
     this.teams.fillAllPositions(this.room.getPlayerList());
   }
 
@@ -193,8 +193,9 @@ export default class GameService implements IGameService {
 
       this.isConversionAttempt = false;
       this.isConversionShot = false;
+      this.tryY = null;
 
-      Util.timeout(1000, () => {
+      Util.timeout(200, () => {
         this.room.pauseGame(true);
 
         let teamName: string;
@@ -434,7 +435,7 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    if (this.lastTouchInfo && this.tryY === null) {
+    if (this.lastTouchInfo) {
       if (this.checkForFieldGoal(ballPosition, this.lastTouchInfo)) {
         return;
       }
@@ -706,7 +707,9 @@ export default class GameService implements IGameService {
     ) {
       this.isConversionShot = true;
 
-      Util.timeout(2500, this.handleMissedConversion);
+      Util.timeout(2500, () => {
+        this.handleMissedConversion();
+      });
     }
 
     // check missed conversion
@@ -719,6 +722,7 @@ export default class GameService implements IGameService {
     }
   }
 
+  // TODO: improve state logic (here and in other related parts too)
   private handleMissedConversion() {
     const isStillConversionAttempt = this.isConversionAttempt;
     this.isConversionShot = false;
@@ -726,6 +730,7 @@ export default class GameService implements IGameService {
     if (isStillConversionAttempt) {
       this.room.pauseGame(true);
       this.isConversionAttempt = false;
+      this.tryY = null;
 
       let teamName: string;
       let map: string;

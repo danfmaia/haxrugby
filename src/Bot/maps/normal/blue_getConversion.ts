@@ -1,6 +1,6 @@
 import { BALL_RADIUS } from '../../constants/constants';
 
-function blue_getConversion(tryY: number): string {
+function blue_getConversion(ballX: number, tryY: number): string {
   const map = {
     name: 'HaxRugby v19 BC by JP',
 
@@ -56,8 +56,8 @@ function blue_getConversion(tryY: number): string {
       /* 27 */ { x: -562, y: 180, trait: 'Line' },
       /* 28 */ { x: 562, y: 180, trait: 'Line' },
       /* 29 */ { x: 674, y: 180, trait: 'Line' },
-      /* 30 */ { x: -412, y: tryY - (BALL_RADIUS + 2), trait: 'Line', curve: -180 },
-      /* 31 */ { x: -412, y: tryY + (BALL_RADIUS + 2), trait: 'Line', curve: -180 },
+      /* 30 */ { x: ballX, y: tryY - (BALL_RADIUS + 2), trait: 'Line', curve: -180 },
+      /* 31 */ { x: ballX, y: tryY + (BALL_RADIUS + 2), trait: 'Line', curve: -180 },
       /* 32 */ { x: -562, y: -131, trait: 'Line' },
       /* 33 */ { x: -497, y: -60, trait: 'Line' },
       /* 34 */ { x: -497, y: 60, trait: 'Line' },

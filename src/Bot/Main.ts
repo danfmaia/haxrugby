@@ -63,7 +63,7 @@ const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     roomName: `${ROOM_TITLE} ${APP_VERSION}`,
     public: true,
-    password: 'WJ-wges!B3J)M/Tx',
+    // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: true,
     maxPlayers: 15,
   });

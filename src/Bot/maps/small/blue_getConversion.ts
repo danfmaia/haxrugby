@@ -76,6 +76,10 @@ function blue_getConversion(ballX: number, tryY: number): string {
 
       /* 48 */ { x: -215, y: -200, trait: 'Barrier' },
       /* 49 */ { x: -215, y: 200, trait: 'Barrier' },
+      /* 50 */ { x: -390, y: -200, trait: 'Barrier' },
+      /* 51 */ { x: -390, y: 200, trait: 'Barrier' },
+      /* 52 */ { x: 100, y: -200, trait: 'Barrier' },
+      /* 53 */ { x: 100, y: 200, trait: 'Barrier' },
     ],
 
     segments: [
@@ -113,6 +117,9 @@ function blue_getConversion(ballX: number, tryY: number): string {
       { v0: 42, v1: 43, trait: 'Line', curve: -90 },
       { v0: 44, v1: 45, trait: 'Line' },
       { v0: 46, v1: 47, trait: 'Line' },
+
+      { v0: 50, v1: 51, trait: 'Barrier' },
+      { v0: 52, v1: 53, trait: 'Barrier' },
     ],
 
     goals: [{ team: 'red', p0: [-300, -50], p1: [-300, 50] }],

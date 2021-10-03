@@ -20,6 +20,9 @@ function timeoutAsync(ms: number, callback: () => void): Promise<unknown> {
 function parseNumericInput(input?: string, positive: boolean = false): number | false {
   if (input) {
     input = input.replace('#', '');
+    if (input === '') {
+      return false;
+    }
     const parsed = parseInt(input);
     if (positive && parsed < 1) {
       return false;

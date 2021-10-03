@@ -23,6 +23,10 @@ export class GoalkeeperCommand extends CommandBase<CustomPlayer> {
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
+    if (player.team === TeamID.Spectators) {
+      return;
+    }
+
     this.commandService.setPlayerAsPosition(player, args, PositionEnum.GOALKEEPER);
   }
 }

@@ -32,10 +32,14 @@ class CommandService implements ICommandService {
   public setPlayerAsPosition(player: CustomPlayer, args: string[], position: PositionEnum): void {
     const args0 = args[0];
 
+    console.log(player);
+
     const team = this.gameService.teams.getTeamByTeamID(player.team);
     if (!team) {
       return;
     }
+
+    console.log('passed 1');
 
     const currentPlayer = team.positions[position];
     const positionString = Util.getPositionString(position);
@@ -53,17 +57,21 @@ class CommandService implements ICommandService {
       return;
     }
 
+    console.log('passed 2');
+
     if (args0) {
       const selectedPlayerId: number | false = Util.parseNumericInput(args0, true);
       if (selectedPlayerId === false) {
         this.chatService.sendNormalAnnouncement('Jogador inválido!', 0, player.id);
         return;
       }
+      console.log('passed 3');
       const selectedPlayer = this.room.getPlayer(selectedPlayerId);
       if (selectedPlayer.team !== player.team) {
         this.chatService.sendNormalAnnouncement('Jogador inválido!', 0, player.id);
         return;
       }
+      console.log('passed 4');
       if (currentPlayer && currentPlayer.id === selectedPlayerId) {
         this.chatService.sendNormalAnnouncement(
           `${selectedPlayer.name} já é o ${positionString} do ${team.name}!`,
@@ -75,6 +83,8 @@ class CommandService implements ICommandService {
       }
       return;
     }
+
+    console.log('passed 5');
 
     if (currentPlayer) {
       if (currentPlayer.id !== player.id) {

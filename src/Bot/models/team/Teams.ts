@@ -23,6 +23,7 @@ export interface ITeams {
 
   fillAllPositions(players: CustomPlayer[]): void;
   emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void;
+  removePlayerFromPositions(player: CustomPlayer): void;
   getPlayerByTeamAndPosition(team: TeamEnum, position: PositionEnum): number | null;
 }
 
@@ -74,6 +75,11 @@ class Teams implements ITeams {
   public emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void {
     this.red.positions.emptyPositionsOnPlayerTeamChange(player, this.red);
     this.blue.positions.emptyPositionsOnPlayerTeamChange(player, this.blue);
+  }
+
+  public removePlayerFromPositions(player: CustomPlayer): void {
+    this.red.positions.removePlayerFromPositions(player, this.red);
+    this.blue.positions.removePlayerFromPositions(player, this.blue);
   }
 
   public getPlayerByTeamAndPosition(team: TeamEnum, position: PositionEnum): number | null {

@@ -12,6 +12,7 @@ export interface ITeamPositions {
 
   fillAll(teamFirstPlayer: CustomPlayer | undefined, teamName: string): void;
   emptyPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void;
+  removePlayerFromPositions(player: CustomPlayer, team: TTeam): void;
   clearAllPositions(): void;
   setPlayerAsPosition(player: CustomPlayer, position: PositionEnum, teamName: string): void;
 }
@@ -57,6 +58,21 @@ class TeamPositions implements ITeamPositions {
           `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#jogador>\` para selecionar um novo GK.`,
         );
       }
+    }
+  }
+
+  public removePlayerFromPositions(player: CustomPlayer, team: TTeam): void {
+    if (this.kicker && player.id === this.kicker.id) {
+      this.kicker = null;
+      this.chatService.sendNormalAnnouncement(
+        `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#jogador>\` para selecionar um novo Kicker.`,
+      );
+    }
+    if (this.goalkeeper && player.id === this.goalkeeper.id) {
+      this.goalkeeper = null;
+      this.chatService.sendNormalAnnouncement(
+        `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#jogador>\` para selecionar um novo GK.`,
+      );
     }
   }
 

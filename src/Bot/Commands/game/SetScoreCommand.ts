@@ -10,7 +10,7 @@ import TeamEnum from '../../enums/TeamEnum';
 import { MINUTE_IN_MS } from '../../constants/constants';
 
 @CommandDecorator({
-  names: ['set-score'],
+  names: ['set-score', 'ss'],
 })
 export class SetScoreCommand extends CommandBase<CustomPlayer> {
   private readonly room: IHaxRugbyRoom;
