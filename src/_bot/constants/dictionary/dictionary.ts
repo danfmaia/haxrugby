@@ -1,5 +1,5 @@
 import { lang, LanguageEnum } from '../appConfig';
-import { APP_VERSION, ROOM_TITLE } from '../constants';
+import { APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
 const ptBr: DictionaryKeys = {
@@ -32,7 +32,7 @@ const ptBr: DictionaryKeys = {
     OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
     OFFSIDE: ['As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],
     POST_RULES: [
-      'O HaxRugby é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.',
+      `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,
       'Para ler as regras completas, acesse sites.google.com/site/haxrugby/regras',
     ],
   },
