@@ -191,9 +191,10 @@ export default class GameService implements IGameService {
         return;
       }
 
+      this.isConversionAttempt = false;
+      this.isConversionShot = false;
+
       Util.timeout(1000, () => {
-        this.isConversionAttempt = false;
-        this.isConversionShot = false;
         this.room.pauseGame(true);
 
         let teamName: string;
@@ -384,6 +385,8 @@ export default class GameService implements IGameService {
         this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
       }
     });
+
+    this.chatService.sendConversionHelp();
   }
 
   private checkForTimeEvents(ballPosition: IPosition) {
@@ -703,31 +706,42 @@ export default class GameService implements IGameService {
     ) {
       this.isConversionShot = true;
 
-      Util.timeout(2500, () => {
-        const isStillConversionAttempt = this.isConversionAttempt;
-        this.isConversionShot = false;
+      Util.timeout(2500, this.handleMissedConversion);
+    }
 
-        if (isStillConversionAttempt) {
-          this.room.pauseGame(true);
-          this.isConversionAttempt = false;
+    // check missed conversion
+    const isMissedConversion = this.stadium.getIsMissedConversion(
+      ballPosition,
+      this.room.getDiscProperties(0).xspeed,
+    );
+    if (isMissedConversion) {
+      this.handleMissedConversion();
+    }
+  }
 
-          let teamName: string;
-          let map: string;
+  private handleMissedConversion() {
+    const isStillConversionAttempt = this.isConversionAttempt;
+    this.isConversionShot = false;
 
-          if (isStillConversionAttempt === TeamEnum.RED) {
-            teamName = this.teams.red.name;
-            map = this.stadium.blueMaps.kickoff;
-          } else {
-            teamName = this.teams.red.name;
-            map = this.stadium.redMaps.kickoff;
-          }
+    if (isStillConversionAttempt) {
+      this.room.pauseGame(true);
+      this.isConversionAttempt = false;
 
-          // announce missed conversion
-          this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
+      let teamName: string;
+      let map: string;
 
-          this.handleRestartOrFinishing(map);
-        }
-      });
+      if (isStillConversionAttempt === TeamEnum.RED) {
+        teamName = this.teams.red.name;
+        map = this.stadium.blueMaps.kickoff;
+      } else {
+        teamName = this.teams.red.name;
+        map = this.stadium.redMaps.kickoff;
+      }
+
+      // announce missed conversion
+      this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
+
+      this.handleRestartOrFinishing(map);
     }
   }
 

@@ -3,6 +3,7 @@
 ### v0.8 (_loading..._):
 
 - Implementada a conversão de 2 pontos;
+- Implementados os comandos de suporte à conversão `!k`, `!gk` e `!b`;
 - [experiência] Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5).
 
 ### v0.7:

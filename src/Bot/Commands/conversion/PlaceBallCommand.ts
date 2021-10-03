@@ -74,7 +74,7 @@ export class PlaceBallCommand extends CommandBase<CustomPlayer> {
     if (this.gameService.isConversionAttempt === TeamEnum.RED) {
       map = stadium.redMaps.getConversion(newBallX, this.gameService.tryY);
     } else {
-      map = stadium.blueMaps.getConversion(-newBallX, this.gameService.tryY);
+      map = stadium.blueMaps.getConversion(newBallX, this.gameService.tryY);
     }
 
     this.gameService.isReplacingBall = true;

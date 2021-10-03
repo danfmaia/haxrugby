@@ -34,6 +34,7 @@ export interface IChatService {
   sendMainRules(sound?: number, playerId?: number): void;
   sendSingleRule(rule: RuleEnum, sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
+  sendConversionHelp(playerId?: number): void;
 }
 
 export default class ChatService implements IChatService {
@@ -226,11 +227,6 @@ export default class ChatService implements IChatService {
       this.sendSpace(playerId);
     }
 
-    if (!playerId) {
-      this.sendBoldAnnouncement(MSG_HELP.HELP, 0, playerId);
-      this.sendNormalAnnouncement(MSG_HELP.HELP_DESCRIPTION, 0, playerId);
-    }
-
     this.sendBoldAnnouncement(MSG_HELP.SCORE, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.SCORE_DESCRIPTION, 0, playerId);
 
@@ -249,6 +245,24 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_HELP.LINKS, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.LINKS_DESCRIPTION, 0, playerId);
 
+    if (!playerId) {
+      this.sendBoldAnnouncement(MSG_HELP.HELP, 0, playerId);
+      this.sendNormalAnnouncement(MSG_HELP.HELP_DESCRIPTION, 0, playerId);
+    }
+
     this.sendSpace(playerId);
+  }
+
+  public sendConversionHelp(playerId?: number): void {
+    this.sendSpace(playerId);
+
+    this.sendBoldAnnouncement(MSG_HELP.KICKER, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
+
+    this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
+
+    this.sendBoldAnnouncement(MSG_HELP.PLACE_BALL, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.PLACE_BALL_DESCRIPTION, 0, playerId);
   }
 }

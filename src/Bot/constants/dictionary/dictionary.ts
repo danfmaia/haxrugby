@@ -57,10 +57,6 @@ const ptBr: DictionaryKeys = {
 
     OTHER_COMMANDS: '  Outros:',
 
-    HELP: '    !h ou !help ou !ajuda [forall]',
-    HELP_DESCRIPTION:
-      'Exibe essa lista de comandos. Se for admin e usar o argumento `forall`, exibe a lista para todos os jogadores.',
-
     SCORE: '    !s ou !score ou !placar',
     SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
 
@@ -70,8 +66,8 @@ const ptBr: DictionaryKeys = {
     GOALKEEPER: '    !gk ou !goalkeeper [me/<#jogador>]',
     GOALKEEPER_DESCRIPTION: 'Consulta ou altera o GK do time.',
 
-    PLACE_BALL: '    !pl ou !place',
-    PLACE_BALL_DESCRIPTION: 'Reposiciona a bola na conversão de 2 pontos.',
+    PLACE_BALL: '    !b ou !pl',
+    PLACE_BALL_DESCRIPTION: 'Reposiciona a bola para o chute de conversão.',
 
     RULES: '    !r ou !regras ou !rules',
     RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',
@@ -79,6 +75,10 @@ const ptBr: DictionaryKeys = {
     LINKS: '    !links ou !link ou !promo',
     LINKS_DESCRIPTION:
       'Exibe o link das regras, do Discord e do grupo no Facebook. Se for admin, exibe para todos os jogadores.',
+
+    HELP: '    !h ou !help ou !ajuda [forall]',
+    HELP_DESCRIPTION:
+      'Exibe essa lista de comandos. Se for admin e usar o argumento `forall`, exibe a lista para todos os jogadores.',
   },
 
   MSG_DEF_REC: [

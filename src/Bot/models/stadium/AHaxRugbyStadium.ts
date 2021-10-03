@@ -124,6 +124,10 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     return Math.abs(ballPosition.y) + BALL_RADIUS < this.goalPostY;
   }
 
+  private getIsBallOutsideGoalInYAxis(ballPosition: IPosition): boolean {
+    return Math.abs(ballPosition.y) - BALL_RADIUS > this.goalPostY;
+  }
+
   private getIsBallInsideGoalInXAxis(team: TeamEnum, ballPosition: IPosition): boolean {
     const goalEndX = this.goalLineX + 0.9 * BALL_RADIUS;
 
@@ -277,6 +281,17 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
     }
     if (ballPosition.x < 0 && driverCountByTeam.blue > 0) {
       return true;
+    }
+    return false;
+  }
+
+  public getIsMissedConversion(ballPosition: IPosition, ballXSpeed: number): boolean {
+    if (this.getIsBallOutsideGoalInYAxis(ballPosition)) {
+      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)) {
+        return true;
+      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)) {
+        return true;
+      }
     }
     return false;
   }

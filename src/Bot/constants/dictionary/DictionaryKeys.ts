@@ -35,12 +35,6 @@ type DictionaryKeys = {
 
     OTHER_COMMANDS: string;
 
-    HELP: string;
-    HELP_DESCRIPTION: string;
-
-    RULES: string;
-    RULES_DESCRIPTION: string;
-
     SCORE: string;
     SCORE_DESCRIPTION: string;
 
@@ -53,8 +47,14 @@ type DictionaryKeys = {
     PLACE_BALL: string;
     PLACE_BALL_DESCRIPTION: string;
 
+    RULES: string;
+    RULES_DESCRIPTION: string;
+
     LINKS: string;
     LINKS_DESCRIPTION: string;
+
+    HELP: string;
+    HELP_DESCRIPTION: string;
   };
 
   MSG_DEF_REC: [string, string];
