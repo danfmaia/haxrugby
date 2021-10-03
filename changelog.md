@@ -1,10 +1,11 @@
 ## CHANGELOG
 
-### v0.8 (_loading..._):
+### v0.8:
 
 - Implementada a conversão de 2 pontos;
-- Implementados os comandos de suporte à conversão `!k`, `!gk` e `!b`;
-- [experiência] Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5).
+- Adicionados os comandos de suporte à conversão `!k`, `!gk` e `!b`;
+- [experiência] Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5);
+- Alerta de Desvio/Recuo agora é em cor amarela.
 
 ### v0.7:
 

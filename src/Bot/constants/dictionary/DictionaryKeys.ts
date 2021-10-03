@@ -13,7 +13,9 @@ type DictionaryKeys = {
     FIELD_GOAL: [string, string];
     SAFETY_TITLE: string;
     SAFETY: [string, string, string];
-    LINK_FOR_COMPLETE_RULES: string;
+    OFFSIDE_TITLE: string;
+    OFFSIDE: [string];
+    POST_RULES: [string, string];
   };
 
   MSG_HELP: {

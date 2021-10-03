@@ -1,7 +1,8 @@
 enum RuleEnum {
   TRY = 'TRY',
   FIELD_GOAL = 'FIELD_GOAL',
-  SAFETY = 'FACEBOOK',
+  SAFETY = 'SAFETY',
+  OFFSIDE = 'OFFSIDE',
 }
 
 export default RuleEnum;

@@ -10,7 +10,7 @@ import {
   MSG_RULES,
   MSG_SAFETY_ALLOWED,
 } from '../../constants/dictionary/dictionary';
-import styles from '../../constants/styles';
+import colors from '../../constants/style/colors';
 import LinkEnum from '../../enums/LinkEnum';
 import RuleEnum from '../../enums/RuleEnum';
 import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
@@ -20,7 +20,10 @@ import { IGameService } from './IGameService';
 
 export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+  sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
 
   sendMatchStatus(sound?: number, playerId?: number): void;
   announceDefRec(didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal, isDefRec: boolean): void;
@@ -47,11 +50,23 @@ export default class ChatService implements IChatService {
   }
 
   public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, styles.haxruGreen, undefined, sound);
+    this.room.sendAnnouncement(message, playerId, colors.haxruGreen, undefined, sound);
+  }
+
+  public sendYellowAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.yellow, undefined, sound);
+  }
+
+  public sendBlueAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.blue, undefined, sound);
   }
 
   public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, styles.haxruGreen, 'bold', sound);
+    this.room.sendAnnouncement(message, playerId, colors.haxruGreen, 'bold', sound);
+  }
+
+  public sendYellowBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.yellow, 'bold', sound);
   }
 
   private sendSpace(playerId?: number) {
@@ -84,8 +99,8 @@ export default class ChatService implements IChatService {
   ): void {
     if (didBallEnterOrLeaveIngoal === 'enter') {
       if (isDefRec) {
-        this.sendBoldAnnouncement(MSG_DEF_REC[0], 2);
-        this.sendNormalAnnouncement(MSG_DEF_REC[1]);
+        this.sendYellowBoldAnnouncement(MSG_DEF_REC[0], 2);
+        this.sendYellowAnnouncement(MSG_DEF_REC[1]);
       } else {
         this.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
       }
@@ -114,11 +129,10 @@ export default class ChatService implements IChatService {
   public sendGreetingsToIncomingPlayer(playerId: number): void {
     Util.timeout(1000, () => {
       this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
-      this.sendNormalAnnouncement(MSG_GREETING_2, 0, playerId);
+      this.sendYellowAnnouncement(MSG_GREETING_2, 0, playerId);
       this.sendNormalAnnouncement(MSG_GREETING_3, 0, playerId);
-      this.sendSpace(playerId);
-      this.sendNormalAnnouncement(MSG_GREETING_4, 0, playerId);
-      this.sendNormalAnnouncement(MSG_GREETING_5, 0, playerId);
+      this.sendBlueAnnouncement(MSG_GREETING_4, 0, playerId);
+      this.sendBlueAnnouncement(MSG_GREETING_5, 0, playerId);
     });
     Util.timeout(3000, () => {
       if (this.gameService.isMatchInProgress) {
@@ -176,7 +190,11 @@ export default class ChatService implements IChatService {
     this.sendSingleRule(RuleEnum.SAFETY, 0, playerId);
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement(MSG_RULES.LINK_FOR_COMPLETE_RULES, 0, playerId);
+    this.sendSingleRule(RuleEnum.OFFSIDE, 0, playerId);
+    this.sendSpace(playerId);
+
+    this.sendBoldAnnouncement(MSG_RULES.POST_RULES[0], 0, playerId);
+    this.sendBoldAnnouncement(MSG_RULES.POST_RULES[1], 0, playerId);
     this.sendSpace(playerId);
   }
 
@@ -197,6 +215,12 @@ export default class ChatService implements IChatService {
       case RuleEnum.SAFETY:
         this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
         MSG_RULES.SAFETY.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        return;
+      case RuleEnum.OFFSIDE:
+        this.sendBoldAnnouncement(MSG_RULES.OFFSIDE_TITLE, sound, playerId);
+        MSG_RULES.OFFSIDE.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         return;

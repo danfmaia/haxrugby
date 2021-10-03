@@ -1,12 +1,12 @@
 import { lang, LanguageEnum } from '../appConfig';
-import { APP_VERSION } from '../constants';
+import { APP_VERSION, ROOM_TITLE } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
 const ptBr: DictionaryKeys = {
-  MSG_GREETING_1: `Bem vindo(a) ao HaxRugby by JP v${APP_VERSION}!`,
-  MSG_GREETING_2: 'Essa é uma sala de testes. Ainda estamos em desenvolvimento!',
-  MSG_GREETING_3:
-    'Nessa versão corrigimos bugs evidenciados no último teste aberto. Também lançamos o tamanho normal de mapa!',
+  MSG_GREETING_1: `Bem vindo(a) ao ${ROOM_TITLE} ${APP_VERSION}!`,
+  MSG_GREETING_2:
+    'Ainda estamos em desenvolvimento! Se encontrar bugs, relate no canal #bugs do nosso Discord (!dc).',
+  MSG_GREETING_3: `Na versão ${APP_VERSION} lançamos a conversão de 2 pontos! Com isso, o Try passa a valer apenas 5 pontos, como no Rugby de verdade.`,
   MSG_GREETING_4: 'Use o comando !regras para ver o resumo das regras do jogo.',
   MSG_GREETING_5: 'Use o comando !help ou !h para ver a lista de comandos disponíveis.',
 
@@ -29,8 +29,12 @@ const ptBr: DictionaryKeys = {
       'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
     ],
-    LINK_FOR_COMPLETE_RULES:
-      'Para as regras completas, acesse sites.google.com/site/haxrugby/regras',
+    OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
+    OFFSIDE: ['As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],
+    POST_RULES: [
+      'O HaxRugby é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.',
+      'Para ler as regras completas, acesse sites.google.com/site/haxrugby/regras',
+    ],
   },
 
   MSG_HELP: {
