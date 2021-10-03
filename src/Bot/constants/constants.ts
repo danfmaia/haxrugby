@@ -1,7 +1,7 @@
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆® 𝖻𝗒 𝒥𝒫';
 export const APP_VERSION = '𝗏𝟢.𝟪';
 // export const ROOM_SUBTITLE = '- 𝖭𝗈𝗏𝖺 𝖵𝖾𝗋𝗌𝖺𝗈!';
-export const ROOM_SUBTITLE = '- 𝖣𝖾𝗌𝖾𝗇𝗏𝗈𝗅𝗏𝖾𝗇𝖽𝗈…';
+// export const ROOM_SUBTITLE = '- 𝖣𝖾𝗌𝖾𝗇𝗏𝗈𝗅𝗏𝖾𝗇𝖽𝗈…';
 
 export const MINUTE_IN_MS = 60 * 1000;
 

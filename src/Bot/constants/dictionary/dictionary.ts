@@ -17,7 +17,6 @@ const ptBr: DictionaryKeys = {
       'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
       'O in-goal é a região do campo atrás da linha de gol de cada time.',
       'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
-      'A conversão ainda não foi implementada.',
     ],
     FIELD_GOAL_TITLE: 'FIELD GOAL (FG)     !fg !gol',
     FIELD_GOAL: [
