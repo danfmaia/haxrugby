@@ -49,13 +49,13 @@ class TeamPositions implements ITeamPositions {
       if (this.kicker && player.id === this.kicker.id) {
         this.kicker = null;
         this.chatService.sendNormalAnnouncement(
-          `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#jogador>\` para selecionar um novo Kicker.`,
+          `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#ID_do_jogador>\` para selecionar um novo Kicker.`,
         );
       }
       if (this.goalkeeper && player.id === this.goalkeeper.id) {
         this.goalkeeper = null;
         this.chatService.sendNormalAnnouncement(
-          `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#jogador>\` para selecionar um novo GK.`,
+          `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#ID_do_jogador>\` para selecionar um novo GK.`,
         );
       }
     }
@@ -65,13 +65,13 @@ class TeamPositions implements ITeamPositions {
     if (this.kicker && player.id === this.kicker.id) {
       this.kicker = null;
       this.chatService.sendNormalAnnouncement(
-        `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#jogador>\` para selecionar um novo Kicker.`,
+        `O ${team.name} está sem Kicker. Use \`!k me\` ou \`!k <#ID_do_jogador>\` para selecionar um novo Kicker.`,
       );
     }
     if (this.goalkeeper && player.id === this.goalkeeper.id) {
       this.goalkeeper = null;
       this.chatService.sendNormalAnnouncement(
-        `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#jogador>\` para selecionar um novo GK.`,
+        `O ${team.name} está sem GK. Use \`!gk me\` ou \`!gk <#ID_do_jogador>\` para selecionar um novo GK.`,
       );
     }
   }

@@ -103,7 +103,7 @@ class CommandService implements ICommandService {
     } else {
       this.chatService.sendNormalAnnouncement(`O ${team.name} está sem ${positionString}!`);
       this.chatService.sendNormalAnnouncement(
-        `O ${team.name} está sem ${positionString}! Use \`!gk me\` ou \`!gk <#jogador>\` para definir um ${positionString} para o time.`,
+        `O ${team.name} está sem ${positionString}! Use \`!gk me\` ou \`!gk <#ID_do_jogador>\` para definir um ${positionString} para o time.`,
       );
     }
   }

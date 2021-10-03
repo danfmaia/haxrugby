@@ -63,10 +63,10 @@ const ptBr: DictionaryKeys = {
     SCORE: '    !s ou !score ou !placar',
     SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
 
-    KICKER: '    !k ou !kicker [me/<#jogador>]',
+    KICKER: '    !k ou !kicker [me/<#ID_do_jogador>]',
     KICKER_DESCRIPTION: 'Consulta ou altera o Kicker do time.',
 
-    GOALKEEPER: '    !gk ou !goalkeeper [me/<#jogador>]',
+    GOALKEEPER: '    !gk ou !goalkeeper [me/<#ID_do_jogador>]',
     GOALKEEPER_DESCRIPTION: 'Consulta ou altera o GK do time.',
 
     PLACE_BALL: '    !b ou !pl',

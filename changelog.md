@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.8a:
+
+- Adiciona o comando !clearban;
+
 ### v0.8:
 
 - Implementada a conversão de 2 pontos;

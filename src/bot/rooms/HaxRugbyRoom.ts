@@ -13,6 +13,7 @@ import { CustomPlayer } from '../models/player/CustomPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
 import smallStadium from '../singletons/smallStadium';
+import Util from '../util/Util';
 
 export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
   gameService: IGameService;
@@ -51,10 +52,14 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     });
 
     this.onPlayerJoin.addHandler((player) => {
+      console.log(`${player.name} (ID: ${player.id}) entrou na sala.`);
+
       this.gameService.handlePlayerJoin(player);
     });
 
     this.onPlayerLeave.addHandler((player) => {
+      console.log(`${Util.getPlayerNameAndId(player)} saiu da sala.`);
+
       this.gameService.handlePlayerLeave(player);
     });
 
@@ -64,6 +69,30 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
 
     this.onPlayerBallKick.addHandler((player) => {
       this.gameService.handlePlayerBallKick(player);
+    });
+
+    this.onPlayerKicked.addHandler((player, reason, ban, byPlayer) => {
+      const playerNameAndId: string = Util.getPlayerNameAndId(player);
+      const byPlayerNameAndId: string = Util.getPlayerNameAndId(byPlayer);
+
+      if (ban === false) {
+        if (byPlayer.id > 0) {
+          console.log(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
+        } else {
+          console.log(`${playerNameAndId} foi kickado pelo bot.`);
+          console.log(`Motivo: ${reason}.`);
+        }
+      } else {
+        if (byPlayer.id > 0) {
+          console.log(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
+        } else {
+          console.log(`${playerNameAndId} foi banido pelo bot.`);
+        }
+      }
+
+      if (reason) {
+        console.log(`Motivo: ${reason}.`);
+      }
     });
 
     this.onTeamGoal.addHandler((team) => {

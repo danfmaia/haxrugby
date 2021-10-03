@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import PositionEnum from '../enums/PositionEnum';
+import { CustomPlayer } from '../models/player/CustomPlayer';
 
 function timeout(ms: number, callback: () => void): void {
   const timeout = setTimeout(() => {
@@ -62,6 +63,10 @@ function getPositionString(position: PositionEnum): string {
   }
 }
 
+function getPlayerNameAndId(player: CustomPlayer): string {
+  return `${player.name} (ID: ${player.id})`;
+}
+
 const Util = {
   timeout,
   timeoutAsync,
@@ -69,6 +74,7 @@ const Util = {
   getDurationString,
   getRemainingTimeString,
   getPositionString,
+  getPlayerNameAndId,
 };
 
 export default Util;
