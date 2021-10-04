@@ -5,7 +5,7 @@ import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 
 @CommandDecorator({
-  names: ['clearban'],
+  names: ['clearban', 'clearbans'],
 })
 export class ClearBanCommand extends CommandBase<CustomPlayer> {
   private readonly room: IHaxRugbyRoom;

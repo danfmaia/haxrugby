@@ -147,10 +147,7 @@ export default class ChatService implements IChatService {
   }
 
   public sendNewMatchHelp(): void {
-    this.sendYellowBoldAnnouncement(
-      'Use `!rr` ou `!rr [x2/x3/x4] para iniciar uma nova partida!',
-      2,
-    );
+    this.sendYellowBoldAnnouncement('Use !rr ou !rr [x2/x3/x4] para iniciar uma nova partida!', 2);
     this.sendYellowAnnouncement('Apenas admins podem usar esse comando.');
   }
 
@@ -202,8 +199,8 @@ export default class ChatService implements IChatService {
     this.sendSingleRule(RuleEnum.OFFSIDE, 0, playerId);
     this.sendSpace(playerId);
 
-    this.sendBoldAnnouncement(MSG_RULES.POST_RULES[0], 0, playerId);
-    this.sendBoldAnnouncement(MSG_RULES.POST_RULES[1], 0, playerId);
+    this.room.sendAnnouncement(MSG_RULES.POST_RULES[0], playerId, colors.haxruGreen, 'italic', 0);
+    this.room.sendAnnouncement(MSG_RULES.POST_RULES[1], playerId, colors.haxruGreen, 'italic', 0);
     this.sendSpace(playerId);
   }
 

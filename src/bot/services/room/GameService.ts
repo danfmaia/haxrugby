@@ -284,6 +284,8 @@ export default class GameService implements IGameService {
           this.room.setCustomStadium(this.stadium.blueMaps.kickoff);
         }
       }
+
+      this.chatService.sendNewMatchHelp();
     });
 
     this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
