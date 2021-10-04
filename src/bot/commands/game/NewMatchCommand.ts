@@ -10,6 +10,7 @@ import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 import normalStadium from '../../singletons/normalStadium';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
+import getMatchConfig from '../../singletons/getMatchConfig';
 
 @CommandDecorator({
   names: ['new', 'rr', 'new-match'],
@@ -30,33 +31,51 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
+    const args0 = args[0];
+    const args1 = args[1];
+    const args2 = args[2];
+    const args3 = args[3];
+
     const callback = () => {
-      const updatedMatchConfig = this.gameService.matchConfig;
+      let updatedMatchConfig = this.gameService.matchConfig;
 
-      const timeLimit = Util.parseNumericInput(args[0], true);
-      if (timeLimit) {
-        updatedMatchConfig.timeLimit = timeLimit;
-      }
-
-      const scoreLimit = Util.parseNumericInput(args[1], true);
-      if (scoreLimit) {
-        updatedMatchConfig.scoreLimit = scoreLimit;
-      }
-
-      const stadium = this.getStadiumFromInput(args[2]);
-      if (stadium) {
-        this.gameService.stadium = stadium;
-        this.room.setCustomStadium(stadium.redMaps.kickoff);
+      if (args0 === 'x2' || args0 === 'x3' || args0 === 'x4') {
+        updatedMatchConfig = getMatchConfig(args0);
+        const stadium = this.getStadiumFromInput(updatedMatchConfig.stadium);
+        if (stadium) {
+          this.gameService.stadium = stadium;
+          if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
+            this.room.setCustomStadium(stadium.blueMaps.kickoff);
+          } else {
+            this.room.setCustomStadium(stadium.redMaps.kickoff);
+          }
+        }
       } else {
-        this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
-      }
+        const timeLimit = Util.parseNumericInput(args0, true);
+        if (timeLimit) {
+          updatedMatchConfig.timeLimit = timeLimit;
+        }
 
-      if (args[3]) {
-        const teamArg = args[3].toUpperCase();
-        if (teamArg === TeamEnum.RED) {
+        const scoreLimit = Util.parseNumericInput(args1, true);
+        if (scoreLimit) {
+          updatedMatchConfig.scoreLimit = scoreLimit;
+        }
+
+        const stadium = this.getStadiumFromInput(args2);
+        if (stadium) {
+          this.gameService.stadium = stadium;
+          this.room.setCustomStadium(stadium.redMaps.kickoff);
+        } else {
           this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
-        } else if (teamArg === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.gameService.stadium.blueMaps.kickoff);
+        }
+
+        if (args3) {
+          const teamArg = args3.toUpperCase();
+          if (teamArg === TeamEnum.RED) {
+            this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
+          } else if (teamArg === TeamEnum.BLUE) {
+            this.room.setCustomStadium(this.gameService.stadium.blueMaps.kickoff);
+          }
         }
       }
 

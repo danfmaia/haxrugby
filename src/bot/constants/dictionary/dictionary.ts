@@ -42,9 +42,13 @@ const ptBr: DictionaryKeys = {
 
     ADMIN_COMMANDS: '  Administrativos:',
 
-    NEW_MATCH: '    !new ou !rr [<tempo>] [<pontos>] [small/normal] [red/blue]',
+    NEW_MATCH: '    !rr ou !rr [x2/x3/4]     Exemplo: !rr x4',
     NEW_MATCH_DESCRIPTION:
-      'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, configura os limites de tempo e de pontos, o tamanho de mapa da nova partida e das próximas, e a posse de bola inicial. Só pode ser usado por admins.',
+      'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, altera a configuração da partida.',
+
+    // NEW_MATCH: '    !new ou !rr [<tempo>] [<pontos>] [small/normal] [red/blue]',
+    // NEW_MATCH_DESCRIPTION:
+    //   'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, configura os limites de tempo e de pontos, o tamanho de mapa da nova partida e das próximas, e a posse de bola inicial. Só pode ser usado por admins.',
 
     ADMIN: '    !admin <senha> [reclaim]',
     ADMIN_DESCRIPTION:

@@ -18,6 +18,13 @@ function timeoutAsync(ms: number, callback: () => void): Promise<unknown> {
   });
 }
 
+function interval(ms: number, callback: () => void): void {
+  const interval = setInterval(() => {
+    callback();
+    clearInterval(interval);
+  }, ms);
+}
+
 function parseNumericInput(input?: string, positive: boolean = false): number | false {
   if (input) {
     input = input.replace('#', '');
@@ -70,6 +77,7 @@ function getPlayerNameAndId(player: CustomPlayer): string {
 const Util = {
   timeout,
   timeoutAsync,
+  interval,
   parseNumericInput,
   getDurationString,
   getRemainingTimeString,

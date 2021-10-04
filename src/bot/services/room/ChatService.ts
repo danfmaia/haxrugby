@@ -31,6 +31,7 @@ export interface IChatService {
   announceBallPositionOvertime(): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
+  sendNewMatchHelp(): void;
   sendMainPromoLinks(sound?: number, playerId?: number): void;
   sendMainPromoLinksForSpectators(): void;
   sendSinglePromoLink(link: LinkEnum, sound?: number, playerId?: number): void;
@@ -143,6 +144,14 @@ export default class ChatService implements IChatService {
     Util.timeout(10000, () => {
       this.sendMainPromoLinks(2, playerId);
     });
+  }
+
+  public sendNewMatchHelp(): void {
+    this.sendYellowBoldAnnouncement(
+      'Use `!rr` ou `!rr [x2/x3/x4] para iniciar uma nova partida!',
+      2,
+    );
+    this.sendYellowAnnouncement('Apenas admins podem usar esse comando.');
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {

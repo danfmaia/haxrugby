@@ -3,6 +3,8 @@
 ### v0.8a:
 
 - Adiciona o comando !clearban;
+- Adiciona as opções `x2`, `x3` e `x4` ao comando `!rr` (Exemplo: `!rr x3`);
+- Adicionadas mensagens periódicas de ajuda para começar nova partida (!rr).
 
 ### v0.8:
 

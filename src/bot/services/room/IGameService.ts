@@ -57,4 +57,6 @@ export interface IGameService {
 
   initializeMatch(player?: CustomPlayer): void;
   cancelMatch(player: CustomPlayer, callback: () => void): void;
+
+  getLastWinner(): TeamEnum | null | 0;
 }

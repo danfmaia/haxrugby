@@ -22,7 +22,7 @@ import { RoomUtil } from '../../util/RoomUtil';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
 import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
 import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
-import getDefaultConfig from '../../singletons/getDefaultConfig';
+import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
 import Teams, { ITeams } from '../../models/team/Teams';
@@ -72,9 +72,15 @@ export default class GameService implements IGameService {
     this.chatService = new ChatService(room, this);
     this.roomUtil = new RoomUtil(room, this);
 
-    this.matchConfig = getDefaultConfig(this.chatService);
+    this.matchConfig = getMatchConfig('x2');
     this.teams = new Teams(this.chatService);
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
+
+    Util.interval(0.5 * MINUTE_IN_MS, () => {
+      if (this.isMatchInProgress === false) {
+        this.chatService.sendNewMatchHelp();
+      }
+    });
   }
 
   /**
@@ -261,6 +267,8 @@ export default class GameService implements IGameService {
         if (this.isFinishing) {
           this.room.stopGame();
         }
+
+        this.chatService.sendNewMatchHelp();
       });
       return;
     }
@@ -768,7 +776,7 @@ export default class GameService implements IGameService {
     });
   }
 
-  private getLastWinner(): TeamEnum | null | 0 {
+  public getLastWinner(): TeamEnum | null | 0 {
     const lastScore = this.lastScores[0];
     if (!lastScore) {
       return null;
