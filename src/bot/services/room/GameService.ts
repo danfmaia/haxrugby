@@ -290,6 +290,9 @@ export default class GameService implements IGameService {
 
     this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
     this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
+    this.chatService.sendNormalAnnouncement(
+      `Tempo restante: ${Util.getRemainingTimeString(this.remainingTime)}◊`,
+    );
   }
 
   public cancelMatch(player: CustomPlayer, callback: () => void): void {
@@ -303,10 +306,10 @@ export default class GameService implements IGameService {
 
     this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
     this.chatService.sendNormalAnnouncement(
-      `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
+      `Placar parcial:  ${this.score.red}-${this.score.blue}`,
     );
     this.chatService.sendNormalAnnouncement(
-      `Placar parcial:  ${this.score.red}-${this.score.blue}`,
+      `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
     );
     this.chatService.sendNormalAnnouncement('');
     this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');

@@ -8,6 +8,7 @@ import {
   Types,
 } from 'inversihax';
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
+import { KICK_RATE_LIMIT } from '../constants/constants';
 
 import { CustomPlayer } from '../models/player/CustomPlayer';
 import GameService from '../services/room/GameService';
@@ -107,5 +108,7 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     this.setTeamsLock(true);
     this.setTimeLimit(this.gameService.matchConfig.timeLimit);
     this.setScoreLimit(this.gameService.matchConfig.scoreLimit);
+
+    this.setKickRateLimit(KICK_RATE_LIMIT[0], KICK_RATE_LIMIT[1], KICK_RATE_LIMIT[2]);
   }
 }
