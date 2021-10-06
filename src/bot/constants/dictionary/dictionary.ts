@@ -73,7 +73,7 @@ const ptBr: DictionaryKeys = {
     GOALKEEPER: '    !gk ou !goalkeeper [me/<#ID_do_jogador>]',
     GOALKEEPER_DESCRIPTION: 'Consulta ou altera o GK do time.',
 
-    PLACE_BALL: '    !b ou !pl',
+    PLACE_BALL: '    b ou B',
     PLACE_BALL_DESCRIPTION: 'Reposiciona a bola para o chute de conversão.',
 
     RULES: '    !r ou !regras ou !rules',

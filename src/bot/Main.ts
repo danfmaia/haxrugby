@@ -31,7 +31,7 @@ import { FacebookCommand } from './commands/links/FacebookCommand';
 import { SetScoreCommand } from './commands/game/SetScoreCommand';
 import { KickerCommand } from './commands/conversion/KickerCommand';
 import { GoalkeeperCommand } from './commands/conversion/GoalkeeperCommand';
-import { PlaceBallCommand } from './commands/conversion/PlaceBallCommand';
+import { BallCommand } from './commands/conversion/BallCommand';
 import { ClearBanCommand } from './commands/admin/ClearBanCommand';
 import { LeaveCommand } from './commands/LeaveCommand';
 
@@ -53,7 +53,7 @@ SetScoreCommand;
 
 KickerCommand;
 GoalkeeperCommand;
-PlaceBallCommand;
+BallCommand;
 
 RulesCommand;
 TryCommand;

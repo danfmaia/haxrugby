@@ -1,10 +1,13 @@
 ## CHANGELOG
 
-### v0.8b:
+### v0.8b (_Loading..._):
 
-- Adiciona um kick rate limit;
+- Adiciona um kick rate limit de 10/10/15 (ainda será reajustado no futuro);
 - Tentativa de correção do novo erro do Try;
 - Adiciona o comando !bb;
+- O jogador agora é imediatamente parado após usar o comando de reposicionar bola;
+- Mensagens `b`, `B` e `!B` agora também acionam o comando de reposicionar bola;
+- _Loading..._
 
 ### v0.8a:
 
@@ -16,7 +19,7 @@
 
 - Implementada a conversão de 2 pontos;
 - Adicionados os comandos de suporte à conversão `!k`, `!gk` e `!b`;
-- [experiência] Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5);
+- Diminuído o tamanho da bola em 15% (o raio agora tem o valor de 8.5);
 - Alerta de Desvio/Recuo agora é em cor amarela.
 
 ### v0.7:

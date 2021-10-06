@@ -9,9 +9,9 @@ import { IGameService } from '../../services/room/IGameService';
 import Util from '../../util/Util';
 
 @CommandDecorator({
-  names: ['b', 'ball', 'bola', 'pl', 'place'],
+  names: ['b', 'B', 'ball', 'bola'],
 })
-export class PlaceBallCommand extends CommandBase<CustomPlayer> {
+export class BallCommand extends CommandBase<CustomPlayer> {
   private readonly room: IHaxRugbyRoom;
   private gameService: IGameService;
   private readonly chatService: IChatService;
@@ -25,25 +25,23 @@ export class PlaceBallCommand extends CommandBase<CustomPlayer> {
   }
 
   public canExecute(player: CustomPlayer): boolean {
+    const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
+    if (!playerTeam) {
+      return false;
+    }
+    const kickingTeam = this.gameService.isConversionAttempt;
+    if (!kickingTeam || kickingTeam !== playerTeam.teamEnum) {
+      return false;
+    }
+    if (!playerTeam.positions.kicker || player.id !== playerTeam.positions.kicker.id) {
+      return false;
+    }
     return true;
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
-    // validate if player can execute
-    const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
-    if (!playerTeam) {
-      return;
-    }
     const kickingTeam = this.gameService.isConversionAttempt;
-    if (!kickingTeam || kickingTeam !== playerTeam.teamEnum) {
-      return;
-    }
-    if (!playerTeam.positions.kicker || player.id !== playerTeam.positions.kicker.id) {
-      return;
-    }
-
     const allPlayersPropMap = this.gameService.roomUtil.getAllPlayerPropsMaps();
-
     const stadium = this.gameService.stadium;
     let newBallX = player.position.x;
     const distanceToBallX = PLAYER_RADIUS + BALL_RADIUS + 5;
@@ -87,6 +85,11 @@ export class PlaceBallCommand extends CommandBase<CustomPlayer> {
 
     // reset players to previous position
     this.gameService.roomUtil.setAllPlayersProps(allPlayersPropMap);
+
+    // stop player
+    const playerProps = this.room.getPlayerDiscProperties(player.id);
+    playerProps.xspeed = playerProps.yspeed = 0;
+    this.room.setPlayerDiscProperties(player.id, playerProps);
 
     // place ball
     const updatedBallProps = this.room.getDiscProperties(0);
