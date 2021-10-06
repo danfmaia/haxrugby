@@ -42,7 +42,7 @@ const ptBr: DictionaryKeys = {
 
     ADMIN_COMMANDS: '  Administrativos:',
 
-    NEW_MATCH: '    !rr ou !rr [x2/x3/4]     Exemplo: !rr x4',
+    NEW_MATCH: '    !rr ou !rr x2/x3/x4     Exemplo: !rr x4',
     NEW_MATCH_DESCRIPTION:
       'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, altera a configuração da partida.',
 

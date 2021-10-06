@@ -31,16 +31,16 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
   }
 
   public execute(player: CustomPlayer, args: string[]): void {
-    const args0 = args[0];
-    const args1 = args[1];
-    const args2 = args[2];
-    const args3 = args[3];
+    const arg0 = args[0];
+    const arg1 = args[1];
+    const arg2 = args[2];
+    const arg3 = args[3];
 
     const callback = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
-      if (args0 === 'x2' || args0 === 'x3' || args0 === 'x4') {
-        updatedMatchConfig = getMatchConfig(args0);
+      if (arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
+        updatedMatchConfig = getMatchConfig(arg0);
         const stadium = this.getStadiumFromInput(updatedMatchConfig.stadium);
         if (stadium) {
           this.gameService.stadium = stadium;
@@ -51,17 +51,17 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
           }
         }
       } else {
-        const timeLimit = Util.parseNumericInput(args0, true);
+        const timeLimit = Util.parseNumericInput(arg0, true);
         if (timeLimit) {
           updatedMatchConfig.timeLimit = timeLimit;
         }
 
-        const scoreLimit = Util.parseNumericInput(args1, true);
+        const scoreLimit = Util.parseNumericInput(arg1, true);
         if (scoreLimit) {
           updatedMatchConfig.scoreLimit = scoreLimit;
         }
 
-        const stadium = this.getStadiumFromInput(args2);
+        const stadium = this.getStadiumFromInput(arg2);
         if (stadium) {
           this.gameService.stadium = stadium;
           this.room.setCustomStadium(stadium.redMaps.kickoff);
@@ -69,8 +69,8 @@ export class NewMatchCommand extends CommandBase<CustomPlayer> {
           this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
         }
 
-        if (args3) {
-          const teamArg = args3.toUpperCase();
+        if (arg3) {
+          const teamArg = arg3.toUpperCase();
           if (teamArg === TeamEnum.RED) {
             this.room.setCustomStadium(this.gameService.stadium.redMaps.kickoff);
           } else if (teamArg === TeamEnum.BLUE) {

@@ -752,7 +752,7 @@ export default class GameService implements IGameService {
         teamName = this.teams.red.name;
         map = this.stadium.blueMaps.kickoff;
       } else {
-        teamName = this.teams.red.name;
+        teamName = this.teams.blue.name;
         map = this.stadium.redMaps.kickoff;
       }
 

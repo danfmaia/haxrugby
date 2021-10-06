@@ -2,18 +2,18 @@
 
 ### v0.8b (_Loading..._):
 
-- Adiciona um kick rate limit de 10/10/15 (ainda será reajustado no futuro);
+- Adicionado um kick rate limit de 10/10/15 (ainda será reajustado no futuro);
 - Tentativa de correção do novo erro do Try;
-- Adiciona o comando !bb;
+- Adicionado o comando `!bb`;
 - O jogador agora é imediatamente parado após usar o comando de reposicionar bola;
 - Mensagens `b`, `B` e `!B` agora também acionam o comando de reposicionar bola;
 - _Loading..._
 
 ### v0.8a:
 
-- Adiciona o comando !clearban;
-- Adiciona as opções `x2`, `x3` e `x4` ao comando `!rr` (Exemplo: `!rr x3`);
-- Adicionadas mensagens periódicas de ajuda para começar nova partida (!rr).
+- Adicionado o comando `!clearban`;
+- Adicionadas as opções `x2`, `x3` e `x4` ao comando `!rr` (Exemplo: `!rr x3`);
+- Adicionadas mensagens periódicas de ajuda para começar nova partida (`!rr`).
 
 ### v0.8:
 

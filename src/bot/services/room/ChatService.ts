@@ -147,7 +147,10 @@ export default class ChatService implements IChatService {
   }
 
   public sendNewMatchHelp(): void {
-    this.sendYellowBoldAnnouncement('Use !rr ou !rr [x2/x3/x4] para iniciar uma nova partida!', 2);
+    this.sendYellowBoldAnnouncement(
+      'Use !rr ou !rr x2/x3/x4 para iniciar uma nova partida! Ex.: !rr x4',
+      2,
+    );
     this.sendYellowAnnouncement('Apenas admins podem usar esse comando.');
   }
 
