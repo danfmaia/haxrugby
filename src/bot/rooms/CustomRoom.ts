@@ -7,10 +7,10 @@ import {
   RoomBase,
   Types,
 } from 'inversihax';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { ICustomRoom } from './ICustomRoom';
 
-export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
+export class CustomRoom extends RoomBase<HaxRugbyPlayer> implements ICustomRoom {
   private mIsGameInProgress: boolean = false;
 
   public get isGameInProgress(): boolean {
@@ -19,7 +19,7 @@ export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-    @inject(Types.IPlayerService) playerService: IPlayerService<CustomPlayer>,
+    @inject(Types.IPlayerService) playerService: IPlayerService<HaxRugbyPlayer>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,

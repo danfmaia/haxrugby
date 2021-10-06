@@ -9,8 +9,8 @@ import {
   IChatMessageInterceptor,
   ChatMessage,
 } from 'inversihax';
-import { CustomPlayer } from './models/player/CustomPlayer';
-import { CustomPlayerService } from './services/CustomPlayerService';
+import { HaxRugbyPlayer } from './models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerService } from './services/HaxRugbyPlayerService';
 import { Startup } from './Startup';
 import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
@@ -35,6 +35,7 @@ import { BallCommand } from './commands/conversion/BallCommand';
 import { ClearBanCommand } from './commands/admin/ClearBanCommand';
 import { LeaveCommand } from './commands/LeaveCommand';
 import { CancelMatchCommand } from './commands/game/CancelMatchCommand';
+import { OnlyAdminCommand } from './commands/player/OnlyAdminCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -66,6 +67,8 @@ LinksCommand;
 DiscordCommand;
 FacebookCommand;
 
+OnlyAdminCommand;
+
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     roomName: `${ROOM_TITLE} ${APP_VERSION}`,
@@ -75,13 +78,13 @@ const services = new ContainerModule((bind) => {
     maxPlayers: 15,
   });
 
-  bind<IPlayerService<CustomPlayer>>(Types.IPlayerService)
-    .to(CustomPlayerService)
+  bind<IPlayerService<HaxRugbyPlayer>>(Types.IPlayerService)
+    .to(HaxRugbyPlayerService)
     .inSingletonScope();
 
   bind<IBackgroundTask>(Types.IBackgroundTask).to(InfoBackgroundTask).inSingletonScope();
 
-  bind<IChatMessageInterceptor<ChatMessage<CustomPlayer>>>(Types.IChatMessageInterceptor)
+  bind<IChatMessageInterceptor<ChatMessage<HaxRugbyPlayer>>>(Types.IChatMessageInterceptor)
     .to(ExecuteCommandInterceptor)
     .inRequestScope();
 });

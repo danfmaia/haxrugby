@@ -1,14 +1,14 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import LinkEnum from '../../enums/LinkEnum';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
   names: ['facebook', 'face', 'fb'],
 })
-export class FacebookCommand extends CommandBase<CustomPlayer> {
+export class FacebookCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -19,11 +19,11 @@ export class FacebookCommand extends CommandBase<CustomPlayer> {
     this.chatService = room.gameService.chatService;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
       this.chatService.sendSinglePromoLink(LinkEnum.FACEBOOK);
     } else {

@@ -1,14 +1,14 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import LinkEnum from '../../enums/LinkEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
-  names: ['r', 'regras', 'rules'],
+  names: ['only-admin'],
 })
-export class RulesCommand extends CommandBase<HaxRugbyPlayer> {
+export class OnlyAdminCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -24,18 +24,22 @@ export class RulesCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
-    if (args[0] !== 'link') {
-      if (player.admin) {
-        this.chatService.sendMainRules(2);
-      } else {
-        this.chatService.sendMainRules(0, player.id);
-      }
+    const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
+
+    playerConfig.canBeTheOnlyAdmin = !playerConfig.canBeTheOnlyAdmin;
+
+    if (playerConfig.canBeTheOnlyAdmin === false) {
+      this.chatService.sendNormalAnnouncement(
+        'Você não será mais o único admin da sala.',
+        0,
+        player.id,
+      );
     } else {
-      if (player.admin) {
-        this.chatService.sendSinglePromoLink(LinkEnum.RULES);
-      } else {
-        this.chatService.sendSinglePromoLink(LinkEnum.RULES, 0, player.id);
-      }
+      this.chatService.sendNormalAnnouncement(
+        'Você poderá ser o único admin da sala.',
+        0,
+        player.id,
+      );
     }
   }
 }

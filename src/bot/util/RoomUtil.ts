@@ -2,7 +2,7 @@ import { IPosition, TeamID } from 'inversihax';
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import ITouchInfo from '../models/physics/ITouchInfo';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { TPlayerPropMap as TPlayerPropsMap } from '../models/player/PlayerPropMap';
 import IPlayerCountByTeam from '../models/team/IPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
@@ -108,7 +108,7 @@ export class RoomUtil {
     return false;
   }
 
-  public setPlayerAsPosition(player: CustomPlayer, position: PositionEnum): void {
+  public setPlayerAsPosition(player: HaxRugbyPlayer, position: PositionEnum): void {
     const team = this.room.gameService.teams.getTeamByTeamID(player.team);
     if (!team || this.gameService.isConversionShot) {
       return;

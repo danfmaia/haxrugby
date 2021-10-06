@@ -7,7 +7,7 @@ import {
   AFTER_TRY_MAX_TICKS,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import ITouchInfo from '../../models/physics/ITouchInfo';
@@ -117,7 +117,7 @@ export default class GameService implements IGameService {
     this.lastBallPosition = ballPosition;
   }
 
-  public handleGameStart(byPlayer: CustomPlayer): void {
+  public handleGameStart(byPlayer: HaxRugbyPlayer): void {
     this.isGameStopped = false;
 
     this.isBeforeKickoff = true;
@@ -136,7 +136,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  public handleGameStop(byPlayer: CustomPlayer): void {
+  public handleGameStop(byPlayer: HaxRugbyPlayer): void {
     this.isGameStopped = true;
 
     if (this.isTimeRunning) {
@@ -145,14 +145,14 @@ export default class GameService implements IGameService {
     }
   }
 
-  public handleGamePause(byPlayer: CustomPlayer): void {
+  public handleGamePause(byPlayer: HaxRugbyPlayer): void {
     if (this.isMatchInProgress && this.isTimeRunning) {
       this.isTimeRunning = false;
       this.chatService.sendMatchStatus();
     }
   }
 
-  public handleGameUnpause(byPlayer: CustomPlayer): void {
+  public handleGameUnpause(byPlayer: HaxRugbyPlayer): void {
     if (this.isMatchInProgress && this.isTimeRunning === false && this.isBeforeKickoff === false) {
       this.isTimeRunning = true;
       this.chatService.sendMatchStatus();
@@ -164,14 +164,14 @@ export default class GameService implements IGameService {
     this.chatService.sendGreetingsToIncomingPlayer(player.id);
   }
 
-  public handlePlayerLeave(player: CustomPlayer): void {
+  public handlePlayerLeave(player: HaxRugbyPlayer): void {
     this.adminService.setEarliestPlayerAsAdmin();
     this.unregisterPlayerFromMatchData(player.id);
     this.teams.removePlayerFromPositions(player);
     this.teams.fillAllPositions(this.room.getPlayerList());
   }
 
-  public handlePlayerTeamChange(player: CustomPlayer): void {
+  public handlePlayerTeamChange(player: HaxRugbyPlayer): void {
     this.teams.emptyPositionsOnPlayerTeamChange(player);
 
     if (this.isMatchInProgress) {
@@ -183,7 +183,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  public handlePlayerBallKick(player: CustomPlayer): void {
+  public handlePlayerBallKick(player: HaxRugbyPlayer): void {
     // run time after kickoff
     if (this.isBeforeKickoff && this.isConversionAttempt === false) {
       this.isBeforeKickoff = false;
@@ -232,7 +232,7 @@ export default class GameService implements IGameService {
    *  OWN METHODS
    */
 
-  public initializeMatch(player?: CustomPlayer): void {
+  public initializeMatch(player?: HaxRugbyPlayer): void {
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
     this.isMatchInProgress = true;
     this.isOvertime = false;
@@ -299,7 +299,7 @@ export default class GameService implements IGameService {
     );
   }
 
-  public cancelMatch(player: CustomPlayer, callback?: () => void): void {
+  public cancelMatch(player: HaxRugbyPlayer, callback?: () => void): void {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
@@ -504,7 +504,7 @@ export default class GameService implements IGameService {
     this.chatService.announceDefRec(didBallEnterOrLeaveIngoal, this.isDefRec);
   }
 
-  private checkForTouches(players: CustomPlayer[], ballPosition: IPosition) {
+  private checkForTouches(players: HaxRugbyPlayer[], ballPosition: IPosition) {
     const newTouchInfo = Physics.getTouchInfoList(players, ballPosition);
     if (newTouchInfo) {
       this.lastTouchInfo = newTouchInfo;

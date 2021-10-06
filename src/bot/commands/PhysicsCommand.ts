@@ -1,12 +1,12 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, IDiscPropertiesObject, Types } from 'inversihax';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { ICustomRoom } from '../rooms/ICustomRoom';
 
 @CommandDecorator({
   names: ['p'],
 })
-export class PhysicsCommand extends CommandBase<CustomPlayer> {
+export class PhysicsCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly mRoom: ICustomRoom;
 
   public constructor(@inject(Types.IRoom) room: ICustomRoom) {
@@ -15,11 +15,11 @@ export class PhysicsCommand extends CommandBase<CustomPlayer> {
     this.mRoom = room;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     let increase: boolean;
     if (args[0] === '+') {
       increase = true;

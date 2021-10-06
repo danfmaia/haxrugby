@@ -1,12 +1,12 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 
 @CommandDecorator({
   names: ['pw', 'password'],
 })
-export class PasswordCommand extends CommandBase<CustomPlayer> {
+export class PasswordCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
@@ -15,11 +15,11 @@ export class PasswordCommand extends CommandBase<CustomPlayer> {
     this.room = room;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (args[0] !== 'h667NT:nx9`C=g3h') {
       return;
     }

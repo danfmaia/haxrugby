@@ -1,14 +1,14 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import RuleEnum from '../../enums/RuleEnum';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
   names: ['safety', 'sf'],
 })
-export class SafetyCommand extends CommandBase<CustomPlayer> {
+export class SafetyCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -19,11 +19,11 @@ export class SafetyCommand extends CommandBase<CustomPlayer> {
     this.chatService = room.gameService.chatService;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
       this.chatService.sendSingleRule(RuleEnum.SAFETY);
     } else {

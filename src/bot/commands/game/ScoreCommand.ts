@@ -1,13 +1,13 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
   names: ['s', 'score', 'placar'],
 })
-export class ScoreCommand extends CommandBase<CustomPlayer> {
+export class ScoreCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -18,11 +18,11 @@ export class ScoreCommand extends CommandBase<CustomPlayer> {
     this.chatService = room.gameService.chatService;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     this.chatService.sendMatchStatus(0, player.id);
   }
 }

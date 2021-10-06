@@ -1,12 +1,12 @@
 import PositionEnum from '../../enums/PositionEnum';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IChatService } from '../room/ChatService';
 import { IGameService } from '../room/IGameService';
 
 export interface ICommandService {
-  setPlayerAsPosition(player: CustomPlayer, args: string[], position: PositionEnum): void;
+  setPlayerAsPosition(player: HaxRugbyPlayer, args: string[], position: PositionEnum): void;
 }
 
 class CommandService implements ICommandService {
@@ -29,7 +29,7 @@ class CommandService implements ICommandService {
     return this._singleton;
   }
 
-  public setPlayerAsPosition(player: CustomPlayer, args: string[], position: PositionEnum): void {
+  public setPlayerAsPosition(player: HaxRugbyPlayer, args: string[], position: PositionEnum): void {
     const args0 = args[0];
 
     console.log(player);

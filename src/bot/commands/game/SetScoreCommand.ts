@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IGameService } from '../../services/room/IGameService';
@@ -12,7 +12,7 @@ import { MINUTE_IN_MS } from '../../constants/constants';
 @CommandDecorator({
   names: ['set-score', 'ss'],
 })
-export class SetScoreCommand extends CommandBase<CustomPlayer> {
+export class SetScoreCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;
   private readonly gameService: IGameService;
   private readonly chatService: IChatService;
@@ -25,11 +25,11 @@ export class SetScoreCommand extends CommandBase<CustomPlayer> {
     this.chatService = room.gameService.chatService;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return player.admin;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     const newRedScore = Util.parseNumericInput(args[0]);
     const newBlueScore = Util.parseNumericInput(args[1]);
 

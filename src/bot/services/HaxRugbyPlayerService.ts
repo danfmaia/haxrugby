@@ -1,16 +1,16 @@
 import { injectable } from 'inversify';
 import { IPlayerObject, IPlayerService } from 'inversihax';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
 @injectable()
-export class CustomPlayerService implements IPlayerService<CustomPlayer> {
-  public cast(player: IPlayerObject): CustomPlayer {
+export class HaxRugbyPlayerService implements IPlayerService<HaxRugbyPlayer> {
+  public cast(player: IPlayerObject): HaxRugbyPlayer {
     if (player === null) {
       // @ts-ignore: Unreachable code error
       return;
     }
 
-    return new CustomPlayer(
+    return new HaxRugbyPlayer(
       player.id,
       player.name,
       player.team,

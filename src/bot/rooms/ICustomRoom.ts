@@ -1,6 +1,6 @@
 import { IRoom } from 'inversihax';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
-export interface ICustomRoom extends IRoom<CustomPlayer> {
+export interface ICustomRoom extends IRoom<HaxRugbyPlayer> {
   isGameInProgress: boolean;
 }

@@ -10,22 +10,22 @@ import {
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
 import { KICK_RATE_LIMIT } from '../constants/constants';
 
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
 import smallStadium from '../singletons/smallStadium';
 import Util from '../util/Util';
 
-export interface IHaxRugbyRoom extends IRoom<CustomPlayer> {
+export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
   gameService: IGameService;
 }
 
-export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoom {
+export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyRoom {
   public gameService: IGameService = new GameService(this);
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-    @inject(Types.IPlayerService) playerService: IPlayerService<CustomPlayer>,
+    @inject(Types.IPlayerService) playerService: IPlayerService<HaxRugbyPlayer>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,

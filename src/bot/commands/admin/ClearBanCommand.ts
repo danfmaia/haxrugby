@@ -1,13 +1,13 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 
 @CommandDecorator({
   names: ['clearban', 'clearbans'],
 })
-export class ClearBanCommand extends CommandBase<CustomPlayer> {
+export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
@@ -16,11 +16,11 @@ export class ClearBanCommand extends CommandBase<CustomPlayer> {
     this.room = room;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     return player.admin;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     const playerNameAndId = Util.getPlayerNameAndId(player);
 
     if (args[0] === 'all') {

@@ -2,32 +2,32 @@ import PositionEnum from '../../enums/PositionEnum';
 import { IChatService } from '../../services/room/ChatService';
 import Util from '../../util/Util';
 import { TTeam } from '../team/Teams';
-import { CustomPlayer } from './CustomPlayer';
+import { HaxRugbyPlayer } from './HaxRugbyPlayer';
 
 export interface ITeamPositions {
   chatService: IChatService;
 
-  kicker: CustomPlayer | null;
-  goalkeeper: CustomPlayer | null;
+  kicker: HaxRugbyPlayer | null;
+  goalkeeper: HaxRugbyPlayer | null;
 
-  fillAll(teamFirstPlayer: CustomPlayer | undefined, teamName: string): void;
-  emptyPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void;
-  removePlayerFromPositions(player: CustomPlayer, team: TTeam): void;
+  fillAll(teamFirstPlayer: HaxRugbyPlayer | undefined, teamName: string): void;
+  emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer, team: TTeam): void;
+  removePlayerFromPositions(player: HaxRugbyPlayer, team: TTeam): void;
   clearAllPositions(): void;
-  setPlayerAsPosition(player: CustomPlayer, position: PositionEnum, teamName: string): void;
+  setPlayerAsPosition(player: HaxRugbyPlayer, position: PositionEnum, teamName: string): void;
 }
 
 class TeamPositions implements ITeamPositions {
   public chatService: IChatService;
 
-  public kicker: CustomPlayer | null = null;
-  public goalkeeper: CustomPlayer | null = null;
+  public kicker: HaxRugbyPlayer | null = null;
+  public goalkeeper: HaxRugbyPlayer | null = null;
 
   constructor(chatService: IChatService) {
     this.chatService = chatService;
   }
 
-  public fillAll(teamFirstPlayer: CustomPlayer | undefined, teamName: string): void {
+  public fillAll(teamFirstPlayer: HaxRugbyPlayer | undefined, teamName: string): void {
     if (teamFirstPlayer) {
       if (this.kicker === null) {
         this.kicker = teamFirstPlayer;
@@ -44,7 +44,7 @@ class TeamPositions implements ITeamPositions {
     }
   }
 
-  public emptyPositionsOnPlayerTeamChange(player: CustomPlayer, team: TTeam): void {
+  public emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer, team: TTeam): void {
     if (player.team !== team.teamID) {
       if (this.kicker && player.id === this.kicker.id) {
         this.kicker = null;
@@ -61,7 +61,7 @@ class TeamPositions implements ITeamPositions {
     }
   }
 
-  public removePlayerFromPositions(player: CustomPlayer, team: TTeam): void {
+  public removePlayerFromPositions(player: HaxRugbyPlayer, team: TTeam): void {
     if (this.kicker && player.id === this.kicker.id) {
       this.kicker = null;
       this.chatService.sendNormalAnnouncement(
@@ -81,7 +81,11 @@ class TeamPositions implements ITeamPositions {
     this.goalkeeper = null;
   }
 
-  public setPlayerAsPosition(player: CustomPlayer, position: PositionEnum, teamName: string): void {
+  public setPlayerAsPosition(
+    player: HaxRugbyPlayer,
+    position: PositionEnum,
+    teamName: string,
+  ): void {
     const positionString = Util.getPositionString(position);
     const takenPlayer = this[position];
 

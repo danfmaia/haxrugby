@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { BALL_RADIUS, PLAYER_RADIUS } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 import { IGameService } from '../../services/room/IGameService';
@@ -11,7 +11,7 @@ import Util from '../../util/Util';
 @CommandDecorator({
   names: ['b', 'B', 'ball', 'bola'],
 })
-export class BallCommand extends CommandBase<CustomPlayer> {
+export class BallCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;
   private gameService: IGameService;
   private readonly chatService: IChatService;
@@ -24,7 +24,7 @@ export class BallCommand extends CommandBase<CustomPlayer> {
     this.chatService = room.gameService.chatService;
   }
 
-  public canExecute(player: CustomPlayer): boolean {
+  public canExecute(player: HaxRugbyPlayer): boolean {
     const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
     if (!playerTeam) {
       return false;
@@ -39,7 +39,7 @@ export class BallCommand extends CommandBase<CustomPlayer> {
     return true;
   }
 
-  public execute(player: CustomPlayer, args: string[]): void {
+  public execute(player: HaxRugbyPlayer, args: string[]): void {
     const kickingTeam = this.gameService.isConversionAttempt;
     const allPlayersPropMap = this.gameService.roomUtil.getAllPlayerPropsMaps();
     const stadium = this.gameService.stadium;

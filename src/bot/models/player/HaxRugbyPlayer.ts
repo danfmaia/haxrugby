@@ -1,6 +1,6 @@
 import { IPosition, Player, TeamID } from 'inversihax';
 
-export class CustomPlayer extends Player {
+export class HaxRugbyPlayer extends Player {
   constructor(
     id: number,
     name: string,

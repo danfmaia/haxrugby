@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { ChatMessage, IChatMessageInterceptor, Types } from 'inversihax';
 import { BallCommand } from '../commands/conversion/BallCommand';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import Util from '../util/Util';
 
 @injectable()
 export class ExecuteCommandInterceptor
-  implements IChatMessageInterceptor<ChatMessage<CustomPlayer>>
+  implements IChatMessageInterceptor<ChatMessage<HaxRugbyPlayer>>
 {
   private readonly room: IHaxRugbyRoom;
 
@@ -15,7 +15,7 @@ export class ExecuteCommandInterceptor
     this.room = room;
   }
 
-  intercept(message: ChatMessage<CustomPlayer>): boolean {
+  intercept(message: ChatMessage<HaxRugbyPlayer>): boolean {
     // BallCommand's interceptor
     if (['b', 'B'].includes(message.message)) {
       message.command = new BallCommand(this.room);

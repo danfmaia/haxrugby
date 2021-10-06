@@ -4,7 +4,7 @@ import { BLUE_TEAM_NAME, RED_TEAM_NAME } from '../../constants/team/team';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamEnum from '../../enums/TeamEnum';
 import { IChatService } from '../../services/room/ChatService';
-import { CustomPlayer } from '../player/CustomPlayer';
+import { HaxRugbyPlayer } from '../player/HaxRugbyPlayer';
 import TeamPositions, { ITeamPositions } from '../player/TeamPositions';
 
 export type TTeam = {
@@ -21,9 +21,9 @@ export interface ITeams {
   getTeam(team: TeamEnum): TTeam;
   getTeamByTeamID(teamID: TeamID): TTeam | null;
 
-  fillAllPositions(players: CustomPlayer[]): void;
-  emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void;
-  removePlayerFromPositions(player: CustomPlayer): void;
+  fillAllPositions(players: HaxRugbyPlayer[]): void;
+  emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer): void;
+  removePlayerFromPositions(player: HaxRugbyPlayer): void;
   getPlayerByTeamAndPosition(team: TeamEnum, position: PositionEnum): number | null;
 }
 
@@ -64,7 +64,7 @@ class Teams implements ITeams {
     }
   }
 
-  public fillAllPositions(players: CustomPlayer[]): void {
+  public fillAllPositions(players: HaxRugbyPlayer[]): void {
     const redFirstPlayer = players.find((player) => player.team === TeamID.RedTeam);
     this.red.positions.fillAll(redFirstPlayer, this.red.name);
 
@@ -72,12 +72,12 @@ class Teams implements ITeams {
     this.blue.positions.fillAll(blueFirstPlayer, this.blue.name);
   }
 
-  public emptyPositionsOnPlayerTeamChange(player: CustomPlayer): void {
+  public emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer): void {
     this.red.positions.emptyPositionsOnPlayerTeamChange(player, this.red);
     this.blue.positions.emptyPositionsOnPlayerTeamChange(player, this.blue);
   }
 
-  public removePlayerFromPositions(player: CustomPlayer): void {
+  public removePlayerFromPositions(player: HaxRugbyPlayer): void {
     this.red.positions.removePlayerFromPositions(player, this.red);
     this.blue.positions.removePlayerFromPositions(player, this.blue);
   }

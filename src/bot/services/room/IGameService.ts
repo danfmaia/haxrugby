@@ -1,6 +1,6 @@
 import { IPlayerObject, IPosition, TeamID } from 'inversihax';
 
-import { CustomPlayer } from '../../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
@@ -38,16 +38,16 @@ export interface IGameService {
 
   // game event handlers
   handleGameTick(): void;
-  handleGameStart(byPlayer: CustomPlayer): void;
-  handleGameStop(byPlayer: CustomPlayer): void;
-  handleGamePause(byPlayer: CustomPlayer): void;
-  handleGameUnpause(byPlayer: CustomPlayer): void;
+  handleGameStart(byPlayer: HaxRugbyPlayer): void;
+  handleGameStop(byPlayer: HaxRugbyPlayer): void;
+  handleGamePause(byPlayer: HaxRugbyPlayer): void;
+  handleGameUnpause(byPlayer: HaxRugbyPlayer): void;
 
   // player event handlers
   handlePlayerJoin(player: IPlayerObject): void;
-  handlePlayerLeave(player: CustomPlayer): void;
-  handlePlayerTeamChange(player: CustomPlayer): void;
-  handlePlayerBallKick(player: CustomPlayer): void;
+  handlePlayerLeave(player: HaxRugbyPlayer): void;
+  handlePlayerTeamChange(player: HaxRugbyPlayer): void;
+  handlePlayerBallKick(player: HaxRugbyPlayer): void;
 
   handleTeamGoal(team: TeamID): void;
 
@@ -55,8 +55,8 @@ export interface IGameService {
    *  OWN METHODS
    */
 
-  initializeMatch(player?: CustomPlayer): void;
-  cancelMatch(player: CustomPlayer, callback?: () => void): void;
+  initializeMatch(player?: HaxRugbyPlayer): void;
+  cancelMatch(player: HaxRugbyPlayer, callback?: () => void): void;
 
   getLastWinner(): TeamEnum | null | 0;
 }

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import PositionEnum from '../enums/PositionEnum';
-import { CustomPlayer } from '../models/player/CustomPlayer';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
 function timeout(ms: number, callback: () => void): void {
   const timeout = setTimeout(() => {
@@ -69,7 +69,7 @@ function getPositionString(position: PositionEnum): string {
   }
 }
 
-function getPlayerNameAndId(player: CustomPlayer): string {
+function getPlayerNameAndId(player: HaxRugbyPlayer): string {
   return `${player.name} (ID: ${player.id})`;
 }
 
