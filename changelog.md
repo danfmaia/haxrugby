@@ -1,12 +1,16 @@
 ## CHANGELOG
 
+### v0.8b:
+
+- Adiciona um kick rate limit;
+- Tentativa de correção do novo erro do Try;
+- Adiciona o comando !bb;
+
 ### v0.8a:
 
 - Adiciona o comando !clearban;
 - Adiciona as opções `x2`, `x3` e `x4` ao comando `!rr` (Exemplo: `!rr x3`);
 - Adicionadas mensagens periódicas de ajuda para começar nova partida (!rr).
-- Adiciona um kick rate limit;
-- Tentativa de correção do novo erro do Try;
 
 ### v0.8:
 

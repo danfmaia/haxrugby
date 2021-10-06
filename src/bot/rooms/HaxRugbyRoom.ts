@@ -73,6 +73,10 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
     });
 
     this.onPlayerKicked.addHandler((player, reason, ban, byPlayer) => {
+      if (reason === '!bb') {
+        return;
+      }
+
       const playerNameAndId: string = Util.getPlayerNameAndId(player);
       const byPlayerNameAndId: string = Util.getPlayerNameAndId(byPlayer);
 
@@ -81,7 +85,6 @@ export class HaxRugbyRoom extends RoomBase<CustomPlayer> implements IHaxRugbyRoo
           console.log(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
         } else {
           console.log(`${playerNameAndId} foi kickado pelo bot.`);
-          console.log(`Motivo: ${reason}.`);
         }
       } else {
         if (byPlayer.id > 0) {

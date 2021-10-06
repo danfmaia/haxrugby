@@ -33,6 +33,7 @@ import { KickerCommand } from './commands/conversion/KickerCommand';
 import { GoalkeeperCommand } from './commands/conversion/GoalkeeperCommand';
 import { PlaceBallCommand } from './commands/conversion/PlaceBallCommand';
 import { ClearBanCommand } from './commands/admin/ClearBanCommand';
+import { LeaveCommand } from './commands/LeaveCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -40,6 +41,7 @@ import { ClearBanCommand } from './commands/admin/ClearBanCommand';
 // PhysicsCommand;
 
 HelpCommand;
+LeaveCommand;
 
 AdminCommand;
 PasswordCommand;
@@ -65,7 +67,7 @@ FacebookCommand;
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
     roomName: `${ROOM_TITLE} ${APP_VERSION}`,
-    public: true,
+    public: false,
     // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: true,
     maxPlayers: 15,
