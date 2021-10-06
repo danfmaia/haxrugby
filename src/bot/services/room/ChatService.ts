@@ -70,6 +70,10 @@ export default class ChatService implements IChatService {
     this.room.sendAnnouncement(message, playerId, colors.yellow, 'bold', sound);
   }
 
+  public sendBlueBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.blue, 'bold', sound);
+  }
+
   private sendSpace(playerId?: number) {
     this.sendNormalAnnouncement('', 0, playerId);
   }
@@ -147,11 +151,11 @@ export default class ChatService implements IChatService {
   }
 
   public sendNewMatchHelp(): void {
-    this.sendYellowBoldAnnouncement(
-      'Use !rr ou !rr x2/x3/x4 para iniciar uma nova partida! Ex.: !rr x4',
+    this.sendBlueBoldAnnouncement(
+      'Use !rr ou !rr x2/x3/x4 para iniciar uma nova partida!   Exemplo: !rr x4',
       2,
     );
-    this.sendYellowAnnouncement('Apenas admins podem usar esse comando.');
+    this.sendBlueAnnouncement('Apenas admins podem usar esse comando.');
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {

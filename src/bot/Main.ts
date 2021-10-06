@@ -34,6 +34,7 @@ import { GoalkeeperCommand } from './commands/conversion/GoalkeeperCommand';
 import { BallCommand } from './commands/conversion/BallCommand';
 import { ClearBanCommand } from './commands/admin/ClearBanCommand';
 import { LeaveCommand } from './commands/LeaveCommand';
+import { CancelMatchCommand } from './commands/game/CancelMatchCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -48,6 +49,7 @@ PasswordCommand;
 ClearBanCommand;
 
 NewMatchCommand;
+CancelMatchCommand;
 ScoreCommand;
 SetScoreCommand;
 

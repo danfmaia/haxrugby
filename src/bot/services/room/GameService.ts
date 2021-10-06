@@ -76,6 +76,10 @@ export default class GameService implements IGameService {
     this.teams = new Teams(this.chatService);
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
 
+    this.sendNewMatchHelpPeriodically();
+  }
+
+  private sendNewMatchHelpPeriodically() {
     Util.interval(0.5 * MINUTE_IN_MS, () => {
       if (this.isMatchInProgress === false) {
         this.chatService.sendNewMatchHelp();
@@ -295,13 +299,13 @@ export default class GameService implements IGameService {
     );
   }
 
-  public cancelMatch(player: CustomPlayer, callback: () => void): void {
+  public cancelMatch(player: CustomPlayer, callback?: () => void): void {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
     Util.timeout(3500, () => {
       this.room.stopGame();
-      callback();
+      if (callback) callback();
     });
 
     this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);

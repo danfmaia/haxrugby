@@ -18,10 +18,9 @@ function timeoutAsync(ms: number, callback: () => void): Promise<unknown> {
   });
 }
 
-function interval(ms: number, callback: () => void): void {
-  const interval = setInterval(() => {
+function interval(ms: number, callback: () => void): number {
+  return setInterval(() => {
     callback();
-    clearInterval(interval);
   }, ms);
 }
 
