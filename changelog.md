@@ -5,6 +5,8 @@
 - Adiciona o comando !clearban;
 - Adiciona as opções `x2`, `x3` e `x4` ao comando `!rr` (Exemplo: `!rr x3`);
 - Adicionadas mensagens periódicas de ajuda para começar nova partida (!rr).
+- Adiciona um kick rate limit;
+- Tentativa de correção do novo erro do Try;
 
 ### v0.8:
 
@@ -17,7 +19,7 @@
 
 - Corrigido o erro do Try que não era Try;
 - Corrigido alerta "Safety permitido." sendo disparado na ocasião de um Try na linha de gol;
-- _[Teste pendente]_ Corrigido o erro do Safety (ao invés de Try) sendo dado quando a bola entra no in-goal sendo conduzida simultaneamente pelo ataque e pela defesa;
+- Corrigido o erro do Safety (ao invés de Try) sendo dado quando a bola entra no in-goal sendo conduzida simultaneamente pelo ataque e pela defesa;
 - Criado comando para alterar o placar (`!set-score`);
 - Aprimorados comandos existentes;
 - Retirado o player do host;
