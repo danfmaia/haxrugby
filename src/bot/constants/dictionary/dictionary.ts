@@ -1,5 +1,5 @@
 import { lang, LanguageEnum } from '../appConfig';
-import { APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
+import { APP_MINOR_VERSION, APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
 export const _1: string = '   ';
@@ -10,7 +10,7 @@ const ptBr: DictionaryKeys = {
   MSG_GREETING_1: `Bem vindo(a) ao ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GREETING_2:
     'Ainda estamos em desenvolvimento! Se encontrar bugs, relate no canal #bugs do nosso Discord (!dc).',
-  MSG_GREETING_3: `Na versão ${APP_VERSION} lançamos a conversão de 2 pontos! Com isso, o Try passa a valer apenas 5 pontos, como no Rugby de verdade.`,
+  MSG_GREETING_3: `Na versão ${APP_MINOR_VERSION} lançamos a 𝗰𝗼𝗻𝘃𝗲𝗿𝘀ã𝗼 𝗱𝗲 𝟮 𝗽𝗼𝗻𝘁𝗼𝘀!`,
   MSG_GREETING_4: 'Use o comando !regras para ver o resumo das regras do jogo.',
   MSG_GREETING_5: 'Use o comando !help ou !h para ver a lista de comandos disponíveis.',
 
@@ -74,10 +74,10 @@ const ptBr: DictionaryKeys = {
     SCORE: _2 + '!s ou !score ou !placar',
     SCORE_DESCRIPTION: _3 + 'Exibe o tempo e placar da partida.',
 
-    KICKER: _2 + '!k ou !kicker [me/<#ID_do_jogador>]',
+    KICKER: _2 + '!k ou !k me ou !k #<ID_do_jogador>',
     KICKER_DESCRIPTION: _3 + 'Consulta ou altera o Kicker do time.',
 
-    GOALKEEPER: _2 + '!gk ou !goalkeeper [me/<#ID_do_jogador>]',
+    GOALKEEPER: _2 + '!gk ou !gk me ou !gk #<ID_do_jogador>',
     GOALKEEPER_DESCRIPTION: _3 + 'Consulta ou altera o GK do time.',
 
     BALL: _2 + 'b ou B',

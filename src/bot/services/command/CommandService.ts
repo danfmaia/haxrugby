@@ -88,8 +88,14 @@ class CommandService implements ICommandService {
 
     if (currentPlayer) {
       if (currentPlayer.id !== player.id) {
+        let command: string;
+        if (position === PositionEnum.KICKER) {
+          command = '`!k me`';
+        } else {
+          command = '`!gk me`';
+        }
         this.chatService.sendNormalAnnouncement(
-          `${currentPlayer.name} é o ${positionString} do ${team.name}.`,
+          `${currentPlayer.name} é o ${positionString} do ${team.name}. Use ${command} para reivindicar a posição.`,
           0,
           player.id,
         );
@@ -103,7 +109,7 @@ class CommandService implements ICommandService {
     } else {
       this.chatService.sendNormalAnnouncement(`O ${team.name} está sem ${positionString}!`);
       this.chatService.sendNormalAnnouncement(
-        `O ${team.name} está sem ${positionString}! Use \`!gk me\` ou \`!gk <#ID_do_jogador>\` para definir um ${positionString} para o time.`,
+        `O ${team.name} está sem ${positionString}! Use \`!gk me\` ou \`!gk #<ID_do_jogador>\` para definir um ${positionString} para o time.`,
       );
     }
   }

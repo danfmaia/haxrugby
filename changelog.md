@@ -2,7 +2,8 @@
 
 ### v0.8c (_Loading..._):
 
-- Corrigido o erro do `!k`e `!gk` quando seleciona um jogador com `#`;
+- Alterado o kick rate limit para 10/60/3;
+- Corrigido o erro do `!k` e `!gk` quando seleciona um jogador com `#`;
 - Correções e melhorias em diversas mensagens do bot;
 - _Loading..._
 
