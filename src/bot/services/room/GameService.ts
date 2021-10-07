@@ -292,20 +292,24 @@ export default class GameService implements IGameService {
       this.chatService.sendNewMatchHelp();
     });
 
+    const remainingTimeString = Util.getRemainingTimeString(this.remainingTime);
+
     this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
     this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
-    this.chatService.sendNormalAnnouncement(
-      `Tempo restante: ${Util.getRemainingTimeString(this.remainingTime)}◊`,
-    );
+    if (this.remainingTime > 0) {
+      this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} restante`);
+    } else {
+      this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} do overtime`);
+    }
   }
 
-  public cancelMatch(player: HaxRugbyPlayer, callback?: () => void): void {
+  public cancelMatch(player: HaxRugbyPlayer, restartMatch?: () => void): void {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
     Util.timeout(3500, () => {
       this.room.stopGame();
-      if (callback) callback();
+      if (restartMatch) restartMatch();
     });
 
     this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
@@ -315,8 +319,10 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(
       `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
     );
-    this.chatService.sendNormalAnnouncement('');
-    this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
+    this.chatService.sendSpace();
+    if (restartMatch) {
+      this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
+    }
   }
 
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {

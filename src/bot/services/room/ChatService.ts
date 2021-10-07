@@ -24,6 +24,9 @@ export interface IChatService {
   sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
   sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+  sendBlueBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+
+  sendSpace(playerId?: number): void;
 
   sendMatchStatus(sound?: number, playerId?: number): void;
   announceDefRec(didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal, isDefRec: boolean): void;
@@ -51,7 +54,7 @@ export default class ChatService implements IChatService {
   }
 
   public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.haxruGreen, undefined, sound);
+    this.room.sendAnnouncement(message, playerId, colors.haxRugbyGreen, undefined, sound);
   }
 
   public sendYellowAnnouncement(message: string, sound: number = 0, playerId?: number): void {
@@ -63,7 +66,7 @@ export default class ChatService implements IChatService {
   }
 
   public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.haxruGreen, 'bold', sound);
+    this.room.sendAnnouncement(message, playerId, colors.haxRugbyGreen, 'bold', sound);
   }
 
   public sendYellowBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
@@ -74,7 +77,7 @@ export default class ChatService implements IChatService {
     this.room.sendAnnouncement(message, playerId, colors.blue, 'bold', sound);
   }
 
-  private sendSpace(playerId?: number) {
+  public sendSpace(playerId?: number): void {
     this.sendNormalAnnouncement('', 0, playerId);
   }
 
@@ -151,17 +154,17 @@ export default class ChatService implements IChatService {
   }
 
   public sendNewMatchHelp(): void {
-    this.sendBlueBoldAnnouncement(
+    this.sendBoldAnnouncement(
       'Use !rr ou !rr x2/x3/x4 para iniciar uma nova partida!   Exemplo: !rr x4',
       2,
     );
-    this.sendBlueAnnouncement('Apenas admins podem usar esse comando.');
+    this.sendNormalAnnouncement('Apenas admins podem usar esse comando.');
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {
     this.sendSinglePromoLink(LinkEnum.RULES, sound, playerId);
     this.sendSinglePromoLink(LinkEnum.DISCORD, 0, playerId);
-    this.sendSinglePromoLink(LinkEnum.FACEBOOK, 0, playerId);
+    // this.sendSinglePromoLink(LinkEnum.FACEBOOK, 0, playerId);
   }
 
   public sendMainPromoLinksForSpectators(): void {
@@ -174,12 +177,24 @@ export default class ChatService implements IChatService {
   public sendSinglePromoLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
     switch (link) {
       case LinkEnum.RULES:
-        this.sendBoldAnnouncement('REGRAS do jogo:', sound, playerId);
-        this.sendNormalAnnouncement('    sites.google.com/site/haxrugby/regras', 0, playerId);
+        this.room.sendAnnouncement('REGRAS do jogo:', playerId, colors.haxRugbyBallDark, 'bold', 0);
+        this.room.sendAnnouncement(
+          '    sites.google.com/site/haxrugby/regras',
+          playerId,
+          colors.haxRugbyBallDark,
+          undefined,
+          0,
+        );
         return;
       case LinkEnum.DISCORD:
-        this.sendBoldAnnouncement('Server no DISCORD:', sound, playerId);
-        this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId);
+        this.room.sendAnnouncement('Server no DISCORD:', playerId, colors.discordPurple, 'bold', 0);
+        this.room.sendAnnouncement(
+          '    discord.io/HaxRugby',
+          playerId,
+          colors.discordPurple,
+          undefined,
+          0,
+        );
         return;
       case LinkEnum.FACEBOOK:
         this.sendBoldAnnouncement('Grupo no FACEBOOK:', sound, playerId);
@@ -195,19 +210,24 @@ export default class ChatService implements IChatService {
     this.sendSpace(playerId);
 
     this.sendSingleRule(RuleEnum.TRY, 0, playerId);
-    this.sendSpace(playerId);
-
     this.sendSingleRule(RuleEnum.FIELD_GOAL, 0, playerId);
-    this.sendSpace(playerId);
-
     this.sendSingleRule(RuleEnum.SAFETY, 0, playerId);
-    this.sendSpace(playerId);
-
     this.sendSingleRule(RuleEnum.OFFSIDE, 0, playerId);
-    this.sendSpace(playerId);
 
-    this.room.sendAnnouncement(MSG_RULES.POST_RULES[0], playerId, colors.haxruGreen, 'italic', 0);
-    this.room.sendAnnouncement(MSG_RULES.POST_RULES[1], playerId, colors.haxruGreen, 'italic', 0);
+    this.room.sendAnnouncement(
+      MSG_RULES.POST_RULES[0],
+      playerId,
+      colors.haxRugbyGreen,
+      'italic',
+      0,
+    );
+    this.room.sendAnnouncement(
+      MSG_RULES.POST_RULES[1],
+      playerId,
+      colors.haxRugbyGreen,
+      'italic',
+      0,
+    );
     this.sendSpace(playerId);
   }
 
@@ -218,24 +238,28 @@ export default class ChatService implements IChatService {
         MSG_RULES.TRY.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
+        this.sendSpace(playerId);
         return;
       case RuleEnum.FIELD_GOAL:
         this.sendBoldAnnouncement(MSG_RULES.FIELD_GOAL_TITLE, sound, playerId);
         MSG_RULES.FIELD_GOAL.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
+        this.sendSpace(playerId);
         return;
       case RuleEnum.SAFETY:
         this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
         MSG_RULES.SAFETY.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
+        this.sendSpace(playerId);
         return;
       case RuleEnum.OFFSIDE:
         this.sendBoldAnnouncement(MSG_RULES.OFFSIDE_TITLE, sound, playerId);
         MSG_RULES.OFFSIDE.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
+        this.sendSpace(playerId);
         return;
       default:
     }
@@ -273,8 +297,8 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
 
-    this.sendBoldAnnouncement(MSG_HELP.PLACE_BALL, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.PLACE_BALL_DESCRIPTION, 0, playerId);
+    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
 
     this.sendBoldAnnouncement(MSG_HELP.RULES, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.RULES_DESCRIPTION, 0, playerId);
@@ -299,7 +323,7 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
 
-    this.sendBoldAnnouncement(MSG_HELP.PLACE_BALL, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.PLACE_BALL_DESCRIPTION, 0, playerId);
+    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
   }
 }

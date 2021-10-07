@@ -1,13 +1,20 @@
 ## CHANGELOG
 
-### v0.8b (_Loading..._):
+### v0.8c (_Loading..._):
+
+- Corrigido o erro do `!k`e `!gk` quando seleciona um jogador com `#`;
+- Correções e melhorias em diversas mensagens do bot;
+- _Loading..._
+
+### v0.8b:
 
 - Adicionado um kick rate limit de 10/10/15 (ainda será reajustado no futuro);
 - Tentativa de correção do novo erro do Try;
 - Adicionado o comando `!bb`;
 - O jogador agora é imediatamente parado após usar o comando de reposicionar bola;
 - Mensagens `b`, `B` e `!B` agora também acionam o comando de reposicionar bola;
-- _Loading..._
+- Adicionado comando de cancelar partida (`!cancel`);
+- Adicionado comando para evitar ser o único admin da sala (`!only-admin`).
 
 ### v0.8a:
 

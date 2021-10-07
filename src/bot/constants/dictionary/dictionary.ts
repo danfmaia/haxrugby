@@ -2,6 +2,10 @@ import { lang, LanguageEnum } from '../appConfig';
 import { APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
+export const _1: string = '   ';
+export const _2: string = '      ';
+export const _3: string = '         ';
+
 const ptBr: DictionaryKeys = {
   MSG_GREETING_1: `Bem vindo(a) ao ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GREETING_2:
@@ -14,23 +18,26 @@ const ptBr: DictionaryKeys = {
     TITLE: 'Resumo das REGRAS do jogo:',
     TRY_TITLE: 'TRY     !try',
     TRY: [
-      'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
-      'O in-goal é a região do campo atrás da linha de gol de cada time.',
-      'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
+      _1 + 'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
+      _1 + 'O in-goal é a região do campo atrás da linha de gol de cada time.',
+      _1 + 'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
     ],
     FIELD_GOAL_TITLE: 'FIELD GOAL (FG)     !fg !gol',
     FIELD_GOAL: [
-      'É o tento secundário do rugby. Vale 3 pontos.',
-      'Só pode ser feito de fora da pequena área. Qualquer contato na bola dentro dessa área invalida o Field Goal.',
+      _1 + 'É o tento secundário do rugby. Vale 3 pontos.',
+      _1 +
+        'Só pode ser feito de fora da pequena área. Qualquer contato na bola dentro dessa área invalida o Field Goal.',
     ],
     SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
     SAFETY: [
-      'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
-      'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
-      'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
+      _1 + 'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
+      _1 +
+        'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
+      _1 +
+        'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
     ],
     OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
-    OFFSIDE: ['As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],
+    OFFSIDE: [_1 + 'As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,
       'Para ler as regras completas, acesse sites.google.com/site/haxrugby/regras',
@@ -40,51 +47,53 @@ const ptBr: DictionaryKeys = {
   MSG_HELP: {
     TITLE: 'LISTA DE COMANDOS:',
 
-    ADMIN_COMMANDS: '  Administrativos:',
+    ADMIN_COMMANDS: _1 + 'Administrativos:',
 
-    NEW_MATCH: '    !rr ou !rr x2/x3/x4     Exemplo: !rr x4',
+    NEW_MATCH: _2 + '!rr ou !rr x2/x3/x4     Exemplo: !rr x4',
     NEW_MATCH_DESCRIPTION:
+      _3 +
       'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, altera a configuração da partida.',
 
-    // NEW_MATCH: '    !new ou !rr [<tempo>] [<pontos>] [small/normal] [red/blue]',
-    // NEW_MATCH_DESCRIPTION:
-    //   'Cancela a partida atual (se houver) e começa uma nova partida. Opcionalmente, configura os limites de tempo e de pontos, o tamanho de mapa da nova partida e das próximas, e a posse de bola inicial. Só pode ser usado por admins.',
-
-    ADMIN: '    !admin <senha> [reclaim]',
+    ADMIN: _2 + '!admin <senha> [reclaim]',
     ADMIN_DESCRIPTION:
+      _3 +
       'Concede admin para o jogador. Se usar o argumento `reclaim`, retira o admin de todos os demais jogadores da sala.',
 
-    PASSWORD: '    !pw ou !password <senha> [on/off]',
+    PASSWORD: _2 + '!pw ou !password <senha> [on/off]',
     PASSWORD_DESCRIPTION:
+      _3 +
       'Coloca ou retira senha na/da sala. Se o jogador não é admin, recebe admin. Omitir o 2º argumento funciona como `on`.',
 
-    SET_SCORE: '    !set-score <pontos_do_red> <pontos_do_blue> [red/blue] [<tempo>]',
+    SET_SCORE: _2 + '!set-score <pontos_do_red> <pontos_do_blue> [red/blue] [<tempo>]',
     SET_SCORE_DESCRIPTION:
+      _3 +
       'Alterar o placar da partida e, opcionalmente, o mapa de reinício e o tempo restante. Formato do tempo: m:ss',
 
-    OTHER_COMMANDS: '  Outros:',
+    OTHER_COMMANDS: _1 + 'Outros:',
 
-    SCORE: '    !s ou !score ou !placar',
-    SCORE_DESCRIPTION: 'Exibe o tempo e placar da partida.',
+    SCORE: _2 + '!s ou !score ou !placar',
+    SCORE_DESCRIPTION: _3 + 'Exibe o tempo e placar da partida.',
 
-    KICKER: '    !k ou !kicker [me/<#ID_do_jogador>]',
-    KICKER_DESCRIPTION: 'Consulta ou altera o Kicker do time.',
+    KICKER: _2 + '!k ou !kicker [me/<#ID_do_jogador>]',
+    KICKER_DESCRIPTION: _3 + 'Consulta ou altera o Kicker do time.',
 
-    GOALKEEPER: '    !gk ou !goalkeeper [me/<#ID_do_jogador>]',
-    GOALKEEPER_DESCRIPTION: 'Consulta ou altera o GK do time.',
+    GOALKEEPER: _2 + '!gk ou !goalkeeper [me/<#ID_do_jogador>]',
+    GOALKEEPER_DESCRIPTION: _3 + 'Consulta ou altera o GK do time.',
 
-    PLACE_BALL: '    b ou B',
-    PLACE_BALL_DESCRIPTION: 'Reposiciona a bola para o chute de conversão.',
+    BALL: _2 + 'b ou B',
+    BALL_DESCRIPTION: _3 + 'Reposiciona a bola para o chute de conversão.',
 
-    RULES: '    !r ou !regras ou !rules',
-    RULES_DESCRIPTION: 'Exibe o resumo das regras do jogo.',
+    RULES: _2 + '!r ou !regras ou !rules',
+    RULES_DESCRIPTION: _3 + 'Exibe o resumo das regras do jogo.',
 
-    LINKS: '    !links ou !link ou !promo',
+    LINKS: _2 + '!links ou !link ou !promo',
     LINKS_DESCRIPTION:
+      _3 +
       'Exibe o link das regras, do Discord e do grupo no Facebook. Se for admin, exibe para todos os jogadores.',
 
-    HELP: '    !h ou !help ou !ajuda [forall]',
+    HELP: _2 + '!h ou !help ou !ajuda [forall]',
     HELP_DESCRIPTION:
+      _3 +
       'Exibe essa lista de comandos. Se for admin e usar o argumento `forall`, exibe a lista para todos os jogadores.',
   },
 

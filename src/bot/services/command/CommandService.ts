@@ -67,7 +67,7 @@ class CommandService implements ICommandService {
       }
       console.log('passed 3');
       const selectedPlayer = this.room.getPlayer(selectedPlayerId);
-      if (selectedPlayer.team !== player.team) {
+      if (!selectedPlayer || selectedPlayer.team !== player.team) {
         this.chatService.sendNormalAnnouncement('Jogador inválido!', 0, player.id);
         return;
       }

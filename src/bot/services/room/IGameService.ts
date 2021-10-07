@@ -56,7 +56,7 @@ export interface IGameService {
    */
 
   initializeMatch(player?: HaxRugbyPlayer): void;
-  cancelMatch(player: HaxRugbyPlayer, callback?: () => void): void;
+  cancelMatch(player: HaxRugbyPlayer, restartMatch?: () => void): void;
 
   getLastWinner(): TeamEnum | null | 0;
 }

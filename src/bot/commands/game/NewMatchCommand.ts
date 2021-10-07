@@ -36,7 +36,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const arg2 = args[2];
     const arg3 = args[3];
 
-    const callback = () => {
+    const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
       if (arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
@@ -89,9 +89,9 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     };
 
     if (this.gameService.isMatchInProgress) {
-      this.gameService.cancelMatch(player, callback);
+      this.gameService.cancelMatch(player, restartMatch);
     } else {
-      callback();
+      restartMatch();
     }
   }
 
