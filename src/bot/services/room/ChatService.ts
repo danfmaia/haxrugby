@@ -19,12 +19,12 @@ import Util from '../../util/Util';
 import { IGameService } from './IGameService';
 
 export interface IChatService {
-  sendNormalAnnouncement(message: string, sound?: number, playerId?: number): void;
-  sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendNormalAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
+  sendBoldAnnouncement(message: string, sound: number, playerId?: number, color?: number): void;
   sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
-  sendBoldAnnouncement(message: string, sound: number, playerId?: number): void;
-  sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
   sendBlueBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+  sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
 
   sendSpace(playerId?: number): void;
 
@@ -53,24 +53,34 @@ export default class ChatService implements IChatService {
     this.gameService = gameService;
   }
 
-  public sendNormalAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.haxRugbyGreen, undefined, sound);
+  public sendNormalAnnouncement(
+    message: string,
+    sound: number = 0,
+    playerId?: number,
+    color?: number,
+  ): void {
+    this.room.sendAnnouncement(message, playerId, color || colors.haxRugbyGreen, undefined, sound);
+  }
+
+  public sendBoldAnnouncement(
+    message: string,
+    sound: number = 0,
+    playerId?: number,
+    color?: number,
+  ): void {
+    this.room.sendAnnouncement(message, playerId, color || colors.haxRugbyGreen, 'bold', sound);
   }
 
   public sendYellowAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, colors.yellow, undefined, sound);
   }
 
-  public sendBlueAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.blue, undefined, sound);
-  }
-
-  public sendBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.haxRugbyGreen, 'bold', sound);
-  }
-
   public sendYellowBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, colors.yellow, 'bold', sound);
+  }
+
+  public sendBlueAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.blue, undefined, sound);
   }
 
   public sendBlueBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
@@ -136,7 +146,7 @@ export default class ChatService implements IChatService {
 
   public sendGreetingsToIncomingPlayer(playerId: number): void {
     Util.timeout(1000, () => {
-      this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId);
+      this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId, colors.haxRugbyBall);
       this.sendYellowAnnouncement(MSG_GREETING_2, 0, playerId);
       this.sendNormalAnnouncement(MSG_GREETING_3, 0, playerId);
       this.sendBlueAnnouncement(MSG_GREETING_4, 0, playerId);
@@ -177,23 +187,22 @@ export default class ChatService implements IChatService {
   public sendSinglePromoLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
     switch (link) {
       case LinkEnum.RULES:
-        this.room.sendAnnouncement('REGRAS do jogo:', playerId, colors.haxRugbyBallDark, 'bold', 0);
+        this.room.sendAnnouncement('REGRAS do jogo:', playerId, colors.haxRugbyBall, 'bold', 0);
         this.room.sendAnnouncement(
           '    sites.google.com/site/haxrugby/regras',
           playerId,
-          colors.haxRugbyBallDark,
+          colors.haxRugbyBall,
           undefined,
           0,
         );
         return;
       case LinkEnum.DISCORD:
-        this.room.sendAnnouncement('Server no DISCORD:', playerId, colors.discordPurple, 'bold', 0);
-        this.room.sendAnnouncement(
-          '    discord.io/HaxRugby',
+        this.sendBoldAnnouncement('Server no DISCORD:', sound, playerId, colors.discordPurple);
+        this.sendNormalAnnouncement(
+          '    fb.discord.io/HaxRugby',
+          0,
           playerId,
           colors.discordPurple,
-          undefined,
-          0,
         );
         return;
       case LinkEnum.FACEBOOK:
