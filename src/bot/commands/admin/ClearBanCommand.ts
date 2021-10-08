@@ -25,14 +25,14 @@ export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
 
     if (args[0] === 'all') {
       this.room.clearBans();
-      console.log(`${playerNameAndId} tirou o ban de todos os jogadores.`);
+      Util.logMessageWithTime(`${playerNameAndId} tirou o ban de todos os jogadores.`);
       return;
     }
 
     const kickedId = Util.parseNumericInput(args[0]);
     if (kickedId) {
       this.room.clearBan(kickedId);
-      console.log(`${playerNameAndId} tirou o ban do jogador com ID ${kickedId}`);
+      Util.logMessageWithTime(`${playerNameAndId} tirou o ban do jogador com ID ${kickedId}`);
     }
 
     this.room.clearBans();

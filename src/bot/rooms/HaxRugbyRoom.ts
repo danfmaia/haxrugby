@@ -8,8 +8,8 @@ import {
   Types,
 } from 'inversihax';
 import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/Types';
-import { KICK_RATE_LIMIT } from '../constants/constants';
 
+import { KICK_RATE_LIMIT } from '../constants/constants';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
@@ -53,13 +53,19 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
     });
 
     this.onPlayerJoin.addHandler((player) => {
-      console.log(`${player.name} (ID: ${player.id}) entrou na sala.`);
+      const playerTotal = this.getPlayerList().length;
+      Util.logMessageWithTime(
+        `${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`,
+      );
 
       this.gameService.handlePlayerJoin(player);
     });
 
     this.onPlayerLeave.addHandler((player) => {
-      console.log(`${Util.getPlayerNameAndId(player)} saiu da sala.`);
+      const playerTotal = this.getPlayerList().length;
+      Util.logMessageWithTime(
+        `${Util.getPlayerNameAndId(player)} saiu da sala. Total: ${playerTotal}`,
+      );
 
       this.gameService.handlePlayerLeave(player);
     });
@@ -82,20 +88,20 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
 
       if (ban === false) {
         if (byPlayer.id > 0) {
-          console.log(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
+          Util.logMessageWithTime(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
         } else {
-          console.log(`${playerNameAndId} foi kickado pelo bot.`);
+          Util.logMessageWithTime(`${playerNameAndId} foi kickado pelo bot.`);
         }
       } else {
         if (byPlayer.id > 0) {
-          console.log(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
+          Util.logMessageWithTime(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
         } else {
-          console.log(`${playerNameAndId} foi banido pelo bot.`);
+          Util.logMessageWithTime(`${playerNameAndId} foi banido pelo bot.`);
         }
       }
 
       if (reason) {
-        console.log(`Motivo: ${reason}.`);
+        console.log(`    Motivo: ${reason}.`);
       }
     });
 

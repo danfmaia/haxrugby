@@ -58,6 +58,11 @@ function getRemainingTimeString(remainingTimeInMs: number): string {
   return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
 }
 
+function logMessageWithTime(message: string): void {
+  const time = moment().format('HH:mm:ss');
+  console.log(`${time} > ${message}`);
+}
+
 function getPositionString(position: PositionEnum): string {
   switch (position) {
     case PositionEnum.KICKER:
@@ -80,6 +85,7 @@ const Util = {
   parseNumericInput,
   getDurationString,
   getRemainingTimeString,
+  logMessageWithTime,
   getPositionString,
   getPlayerNameAndId,
 };

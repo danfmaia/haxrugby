@@ -30,7 +30,7 @@ export class ExecuteCommandInterceptor
     message.broadcastForward = false;
     message.command.execute(message.sentBy, message.commandParameters);
 
-    console.log(
+    Util.logMessageWithTime(
       `${Util.getPlayerNameAndId(message.sentBy)} executou o comando \`${message.message}\`.`,
     );
 
