@@ -39,7 +39,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
-      if (arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
+      if (arg0 === 'x1' || arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
         updatedMatchConfig = getMatchConfig(arg0);
         const stadium = this.getStadiumFromInput(updatedMatchConfig.stadium);
         if (stadium) {

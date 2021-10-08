@@ -296,10 +296,12 @@ export default class GameService implements IGameService {
 
     this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
     this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
-    if (this.remainingTime > 0) {
-      this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} restante`);
-    } else {
-      this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} do overtime`);
+    if (remainingTimeString !== '00:00') {
+      if (this.remainingTime > 0) {
+        this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} restante`);
+      } else {
+        this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} do overtime`);
+      }
     }
   }
 

@@ -198,12 +198,7 @@ export default class ChatService implements IChatService {
         return;
       case LinkEnum.DISCORD:
         this.sendBoldAnnouncement('Server no DISCORD:', sound, playerId, colors.discordPurple);
-        this.sendNormalAnnouncement(
-          '    fb.discord.io/HaxRugby',
-          0,
-          playerId,
-          colors.discordPurple,
-        );
+        this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId, colors.discordPurple);
         return;
       case LinkEnum.FACEBOOK:
         this.sendBoldAnnouncement('Grupo no FACEBOOK:', sound, playerId);
@@ -324,8 +319,6 @@ export default class ChatService implements IChatService {
   }
 
   public sendConversionHelp(playerId?: number): void {
-    this.sendSpace(playerId);
-
     this.sendBoldAnnouncement(MSG_HELP.KICKER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
 
