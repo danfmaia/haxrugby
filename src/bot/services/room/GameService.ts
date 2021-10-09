@@ -710,9 +710,15 @@ export default class GameService implements IGameService {
 
       let map: string;
       if (this.isTry === TeamEnum.RED) {
-        map = this.stadium.redMaps.getConversion(this.stadium.areaLineX, this.tryY);
+        map = this.stadium.redMaps.getConversion({
+          ballX: this.stadium.areaLineX,
+          tryY: this.tryY,
+        });
       } else {
-        map = this.stadium.blueMaps.getConversion(-this.stadium.areaLineX, this.tryY);
+        map = this.stadium.blueMaps.getConversion({
+          ballX: -this.stadium.areaLineX,
+          tryY: this.tryY,
+        });
       }
 
       this.handleRestartOrFinishing(map, () => {

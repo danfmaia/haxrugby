@@ -26,7 +26,7 @@ const traits = {
   } as TTrait,
 
   [TraitEnum.kickOffBarrier]: {
-    vis: false,
+    vis: true,
     bCoef: 0.1,
     cGroup: ['redKO', 'blueKO'],
     cMask: ['red', 'blue'],
@@ -34,9 +34,18 @@ const traits = {
 
   // custom
 
+  [TraitEnum.null]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: 'ffff00',
+  } as TTrait,
+
   [TraitEnum.playerArea]: {
     vis: false,
     bCoef: 0.1,
+    cMask: ['red', 'blue'],
   } as TTrait,
 
   [TraitEnum.line]: {
@@ -56,18 +65,26 @@ const traits = {
   } as TTrait,
 
   [TraitEnum.redKOBarrier]: {
-    vis: false,
+    vis: true,
     bCoef: 0.1,
     cGroup: ['redKO'],
     cMask: ['red', 'blue'],
+    color: 'ff0000',
   } as TTrait,
 
   [TraitEnum.blueKOBarrier]: {
-    vis: false,
+    vis: true,
     bCoef: 0.1,
     cGroup: ['blueKO'],
     cMask: ['red', 'blue'],
+    color: '0000ff',
   } as TTrait,
+
+  [TraitEnum.powerBoost]: {
+    vis: false,
+    bCoef: -2.4,
+    cMask: ['ball'],
+  },
 };
 
 export default traits;

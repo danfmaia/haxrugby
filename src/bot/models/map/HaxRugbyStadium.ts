@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { BALL_RADIUS } from '../../constants/constants';
+import { BALL_RADIUS, PLAYER_RADIUS } from '../../constants/constants';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TeamEnum from '../../enums/TeamEnum';
 import StadiumService, {
@@ -10,11 +10,13 @@ import StadiumService, {
   getSegment,
   getVertex,
 } from '../../services/StadiumService';
+import MapDimensions from './MapDimensions';
+import TConversionProps from './TConversionProps';
 import traits from './traits';
 
 class HaxRugbyStadium {
   public name: string;
-  public team: TeamEnum;
+  private isConversion: boolean;
 
   public width: number;
   public height: number;
@@ -30,11 +32,14 @@ class HaxRugbyStadium {
   public planes: any;
   public ballPhysics: any;
 
-  private service: StadiumService;
+  private serv: StadiumService | null = null;
 
   constructor(
     name: string,
     team: TeamEnum,
+    convProps: TConversionProps | null,
+
+    dimensions: MapDimensions,
 
     outerWidth: number,
     outerHeight: number,
@@ -49,8 +54,8 @@ class HaxRugbyStadium {
     areaLineX: number,
   ) {
     this.name = name;
-    this.team = team;
-    this.service = new StadiumService(team);
+    this.isConversion = convProps ? true : false;
+    this.serv = new StadiumService(dimensions, team, convProps);
 
     this.width = outerWidth;
     this.height = outerHeight;
@@ -66,16 +71,18 @@ class HaxRugbyStadium {
     };
 
     this.traits = {
-      ballArea: traits.ballArea,
-      goalPost: traits.goalPost,
-      goalNet: traits.goalNet,
-      kickOffBarrier: traits.kickOffBarrier,
+      [TraitEnum.ballArea]: traits.ballArea,
+      [TraitEnum.goalPost]: traits.goalPost,
+      [TraitEnum.goalNet]: traits.goalNet,
+      [TraitEnum.kickOffBarrier]: traits.kickOffBarrier,
 
-      playerArea: traits.playerArea,
-      line: traits.line,
-      fadeLine: traits.fadeLine,
-      redKOBarrier: traits.redKOBarrier,
-      blueKOBarrier: traits.blueKOBarrier,
+      [TraitEnum.null]: traits.null,
+      [TraitEnum.playerArea]: traits.playerArea,
+      [TraitEnum.line]: traits.line,
+      [TraitEnum.fadeLine]: traits.fadeLine,
+      [TraitEnum.redKOBarrier]: traits.redKOBarrier,
+      [TraitEnum.blueKOBarrier]: traits.blueKOBarrier,
+      [TraitEnum.powerBoost]: traits.powerBoost,
     };
 
     this.vertexes = [
@@ -108,15 +115,35 @@ class HaxRugbyStadium {
       getVertex(kickoffLineX, -(height - 5), TraitEnum.fadeLine), // 22
       getVertex(kickoffLineX, height - 5, TraitEnum.fadeLine), // 23
 
-      getVertex(-kickoffLineX, -outerHeight, this.service.getLeftKOBarrierTrait()), // 24
-      getVertex(-kickoffLineX, outerHeight, this.service.getLeftKOBarrierTrait()), // 25
-      getVertex(kickoffLineX, -outerHeight, this.service.getRightKOBarrierTrait()), // 26
-      getVertex(kickoffLineX, outerHeight, this.service.getRightKOBarrierTrait()), // 27
+      getVertex(-kickoffLineX, -outerHeight, this.serv.getLeftKOBarrierTrait()), // 24
+      getVertex(-kickoffLineX, outerHeight, this.serv.getLeftKOBarrierTrait()), // 25
+      getVertex(kickoffLineX, -outerHeight, this.serv.getRightKOBarrierTrait()), // 26
+      getVertex(kickoffLineX, outerHeight, this.serv.getRightKOBarrierTrait()), // 27
 
       getVertex(0, -outerHeight, TraitEnum.kickOffBarrier), // 28
       getVertex(0, outerHeight, TraitEnum.kickOffBarrier), // 29
-      getVertex(0, -(BALL_RADIUS + 2.3), TraitEnum.kickOffBarrier), // 30
-      getVertex(0, BALL_RADIUS + 2.3, TraitEnum.kickOffBarrier), // 31
+
+      this.serv.getTopBallVertex(), // 30
+      this.serv.getBottomBallVertex(), // 31
+
+      getVertex(
+        this.serv.getSignal() * (areaLineX + PLAYER_RADIUS),
+        -outerHeight,
+        TraitEnum.playerArea,
+      ), // 32
+      getVertex(
+        this.serv.getSignal() * (areaLineX + PLAYER_RADIUS),
+        outerHeight,
+        TraitEnum.playerArea,
+      ), // 33
+
+      getVertex(this.serv.getSignal() * goalLineX, -outerHeight, TraitEnum.kickOffBarrier), // 34
+      getVertex(this.serv.getSignal() * goalLineX, -goalPostY, TraitEnum.kickOffBarrier), // 35
+      getVertex(this.serv.getSignal() * goalLineX, goalPostY, TraitEnum.kickOffBarrier), // 36
+      getVertex(this.serv.getSignal() * goalLineX, outerHeight, TraitEnum.kickOffBarrier), // 37
+
+      getVertex(this.serv.getSignal() * width, -outerHeight, TraitEnum.playerArea), // 38
+      getVertex(this.serv.getSignal() * width, outerHeight, TraitEnum.playerArea), // 39
     ];
 
     this.segments = [
@@ -139,14 +166,23 @@ class HaxRugbyStadium {
       getSegment(20, 21, TraitEnum.fadeLine),
       getSegment(22, 23, TraitEnum.fadeLine),
 
-      getSegment(24, 25, this.service.getLeftKOBarrierTrait()),
-      getSegment(26, 27, this.service.getRightKOBarrierTrait()),
+      this.serv.getLeftKOSegment(24, 25),
+      this.serv.getRightKOSegment(26, 27),
 
-      getSegment(28, 29, TraitEnum.kickOffBarrier),
-      getSegment(30, 31, TraitEnum.kickOffBarrier, this.service.getKickOffCurve()),
+      this.serv.getKickOffSegment(28, 29),
+
+      this.serv.getBallSegment(30, 31),
+
+      this.serv.getConversionSegment(32, 33, TraitEnum.playerArea),
+      this.serv.getConversionSegment(34, 37, TraitEnum.playerArea),
+      this.serv.getConversionSegment(38, 39, TraitEnum.playerArea),
     ];
 
-    this.goals = [];
+    if (this.isConversion === null) {
+      this.goals = [];
+    } else {
+      this.goals = [this.serv.getConversionGoal()];
+    }
 
     this.discs = [
       getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
@@ -167,46 +203,29 @@ class HaxRugbyStadium {
     this.ballPhysics = getBallPhysics(BALL_RADIUS);
   }
 
-  public static getBaseStadium(
+  public static getNewStadium(
     name: string,
+    dimensions: MapDimensions,
     team: TeamEnum,
-
-    outerWidth: number,
-    outerHeight: number,
-
-    width: number,
-    height: number,
-
-    goalLineX: number,
-    goalPostY: number,
-    miniArea: number,
-    kickoffLineX: number,
-    areaLineX: number,
-  ): HaxRugbyStadium {
-    return new this(
-      name,
-      team,
-      outerWidth,
-      outerHeight,
-      width,
-      height,
-      goalLineX,
-      goalPostY,
-      miniArea,
-      kickoffLineX,
-      areaLineX,
+    convProps: TConversionProps | null = null,
+  ): string {
+    return JSON.stringify(
+      new HaxRugbyStadium(
+        name,
+        team,
+        convProps,
+        dimensions,
+        dimensions.outerWidth,
+        dimensions.outerHeight,
+        dimensions.width,
+        dimensions.height,
+        dimensions.goalLineX,
+        dimensions.goalPostY,
+        dimensions.miniArea,
+        dimensions.kickoffLineX,
+        dimensions.areaLineX,
+      ),
     );
-  }
-
-  public static getStadium(
-    stadium: HaxRugbyStadium,
-    name: string,
-    team: TeamEnum,
-  ): HaxRugbyStadium {
-    stadium.name = name;
-    stadium.team = team;
-    stadium.service = new StadiumService(team);
-    return stadium;
   }
 }
 

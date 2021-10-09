@@ -1,10 +1,10 @@
 import TeamEnum from '../../enums/TeamEnum';
 import HaxRugbyStadium from '../../models/map/HaxRugbyStadium';
+import MapDimensions from '../../models/map/MapDimensions';
+import TConversionProps from '../../models/map/TConversionProps';
 import THaxRugbyStadiums from '../../models/stadium/THaxRugbyStadiums';
-import blue_getConversion from './blue_getConversion';
-import red_getConversion from './red_getConversion';
 
-export const dimensions = {
+export const DIMENSIONS = {
   outerWidth: 440,
   outerHeight: 200,
 
@@ -18,27 +18,47 @@ export const dimensions = {
   areaLineX: 200,
 };
 
-const baseStadium = HaxRugbyStadium.getBaseStadium(
-  'S-HaxRugby v9 by JP',
+const dimensions = new MapDimensions(
+  DIMENSIONS.outerWidth,
+  DIMENSIONS.outerHeight,
+  DIMENSIONS.width,
+  DIMENSIONS.height,
+  DIMENSIONS.goalLineX,
+  DIMENSIONS.goalPostY,
+  DIMENSIONS.miniArea,
+  DIMENSIONS.kickoffLineX,
+  DIMENSIONS.areaLineX,
+);
+
+const red_kickoff = HaxRugbyStadium.getNewStadium(
+  'S-HaxRugby v9 R by JP',
+  dimensions,
   TeamEnum.RED,
-  dimensions.outerWidth,
-  dimensions.outerHeight,
-  dimensions.width,
-  dimensions.height,
-  dimensions.goalLineX,
-  dimensions.goalPostY,
-  dimensions.miniArea,
-  dimensions.kickoffLineX,
-  dimensions.areaLineX,
 );
 
-const red_kickoff = JSON.stringify(
-  HaxRugbyStadium.getStadium(baseStadium, 'S-HaxRugby v9 R by JP', TeamEnum.RED),
+function red_getConversion(conversionProps: TConversionProps): string {
+  return HaxRugbyStadium.getNewStadium(
+    'S-HaxRugby v9 RC by JP',
+    dimensions,
+    TeamEnum.RED,
+    conversionProps,
+  );
+}
+
+const blue_kickoff = HaxRugbyStadium.getNewStadium(
+  'S-HaxRugby v9 B by JP',
+  dimensions,
+  TeamEnum.BLUE,
 );
 
-const blue_kickoff = JSON.stringify(
-  HaxRugbyStadium.getStadium(baseStadium, 'S-HaxRugby v9 B by JP', TeamEnum.BLUE),
-);
+function blue_getConversion(conversionProps: TConversionProps): string {
+  return HaxRugbyStadium.getNewStadium(
+    'S-HaxRugby v9 BC by JP',
+    dimensions,
+    TeamEnum.BLUE,
+    conversionProps,
+  );
+}
 
 const redMaps: THaxRugbyStadiums = {
   kickoff: red_kickoff,

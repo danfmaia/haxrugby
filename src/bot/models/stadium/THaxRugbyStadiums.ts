@@ -1,6 +1,8 @@
+import TConversionProps from '../map/TConversionProps';
+
 type THaxRugbyStadiums = {
   kickoff: string;
-  getConversion: (ballX: number, tryY: number) => string;
+  getConversion: (conversionProps: TConversionProps) => string;
 };
 
 export default THaxRugbyStadiums;

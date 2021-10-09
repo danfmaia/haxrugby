@@ -70,9 +70,9 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
     }
 
     if (this.gameService.isConversionAttempt === TeamEnum.RED) {
-      map = stadium.redMaps.getConversion(newBallX, this.gameService.tryY);
+      map = stadium.redMaps.getConversion({ ballX: newBallX, tryY: this.gameService.tryY });
     } else {
-      map = stadium.blueMaps.getConversion(newBallX, this.gameService.tryY);
+      map = stadium.blueMaps.getConversion({ ballX: newBallX, tryY: this.gameService.tryY });
     }
 
     this.gameService.isReplacingBall = true;
