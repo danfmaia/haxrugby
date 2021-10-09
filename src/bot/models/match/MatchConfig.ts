@@ -1,5 +1,5 @@
 import { MINUTE_IN_MS } from '../../constants/constants';
-import StadiumEnum from '../../enums/StadiumEnum';
+import MapEnum from '../../enums/stadium/MapEnum';
 
 export interface IMatchConfig {
   getTimeLimitInMs(): number;
@@ -8,9 +8,9 @@ export interface IMatchConfig {
 class MatchConfig implements IMatchConfig {
   public timeLimit: number;
   public scoreLimit: number;
-  public stadium: StadiumEnum;
+  public stadium: MapEnum;
 
-  constructor(timeLimit: number, scoreLimit: number, stadium: StadiumEnum) {
+  constructor(timeLimit: number, scoreLimit: number, stadium: MapEnum) {
     this.timeLimit = timeLimit;
     this.scoreLimit = scoreLimit;
     this.stadium = stadium;

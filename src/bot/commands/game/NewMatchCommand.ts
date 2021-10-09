@@ -4,7 +4,7 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import StadiumEnum from '../../enums/StadiumEnum';
+import MapEnum from '../../enums/stadium/MapEnum';
 import smallStadium from '../../singletons/smallStadium';
 import HaxRugbyMaps from '../../models/stadium/HaxRugbyMaps';
 import normalStadium from '../../singletons/normalStadium';
@@ -100,9 +100,9 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
       return null;
     }
 
-    if (stadiumInput.toUpperCase() === StadiumEnum.SMALL) {
+    if (stadiumInput.toUpperCase() === MapEnum.SMALL) {
       return smallStadium;
-    } else if (stadiumInput.toUpperCase() === StadiumEnum.NORMAL) {
+    } else if (stadiumInput.toUpperCase() === MapEnum.NORMAL) {
       return normalStadium;
     }
     return null;

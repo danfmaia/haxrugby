@@ -1,12 +1,11 @@
+import TeamEnum from '../../enums/TeamEnum';
 import HaxRugbyStadium from '../../models/map/HaxRugbyStadium';
 import THaxRugbyStadiums from '../../models/stadium/THaxRugbyStadiums';
 import blue_getConversion from './blue_getConversion';
-import blue_kickoff from './blue_kickoff';
 import red_getConversion from './red_getConversion';
-// import red_kickoff from './red_kickoff';
 
 export const dimensions = {
-  outerWidth: 420,
+  outerWidth: 440,
   outerHeight: 200,
 
   width: 390,
@@ -19,19 +18,26 @@ export const dimensions = {
   areaLineX: 200,
 };
 
+const baseStadium = HaxRugbyStadium.getBaseStadium(
+  'S-HaxRugby v9 by JP',
+  TeamEnum.RED,
+  dimensions.outerWidth,
+  dimensions.outerHeight,
+  dimensions.width,
+  dimensions.height,
+  dimensions.goalLineX,
+  dimensions.goalPostY,
+  dimensions.miniArea,
+  dimensions.kickoffLineX,
+  dimensions.areaLineX,
+);
+
 const red_kickoff = JSON.stringify(
-  new HaxRugbyStadium(
-    'S-HaxRugby v9 R by JP',
-    dimensions.outerWidth,
-    dimensions.outerHeight,
-    dimensions.width,
-    dimensions.height,
-    dimensions.goalLineX,
-    dimensions.goalPostY,
-    dimensions.miniArea,
-    dimensions.kickoffLineX,
-    dimensions.areaLineX,
-  ),
+  HaxRugbyStadium.getStadium(baseStadium, 'S-HaxRugby v9 R by JP', TeamEnum.RED),
+);
+
+const blue_kickoff = JSON.stringify(
+  HaxRugbyStadium.getStadium(baseStadium, 'S-HaxRugby v9 B by JP', TeamEnum.BLUE),
 );
 
 const redMaps: THaxRugbyStadiums = {

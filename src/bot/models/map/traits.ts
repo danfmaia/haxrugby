@@ -1,86 +1,73 @@
 import TraitEnum from '../../enums/stadium/TraitEnum';
-import Trait from './Trait';
+import TTrait from './TTrait';
 
 const traits = {
   // mandatory
 
-  ballArea: {
-    name: TraitEnum.ballArea,
-    vis: true,
+  [TraitEnum.ballArea]: {
+    vis: false,
     bCoef: 1,
-    cGroup: [],
     cMask: ['ball'],
-  } as Trait,
+  } as TTrait,
 
-  goalPost: {
-    name: TraitEnum.goalPost,
+  [TraitEnum.goalPost]: {
     vis: true,
     bCoef: 0.5,
-    cGroup: [],
     cMask: ['ball'],
-    color: '000000',
     radius: 2,
-  } as Trait,
+    invMass: 0,
+    color: '000000',
+  } as TTrait,
 
-  goalNet: {
-    name: TraitEnum.goalNet,
+  [TraitEnum.goalNet]: {
     vis: true,
     bCoef: 0.1,
-    cGroup: [],
-    cMask: [],
-  } as Trait,
+    cMask: [0],
+  } as TTrait,
 
-  kickOffBarrier: {
-    name: TraitEnum.kickOffBarrier,
+  [TraitEnum.kickOffBarrier]: {
     vis: false,
     bCoef: 0.1,
     cGroup: ['redKO', 'blueKO'],
     cMask: ['red', 'blue'],
-  } as Trait,
+  } as TTrait,
 
   // custom
 
-  playerArea: {
-    name: TraitEnum.playerArea,
+  [TraitEnum.playerArea]: {
     vis: false,
     bCoef: 0.1,
-    cGroup: [],
-    cMask: ['all'],
-  } as Trait,
+  } as TTrait,
 
-  line: {
-    name: TraitEnum.line,
+  [TraitEnum.line]: {
     vis: true,
     bCoef: 0,
-    cGroup: [],
-    cMask: [],
+    cGroup: [0],
+    cMask: [0],
     color: [199, 230, 189],
-  } as Trait,
+  } as TTrait,
 
-  fadeLine: {
-    name: TraitEnum.fadeLine,
+  [TraitEnum.fadeLine]: {
     vis: true,
     bCoef: 0,
-    cGroup: [],
-    cMask: [],
+    cGroup: [0],
+    cMask: [0],
     color: [150, 173, 142],
-  } as Trait,
+  } as TTrait,
 
-  redKickOffBarrier: {
-    name: TraitEnum.redKickOffBarrier,
+  [TraitEnum.redKOBarrier]: {
     vis: false,
     bCoef: 0.1,
     cGroup: ['redKO'],
     cMask: ['red', 'blue'],
-  } as Trait,
+  } as TTrait,
 
-  blueKickOffBarrier: {
-    name: TraitEnum.blueKickOffBarrier,
+  [TraitEnum.blueKOBarrier]: {
     vis: false,
     bCoef: 0.1,
     cGroup: ['blueKO'],
     cMask: ['red', 'blue'],
-  } as Trait,
+  } as TTrait,
 };
 
 export default traits;

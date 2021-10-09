@@ -6,8 +6,8 @@ enum TraitEnum {
   kickOffBarrier = 'kickOffBarrier',
   line = 'line',
   fadeLine = 'fadeLine',
-  redKickOffBarrier = 'redKickOffBarrier',
-  blueKickOffBarrier = 'blueKickOffBarrier',
+  redKOBarrier = 'redKOBarrier',
+  blueKOBarrier = 'blueKOBarrier',
 }
 
 export default TraitEnum;

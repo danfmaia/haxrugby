@@ -1,13 +1,13 @@
 import AHaxRugbyMap from './AHaxRugbyMap';
-import THaxRugbyMaps from './THaxRugbyStadiums';
+import THaxRugbyStadiums from './THaxRugbyStadiums';
 
 class HaxRugbyMaps extends AHaxRugbyMap {
-  public redMaps: THaxRugbyMaps;
-  public blueMaps: THaxRugbyMaps;
+  public redMaps: THaxRugbyStadiums;
+  public blueMaps: THaxRugbyStadiums;
 
   constructor(
-    redMaps: THaxRugbyMaps,
-    blueMaps: THaxRugbyMaps,
+    redMaps: THaxRugbyStadiums,
+    blueMaps: THaxRugbyStadiums,
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,

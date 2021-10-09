@@ -2,6 +2,7 @@
 
 import { Color } from 'inversihax';
 import TraitEnum from '../enums/stadium/TraitEnum';
+import TeamEnum from '../enums/TeamEnum';
 
 export function getVertex(x: number, y: number, trait: TraitEnum): any {
   return {
@@ -41,3 +42,34 @@ export function getBallPhysics(radius: number): any {
     radius,
   };
 }
+
+class StadiumService {
+  private team: TeamEnum;
+
+  constructor(team: TeamEnum) {
+    this.team = team;
+  }
+
+  getLeftKOBarrierTrait(): TraitEnum {
+    if (this.team === TeamEnum.RED) {
+      return TraitEnum.blueKOBarrier;
+    }
+    return TraitEnum.redKOBarrier;
+  }
+
+  getRightKOBarrierTrait(): TraitEnum {
+    if (this.team === TeamEnum.RED) {
+      return TraitEnum.redKOBarrier;
+    }
+    return TraitEnum.blueKOBarrier;
+  }
+
+  getKickOffCurve(): number {
+    if (this.team === TeamEnum.RED) {
+      return -180;
+    }
+    return 180;
+  }
+}
+
+export default StadiumService;
