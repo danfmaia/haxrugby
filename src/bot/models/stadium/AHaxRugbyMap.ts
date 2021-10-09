@@ -8,7 +8,7 @@ import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
 
 export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
 
-interface IHaxRugbyStadium {
+interface IHaxRugbyMap {
   miniAreaX: number;
   kickoffLineX: number;
   areaLineX: number;
@@ -55,7 +55,7 @@ interface IHaxRugbyStadium {
   moveDiscInXAxis(disc: IDiscPropertiesObject, team: TeamEnum, deltaX: number): number;
 }
 
-abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
+abstract class AHaxRugbyMap implements IHaxRugbyMap {
   private goalLineX: number;
   private goalPostY: number;
   public miniAreaX: number;
@@ -304,4 +304,4 @@ abstract class AHaxRugbyStadium implements IHaxRugbyStadium {
   }
 }
 
-export default AHaxRugbyStadium;
+export default AHaxRugbyMap;

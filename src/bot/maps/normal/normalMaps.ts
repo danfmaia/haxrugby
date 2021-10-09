@@ -1,4 +1,4 @@
-import THaxRugbyMaps from '../../models/stadium/HaxRugbyMaps';
+import THaxRugbyMaps from '../../models/stadium/THaxRugbyStadiums';
 import blue_getConversion from './blue_getConversion';
 import blue_kickoff from './blue_kickoff';
 import red_getConversion from './red_getConversion';

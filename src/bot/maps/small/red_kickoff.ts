@@ -1,7 +1,7 @@
 import { BALL_RADIUS } from '../../constants/constants';
 
 const map = {
-  name: 'S-HaxRugby v8 R by JP',
+  name: 'S-HaxRugby v9 R by JP',
 
   width: 420,
   height: 200,

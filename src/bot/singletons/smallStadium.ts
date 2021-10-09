@@ -1,20 +1,14 @@
-import smallMaps from '../maps/small/smallMaps';
-import HaxRugbyStadium from '../models/stadium/HaxRugbyStadium';
+import smallMaps, { dimensions } from '../maps/small/smallStadiums';
+import HaxRugbyMaps from '../models/stadium/HaxRugbyMaps';
 
-const goalLineX = 300;
-const goalPostY = 50;
-const miniAreaX = 45;
-const kickoffLineX = 100;
-const areaLineX = 200;
-
-const smallStadium = new HaxRugbyStadium(
+const smallStadium = new HaxRugbyMaps(
   smallMaps.red,
   smallMaps.blue,
-  goalLineX,
-  goalPostY,
-  miniAreaX,
-  kickoffLineX,
-  areaLineX,
+  dimensions.goalLineX,
+  dimensions.goalPostY,
+  dimensions.miniArea,
+  dimensions.kickoffLineX,
+  dimensions.areaLineX,
 );
 
 export default smallStadium;

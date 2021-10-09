@@ -6,7 +6,7 @@ import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import StadiumEnum from '../../enums/StadiumEnum';
 import smallStadium from '../../singletons/smallStadium';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import HaxRugbyMaps from '../../models/stadium/HaxRugbyMaps';
 import normalStadium from '../../singletons/normalStadium';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
@@ -95,7 +95,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getStadiumFromInput(stadiumInput: string): null | HaxRugbyStadium {
+  private getStadiumFromInput(stadiumInput: string): null | HaxRugbyMaps {
     if (!stadiumInput) {
       return null;
     }

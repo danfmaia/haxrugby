@@ -13,7 +13,7 @@ import {
 import colors from '../../constants/style/colors';
 import LinkEnum from '../../enums/LinkEnum';
 import RuleEnum from '../../enums/RuleEnum';
-import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
+import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyMap';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
@@ -319,13 +319,13 @@ export default class ChatService implements IChatService {
   }
 
   public sendConversionHelp(playerId?: number): void {
+    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
+
     this.sendBoldAnnouncement(MSG_HELP.KICKER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
 
     this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
   }
 }

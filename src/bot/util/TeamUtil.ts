@@ -1,21 +1,21 @@
 import { TeamID } from 'inversihax';
 import TeamEnum from '../enums/TeamEnum';
 
-export function getOpposingTeam(team: TeamEnum): TeamEnum {
+function getOpposingTeam(team: TeamEnum): TeamEnum {
   if (team === TeamEnum.RED) {
     return TeamEnum.BLUE;
   }
   return TeamEnum.RED;
 }
 
-export function getTeamID(team: TeamEnum): TeamID {
+function getTeamID(team: TeamEnum): TeamID {
   if (team === TeamEnum.RED) {
     return TeamID.RedTeam;
   }
   return TeamID.BlueTeam;
 }
 
-export function getOpposingTeamID(team: TeamEnum): TeamID {
+function getOpposingTeamID(team: TeamEnum): TeamID {
   if (team === TeamEnum.RED) {
     return TeamID.BlueTeam;
   }

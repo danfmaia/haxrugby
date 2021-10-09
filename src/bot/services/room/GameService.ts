@@ -19,9 +19,9 @@ import { IGameService } from './IGameService';
 import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import HaxRugbyMaps from '../../models/stadium/HaxRugbyMaps';
 import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
-import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
+import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyMap';
 import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
@@ -33,7 +33,7 @@ export default class GameService implements IGameService {
   public chatService: IChatService;
   public roomUtil: RoomUtil;
 
-  public stadium: HaxRugbyStadium = smallStadium;
+  public stadium: HaxRugbyMaps = smallStadium;
   public matchConfig: MatchConfig;
   public teams: ITeams;
 
