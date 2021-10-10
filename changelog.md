@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.9a:
+
+- O tiro de safety agora é no local da última condução de bola à frente da zona protegida.
+
 ### v0.9:
 
 - Implementada a classe `HaxRugbyStadium`;

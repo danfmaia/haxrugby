@@ -1,7 +1,7 @@
 import TConversionProps from '../stadium/TConversionProps';
 
 type THaxRugbyStadiums = {
-  kickoff: string;
+  getKickoff: (kickoffX?: number) => string;
   getConversion: (conversionProps: TConversionProps) => string;
 };
 

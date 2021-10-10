@@ -10,7 +10,7 @@ import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
-import ITouchInfo from '../../models/physics/ITouchInfo';
+import TTouchInfo from '../../models/physics/TTouchInfo';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import smallMap from '../../singletons/smallMap';
 import Physics from '../../util/Physics';
@@ -20,7 +20,7 @@ import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
-import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
+import TPlayerCountByTeam from '../../models/team/TPlayerCountByTeam';
 import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
@@ -49,11 +49,14 @@ export default class GameService implements IGameService {
   public isOvertime: boolean = false;
   private isFinishing: boolean = false;
 
-  private lastTouchInfo: ITouchInfo | null = null;
-  private touchInfoList: (ITouchInfo | null)[] = [];
+  private lastTouchInfo: TTouchInfo | null = null;
+  private touchInfoList: (TTouchInfo | null)[] = [];
   private driverIds: number[] = [];
-  private toucherCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
-  private driverCountByTeam: IPlayerCountByTeam = { red: 0, blue: 0 };
+  private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
+  private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
+  private lastDriveX: number = 0;
+
+  private kickoffX: number | null = null;
 
   public lastBallPosition: IPosition = { x: 0, y: 0 };
   private isDefRec: boolean = false;
@@ -129,6 +132,10 @@ export default class GameService implements IGameService {
 
     if (!this.isMatchInProgress) {
       this.initializeMatch(byPlayer);
+    }
+
+    if (this.isConversionAttempt === false && this.kickoffX) {
+      this.initializeKickoff(this.kickoffX);
     }
 
     if (this.isConversionAttempt && this.tryY !== null && this.isReplacingBall === false) {
@@ -213,11 +220,11 @@ export default class GameService implements IGameService {
         if (team === TeamID.RedTeam) {
           this.score.red = this.score.red + 2;
           teamName = this.teams.red.name;
-          stadium = this.map.blueStadiums.kickoff;
+          stadium = this.map.blueStadiums.getKickoff();
         } else {
           this.score.blue = this.score.blue + 2;
           teamName = this.teams.blue.name;
-          stadium = this.map.redStadiums.kickoff;
+          stadium = this.map.redStadiums.getKickoff();
         }
 
         // announce successful conversion
@@ -241,6 +248,7 @@ export default class GameService implements IGameService {
     this.lastTouchInfo = null;
     this.touchInfoList = [];
     this.driverIds = [];
+    this.lastDriveX = 0;
     this.tryY = null;
     this.isTry = false;
     this.isConversionAttempt = false;
@@ -283,9 +291,9 @@ export default class GameService implements IGameService {
       if (this.isFinishing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
-          this.room.setCustomStadium(this.map.redStadiums.kickoff);
+          this.room.setCustomStadium(this.map.redStadiums.getKickoff());
         } else if (lastWinner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.map.blueStadiums.kickoff);
+          this.room.setCustomStadium(this.map.blueStadiums.getKickoff());
         }
       }
 
@@ -327,8 +335,25 @@ export default class GameService implements IGameService {
     }
   }
 
+  private initializeKickoff(kickoffX: number) {
+    // move ball to the correct place
+    const updatedBallProps = this.room.getDiscProperties(0);
+    updatedBallProps.x = kickoffX;
+    this.room.setDiscProperties(0, updatedBallProps);
+
+    // move players to correct place
+    const players = this.room.getPlayerList().filter((player) => player.team !== TeamID.Spectators);
+    players.forEach((player) => {
+      const updatedPlayerProps = this.room.getPlayerDiscProperties(player.id);
+      if (updatedPlayerProps) {
+        updatedPlayerProps.x = updatedPlayerProps.x + kickoffX;
+        this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
+      }
+    });
+  }
+
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
-    // move ball to the right place
+    // move ball to the correct place
     const updatedBallProps = this.room.getDiscProperties(0);
     updatedBallProps.x = this.map.moveDiscInXAxis(
       updatedBallProps,
@@ -342,7 +367,7 @@ export default class GameService implements IGameService {
     };
     this.room.setDiscProperties(0, updatedBallProps);
 
-    // move kicker to the right place
+    // move kicker to the correct place
     const kickerId = this.teams.getPlayerByTeamAndPosition(kickingTeam, PositionEnum.KICKER);
     if (kickerId !== null) {
       const updatedKickerProps = this.room.getPlayerDiscProperties(kickerId);
@@ -361,7 +386,7 @@ export default class GameService implements IGameService {
     const defendingTeam = TeamUtil.getOpposingTeam(kickingTeam);
     const defendingTeamID = TeamUtil.getOpposingTeamID(kickingTeam);
 
-    // move kicking team's players to right place
+    // move kicking team's players to correct place
     const kickingTeamPlayers = this.room
       .getPlayerList()
       .filter((player) => player.team === kickingTeamID && player.id !== kickerId);
@@ -378,7 +403,7 @@ export default class GameService implements IGameService {
       }
     });
 
-    // move GK to the right place
+    // move GK to the correct place
     const goalkeeperId = this.teams.getPlayerByTeamAndPosition(
       defendingTeam,
       PositionEnum.GOALKEEPER,
@@ -396,7 +421,7 @@ export default class GameService implements IGameService {
       }
     }
 
-    // move defending team's players to right place
+    // move defending team's players to correct place
     const defenseBenchPlayers = this.room
       .getPlayerList()
       .filter((player) => player.team === defendingTeamID && player.id !== goalkeeperId);
@@ -466,11 +491,19 @@ export default class GameService implements IGameService {
       }
     }
 
-    // check for ball drives
+    // register ball drivers if any
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
 
     // count current ball drivers
     this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+
+    // register last drive X
+    if (
+      (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) ||
+      (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX)
+    ) {
+      this.lastDriveX = ballPosition.x;
+    }
 
     // in case of try, let the scorer attempt to take the ball more to the middle
     if (this.isTry) {
@@ -524,7 +557,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
+  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: TTouchInfo): boolean {
     const isGoal = this.map.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
@@ -540,11 +573,11 @@ export default class GameService implements IGameService {
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
         teamName = this.teams.red.name;
-        stadium = this.map.blueStadiums.kickoff;
+        stadium = this.map.blueStadiums.getKickoff();
       } else {
         this.score.blue = this.score.blue + 3;
         teamName = this.teams.blue.name;
-        stadium = this.map.redStadiums.kickoff;
+        stadium = this.map.redStadiums.getKickoff();
       }
 
       // announce goal
@@ -599,12 +632,20 @@ export default class GameService implements IGameService {
       let teamName: string;
       let stadium: string;
 
+      let kickoffX = this.lastDriveX;
+      if (kickoffX < -this.map.areaLineX) {
+        kickoffX = -this.map.areaLineX;
+      } else if (kickoffX > this.map.areaLineX) {
+        kickoffX = this.map.areaLineX;
+      }
+      this.kickoffX = kickoffX;
+
       if (isSafety === TeamEnum.RED) {
         teamName = this.teams.red.name;
-        stadium = this.map.redStadiums.kickoff;
+        stadium = this.map.redStadiums.getKickoff(kickoffX);
       } else {
         teamName = this.teams.blue.name;
-        stadium = this.map.blueStadiums.kickoff;
+        stadium = this.map.blueStadiums.getKickoff(kickoffX);
       }
 
       // announce safety
@@ -651,7 +692,7 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private handleAfterTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam) {
+  private handleAfterTry(ballPosition: IPosition, driverCountByTeam: TPlayerCountByTeam) {
     if (this.isTry === false || this.tryY === null) {
       return;
     }
@@ -768,10 +809,10 @@ export default class GameService implements IGameService {
 
       if (isStillConversionAttempt === TeamEnum.RED) {
         teamName = this.teams.red.name;
-        stadium = this.map.blueStadiums.kickoff;
+        stadium = this.map.blueStadiums.getKickoff();
       } else {
         teamName = this.teams.blue.name;
-        stadium = this.map.redStadiums.kickoff;
+        stadium = this.map.redStadiums.getKickoff();
       }
 
       // announce missed conversion

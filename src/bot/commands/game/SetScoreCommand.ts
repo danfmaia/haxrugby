@@ -56,9 +56,9 @@ export class SetScoreCommand extends CommandBase<HaxRugbyPlayer> {
     if (args[2]) {
       const teamArg = args[2].toUpperCase();
       if (teamArg === TeamEnum.RED) {
-        this.room.setCustomStadium(this.gameService.map.redStadiums.kickoff);
+        this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
       } else if (teamArg === TeamEnum.BLUE) {
-        this.room.setCustomStadium(this.gameService.map.blueStadiums.kickoff);
+        this.room.setCustomStadium(this.gameService.map.blueStadiums.getKickoff());
       }
     }
 

@@ -1,9 +1,9 @@
 import { IPosition } from 'inversihax';
 
-type ITouchInfo = {
+type TTouchInfo = {
   toucherIds: number[];
   ballPosition: IPosition;
   hasKick: boolean;
 };
 
-export default ITouchInfo;
+export default TTouchInfo;

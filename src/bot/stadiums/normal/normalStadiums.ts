@@ -12,7 +12,6 @@ export const DIMENSIONS = {
   height: 300,
 
   spawnDistance: 227,
-
   goalLineX: 562,
   goalPostY: 60,
   miniArea: 65,
@@ -33,12 +32,15 @@ const dimensions = new MapDimensions(
   DIMENSIONS.areaLineX,
 );
 
-const red_kickoff = HaxRugbyStadium.getNewStadium(
-  'HaxRugby v20 R by JP',
-  MapSizeEnum.NORMAL,
-  dimensions,
-  TeamEnum.RED,
-);
+function red_getKickoff(kickoffX: number = 0): string {
+  return HaxRugbyStadium.getNewStadium(
+    'HaxRugby v20 R by JP',
+    MapSizeEnum.NORMAL,
+    dimensions,
+    TeamEnum.RED,
+    kickoffX,
+  );
+}
 
 function red_getConversion(conversionProps: TConversionProps): string {
   return HaxRugbyStadium.getNewStadium(
@@ -46,16 +48,20 @@ function red_getConversion(conversionProps: TConversionProps): string {
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
+    undefined,
     conversionProps,
   );
 }
 
-const blue_kickoff = HaxRugbyStadium.getNewStadium(
-  'HaxRugby v20 B by JP',
-  MapSizeEnum.NORMAL,
-  dimensions,
-  TeamEnum.BLUE,
-);
+function blue_getKickoff(kickoffX: number = 0): string {
+  return HaxRugbyStadium.getNewStadium(
+    'HaxRugby v20 B by JP',
+    MapSizeEnum.NORMAL,
+    dimensions,
+    TeamEnum.BLUE,
+    kickoffX,
+  );
+}
 
 function blue_getConversion(conversionProps: TConversionProps): string {
   return HaxRugbyStadium.getNewStadium(
@@ -63,17 +69,18 @@ function blue_getConversion(conversionProps: TConversionProps): string {
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
+    undefined,
     conversionProps,
   );
 }
 
 const redMaps: THaxRugbyStadiums = {
-  kickoff: red_kickoff,
+  getKickoff: red_getKickoff,
   getConversion: red_getConversion,
 };
 
 const blueMaps: THaxRugbyStadiums = {
-  kickoff: blue_kickoff,
+  getKickoff: blue_getKickoff,
   getConversion: blue_getConversion,
 };
 

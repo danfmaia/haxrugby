@@ -2,7 +2,7 @@ import { IPosition } from 'inversihax';
 
 import { BALL_RADIUS, TOUCH_EPSILON, PLAYER_RADIUS } from '../constants/constants';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
-import ITouchInfo from '../models/physics/ITouchInfo';
+import TTouchInfo from '../models/physics/TTouchInfo';
 
 function calcDistanceBetweenPositions(p1: IPosition, p2: IPosition): number {
   const d1 = p1.x - p2.x;
@@ -31,7 +31,7 @@ function getIsTouching(
   return distance < triggerDistance;
 }
 
-function getTouchInfoList(players: HaxRugbyPlayer[], ballPosition: IPosition): ITouchInfo | null {
+function getTouchInfoList(players: HaxRugbyPlayer[], ballPosition: IPosition): TTouchInfo | null {
   const toucherIds: number[] = [];
   const triggerDistance = getTouchTriggerDistance(BALL_RADIUS, PLAYER_RADIUS);
 
@@ -57,9 +57,9 @@ function getTouchInfoList(players: HaxRugbyPlayer[], ballPosition: IPosition): I
   return null;
 }
 
-function getDriverIds(touchInfoList: (ITouchInfo | null)[]): number[] {
+function getDriverIds(touchInfoList: (TTouchInfo | null)[]): number[] {
   let driverIds: number[] = [];
-  let firstTouchInfo: ITouchInfo;
+  let firstTouchInfo: TTouchInfo;
 
   for (let index = 0; index < touchInfoList.length; index++) {
     const touchInfo = touchInfoList[index];

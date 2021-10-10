@@ -113,7 +113,7 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
   }
 
   private initializeRoom() {
-    this.setCustomStadium(smallMap.redStadiums.kickoff);
+    this.setCustomStadium(smallMap.redStadiums.getKickoff());
     this.setTeamsLock(true);
     this.setTimeLimit(this.gameService.matchConfig.timeLimit);
     this.setScoreLimit(this.gameService.matchConfig.scoreLimit);

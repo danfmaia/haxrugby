@@ -1,10 +1,10 @@
 import { IPosition, TeamID } from 'inversihax';
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
-import ITouchInfo from '../models/physics/ITouchInfo';
+import TTouchInfo from '../models/physics/TTouchInfo';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { TPlayerPropMap as TPlayerPropsMap } from '../models/player/PlayerPropMap';
-import IPlayerCountByTeam from '../models/team/IPlayerCountByTeam';
+import TPlayerCountByTeam from '../models/team/TPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IGameService } from '../services/room/IGameService';
 
@@ -17,7 +17,7 @@ export class RoomUtil {
     this.gameService = gameService;
   }
 
-  public countPlayersByTeam(playerIds: number[]): IPlayerCountByTeam {
+  public countPlayersByTeam(playerIds: number[]): TPlayerCountByTeam {
     const playerCount = {
       red: 0,
       blue: 0,
@@ -47,7 +47,7 @@ export class RoomUtil {
     );
   }
 
-  public getTeamThatTouchedBall(touchInfo: ITouchInfo | null): boolean | TeamEnum {
+  public getTeamThatTouchedBall(touchInfo: TTouchInfo | null): boolean | TeamEnum {
     if (!touchInfo) {
       return false;
     }

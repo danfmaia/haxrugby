@@ -8,6 +8,8 @@ class HaxRugbyMap extends AHaxRugbyMap {
   constructor(
     redStadiums: THaxRugbyStadiums,
     blueStadiums: THaxRugbyStadiums,
+
+    spawnDistance: number,
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,

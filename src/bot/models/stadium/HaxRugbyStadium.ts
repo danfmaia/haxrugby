@@ -38,6 +38,7 @@ class HaxRugbyStadium {
     name: string,
     size: MapSizeEnum,
     team: TeamEnum,
+    kickoffX: number = 0,
     convProps: TConversionProps | null = null,
 
     dimensions: MapDimensions,
@@ -56,7 +57,7 @@ class HaxRugbyStadium {
     areaLineX: number,
   ) {
     this.name = name;
-    this.serv = new StadiumService(dimensions, size, team, convProps);
+    this.serv = new StadiumService(dimensions, size, team, kickoffX, convProps);
 
     this.width = outerWidth;
     this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
@@ -116,36 +117,36 @@ class HaxRugbyStadium {
       getVertex(kickoffLineX, -(height - 1.5), TraitEnum.fadeLine), // 22
       getVertex(kickoffLineX, height - 1.5, TraitEnum.fadeLine), // 23
 
-      getVertex(-kickoffLineX, -outerHeight, this.serv.getLeftKOBarrierTrait()), // 24
-      getVertex(-kickoffLineX, outerHeight, this.serv.getLeftKOBarrierTrait()), // 25
-      getVertex(kickoffLineX, -outerHeight, this.serv.getRightKOBarrierTrait()), // 26
-      getVertex(kickoffLineX, outerHeight, this.serv.getRightKOBarrierTrait()), // 27
+      getVertex(this.serv.getLeftKickoffX(), -outerHeight, this.serv.getLeftKOBarrierTrait()), // 24
+      getVertex(this.serv.getLeftKickoffX(), outerHeight, this.serv.getLeftKOBarrierTrait()), // 25
+      getVertex(this.serv.getRightKickoffX(), -outerHeight, this.serv.getRightKOBarrierTrait()), // 26
+      getVertex(this.serv.getRightKickoffX(), outerHeight, this.serv.getRightKOBarrierTrait()), // 27
 
-      getVertex(0, -outerHeight, TraitEnum.kickOffBarrier), // 28
-      getVertex(0, outerHeight, TraitEnum.kickOffBarrier), // 29
+      getVertex(kickoffX, -outerHeight, TraitEnum.kickOffBarrier), // 28
+      getVertex(kickoffX, outerHeight, TraitEnum.kickOffBarrier), // 29
 
       this.serv.getTopBallVertex(), // 30
       this.serv.getBottomBallVertex(), // 31
 
       getVertex(
-        this.serv.getSignal() * (areaLineX + PLAYER_RADIUS),
+        this.serv.getSign() * (areaLineX + PLAYER_RADIUS),
         -outerHeight,
         TraitEnum.playerArea,
       ), // 32
       getVertex(
-        this.serv.getSignal() * (areaLineX + PLAYER_RADIUS),
+        this.serv.getSign() * (areaLineX + PLAYER_RADIUS),
         outerHeight,
         TraitEnum.playerArea,
       ), // 33
 
       // TODO: improve these lines
-      getVertex(this.serv.getSignal() * goalLineX, -outerHeight, TraitEnum.kickOffBarrier), // 34
-      getVertex(this.serv.getSignal() * goalLineX, -goalPostY, TraitEnum.null), // 35
-      getVertex(this.serv.getSignal() * goalLineX, goalPostY, TraitEnum.null), // 36
-      getVertex(this.serv.getSignal() * goalLineX, outerHeight, TraitEnum.kickOffBarrier), // 37
+      getVertex(this.serv.getSign() * goalLineX, -outerHeight, TraitEnum.kickOffBarrier), // 34
+      getVertex(this.serv.getSign() * goalLineX, -goalPostY, TraitEnum.null), // 35
+      getVertex(this.serv.getSign() * goalLineX, goalPostY, TraitEnum.null), // 36
+      getVertex(this.serv.getSign() * goalLineX, outerHeight, TraitEnum.kickOffBarrier), // 37
 
-      getVertex(this.serv.getSignal() * width, -outerHeight, TraitEnum.playerArea), // 38
-      getVertex(this.serv.getSignal() * width, outerHeight, TraitEnum.playerArea), // 39
+      getVertex(this.serv.getSign() * width, -outerHeight, TraitEnum.playerArea), // 38
+      getVertex(this.serv.getSign() * width, outerHeight, TraitEnum.playerArea), // 39
 
       // Red's non-small in-goal lines
 
@@ -571,13 +572,15 @@ class HaxRugbyStadium {
     size: MapSizeEnum,
     dimensions: MapDimensions,
     team: TeamEnum,
-    convProps: TConversionProps | null = null,
+    kickoffX?: number,
+    convProps?: TConversionProps,
   ): string {
     return JSON.stringify(
       new HaxRugbyStadium(
         name,
         size,
         team,
+        kickoffX,
         convProps,
         dimensions,
         dimensions.outerWidth,

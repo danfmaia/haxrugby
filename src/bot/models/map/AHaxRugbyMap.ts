@@ -4,7 +4,7 @@ import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/co
 import TeamEnum from '../../enums/TeamEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
-import IPlayerCountByTeam from '../team/IPlayerCountByTeam';
+import TPlayerCountByTeam from '../team/TPlayerCountByTeam';
 
 export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
 
@@ -28,28 +28,28 @@ interface IHaxRugbyMap {
 
   getIsSafety(
     ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: TPlayerCountByTeam,
     isDefRec: boolean,
   ): false | TeamEnum;
 
   getIsSafetyOnGoalPost(
     ballPosition: IPosition,
-    toucherCountByTeam: IPlayerCountByTeam,
+    toucherCountByTeam: TPlayerCountByTeam,
     isDefRec: boolean,
   ): false | TeamEnum;
 
-  getIsTry(ballPosition: IPosition, driverCountByTeam: IPlayerCountByTeam): false | TeamEnum;
+  getIsTry(ballPosition: IPosition, driverCountByTeam: TPlayerCountByTeam): false | TeamEnum;
 
   getIsTryOnGoalPost(
     ballPosition: IPosition,
-    toucherCountByTeam: IPlayerCountByTeam,
+    toucherCountByTeam: TPlayerCountByTeam,
     room: IHaxRugbyRoom,
   ): false | TeamEnum;
 
   getIsTryOnGoalLine(
     didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
     ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: TPlayerCountByTeam,
   ): boolean;
 
   moveDiscInXAxis(disc: IDiscPropertiesObject, team: TeamEnum, deltaX: number): number;
@@ -170,7 +170,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
 
   public getIsSafety(
     ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: TPlayerCountByTeam,
   ): false | TeamEnum {
     if (ballPosition.x <= -this.tryLineX && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
@@ -182,7 +182,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
 
   public getIsSafetyOnGoalPost(
     ballPosition: IPosition,
-    toucherCountByTeam: IPlayerCountByTeam,
+    toucherCountByTeam: TPlayerCountByTeam,
   ): false | TeamEnum {
     // TODO: This logic can be improved. At least for safety on goal post.
     if (
@@ -220,7 +220,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
 
   public getIsTry(
     ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: TPlayerCountByTeam,
   ): false | TeamEnum {
     if (ballPosition.x >= this.tryLineX && driverCountByTeam.red > 0) {
       return TeamEnum.RED;
@@ -232,7 +232,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
 
   public getIsTryOnGoalPost(
     ballPosition: IPosition,
-    toucherCountByTeam: IPlayerCountByTeam,
+    toucherCountByTeam: TPlayerCountByTeam,
   ): false | TeamEnum {
     if (
       Math.abs(Math.abs(ballPosition.x) - this.goalLineX) >
@@ -270,7 +270,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
   public getIsTryOnGoalLine(
     didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
     ballPosition: IPosition,
-    driverCountByTeam: IPlayerCountByTeam,
+    driverCountByTeam: TPlayerCountByTeam,
   ): boolean {
     if (didBallEnterOrLeaveIngoal !== 'enter') {
       return false;

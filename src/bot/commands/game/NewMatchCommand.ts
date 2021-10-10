@@ -45,9 +45,9 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         if (stadium) {
           this.gameService.map = stadium;
           if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
-            this.room.setCustomStadium(stadium.blueStadiums.kickoff);
+            this.room.setCustomStadium(stadium.blueStadiums.getKickoff());
           } else {
-            this.room.setCustomStadium(stadium.redStadiums.kickoff);
+            this.room.setCustomStadium(stadium.redStadiums.getKickoff());
           }
         }
       } else {
@@ -64,17 +64,17 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         const stadium = this.getStadiumFromInput(arg2);
         if (stadium) {
           this.gameService.map = stadium;
-          this.room.setCustomStadium(stadium.redStadiums.kickoff);
+          this.room.setCustomStadium(stadium.redStadiums.getKickoff());
         } else {
-          this.room.setCustomStadium(this.gameService.map.redStadiums.kickoff);
+          this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
         }
 
         if (arg3) {
           const teamArg = arg3.toUpperCase();
           if (teamArg === TeamEnum.RED) {
-            this.room.setCustomStadium(this.gameService.map.redStadiums.kickoff);
+            this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
           } else if (teamArg === TeamEnum.BLUE) {
-            this.room.setCustomStadium(this.gameService.map.blueStadiums.kickoff);
+            this.room.setCustomStadium(this.gameService.map.blueStadiums.getKickoff());
           }
         }
       }

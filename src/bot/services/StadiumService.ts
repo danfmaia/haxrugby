@@ -52,8 +52,39 @@ class StadiumService {
     private dims: MapDimensions,
     private size: MapSizeEnum,
     private team: TeamEnum,
+    private kickoffX: number,
     private convProps: TConversionProps | null,
   ) {}
+
+  getLeftKickoffX(): number {
+    const leftKickoffX = this.kickoffX - this.dims.kickoffLineX;
+    if (leftKickoffX < -this.dims.goalLineX) {
+      return -this.dims.goalLineX;
+    }
+    return leftKickoffX;
+  }
+
+  getRightKickoffX(): number {
+    const rightKickoffX = this.kickoffX + this.dims.kickoffLineX;
+    if (rightKickoffX > this.dims.goalLineX) {
+      return this.dims.goalLineX;
+    }
+    return rightKickoffX;
+  }
+
+  getRightKOVertexes(): any {
+    if (this.kickoffX === null) {
+      return getVertex(-this.dims.kickoffLineX, -outerHeight, this.getLeftKOBarrierTrait());
+    } else {
+      let kickoffX = this.kickoffX - this.dims.kickoffLineX;
+      if (kickoffX < -this.dims.goalLineX) {
+        kickoffX = -this.dims.goalLineX;
+      } else if (kickoffX > this.dims.goalLineX) {
+        kickoffX = this.dims.goalLineX;
+      }
+      return getVertex(kickoffX, -outerHeight, this.getLeftKOBarrierTrait());
+    }
+  }
 
   getLeftKOSegment(v0: number, v1: number): any {
     let trait: TraitEnum;
@@ -109,7 +140,7 @@ class StadiumService {
     return TraitEnum.blueKOBarrier;
   }
 
-  getSignal(): number {
+  getSign(): number {
     if (this.team === TeamEnum.RED) {
       return 1;
     }
@@ -135,7 +166,7 @@ class StadiumService {
 
   getTopBallVertex(): any {
     if (!this.convProps) {
-      return getVertex(0, -(BALL_RADIUS + 2.3), TraitEnum.kickOffBarrier);
+      return getVertex(this.kickoffX, -(BALL_RADIUS + 2.3), TraitEnum.kickOffBarrier);
     }
     return getVertex(
       this.convProps.ballX,
@@ -146,7 +177,7 @@ class StadiumService {
 
   getBottomBallVertex(): any {
     if (!this.convProps) {
-      return getVertex(0, BALL_RADIUS + 2.3, TraitEnum.kickOffBarrier);
+      return getVertex(this.kickoffX, BALL_RADIUS + 2.3, TraitEnum.kickOffBarrier);
     }
     return getVertex(
       this.convProps.ballX,
