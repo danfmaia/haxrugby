@@ -6,17 +6,29 @@ import THaxRugbyStadiums from '../../models/map/THaxRugbyStadiums';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 
 export const DIMENSIONS = {
-  outerWidth: 440,
-  outerHeight: 200,
+  outerWidth: 514,
+  outerHeight: 233.6,
 
-  width: 390,
-  height: 153,
+  width: 468,
+  height: 183.6,
 
-  goalLineX: 300,
+  goalLineX: 360,
   goalPostY: 50,
-  miniArea: 45,
-  kickoffLineX: 100,
-  areaLineX: 200,
+  miniArea: 54,
+  kickoffLineX: 120,
+  areaLineX: 240,
+
+  // outerWidth: 440,
+  // outerHeight: 200,
+
+  // width: 390,
+  // height: 153,
+
+  // goalLineX: 300,
+  // goalPostY: 50,
+  // miniArea: 45,
+  // kickoffLineX: 100,
+  // areaLineX: 200,
 };
 
 const dimensions = new MapDimensions(

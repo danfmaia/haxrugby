@@ -60,7 +60,7 @@ class HaxRugbyStadium {
     this.serv = new StadiumService(dimensions, size, team, convProps);
 
     this.width = outerWidth;
-    this.height = outerHeight;
+    this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
 
     this.spawnDistance = 150;
 

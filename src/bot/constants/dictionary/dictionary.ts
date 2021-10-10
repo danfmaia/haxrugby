@@ -10,8 +10,8 @@ const ptBr: DictionaryKeys = {
   MSG_GREETING_1: `Bem vindo(a) ao ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GREETING_2:
     'Ainda estamos em desenvolvimento! Se encontrar bugs, relate no canal #bugs do nosso Discord (!dc).',
-  MSG_GREETING_3: `Na versão ${APP_MINOR_VERSION} lançamos a 𝗰𝗼𝗻𝘃𝗲𝗿𝘀ã𝗼 𝗱𝗲 𝟮 𝗽𝗼𝗻𝘁𝗼𝘀!`,
-  MSG_GREETING_4: 'Use o comando !regras para ver o resumo das regras do jogo.',
+  MSG_GREETING_3: `Na versão ${APP_MINOR_VERSION} 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗲𝗺𝗼𝘀 𝗮 𝗰𝗹𝗮𝘀𝘀𝗲 𝗛𝗮𝘅𝗥𝘂𝗴𝗯𝘆𝗦𝘁𝗮𝗱𝗶𝘂𝗺 e 𝗮𝘂𝗺𝗲𝗻𝘁𝗮𝗺𝗼𝘀 𝗼 𝘁𝗮𝗺𝗮𝗻𝗵𝗼 𝗱𝗼 𝗺𝗮𝗽 𝘀𝗺𝗮𝗹𝗹!`,
+  MSG_GREETING_4: 'Use !regras para ver as regras do jogo e !h para ver a lista de comandos.',
   MSG_GREETING_5: 'Use o comando !help ou !h para ver a lista de comandos disponíveis.',
 
   MSG_RULES: {

@@ -4,7 +4,9 @@
 
 - Implementada a classe `HaxRugbyStadium`;
   - Agora todos os stadiums, independente do tamanho do map e ou da situação de jogo, são objetos desta única classe;
-  - Isso torna bastante flexíveis as dimensões dos maps, podendo ser alteradas com facilidade.
+  - Isso tornou bem flexíveis as dimensões dos maps, podendo ser alteradas com facilidade;
+  - E agora também ficou bastante facilitado o desenvolvimento do penal (cobrança que acontece após o **impedimento**).
+- Aumentado o map small em 20% (exceto o field goal).
 
 ### v0.8c:
 
