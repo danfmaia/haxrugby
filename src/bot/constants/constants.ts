@@ -20,3 +20,5 @@ export const AFTER_TRY_MAX_TICKS = 120;
 
 // export const KICK_RATE_LIMIT = [10, 10, 15];
 export const KICK_RATE_LIMIT = [10, 60, 3];
+
+export const BALL_COLOR_TRANSITION_TICKS = 31;

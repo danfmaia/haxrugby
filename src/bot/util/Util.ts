@@ -1,4 +1,6 @@
 import * as moment from 'moment';
+import { BALL_COLOR_TRANSITION_TICKS } from '../constants/constants';
+import colors from '../constants/style/colors';
 import PositionEnum from '../enums/PositionEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
@@ -78,6 +80,14 @@ function getPlayerNameAndId(player: HaxRugbyPlayer): string {
   return `${player.name} (ID: ${player.id})`;
 }
 
+function transitionBallColor(currentColor: number, count: number): number {
+  // console.log('count: ', count);
+  return (
+    (count * currentColor + (BALL_COLOR_TRANSITION_TICKS - count) * colors.ball) /
+    BALL_COLOR_TRANSITION_TICKS
+  );
+}
+
 const Util = {
   timeout,
   timeoutAsync,
@@ -88,6 +98,7 @@ const Util = {
   logMessageWithTime,
   getPositionString,
   getPlayerNameAndId,
+  transitionBallColor,
 };
 
 export default Util;

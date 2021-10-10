@@ -5,6 +5,7 @@ import {
   DRIVE_MIN_TICKS,
   BALL_RADIUS,
   AFTER_TRY_MAX_TICKS,
+  BALL_COLOR_TRANSITION_TICKS,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -26,6 +27,7 @@ import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
 import Teams, { ITeams } from '../../models/team/Teams';
+import colors from '../../constants/style/colors';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -55,6 +57,7 @@ export default class GameService implements IGameService {
   private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private lastDriveX: number = 0;
+  private ballColorTransitionCount: number = BALL_COLOR_TRANSITION_TICKS;
 
   private kickoffX: number | null = null;
 
@@ -191,10 +194,11 @@ export default class GameService implements IGameService {
   }
 
   public handlePlayerBallKick(player: HaxRugbyPlayer): void {
-    // run time after kickoff
+    // actions after kickoff
     if (this.isBeforeKickoff && this.isConversionAttempt === false) {
       this.isBeforeKickoff = false;
       this.isTimeRunning = true;
+      this.kickoffX = null;
       this.chatService.sendMatchStatus();
     }
 
@@ -249,6 +253,7 @@ export default class GameService implements IGameService {
     this.touchInfoList = [];
     this.driverIds = [];
     this.lastDriveX = 0;
+    this.kickoffX = null;
     this.tryY = null;
     this.isTry = false;
     this.isConversionAttempt = false;
@@ -491,19 +496,7 @@ export default class GameService implements IGameService {
       }
     }
 
-    // register ball drivers if any
-    this.driverIds = Physics.getDriverIds(this.touchInfoList);
-
-    // count current ball drivers
-    this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
-
-    // register last drive X
-    if (
-      (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) ||
-      (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX)
-    ) {
-      this.lastDriveX = ballPosition.x;
-    }
+    this.checkForDrives(ballPosition);
 
     // in case of try, let the scorer attempt to take the ball more to the middle
     if (this.isTry) {
@@ -554,6 +547,46 @@ export default class GameService implements IGameService {
     this.touchInfoList.unshift(newTouchInfo);
     if (this.touchInfoList.length > DRIVE_MIN_TICKS) {
       this.touchInfoList.pop();
+    }
+  }
+
+  private checkForDrives(ballPosition: IPosition) {
+    // register ball drivers if any
+    this.driverIds = Physics.getDriverIds(this.touchInfoList);
+
+    // count current ball drivers
+    this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
+
+    // register last drive X
+    if (
+      (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) ||
+      (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX)
+    ) {
+      this.lastDriveX = ballPosition.x;
+
+      // change ball color to team's
+      this.ballColorTransitionCount = BALL_COLOR_TRANSITION_TICKS;
+      const ballProps = this.room.getDiscProperties(0);
+      if (this.driverCountByTeam.red && ballProps.color !== colors.ballRed) {
+        ballProps.color = colors.ballRed;
+        this.room.setDiscProperties(0, ballProps);
+      } else if (this.driverCountByTeam.blue && ballProps.color !== colors.ballBlue) {
+        ballProps.color = colors.ballBlue;
+        this.room.setDiscProperties(0, ballProps);
+      }
+    } else if (this.ballColorTransitionCount > 0) {
+      // transition ball color to original
+      this.ballColorTransitionCount = this.ballColorTransitionCount - 1;
+      // const ballProps = this.room.getDiscProperties(0);
+      // ballProps.color = Util.transitionBallColor(ballProps.color, this.ballColorTransitionCount);
+      // console.log('ballProps.color: ', ballProps.color);
+      // this.room.setDiscProperties(0, ballProps);
+    }
+
+    if (this.ballColorTransitionCount === 1) {
+      const ballProps = this.room.getDiscProperties(0);
+      ballProps.color = colors.ball;
+      this.room.setDiscProperties(0, ballProps);
     }
   }
 
