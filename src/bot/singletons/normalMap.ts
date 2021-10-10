@@ -1,5 +1,5 @@
-import normalMaps from '../maps/normal/normalMaps';
-import HaxRugbyMaps from '../models/stadium/HaxRugbyMaps';
+import normalMaps from '../stadiums/normal/normalStadiums';
+import HaxRugbyMap from '../models/map/HaxRugbyMaps';
 
 const goalLineX = 562;
 const goalPostY = 60;
@@ -7,7 +7,7 @@ const miniAreaX = 65;
 const kickoffLineX = 179;
 const areaLineX = 412;
 
-const normalStadium = new HaxRugbyMaps(
+const normalMap = new HaxRugbyMap(
   normalMaps.red,
   normalMaps.blue,
   goalLineX,
@@ -17,4 +17,4 @@ const normalStadium = new HaxRugbyMaps(
   areaLineX,
 );
 
-export default normalStadium;
+export default normalMap;

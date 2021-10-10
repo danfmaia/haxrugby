@@ -1,21 +1,22 @@
+import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import TeamEnum from '../../enums/TeamEnum';
-import HaxRugbyStadium from '../../models/map/HaxRugbyStadium';
-import MapDimensions from '../../models/map/MapDimensions';
-import TConversionProps from '../../models/map/TConversionProps';
-import THaxRugbyStadiums from '../../models/stadium/THaxRugbyStadiums';
+import THaxRugbyStadiums from '../../models/map/THaxRugbyStadiums';
+import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import MapDimensions from '../../models/stadium/MapDimensions';
+import TConversionProps from '../../models/stadium/TConversionProps';
 
 export const DIMENSIONS = {
-  outerWidth: 440,
-  outerHeight: 200,
+  outerWidth: 720,
+  outerHeight: 350,
 
-  width: 390,
-  height: 153,
+  width: 674,
+  height: 300,
 
-  goalLineX: 300,
-  goalPostY: 50,
-  miniArea: 45,
-  kickoffLineX: 100,
-  areaLineX: 200,
+  goalLineX: 562,
+  goalPostY: 60,
+  miniArea: 65,
+  kickoffLineX: 179,
+  areaLineX: 412,
 };
 
 const dimensions = new MapDimensions(
@@ -31,14 +32,16 @@ const dimensions = new MapDimensions(
 );
 
 const red_kickoff = HaxRugbyStadium.getNewStadium(
-  'S-HaxRugby v9 R by JP',
+  'HaxRugby v20 R by JP',
+  MapSizeEnum.NORMAL,
   dimensions,
   TeamEnum.RED,
 );
 
 function red_getConversion(conversionProps: TConversionProps): string {
   return HaxRugbyStadium.getNewStadium(
-    'S-HaxRugby v9 RC by JP',
+    'HaxRugby v20 RC by JP',
+    MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
     conversionProps,
@@ -46,14 +49,16 @@ function red_getConversion(conversionProps: TConversionProps): string {
 }
 
 const blue_kickoff = HaxRugbyStadium.getNewStadium(
-  'S-HaxRugby v9 B by JP',
+  'HaxRugby v20 B by JP',
+  MapSizeEnum.NORMAL,
   dimensions,
   TeamEnum.BLUE,
 );
 
 function blue_getConversion(conversionProps: TConversionProps): string {
   return HaxRugbyStadium.getNewStadium(
-    'S-HaxRugby v9 BC by JP',
+    'HaxRugby v20 BC by JP',
+    MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
     conversionProps,
@@ -70,9 +75,9 @@ const blueMaps: THaxRugbyStadiums = {
   getConversion: blue_getConversion,
 };
 
-const smallMaps = {
+const normalMaps = {
   red: redMaps,
   blue: blueMaps,
 };
 
-export default smallMaps;
+export default normalMaps;

@@ -2,10 +2,11 @@
 
 import { Color } from 'inversihax';
 import { BALL_RADIUS } from '../constants/constants';
+import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TraitEnum from '../enums/stadium/TraitEnum';
 import TeamEnum from '../enums/TeamEnum';
-import MapDimensions from '../models/map/MapDimensions';
-import TConversionProps from '../models/map/TConversionProps';
+import MapDimensions from '../models/stadium/MapDimensions';
+import TConversionProps from '../models/stadium/TConversionProps';
 
 export function getVertex(x: number, y: number, trait: TraitEnum): any {
   return {
@@ -49,6 +50,7 @@ export function getBallPhysics(radius: number): any {
 class StadiumService {
   constructor(
     private dims: MapDimensions,
+    private size: MapSizeEnum,
     private team: TeamEnum,
     private convProps: TConversionProps | null,
   ) {}
@@ -156,17 +158,19 @@ class StadiumService {
   getBallSegment(v0: number, v1: number): any {
     let curve: number;
 
-    if (!this.convProps) {
+    if (this.convProps === null) {
       if (this.team === TeamEnum.RED) {
+        curve = -180;
+      } else {
         curve = 180;
       }
-      curve = -180;
       return getSegment(v0, v1, TraitEnum.kickOffBarrier, curve);
     } else {
       if (this.team === TeamEnum.RED) {
+        curve = 180;
+      } else {
         curve = -180;
       }
-      curve = 180;
       return getSegment(v0, v1, TraitEnum.powerBoost, curve);
     }
   }
@@ -185,6 +189,20 @@ class StadiumService {
         p1: [-this.dims.goalLineX, this.dims.goalPostY],
       };
     }
+  }
+
+  getNonSmallTrait(trait: TraitEnum): TraitEnum {
+    if (this.size !== MapSizeEnum.SMALL) {
+      return trait;
+    }
+    return TraitEnum.null;
+  }
+
+  getSmallTrait(trait: TraitEnum): TraitEnum {
+    if (this.size === MapSizeEnum.SMALL) {
+      return trait;
+    }
+    return TraitEnum.null;
   }
 }
 

@@ -13,7 +13,7 @@ import {
 import colors from '../../constants/style/colors';
 import LinkEnum from '../../enums/LinkEnum';
 import RuleEnum from '../../enums/RuleEnum';
-import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyMap';
+import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';

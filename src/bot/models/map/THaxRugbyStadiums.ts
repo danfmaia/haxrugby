@@ -1,4 +1,4 @@
-import TConversionProps from '../map/TConversionProps';
+import TConversionProps from '../stadium/TConversionProps';
 
 type THaxRugbyStadiums = {
   kickoff: string;

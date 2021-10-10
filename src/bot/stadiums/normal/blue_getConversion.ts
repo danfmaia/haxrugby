@@ -1,5 +1,5 @@
 import { BALL_RADIUS } from '../../constants/constants';
-import TConversionProps from '../../models/map/TConversionProps';
+import TConversionProps from '../../models/stadium/TConversionProps';
 
 function blue_getConversion(convProps: TConversionProps): string {
   const map = {

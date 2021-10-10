@@ -1,7 +1,7 @@
 import AHaxRugbyMap from './AHaxRugbyMap';
 import THaxRugbyStadiums from './THaxRugbyStadiums';
 
-class HaxRugbyMaps extends AHaxRugbyMap {
+class HaxRugbyMap extends AHaxRugbyMap {
   public redMaps: THaxRugbyStadiums;
   public blueMaps: THaxRugbyStadiums;
 
@@ -21,4 +21,4 @@ class HaxRugbyMaps extends AHaxRugbyMap {
   }
 }
 
-export default HaxRugbyMaps;
+export default HaxRugbyMap;
