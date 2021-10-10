@@ -314,6 +314,78 @@ class HaxRugbyStadium {
 
       /* 138 */ getVertex(-5, goalPostY, TraitEnum.line),
       /* 139 */ getVertex(5, goalPostY, TraitEnum.line),
+
+      // "JP's" drawing lines
+
+      /* 140 */ { x: -15, y: -340, trait: 'fadeLine' },
+      /* 141 */ { x: -15, y: -316, trait: 'fadeLine' },
+      /* 142 */ { x: -27, y: -305, trait: 'fadeLine' },
+      /* 143 */ { x: -10, y: -310, trait: 'fadeLine' },
+      /* 144 */ { x: -10, y: -340, curve: 230, trait: 'fadeLine' },
+      /* 145 */ { x: -10, y: -325, curve: 230, trait: 'fadeLine' },
+      /* 146 */ { x: 5, y: -345, curve: 0, trait: 'fadeLine' },
+      /* 147 */ { x: 5, y: -335, curve: 0, trait: 'fadeLine' },
+      /* 148 */ { x: 25, y: -326, curve: -120, trait: 'fadeLine' },
+      /* 149 */ { x: 10, y: -324, curve: -120, trait: 'fadeLine' },
+      /* 150 */ { x: 17.5, y: -320, curve: 0, trait: 'fadeLine' },
+      /* 151 */ { x: 25, y: -316, curve: 120, trait: 'fadeLine' },
+      /* 152 */ { x: 10, y: -314, curve: 120, trait: 'fadeLine' },
+
+      // empty drawing vertexes
+
+      /* 153 */ { x: 0, y: 0, trait: 'null' },
+      /* 154 */ { x: 0, y: 0, trait: 'null' },
+      /* 155 */ { x: 0, y: 0, trait: 'null' },
+      /* 156 */ { x: 0, y: 0, trait: 'null' },
+      /* 157 */ { x: 0, y: 0, trait: 'null' },
+      /* 158 */ { x: 0, y: 0, trait: 'null' },
+      /* 159 */ { x: 0, y: 0, trait: 'null' },
+
+      // "Rugby Union" drawing lines
+
+      /* 160 */ { x: -95, y: 310, curve: 230, trait: 'fadeLine' },
+      /* 161 */ { x: -95, y: 340, trait: 'fadeLine' },
+      /* 162 */ { x: -95, y: 325, curve: 230, trait: 'fadeLine' },
+      /* 163 */ { x: -86, y: 324, curve: 0, trait: 'fadeLine' },
+      /* 164 */ { x: -80, y: 340, curve: 0, trait: 'fadeLine' },
+      /* 165 */ { x: -75, y: 335, curve: -110, trait: 'fadeLine' },
+      /* 166 */ { x: -60, y: 335, trait: 'fadeLine', curve: -110 },
+      /* 167 */ { x: -60, y: 340, trait: 'fadeLine' },
+      /* 168 */ { x: -40, y: 320, trait: 'fadeLine' },
+      /* 169 */ { x: -40, y: 343, trait: 'fadeLine', curve: -110 },
+      /* 170 */ { x: -55, y: 343, trait: 'fadeLine', curve: -110 },
+      /* 171 */ { x: -35, y: 340, curve: 0, trait: 'fadeLine' },
+      /* 172 */ { x: -35, y: 305, curve: 0, trait: 'fadeLine' },
+      /* 173 */ { x: -35, y: 325, curve: 290, trait: 'fadeLine' },
+      /* 174 */ { x: -15, y: 320, curve: 0, trait: 'fadeLine' },
+      /* 175 */ { x: -7.5, y: 335, curve: 0, trait: 'fadeLine' },
+      /* 176 */ { x: 0, y: 320, trait: 'fadeLine' },
+      /* 177 */ { x: -15, y: 350, trait: 'fadeLine' },
+      /* 178 */ { x: 10, y: 310, trait: 'fadeLine' },
+      /* 179 */ { x: 10, y: 335, trait: 'fadeLine', curve: -110 },
+      /* 180 */ { x: 25, y: 335, trait: 'fadeLine', curve: -110 },
+      /* 181 */ { x: 25, y: 310, trait: 'fadeLine' },
+      /* 182 */ { x: 30, y: 320, trait: 'fadeLine' },
+      /* 183 */ { x: 30, y: 340, trait: 'fadeLine' },
+      /* 184 */ { x: -40, y: 325, curve: -290, trait: 'fadeLine' },
+      /* 185 */ { x: -35, y: 335, curve: 290, trait: 'fadeLine' },
+      /* 186 */ { x: 30, y: 325, trait: 'fadeLine', curve: 110 },
+      /* 187 */ { x: 45, y: 325, trait: 'fadeLine', curve: 110 },
+      /* 188 */ { x: 45, y: 340, trait: 'fadeLine' },
+      /* 189 */ { x: 50, y: 320, trait: 'fadeLine' },
+      /* 190 */ { x: 50, y: 340, trait: 'fadeLine' },
+      /* 191 */ { x: 49, y: 314, trait: 'fadeLine' },
+      /* 192 */ { x: 51, y: 314, trait: 'fadeLine' },
+      /* 193 */ { x: 65, y: 320, curve: 180, trait: 'fadeLine' },
+      /* 194 */ { x: 65, y: 340, curve: 180, trait: 'fadeLine' },
+      /* 195 */ { x: 80, y: 320, trait: 'fadeLine' },
+      /* 196 */ { x: 80, y: 340, trait: 'fadeLine' },
+      /* 197 */ { x: 80, y: 325, trait: 'fadeLine', curve: 110 },
+      /* 198 */ { x: 95, y: 325, trait: 'fadeLine', curve: 110 },
+      /* 199 */ { x: 95, y: 340, trait: 'fadeLine' },
+      /* 200 */ { x: -75, y: 320, curve: 0, trait: 'fadeLine' },
+      /* 201 */ { x: -60, y: 320, trait: 'fadeLine' },
+      /* 202 */ { x: -40, y: 335, curve: -290, trait: 'fadeLine' },
     ];
 
     this.segments = [
@@ -423,6 +495,49 @@ class HaxRugbyStadium {
 
       getSegment(136, 137, this.serv.getSmallTrait(TraitEnum.line)),
       getSegment(138, 139, this.serv.getSmallTrait(TraitEnum.line)),
+
+      // "JP's" drawing lines
+
+      { vis: true, v0: 140, v1: 141, trait: 'fadeLine' },
+      { vis: true, v0: 141, v1: 142, curve: 106.99711775898741, trait: 'fadeLine' },
+      { vis: true, v0: 144, v1: 143, trait: 'fadeLine' },
+      { vis: true, v0: 144, v1: 145, curve: 230, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 146, v1: 147, trait: 'fadeLine' },
+      { curve: -120, vis: true, v0: 148, v1: 149, trait: 'fadeLine' },
+      { curve: -80, vis: true, v0: 149, v1: 150, trait: 'fadeLine' },
+      { curve: 80, vis: true, v0: 150, v1: 151, trait: 'fadeLine' },
+      { curve: 120, vis: true, v0: 151, v1: 152, y: -312, trait: 'fadeLine' },
+
+      // "Rugby Union" drawing lines
+
+      { vis: true, v0: 160, v1: 161, trait: 'fadeLine' },
+      { vis: true, v0: 160, v1: 162, curve: 230, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 164, v1: 163, trait: 'fadeLine' },
+      { curve: -110, vis: true, v0: 165, v1: 166, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 200, v1: 165, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 201, v1: 167, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 168, v1: 169, trait: 'fadeLine' },
+      { curve: -110, vis: true, v0: 170, v1: 169, trait: 'fadeLine' },
+      { vis: true, v0: 184, v1: 169, x: -45, trait: 'fadeLine' },
+      { curve: -290, vis: true, v0: 184, v1: 202, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 171, v1: 172, trait: 'fadeLine' },
+      { curve: 290, vis: true, v0: 173, v1: 185, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 174, v1: 175, trait: 'fadeLine' },
+      { curve: 0, vis: true, v0: 176, v1: 177, trait: 'fadeLine' },
+      { vis: true, v0: 178, v1: 179, trait: 'fadeLine' },
+      { vis: true, v0: 181, v1: 180, trait: 'fadeLine' },
+      { vis: true, v0: 183, v1: 182, trait: 'fadeLine' },
+      { vis: true, v0: 188, v1: 187, trait: 'fadeLine' },
+      { vis: true, v0: 190, v1: 189, x: 50, trait: 'fadeLine' },
+      { vis: true, v0: 193, v1: 194, curve: 180, trait: 'fadeLine' },
+      { vis: true, v0: 196, v1: 195, x: 80, trait: 'fadeLine' },
+      { vis: true, v0: 199, v1: 198, x: 95, trait: 'fadeLine' },
+      { vis: true, v0: 179, v1: 180, curve: -110, trait: 'fadeLine' },
+      { curve: 110, vis: true, v0: 186, v1: 187, trait: 'fadeLine' },
+      { curve: 180, vis: true, v0: 191, v1: 192, trait: 'fadeLine' },
+      { curve: -180, vis: true, v0: 191, v1: 192, trait: 'fadeLine' },
+      { curve: -180, vis: true, v0: 193, v1: 194, trait: 'fadeLine' },
+      { vis: true, v0: 197, v1: 198, curve: 110, trait: 'fadeLine' },
     ];
 
     if (this.isConversion === null) {
