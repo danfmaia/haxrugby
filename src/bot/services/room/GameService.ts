@@ -1,4 +1,4 @@
-import { IPlayerObject, IPosition, TeamID } from 'inversihax';
+import { IDiscPropertiesObject, IPlayerObject, IPosition, TeamID } from 'inversihax';
 
 import {
   MINUTE_IN_MS,
@@ -28,6 +28,7 @@ import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
 import Teams, { ITeams } from '../../models/team/Teams';
 import colors from '../../constants/style/colors';
+import TLastDriveInfo from '../../models/physics/TLastDriveInfo';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -56,8 +57,11 @@ export default class GameService implements IGameService {
   private driverIds: number[] = [];
   private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
-  private lastDriveX: number = 0;
-  private ballColorTransitionCount: number = BALL_COLOR_TRANSITION_TICKS;
+  private lastDriveX: TLastDriveInfo = {
+    driveX: 0,
+    team: TeamEnum.RED,
+  };
+  private ballColorTransitionCount: number = 0;
 
   private kickoffX: number | null = null;
 
@@ -252,7 +256,10 @@ export default class GameService implements IGameService {
     this.lastTouchInfo = null;
     this.touchInfoList = [];
     this.driverIds = [];
-    this.lastDriveX = 0;
+    this.lastDriveX = {
+      ...this.lastDriveX,
+      driveX: 0,
+    };
     this.kickoffX = null;
     this.tryY = null;
     this.isTry = false;
@@ -557,35 +564,44 @@ export default class GameService implements IGameService {
     // count current ball drivers
     this.driverCountByTeam = this.roomUtil.countPlayersByTeam(this.driverIds);
 
-    // register last drive X
-    if (
-      (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) ||
-      (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX)
-    ) {
-      this.lastDriveX = ballPosition.x;
+    const ballCurrentColor = this.room.getDiscProperties(0).color;
+    const ballProps = {} as IDiscPropertiesObject;
+
+    if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
+      // register last drive X
+      this.lastDriveX = {
+        driveX: ballPosition.x,
+        team: TeamEnum.RED,
+      };
 
       // change ball color to team's
-      this.ballColorTransitionCount = BALL_COLOR_TRANSITION_TICKS;
-      const ballProps = this.room.getDiscProperties(0);
-      if (this.driverCountByTeam.red && ballProps.color !== colors.ballRed) {
+      if (ballCurrentColor !== colors.ballRed) {
+        this.ballColorTransitionCount = BALL_COLOR_TRANSITION_TICKS;
         ballProps.color = colors.ballRed;
         this.room.setDiscProperties(0, ballProps);
-      } else if (this.driverCountByTeam.blue && ballProps.color !== colors.ballBlue) {
+      }
+    } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
+      // register last drive X
+      this.lastDriveX = {
+        driveX: ballPosition.x,
+        team: TeamEnum.BLUE,
+      };
+
+      // change ball color to team's
+      if (ballCurrentColor !== colors.ballRed) {
+        this.ballColorTransitionCount = BALL_COLOR_TRANSITION_TICKS;
         ballProps.color = colors.ballBlue;
         this.room.setDiscProperties(0, ballProps);
       }
-    } else if (this.ballColorTransitionCount > 0) {
-      // transition ball color to original
-      this.ballColorTransitionCount = this.ballColorTransitionCount - 1;
-      // const ballProps = this.room.getDiscProperties(0);
-      // ballProps.color = Util.transitionBallColor(ballProps.color, this.ballColorTransitionCount);
-      // console.log('ballProps.color: ', ballProps.color);
-      // this.room.setDiscProperties(0, ballProps);
     }
 
-    if (this.ballColorTransitionCount === 1) {
-      const ballProps = this.room.getDiscProperties(0);
-      ballProps.color = colors.ball;
+    if (this.ballColorTransitionCount > 0) {
+      // transition ball color to original
+      this.ballColorTransitionCount = this.ballColorTransitionCount - 1;
+      ballProps.color = Util.transitionBallColor(
+        this.lastDriveX.team,
+        this.ballColorTransitionCount,
+      );
       this.room.setDiscProperties(0, ballProps);
     }
   }
@@ -665,7 +681,7 @@ export default class GameService implements IGameService {
       let teamName: string;
       let stadium: string;
 
-      let kickoffX = this.lastDriveX;
+      let kickoffX = this.lastDriveX.driveX;
       if (kickoffX < -this.map.areaLineX) {
         kickoffX = -this.map.areaLineX;
       } else if (kickoffX > this.map.areaLineX) {
