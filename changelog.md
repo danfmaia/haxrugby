@@ -1,6 +1,12 @@
 ## CHANGELOG
 
-### v0.8c (_Loading..._):
+### v0.9:
+
+- Implementada a classe `HaxRugbyStadium`;
+  - Agora todos os stadiums, independente do tamanho do map e ou da situação de jogo, são objetos desta única classe;
+  - Isso torna bastante flexíveis as dimensões dos maps, podendo ser alteradas com facilidade.
+
+### v0.8c:
 
 - Alterado o kick rate limit para 10/60/3;
 - Corrigido o erro do `!k` e `!gk` quando seleciona um jogador com `#`;

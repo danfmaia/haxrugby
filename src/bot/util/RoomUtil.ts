@@ -42,10 +42,8 @@ export class RoomUtil {
     return (
       (-blueMinusRed <= 7 &&
         -blueMinusRed > 0 &&
-        ballPosition.x < -this.gameService.stadium.kickoffLineX) ||
-      (blueMinusRed <= 7 &&
-        blueMinusRed > 0 &&
-        ballPosition.x > this.gameService.stadium.kickoffLineX)
+        ballPosition.x < -this.gameService.map.kickoffLineX) ||
+      (blueMinusRed <= 7 && blueMinusRed > 0 && ballPosition.x > this.gameService.map.kickoffLineX)
     );
   }
 

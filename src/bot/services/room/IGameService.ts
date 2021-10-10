@@ -13,7 +13,7 @@ export interface IGameService {
   chatService: IChatService;
   roomUtil: RoomUtil;
 
-  stadium: HaxRugbyMap;
+  map: HaxRugbyMap;
   matchConfig: MatchConfig;
   teams: ITeams;
 

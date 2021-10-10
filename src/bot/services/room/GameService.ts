@@ -33,7 +33,7 @@ export default class GameService implements IGameService {
   public chatService: IChatService;
   public roomUtil: RoomUtil;
 
-  public stadium: HaxRugbyMap = smallMap;
+  public map: HaxRugbyMap = smallMap;
   public matchConfig: MatchConfig;
   public teams: ITeams;
 
@@ -209,21 +209,21 @@ export default class GameService implements IGameService {
         this.room.pauseGame(true);
 
         let teamName: string;
-        let map: string;
+        let stadium: string;
         if (team === TeamID.RedTeam) {
           this.score.red = this.score.red + 2;
           teamName = this.teams.red.name;
-          map = this.stadium.blueMaps.kickoff;
+          stadium = this.map.blueStadiums.kickoff;
         } else {
           this.score.blue = this.score.blue + 2;
           teamName = this.teams.blue.name;
-          map = this.stadium.redMaps.kickoff;
+          stadium = this.map.redStadiums.kickoff;
         }
 
         // announce successful conversion
         this.chatService.sendBoldAnnouncement(`Conversão do ${teamName}!`, 2);
 
-        this.handleRestartOrFinishing(map);
+        this.handleRestartOrFinishing(stadium);
       });
     }
   }
@@ -283,9 +283,9 @@ export default class GameService implements IGameService {
       if (this.isFinishing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
-          this.room.setCustomStadium(this.stadium.redMaps.kickoff);
+          this.room.setCustomStadium(this.map.redStadiums.kickoff);
         } else if (lastWinner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.stadium.blueMaps.kickoff);
+          this.room.setCustomStadium(this.map.blueStadiums.kickoff);
         }
       }
 
@@ -330,10 +330,10 @@ export default class GameService implements IGameService {
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
     // move ball to the right place
     const updatedBallProps = this.room.getDiscProperties(0);
-    updatedBallProps.x = this.stadium.moveDiscInXAxis(
+    updatedBallProps.x = this.map.moveDiscInXAxis(
       updatedBallProps,
       kickingTeam,
-      this.stadium.areaLineX,
+      this.map.areaLineX,
     );
     updatedBallProps.y = tryY;
     this.lastBallPosition = {
@@ -347,10 +347,10 @@ export default class GameService implements IGameService {
     if (kickerId !== null) {
       const updatedKickerProps = this.room.getPlayerDiscProperties(kickerId);
       if (updatedKickerProps) {
-        updatedKickerProps.x = this.stadium.moveDiscInXAxis(
+        updatedKickerProps.x = this.map.moveDiscInXAxis(
           updatedKickerProps,
           kickingTeam,
-          this.stadium.areaLineX,
+          this.map.areaLineX,
         );
         updatedKickerProps.y = updatedKickerProps.y + tryY;
         this.room.setPlayerDiscProperties(kickerId, updatedKickerProps);
@@ -369,10 +369,10 @@ export default class GameService implements IGameService {
     kickingTeamPlayers.forEach((player) => {
       const updatedPlayerProps = this.room.getPlayerDiscProperties(player.id);
       if (updatedPlayerProps) {
-        updatedPlayerProps.x = this.stadium.moveDiscInXAxis(
+        updatedPlayerProps.x = this.map.moveDiscInXAxis(
           updatedPlayerProps,
           defendingTeam,
-          this.stadium.miniAreaX,
+          this.map.miniAreaX,
         );
         this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
       }
@@ -386,10 +386,10 @@ export default class GameService implements IGameService {
     if (goalkeeperId !== null) {
       const updatedGoalkeeperProps = this.room.getPlayerDiscProperties(goalkeeperId);
       if (updatedGoalkeeperProps) {
-        updatedGoalkeeperProps.x = this.stadium.moveDiscInXAxis(
+        updatedGoalkeeperProps.x = this.map.moveDiscInXAxis(
           updatedGoalkeeperProps,
           kickingTeam,
-          this.stadium.areaLineX,
+          this.map.areaLineX,
         );
         updatedGoalkeeperProps.y = 0;
         this.room.setPlayerDiscProperties(goalkeeperId, updatedGoalkeeperProps);
@@ -403,10 +403,10 @@ export default class GameService implements IGameService {
     defenseBenchPlayers.forEach((player) => {
       const updatedPlayerProps = this.room.getPlayerDiscProperties(player.id);
       if (updatedPlayerProps) {
-        updatedPlayerProps.x = this.stadium.moveDiscInXAxis(
+        updatedPlayerProps.x = this.map.moveDiscInXAxis(
           updatedPlayerProps,
           kickingTeam,
-          this.stadium.areaLineX + this.stadium.kickoffLineX,
+          this.map.areaLineX + this.map.kickoffLineX,
         );
         this.room.setPlayerDiscProperties(player.id, updatedPlayerProps);
       }
@@ -478,7 +478,7 @@ export default class GameService implements IGameService {
       return;
     }
 
-    const didBallEnterOrLeaveIngoal = this.stadium.getDidBallEnterOrLeaveIngoal(
+    const didBallEnterOrLeaveIngoal = this.map.getDidBallEnterOrLeaveIngoal(
       ballPosition,
       this.lastBallPosition,
     );
@@ -493,7 +493,7 @@ export default class GameService implements IGameService {
     }
 
     if (this.isDefRec === false) {
-      const isTryOnGoalLine = this.stadium.getIsTryOnGoalLine(
+      const isTryOnGoalLine = this.map.getIsTryOnGoalLine(
         didBallEnterOrLeaveIngoal,
         ballPosition,
         this.driverCountByTeam,
@@ -525,7 +525,7 @@ export default class GameService implements IGameService {
   }
 
   private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: ITouchInfo): boolean {
-    const isGoal = this.stadium.getIsFieldGoal(
+    const isGoal = this.map.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
       lastTouchInfo.ballPosition,
@@ -535,22 +535,22 @@ export default class GameService implements IGameService {
       this.isTimeRunning = false;
       this.room.pauseGame(true);
       let teamName: string;
-      let map: string;
+      let stadium: string;
 
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
         teamName = this.teams.red.name;
-        map = this.stadium.blueMaps.kickoff;
+        stadium = this.map.blueStadiums.kickoff;
       } else {
         this.score.blue = this.score.blue + 3;
         teamName = this.teams.blue.name;
-        map = this.stadium.redMaps.kickoff;
+        stadium = this.map.redStadiums.kickoff;
       }
 
       // announce goal
       this.chatService.sendBoldAnnouncement(`Field Goal do ${teamName}!`, 2);
 
-      this.handleRestartOrFinishing(map);
+      this.handleRestartOrFinishing(stadium);
       return true;
     }
     return false;
@@ -586,31 +586,31 @@ export default class GameService implements IGameService {
     let isSafety: false | TeamEnum = false;
 
     // check for safety on in-goal
-    isSafety = this.stadium.getIsSafety(ballPosition, this.driverCountByTeam);
+    isSafety = this.map.getIsSafety(ballPosition, this.driverCountByTeam);
 
     // check for safety on goal post
     if (isSafety === false) {
-      isSafety = this.stadium.getIsSafetyOnGoalPost(ballPosition, this.toucherCountByTeam);
+      isSafety = this.map.getIsSafetyOnGoalPost(ballPosition, this.toucherCountByTeam);
     }
 
     if (isSafety) {
       this.isTimeRunning = false;
       this.room.pauseGame(true);
       let teamName: string;
-      let map: string;
+      let stadium: string;
 
       if (isSafety === TeamEnum.RED) {
         teamName = this.teams.red.name;
-        map = this.stadium.redMaps.kickoff;
+        stadium = this.map.redStadiums.kickoff;
       } else {
         teamName = this.teams.blue.name;
-        map = this.stadium.blueMaps.kickoff;
+        stadium = this.map.blueStadiums.kickoff;
       }
 
       // announce safety
       this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
 
-      this.handleRestartOrFinishing(map);
+      this.handleRestartOrFinishing(stadium);
       return true;
     }
     return false;
@@ -620,11 +620,11 @@ export default class GameService implements IGameService {
     let isTry: false | TeamEnum = false;
 
     // check for try on in-goal
-    isTry = this.stadium.getIsTry(ballPosition, this.driverCountByTeam);
+    isTry = this.map.getIsTry(ballPosition, this.driverCountByTeam);
 
     // check for try on goal post
     if (isTry === false) {
-      isTry = this.stadium.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
+      isTry = this.map.getIsTryOnGoalPost(ballPosition, this.toucherCountByTeam);
     }
 
     if (isTry) {
@@ -658,7 +658,7 @@ export default class GameService implements IGameService {
 
     let isStillAttempting: boolean = true;
 
-    if (Math.abs(ballPosition.x) < this.stadium.tryLineX) {
+    if (Math.abs(ballPosition.x) < this.map.tryLineX) {
       // finish attempt when ball is moved out of the in-goal
       isStillAttempting = false;
     }
@@ -708,20 +708,20 @@ export default class GameService implements IGameService {
       this.afterTryTickCount = 0;
       this.room.pauseGame(true);
 
-      let map: string;
+      let stadium: string;
       if (this.isTry === TeamEnum.RED) {
-        map = this.stadium.redMaps.getConversion({
-          ballX: this.stadium.areaLineX,
+        stadium = this.map.redStadiums.getConversion({
+          ballX: this.map.areaLineX,
           tryY: this.tryY,
         });
       } else {
-        map = this.stadium.blueMaps.getConversion({
-          ballX: -this.stadium.areaLineX,
+        stadium = this.map.blueStadiums.getConversion({
+          ballX: -this.map.areaLineX,
           tryY: this.tryY,
         });
       }
 
-      this.handleRestartOrFinishing(map, () => {
+      this.handleRestartOrFinishing(stadium, () => {
         this.isConversionAttempt = this.isTry;
         this.isTry = false;
       });
@@ -744,7 +744,7 @@ export default class GameService implements IGameService {
     }
 
     // check missed conversion
-    const isMissedConversion = this.stadium.getIsMissedConversion(
+    const isMissedConversion = this.map.getIsMissedConversion(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
     );
@@ -764,20 +764,20 @@ export default class GameService implements IGameService {
       this.tryY = null;
 
       let teamName: string;
-      let map: string;
+      let stadium: string;
 
       if (isStillConversionAttempt === TeamEnum.RED) {
         teamName = this.teams.red.name;
-        map = this.stadium.blueMaps.kickoff;
+        stadium = this.map.blueStadiums.kickoff;
       } else {
         teamName = this.teams.blue.name;
-        map = this.stadium.redMaps.kickoff;
+        stadium = this.map.redStadiums.kickoff;
       }
 
       // announce missed conversion
       this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
 
-      this.handleRestartOrFinishing(map);
+      this.handleRestartOrFinishing(stadium);
     }
   }
 

@@ -42,7 +42,7 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     const kickingTeam = this.gameService.isConversionAttempt;
     const allPlayersPropMap = this.gameService.roomUtil.getAllPlayerPropsMaps();
-    const stadium = this.gameService.stadium;
+    const map = this.gameService.map;
     let newBallX = player.position.x;
     const distanceToBallX = PLAYER_RADIUS + BALL_RADIUS + 5;
 
@@ -51,33 +51,39 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
       newBallX = newBallX + distanceToBallX;
       if (newBallX < 0) {
         newBallX = 0;
-      } else if (newBallX > stadium.areaLineX) {
-        newBallX = stadium.areaLineX;
+      } else if (newBallX > map.areaLineX) {
+        newBallX = map.areaLineX;
       }
     } else {
       newBallX = newBallX - distanceToBallX;
       if (newBallX > 0) {
         newBallX = 0;
-      } else if (newBallX < -stadium.areaLineX) {
-        newBallX = -stadium.areaLineX;
+      } else if (newBallX < -map.areaLineX) {
+        newBallX = -map.areaLineX;
       }
     }
 
-    let map: string;
+    let stadium: string;
     if (this.gameService.tryY === null) {
       // bug
       return;
     }
 
     if (this.gameService.isConversionAttempt === TeamEnum.RED) {
-      map = stadium.redMaps.getConversion({ ballX: newBallX, tryY: this.gameService.tryY });
+      stadium = map.redStadiums.getConversion({
+        ballX: newBallX,
+        tryY: this.gameService.tryY,
+      });
     } else {
-      map = stadium.blueMaps.getConversion({ ballX: newBallX, tryY: this.gameService.tryY });
+      stadium = map.blueStadiums.getConversion({
+        ballX: newBallX,
+        tryY: this.gameService.tryY,
+      });
     }
 
     this.gameService.isReplacingBall = true;
     this.room.stopGame();
-    this.room.setCustomStadium(map);
+    this.room.setCustomStadium(stadium);
     this.room.startGame();
     Util.timeout(50, () => {
       this.gameService.isReplacingBall = false;

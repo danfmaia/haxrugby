@@ -2,12 +2,12 @@ import AHaxRugbyMap from './AHaxRugbyMap';
 import THaxRugbyStadiums from './THaxRugbyStadiums';
 
 class HaxRugbyMap extends AHaxRugbyMap {
-  public redMaps: THaxRugbyStadiums;
-  public blueMaps: THaxRugbyStadiums;
+  public redStadiums: THaxRugbyStadiums;
+  public blueStadiums: THaxRugbyStadiums;
 
   constructor(
-    redMaps: THaxRugbyStadiums,
-    blueMaps: THaxRugbyStadiums,
+    redStadiums: THaxRugbyStadiums,
+    blueStadiums: THaxRugbyStadiums,
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,
@@ -16,8 +16,8 @@ class HaxRugbyMap extends AHaxRugbyMap {
   ) {
     super(goalLineX, goalPostY, miniAreaX, kickoffLineX, areaLineX);
 
-    this.redMaps = redMaps;
-    this.blueMaps = blueMaps;
+    this.redStadiums = redStadiums;
+    this.blueStadiums = blueStadiums;
   }
 }
 
