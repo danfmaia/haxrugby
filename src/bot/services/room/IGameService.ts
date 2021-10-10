@@ -3,7 +3,7 @@ import { IPlayerObject, IPosition, TeamID } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import { IChatService } from './ChatService';
 import { ITeams } from '../../models/team/Teams';
 import { RoomUtil } from '../../util/RoomUtil';
@@ -13,7 +13,7 @@ export interface IGameService {
   chatService: IChatService;
   roomUtil: RoomUtil;
 
-  stadium: HaxRugbyStadium;
+  stadium: HaxRugbyMap;
   matchConfig: MatchConfig;
   teams: ITeams;
 

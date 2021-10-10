@@ -4,10 +4,10 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import StadiumEnum from '../../enums/StadiumEnum';
-import smallStadium from '../../singletons/smallStadium';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
-import normalStadium from '../../singletons/normalStadium';
+import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
+import smallMap from '../../singletons/smallMap';
+import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
+import normalMap from '../../singletons/normalMap';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
 import getMatchConfig from '../../singletons/getMatchConfig';
@@ -95,15 +95,15 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getStadiumFromInput(stadiumInput: string): null | HaxRugbyStadium {
+  private getStadiumFromInput(stadiumInput: string): null | HaxRugbyMap {
     if (!stadiumInput) {
       return null;
     }
 
-    if (stadiumInput.toUpperCase() === StadiumEnum.SMALL) {
-      return smallStadium;
-    } else if (stadiumInput.toUpperCase() === StadiumEnum.NORMAL) {
-      return normalStadium;
+    if (stadiumInput.toUpperCase() === MapSizeEnum.SMALL) {
+      return smallMap;
+    } else if (stadiumInput.toUpperCase() === MapSizeEnum.NORMAL) {
+      return normalMap;
     }
     return null;
   }

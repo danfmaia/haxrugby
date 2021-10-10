@@ -13,7 +13,7 @@ import { KICK_RATE_LIMIT } from '../constants/constants';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
-import smallStadium from '../singletons/smallStadium';
+import smallMap from '../singletons/smallMap';
 import Util from '../util/Util';
 
 export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
@@ -113,7 +113,7 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
   }
 
   private initializeRoom() {
-    this.setCustomStadium(smallStadium.redMaps.kickoff);
+    this.setCustomStadium(smallMap.redMaps.kickoff);
     this.setTeamsLock(true);
     this.setTimeLimit(this.gameService.matchConfig.timeLimit);
     this.setScoreLimit(this.gameService.matchConfig.scoreLimit);

@@ -12,16 +12,16 @@ import MatchConfig from '../../models/match/MatchConfig';
 import { IScore } from '../../models/match/Score';
 import ITouchInfo from '../../models/physics/ITouchInfo';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import smallStadium from '../../singletons/smallStadium';
+import smallMap from '../../singletons/smallMap';
 import Physics from '../../util/Physics';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
 import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import { RoomUtil } from '../../util/RoomUtil';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
+import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import IPlayerCountByTeam from '../../models/team/IPlayerCountByTeam';
-import { IBallEnterOrLeaveIngoal } from '../../models/stadium/AHaxRugbyStadium';
+import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
@@ -33,7 +33,7 @@ export default class GameService implements IGameService {
   public chatService: IChatService;
   public roomUtil: RoomUtil;
 
-  public stadium: HaxRugbyStadium = smallStadium;
+  public stadium: HaxRugbyMap = smallMap;
   public matchConfig: MatchConfig;
   public teams: ITeams;
 
@@ -710,9 +710,15 @@ export default class GameService implements IGameService {
 
       let map: string;
       if (this.isTry === TeamEnum.RED) {
-        map = this.stadium.redMaps.getConversion(this.stadium.areaLineX, this.tryY);
+        map = this.stadium.redMaps.getConversion({
+          ballX: this.stadium.areaLineX,
+          tryY: this.tryY,
+        });
       } else {
-        map = this.stadium.blueMaps.getConversion(-this.stadium.areaLineX, this.tryY);
+        map = this.stadium.blueMaps.getConversion({
+          ballX: -this.stadium.areaLineX,
+          tryY: this.tryY,
+        });
       }
 
       this.handleRestartOrFinishing(map, () => {
