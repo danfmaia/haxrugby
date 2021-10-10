@@ -2,9 +2,10 @@ class MapDimensions {
   constructor(
     public outerWidth: number,
     public outerHeight: number,
-
     public width: number,
     public height: number,
+
+    public spawnDistance: number,
 
     public goalLineX: number,
     public goalPostY: number,

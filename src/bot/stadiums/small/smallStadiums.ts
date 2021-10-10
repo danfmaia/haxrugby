@@ -8,9 +8,10 @@ import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 export const DIMENSIONS = {
   outerWidth: 514,
   outerHeight: 233.6,
-
   width: 468,
   height: 183.6,
+
+  spawnDistance: 150,
 
   goalLineX: 360,
   goalPostY: 50,
@@ -36,6 +37,7 @@ const dimensions = new MapDimensions(
   DIMENSIONS.outerHeight,
   DIMENSIONS.width,
   DIMENSIONS.height,
+  DIMENSIONS.spawnDistance,
   DIMENSIONS.goalLineX,
   DIMENSIONS.goalPostY,
   DIMENSIONS.miniArea,

@@ -45,9 +45,10 @@ class HaxRugbyStadium {
 
     outerWidth: number,
     outerHeight: number,
-
     width: number,
     height: number,
+
+    spawnDistance: number,
 
     goalLineX: number,
     goalPostY: number,
@@ -62,7 +63,7 @@ class HaxRugbyStadium {
     this.width = outerWidth;
     this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
 
-    this.spawnDistance = 150;
+    this.spawnDistance = spawnDistance;
 
     this.bg = {
       type: 'grass',
@@ -139,6 +140,7 @@ class HaxRugbyStadium {
         TraitEnum.playerArea,
       ), // 33
 
+      // TODO: improve these lines
       getVertex(this.serv.getSignal() * goalLineX, -outerHeight, TraitEnum.kickOffBarrier), // 34
       getVertex(this.serv.getSignal() * goalLineX, -goalPostY, TraitEnum.null), // 35
       getVertex(this.serv.getSignal() * goalLineX, goalPostY, TraitEnum.null), // 36
@@ -415,8 +417,9 @@ class HaxRugbyStadium {
 
       this.serv.getBallSegment(30, 31),
 
+      // TODO: improve these 3 lines
       this.serv.getConversionSegment(32, 33, TraitEnum.playerArea),
-      this.serv.getConversionSegment(34, 37, TraitEnum.playerArea),
+      this.serv.getConversionSegment(34, 37, TraitEnum.kickOffBarrier),
       this.serv.getConversionSegment(38, 39, TraitEnum.playerArea),
 
       // Red's non-small in-goal lines
@@ -583,6 +586,7 @@ class HaxRugbyStadium {
         dimensions.outerHeight,
         dimensions.width,
         dimensions.height,
+        dimensions.spawnDistance,
         dimensions.goalLineX,
         dimensions.goalPostY,
         dimensions.miniArea,

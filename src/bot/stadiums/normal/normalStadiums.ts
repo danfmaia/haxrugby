@@ -8,9 +8,10 @@ import TConversionProps from '../../models/stadium/TConversionProps';
 export const DIMENSIONS = {
   outerWidth: 720,
   outerHeight: 350,
-
   width: 674,
   height: 300,
+
+  spawnDistance: 227,
 
   goalLineX: 562,
   goalPostY: 60,
@@ -24,6 +25,7 @@ const dimensions = new MapDimensions(
   DIMENSIONS.outerHeight,
   DIMENSIONS.width,
   DIMENSIONS.height,
+  DIMENSIONS.spawnDistance,
   DIMENSIONS.goalLineX,
   DIMENSIONS.goalPostY,
   DIMENSIONS.miniArea,
