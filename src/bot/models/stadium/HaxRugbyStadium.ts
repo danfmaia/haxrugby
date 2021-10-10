@@ -17,7 +17,6 @@ import traits from './traits';
 
 class HaxRugbyStadium {
   public name: string;
-  private isConversion: boolean;
 
   public width: number;
   public height: number;
@@ -39,7 +38,7 @@ class HaxRugbyStadium {
     name: string,
     size: MapSizeEnum,
     team: TeamEnum,
-    convProps: TConversionProps | null,
+    convProps: TConversionProps | null = null,
 
     dimensions: MapDimensions,
 
@@ -57,7 +56,6 @@ class HaxRugbyStadium {
     areaLineX: number,
   ) {
     this.name = name;
-    this.isConversion = convProps ? true : false;
     this.serv = new StadiumService(dimensions, size, team, convProps);
 
     this.width = outerWidth;
@@ -543,7 +541,7 @@ class HaxRugbyStadium {
       { vis: true, v0: 197, v1: 198, curve: 110, trait: 'fadeLine' },
     ];
 
-    if (this.isConversion === null) {
+    if (!convProps) {
       this.goals = [];
     } else {
       this.goals = [this.serv.getConversionGoal()];
