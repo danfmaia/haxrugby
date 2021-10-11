@@ -57,10 +57,8 @@ export default class GameService implements IGameService {
   private driverIds: number[] = [];
   private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
-  private lastDriveX: TLastDriveInfo = {
-    driveX: 0,
-    team: TeamEnum.RED,
-  };
+  private lastDriveInfo: null | TLastDriveInfo = null;
+  private isBallDropped: false | TeamEnum = false;
   private ballColorTransitionCount: number = 0;
 
   private kickoffX: number | null = null;
@@ -207,6 +205,15 @@ export default class GameService implements IGameService {
     }
 
     this.registerKickAsTouch(player.id);
+
+    // set ball as dropped
+    if (this.driverCountByTeam.red) {
+      this.isBallDropped = TeamEnum.RED;
+    } else if (this.driverCountByTeam.blue) {
+      this.isBallDropped = TeamEnum.BLUE;
+    } else {
+      this.isBallDropped = false;
+    }
   }
 
   public handleTeamGoal(team: TeamID): void {
@@ -256,10 +263,7 @@ export default class GameService implements IGameService {
     this.lastTouchInfo = null;
     this.touchInfoList = [];
     this.driverIds = [];
-    this.lastDriveX = {
-      ...this.lastDriveX,
-      driveX: 0,
-    };
+    this.lastDriveInfo = null;
     this.isDefRec = false;
     this.kickoffX = null;
     this.tryY = null;
@@ -498,12 +502,6 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    if (this.lastTouchInfo) {
-      if (this.checkForFieldGoal(ballPosition, this.lastTouchInfo)) {
-        return;
-      }
-    }
-
     // register ball drivers if any
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
 
@@ -516,7 +514,13 @@ export default class GameService implements IGameService {
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
-    this.handleBallColor(ballPosition, this.isDefRec);
+    this.handleDriveInfo(ballPosition, this.isDefRec);
+
+    if (this.lastDriveInfo) {
+      if (this.checkForFieldGoal(ballPosition, this.lastDriveInfo)) {
+        return;
+      }
+    }
 
     // in case of try, let the scorer attempt to take the ball more to the middle
     if (this.isTry) {
@@ -569,11 +573,12 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForFieldGoal(ballPosition: IPosition, lastTouchInfo: TTouchInfo): boolean {
+  private checkForFieldGoal(ballPosition: IPosition, lastDriveInfo: TLastDriveInfo): boolean {
     const isGoal = this.map.getIsFieldGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
-      lastTouchInfo.ballPosition,
+      lastDriveInfo,
+      this.isBallDropped,
     );
 
     if (isGoal) {
@@ -593,7 +598,7 @@ export default class GameService implements IGameService {
       }
 
       // announce goal
-      this.chatService.sendBoldAnnouncement(`Field Goal do ${teamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(`Drop Goal do ${teamName}!`, 2);
 
       this.handleRestartOrFinishing(stadium);
       return true;
@@ -644,7 +649,7 @@ export default class GameService implements IGameService {
       let teamName: string;
       let stadium: string;
 
-      let kickoffX = this.lastDriveX.driveX;
+      let kickoffX = this.lastDriveInfo ? this.lastDriveInfo.ballPosition.x : 0;
       if (kickoffX < -this.map.areaLineX) {
         kickoffX = -this.map.areaLineX;
       } else if (kickoffX > this.map.areaLineX) {
@@ -781,15 +786,15 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleBallColor(ballPosition: IPosition, isDefRec: boolean) {
+  private handleDriveInfo(ballPosition: IPosition, isDefRec: boolean) {
     const ballCurrentColor = this.room.getDiscProperties(0).color;
 
     if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
-      // register last drive X
-      this.lastDriveX = {
-        driveX: ballPosition.x,
+      this.lastDriveInfo = {
+        ballPosition,
         team: TeamEnum.RED,
       };
+      this.isBallDropped = false;
 
       // change ball color to team's
       if (ballCurrentColor !== colors.ballRed) {
@@ -797,11 +802,11 @@ export default class GameService implements IGameService {
         this.room.util.setBallColor(colors.ballRed);
       }
     } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
-      // register last drive X
-      this.lastDriveX = {
-        driveX: ballPosition.x,
+      this.lastDriveInfo = {
+        ballPosition,
         team: TeamEnum.BLUE,
       };
+      this.isBallDropped = false;
 
       // change ball color to team's
       if (ballCurrentColor !== colors.ballRed) {
@@ -810,12 +815,15 @@ export default class GameService implements IGameService {
       }
     }
 
-    if (this.ballColorTransitionCount > 0 && isDefRec === false) {
+    if (this.lastDriveInfo && this.ballColorTransitionCount > 0 && isDefRec === false) {
       // transition ball color to original
       this.ballColorTransitionCount = this.ballColorTransitionCount - 1;
-      const color = Util.transitionBallColor(this.lastDriveX.team, this.ballColorTransitionCount);
+      const color = Util.transitionBallColor(
+        this.lastDriveInfo.team,
+        this.ballColorTransitionCount,
+      );
       this.room.util.setBallColor(color);
-    } else if (isDefRec) {
+    } else if (isDefRec && this.isTry === false) {
       const ballColor = this.room.getDiscProperties(0).color;
       if (ballColor !== colors.purple) {
         this.room.util.setBallColor(colors.purple);
@@ -885,10 +893,10 @@ export default class GameService implements IGameService {
   }
 
   private restartGame(map: string, handleGameStop?: () => void) {
-    if (this.kickoffX === null) {
-      this.lastDriveX = {
-        ...this.lastDriveX,
-        driveX: 0,
+    if (this.kickoffX === null && this.lastDriveInfo) {
+      this.lastDriveInfo = {
+        ...this.lastDriveInfo,
+        ballPosition: { x: 0, y: 0 },
       };
       this.ballColorTransitionCount = 0;
     }

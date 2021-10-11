@@ -1,5 +1,17 @@
 ## CHANGELOG
 
+### v0.10:
+
+- O Field Goal agora se chama **Drop Goal**;
+- Para se marcar um Drop Goal é preciso conduzir a bola primeiro;
+- Desvios dentro da pequena área não evitam o Drop Goal;
+- Não é possível fazer um Drop Goal contra.
+
+### v0.9b:
+
+- Diminuído o raio da bola de 8.5 para 7.5;
+- Bola desviada/recuada agora fica com a cor roxa.
+
 ### v0.9a:
 
 - O tiro de safety agora é no local da última condução de bola à frente da zona protegida.

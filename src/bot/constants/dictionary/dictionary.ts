@@ -23,11 +23,11 @@ const ptBr: DictionaryKeys = {
       _1 + 'O in-goal é a região do campo atrás da linha de gol de cada time.',
       _1 + 'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
     ],
-    FIELD_GOAL_TITLE: 'FIELD GOAL (FG)     !fg !gol',
-    FIELD_GOAL: [
+    DROP_GOAL_TITLE: 'DROP GOAL (FG)     !fg !gol',
+    DROP_GOAL: [
       _1 + 'É o tento secundário do rugby. Vale 3 pontos.',
-      _1 +
-        'Só pode ser feito de fora da pequena área. Qualquer contato na bola dentro dessa área invalida o Field Goal.',
+      _1 + 'Só pode ser feito de fora da pequena área e com a bola dominada (sendo conduzida).',
+      _1 + 'Não é possível fazer um Drop Goal contra.',
     ],
     SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
     SAFETY: [

@@ -1,7 +1,8 @@
+import { IPosition } from 'inversihax';
 import TeamEnum from '../../enums/TeamEnum';
 
 type TLastDriveInfo = {
-  driveX: number;
+  ballPosition: IPosition;
   team: TeamEnum;
 };
 

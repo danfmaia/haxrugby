@@ -9,8 +9,8 @@ type DictionaryKeys = {
     TITLE: string;
     TRY_TITLE: string;
     TRY: [string, string, string];
-    FIELD_GOAL_TITLE: string;
-    FIELD_GOAL: [string, string];
+    DROP_GOAL_TITLE: string;
+    DROP_GOAL: [string, string, string];
     SAFETY_TITLE: string;
     SAFETY: [string, string, string];
     OFFSIDE_TITLE: string;

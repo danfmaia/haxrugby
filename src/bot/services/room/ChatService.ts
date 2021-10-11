@@ -249,8 +249,8 @@ export default class ChatService implements IChatService {
         this.sendSpace(playerId);
         return;
       case RuleEnum.FIELD_GOAL:
-        this.sendBoldAnnouncement(MSG_RULES.FIELD_GOAL_TITLE, sound, playerId);
-        MSG_RULES.FIELD_GOAL.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.DROP_GOAL_TITLE, sound, playerId);
+        MSG_RULES.DROP_GOAL.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         this.sendSpace(playerId);

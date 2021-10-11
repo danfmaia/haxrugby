@@ -4,6 +4,7 @@ import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/co
 import TeamEnum from '../../enums/TeamEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
+import TLastDriveInfo from '../physics/TLastDriveInfo';
 import TPlayerCountByTeam from '../team/TPlayerCountByTeam';
 
 export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
@@ -18,7 +19,8 @@ interface IHaxRugbyMap {
   getIsFieldGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
-    lastBallPositionWhenTouched: IPosition,
+    lastDriveInfo: TLastDriveInfo,
+    isBallDropped: false | TeamEnum,
   ): false | TeamEnum;
 
   getDidBallEnterOrLeaveIngoal(
@@ -83,21 +85,30 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
   public getIsFieldGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
-    lastBallPositionWhenTouched: IPosition,
+    lastDriveInfo: TLastDriveInfo,
+    isBallDropped: false | TeamEnum,
   ): false | TeamEnum {
     if (this.getIsBallInsideGoalInYAxis(ballPosition)) {
-      if (ballXSpeed > 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)) {
-        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
+      if (
+        isBallDropped === TeamEnum.RED &&
+        ballXSpeed > 0 &&
+        this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)
+      ) {
+        if (this.getWasBallBeforeMiniAreaX(lastDriveInfo.ballPosition)) {
           return TeamEnum.RED;
         }
-        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
+        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastDriveInfo.ballPosition)) {
           return TeamEnum.RED;
         }
-      } else if (ballXSpeed < 0 && this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)) {
-        if (this.getWasBallBeforeMiniAreaX(lastBallPositionWhenTouched)) {
+      } else if (
+        isBallDropped === TeamEnum.BLUE &&
+        ballXSpeed < 0 &&
+        this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)
+      ) {
+        if (this.getWasBallBeforeMiniAreaX(lastDriveInfo.ballPosition)) {
           return TeamEnum.BLUE;
         }
-        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastBallPositionWhenTouched)) {
+        if (this.getWasBallYGreaterThanGoalPostYAndOutsideMiniArea(lastDriveInfo.ballPosition)) {
           return TeamEnum.BLUE;
         }
       }
