@@ -41,7 +41,7 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     const kickingTeam = this.gameService.isConversionAttempt;
-    const allPlayersPropMap = this.gameService.roomUtil.getAllPlayerPropsMaps();
+    const allPlayersPropMap = this.room.util.getAllPlayerPropsMaps();
     const map = this.gameService.map;
     let newBallX = player.position.x;
     const distanceToBallX = PLAYER_RADIUS + BALL_RADIUS + 5;
@@ -90,7 +90,7 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
     });
 
     // reset players to previous position
-    this.gameService.roomUtil.setAllPlayersProps(allPlayersPropMap);
+    this.room.util.setAllPlayersProps(allPlayersPropMap);
 
     // stop player
     const playerProps = this.room.getPlayerDiscProperties(player.id);

@@ -6,12 +6,12 @@ import { IScore } from '../../models/match/Score';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import { IChatService } from './ChatService';
 import { ITeams } from '../../models/team/Teams';
-import { RoomUtil } from '../../util/RoomUtil';
 import TeamEnum from '../../enums/TeamEnum';
+import GameUtil from '../../util/GameUtil';
 
 export interface IGameService {
   chatService: IChatService;
-  roomUtil: RoomUtil;
+  util: GameUtil;
 
   map: HaxRugbyMap;
   matchConfig: MatchConfig;

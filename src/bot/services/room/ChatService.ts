@@ -117,12 +117,16 @@ export default class ChatService implements IChatService {
   ): void {
     if (didBallEnterOrLeaveIngoal === 'enter') {
       if (isDefRec) {
+        this.room.util.setBallColor(colors.purple);
+
         this.sendYellowBoldAnnouncement(MSG_DEF_REC[0], 2);
         this.sendYellowAnnouncement(MSG_DEF_REC[1]);
       } else {
         this.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
       }
     } else if (didBallEnterOrLeaveIngoal === 'leave') {
+      this.room.util.setBallColor(colors.ball);
+
       this.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
     }
   }
