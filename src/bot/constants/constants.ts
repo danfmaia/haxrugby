@@ -8,7 +8,7 @@ export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const MINUTE_IN_MS = 60 * 1000;
 
-export const BALL_RADIUS = 8.5;
+export const BALL_RADIUS = 7.5;
 export const PLAYER_RADIUS = 15;
 export const GOAL_POST_RADIUS = 2;
 
