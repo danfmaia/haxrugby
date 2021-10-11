@@ -1,12 +1,24 @@
-import { IDiscPropertiesObject, TeamID } from 'inversihax';
+import { CollisionFlag, IDiscPropertiesObject, TeamID } from 'inversihax';
 import TeamEnum from '../enums/TeamEnum';
-import TTouchInfo from '../models/physics/TTouchInfo';
+import TTouchInfo from '../models/game/TTouchInfo';
 import { TPlayerPropMap as TPlayerPropsMap } from '../models/player/PlayerPropMap';
 import TPlayerCountByTeam from '../models/team/TPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 export class RoomUtil {
+  public static ballProps: IDiscPropertiesObject | null = null;
+
   constructor(public room: IHaxRugbyRoom) {}
+
+  public static getOriginalBallProps(room: IHaxRugbyRoom): IDiscPropertiesObject {
+    if (this.ballProps) {
+      return this.ballProps;
+    } else {
+      const ballProps = room.getDiscProperties(0);
+      this.ballProps = ballProps;
+      return ballProps;
+    }
+  }
 
   public countPlayersByTeam(playerIds: number[]): TPlayerCountByTeam {
     const playerCount = {
@@ -72,6 +84,29 @@ export class RoomUtil {
     allPlayerPropsMaps.forEach((playerPropsMap) => {
       this.room.setPlayerDiscProperties(playerPropsMap.playerId, playerPropsMap.discProps);
     });
+  }
+
+  public toggleAerialBall(toggle: boolean): void {
+    const originalBallProps = RoomUtil.getOriginalBallProps(this.room);
+    const updatedBallProps = {} as IDiscPropertiesObject;
+
+    if (toggle) {
+      updatedBallProps.cGroup = CollisionFlag.ball;
+      updatedBallProps.cMask = CollisionFlag.wall;
+      this.room.setDiscProperties(0, updatedBallProps);
+    } else {
+      updatedBallProps.cGroup = originalBallProps.cGroup;
+      updatedBallProps.cMask = originalBallProps.cMask;
+      this.room.setDiscProperties(0, updatedBallProps);
+    }
+  }
+
+  public getIsAerialBall(): boolean {
+    const ballCMask = this.room.getDiscProperties(0).cMask;
+    if (ballCMask === CollisionFlag.wall) {
+      return true;
+    }
+    return false;
   }
 
   public setBallColor(color: number): void {

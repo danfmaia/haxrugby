@@ -1,7 +1,7 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆®';
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆® 𝖻𝗒 𝒥𝒫';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟬';
-const APP_PATCH_VERSION = '';
+const APP_PATCH_VERSION = '𝗮';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 // export const ROOM_SUBTITLE = '- 𝖭𝗈𝗏𝖺 𝖵𝖾𝗋𝗌𝖺𝗈!';
 // export const ROOM_SUBTITLE = '- 𝖣𝖾𝗌𝖾𝗇𝗏𝗈𝗅𝗏𝖾𝗇𝖽𝗈…';
@@ -15,10 +15,12 @@ export const GOAL_POST_RADIUS = 2;
 // safety margin for touching
 export const TOUCH_EPSILON = 0.01;
 // minimal tick range for driving
-export const DRIVE_MIN_TICKS = 6; // 6 ticks = 0.1s
+export const DRIVE_MIN_TICKS = 10; // 10 ticks = 0.167s
 export const AFTER_TRY_MAX_TICKS = 120;
 
 // export const KICK_RATE_LIMIT = [10, 10, 15];
 export const KICK_RATE_LIMIT = [10, 60, 3];
 
-export const BALL_COLOR_TRANSITION_TICKS = 40;
+export const BALL_TRANSITION_TICKS = 75;
+export const BALL_AERIAL_TICKS = 60;
+export const AIR_KICK_BOOST = 1.3;

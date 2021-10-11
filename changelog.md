@@ -1,11 +1,19 @@
 ## CHANGELOG
 
+### v0.10a:
+
+- Tempo mínimo de condução revertido para 0.167s;
+- Implementado o **Chute Aéreo**;
+  - Use os comandos `a`, `z`, `c`, `d`, `l` ou `p` para ativar ou desativar o Chute Aéreo;
+- Para marcar um Drop Goal é necessário usar o Chute Aéreo.
+
 ### v0.10:
 
 - O Field Goal agora se chama **Drop Goal**;
 - Para se marcar um Drop Goal é preciso conduzir a bola primeiro;
 - Desvios dentro da pequena área não evitam o Drop Goal;
-- Não é possível fazer um Drop Goal contra.
+- Não é possível fazer um Drop Goal contra;
+- Diminuído o tempo mínimo de condução de 0.167s para 0.1s.
 
 ### v0.9b:
 

@@ -2,6 +2,7 @@ export class HaxRugbyPlayerConfig {
   public static configs: HaxRugbyPlayerConfig[] = [];
 
   public playerId: number;
+  public isAirKickEnabled: boolean = true;
   public canBeTheOnlyAdmin: boolean = true;
 
   constructor(playerId: number) {

@@ -20,11 +20,15 @@ import Util from '../util/Util';
 export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
   gameService: IGameService;
   util: RoomUtil;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  CollisionFlags: any;
 }
 
 export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyRoom {
   public gameService: IGameService = new GameService(this);
   public util: RoomUtil = new RoomUtil(this);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public CollisionFlags: any;
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { BALL_COLOR_TRANSITION_TICKS } from '../constants/constants';
+import { BALL_TRANSITION_TICKS } from '../constants/constants';
 
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
@@ -82,7 +82,7 @@ function getPlayerNameAndId(player: HaxRugbyPlayer): string {
 }
 
 function transitionBallColor(team: TeamEnum, count: number): number {
-  const percentage = (BALL_COLOR_TRANSITION_TICKS - count) / BALL_COLOR_TRANSITION_TICKS;
+  const percentage = (BALL_TRANSITION_TICKS - count) / BALL_TRANSITION_TICKS;
   const step = Math.floor(10 * percentage);
 
   if (team === TeamEnum.RED) {

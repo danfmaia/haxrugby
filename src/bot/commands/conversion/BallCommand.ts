@@ -8,8 +8,10 @@ import { IChatService } from '../../services/room/ChatService';
 import { IGameService } from '../../services/room/IGameService';
 import Util from '../../util/Util';
 
+export const BALL_COMMAND_HOTKEYS = ['b', 'B', 'ball', 'bola'];
+
 @CommandDecorator({
-  names: ['b', 'B', 'ball', 'bola'],
+  names: BALL_COMMAND_HOTKEYS,
 })
 export class BallCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;

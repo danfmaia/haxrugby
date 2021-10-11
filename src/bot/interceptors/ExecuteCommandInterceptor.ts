@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { ChatMessage, IChatMessageInterceptor, Types } from 'inversihax';
-import { BallCommand } from '../commands/conversion/BallCommand';
+import { BallCommand, BALL_COMMAND_HOTKEYS } from '../commands/conversion/BallCommand';
+import { AirKickCommand, AIR_KICK_COMMAND_HOTKEYS } from '../commands/AirKickCommand';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import Util from '../util/Util';
@@ -16,9 +17,11 @@ export class ExecuteCommandInterceptor
   }
 
   intercept(message: ChatMessage<HaxRugbyPlayer>): boolean {
-    // BallCommand's interceptor
-    if (['b', 'B'].includes(message.message)) {
+    if (BALL_COMMAND_HOTKEYS.includes(message.message)) {
       message.command = new BallCommand(this.room);
+    }
+    if (AIR_KICK_COMMAND_HOTKEYS.includes(message.message)) {
+      message.command = new AirKickCommand(this.room);
     }
 
     // other commands' interceptor

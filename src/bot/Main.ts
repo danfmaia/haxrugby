@@ -15,9 +15,9 @@ import { Startup } from './Startup';
 import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
-import { NewMatchCommand } from './commands/game/NewMatchCommand';
+import { NewMatchCommand } from './commands/match/NewMatchCommand';
 import { APP_VERSION, ROOM_TITLE } from './constants/constants';
-import { ScoreCommand } from './commands/game/ScoreCommand';
+import { ScoreCommand } from './commands/match/ScoreCommand';
 import { LinksCommand } from './commands/links/LinksCommand';
 import { AdminCommand } from './commands/admin/AdminCommand';
 import { PasswordCommand } from './commands/admin/PasswordCommand';
@@ -28,15 +28,16 @@ import { FieldGoalCommand } from './commands/rules/FieldGoalCommand';
 import { SafetyCommand } from './commands/rules/SafetyCommand';
 import { DiscordCommand } from './commands/links/DiscordCommand';
 import { FacebookCommand } from './commands/links/FacebookCommand';
-import { SetScoreCommand } from './commands/game/SetScoreCommand';
+import { SetScoreCommand } from './commands/match/SetScoreCommand';
 import { KickerCommand } from './commands/conversion/KickerCommand';
 import { GoalkeeperCommand } from './commands/conversion/GoalkeeperCommand';
 import { BallCommand } from './commands/conversion/BallCommand';
 import { ClearBanCommand } from './commands/admin/ClearBanCommand';
 import { LeaveCommand } from './commands/LeaveCommand';
-import { CancelMatchCommand } from './commands/game/CancelMatchCommand';
+import { CancelMatchCommand } from './commands/match/CancelMatchCommand';
 import { OnlyAdminCommand } from './commands/admin/OnlyAdminCommand';
 import { KickRateLimitCommand } from './commands/physics/KickRateLimitCommand';
+import { AirKickCommand } from './commands/AirKickCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -56,6 +57,7 @@ CancelMatchCommand;
 ScoreCommand;
 SetScoreCommand;
 
+AirKickCommand;
 KickerCommand;
 GoalkeeperCommand;
 BallCommand;

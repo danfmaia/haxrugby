@@ -1,10 +1,10 @@
-import { IDiscPropertiesObject, IPosition } from 'inversihax';
+import { IDiscPropertiesObject, IPosition, TeamID } from 'inversihax';
 
 import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
-import TLastDriveInfo from '../physics/TLastDriveInfo';
+import TLastDriveInfo from '../game/TLastDriveInfo';
 import TPlayerCountByTeam from '../team/TPlayerCountByTeam';
 
 export type IBallEnterOrLeaveIngoal = 'enter' | 'leave' | false;
@@ -20,7 +20,7 @@ interface IHaxRugbyMap {
     ballPosition: IPosition,
     ballXSpeed: number,
     lastDriveInfo: TLastDriveInfo,
-    isBallDropped: false | TeamEnum,
+    kickerTeam: TeamID,
   ): false | TeamEnum;
 
   getDidBallEnterOrLeaveIngoal(
@@ -86,11 +86,11 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     ballPosition: IPosition,
     ballXSpeed: number,
     lastDriveInfo: TLastDriveInfo,
-    isBallDropped: false | TeamEnum,
+    kickerTeam: TeamID,
   ): false | TeamEnum {
     if (this.getIsBallInsideGoalInYAxis(ballPosition)) {
       if (
-        isBallDropped === TeamEnum.RED &&
+        kickerTeam === TeamID.RedTeam &&
         ballXSpeed > 0 &&
         this.getIsBallInsideGoalInXAxis(TeamEnum.RED, ballPosition)
       ) {
@@ -101,7 +101,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
           return TeamEnum.RED;
         }
       } else if (
-        isBallDropped === TeamEnum.BLUE &&
+        kickerTeam === TeamID.BlueTeam &&
         ballXSpeed < 0 &&
         this.getIsBallInsideGoalInXAxis(TeamEnum.BLUE, ballPosition)
       ) {
