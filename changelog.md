@@ -3,6 +3,7 @@
 ### v0.9a:
 
 - O tiro de safety agora é no local da última condução de bola à frente da zona protegida.
+- A bola agora altera para a cor do time que a conduziu, e transita gradualmente para o branco quando é solta.
 
 ### v0.9:
 

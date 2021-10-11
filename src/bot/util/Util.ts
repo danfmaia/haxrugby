@@ -1,5 +1,8 @@
 import * as moment from 'moment';
+import { BALL_COLOR_TRANSITION_TICKS } from '../constants/constants';
+
 import PositionEnum from '../enums/PositionEnum';
+import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
 function timeout(ms: number, callback: () => void): void {
@@ -78,6 +81,63 @@ function getPlayerNameAndId(player: HaxRugbyPlayer): string {
   return `${player.name} (ID: ${player.id})`;
 }
 
+function transitionBallColor(team: TeamEnum, count: number): number {
+  const percentage = (BALL_COLOR_TRANSITION_TICKS - count) / BALL_COLOR_TRANSITION_TICKS;
+  const step = Math.floor(10 * percentage);
+
+  if (team === TeamEnum.RED) {
+    switch (step) {
+      case 0:
+        return 0xf7bdb4;
+      case 1:
+        return 0xf8c5bd;
+      case 2:
+        return 0xf9ccc5;
+      case 3:
+        return 0xfad3cd;
+      case 4:
+        return 0xfadad6;
+      case 5:
+        return 0xfbe2de;
+      case 6:
+        return 0xfce9e6;
+      case 7:
+        return 0xfdf0ee;
+      case 8:
+        return 0xfef8f7;
+      case 9:
+        return 0xffffff;
+      default:
+    }
+  } else if (team === TeamEnum.BLUE) {
+    switch (step) {
+      case 0:
+        return 0xb1cbf2;
+      case 1:
+        return 0xb9d1f3;
+      case 2:
+        return 0xc2d6f4;
+      case 3:
+        return 0xcbdcf6;
+      case 4:
+        return 0xd4e2f8;
+      case 5:
+        return 0xdce8f9;
+      case 6:
+        return 0xe5eefa;
+      case 7:
+        return 0xeef3fc;
+      case 8:
+        return 0xf6f9fe;
+      case 9:
+        return 0xffffff;
+      default:
+    }
+  }
+
+  return 0xffffff;
+}
+
 const Util = {
   timeout,
   timeoutAsync,
@@ -88,6 +148,7 @@ const Util = {
   logMessageWithTime,
   getPositionString,
   getPlayerNameAndId,
+  transitionBallColor,
 };
 
 export default Util;

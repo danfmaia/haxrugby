@@ -549,6 +549,7 @@ class HaxRugbyStadium {
     }
 
     this.discs = [
+      // goal posts
       getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
       getDisc([-goalLineX, goalPostY], TraitEnum.goalPost),
       getDisc([goalLineX, -goalPostY], TraitEnum.goalPost),

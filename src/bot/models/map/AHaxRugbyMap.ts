@@ -129,7 +129,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
   }
 
   private getIsBallInsideGoalInXAxis(team: TeamEnum, ballPosition: IPosition): boolean {
-    const goalEndX = this.goalLineX + 0.45 * BALL_RADIUS;
+    const goalEndX = this.goalLineX + 0.9 * BALL_RADIUS;
 
     if (team === TeamEnum.RED) {
       return ballPosition.x > this.goalLineX && ballPosition.x < goalEndX;

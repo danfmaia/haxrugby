@@ -14,14 +14,17 @@ import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
 import smallMap from '../singletons/smallMap';
+import { RoomUtil } from '../util/RoomUtil';
 import Util from '../util/Util';
 
 export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
   gameService: IGameService;
+  util: RoomUtil;
 }
 
 export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyRoom {
   public gameService: IGameService = new GameService(this);
+  public util: RoomUtil = new RoomUtil(this);
 
   public constructor(
     @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,

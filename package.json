@@ -17,7 +17,8 @@
     "inversihax": "^1.1.1",
     "lodash": "^4.17.15",
     "moment": "^2.29.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

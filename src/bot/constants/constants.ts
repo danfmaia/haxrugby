@@ -1,7 +1,7 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆®';
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆® 𝖻𝗒 𝒥𝒫';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟵';
-const APP_PATCH_VERSION = '𝗮';
+const APP_PATCH_VERSION = '𝗯';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 // export const ROOM_SUBTITLE = '- 𝖭𝗈𝗏𝖺 𝖵𝖾𝗋𝗌𝖺𝗈!';
 // export const ROOM_SUBTITLE = '- 𝖣𝖾𝗌𝖾𝗇𝗏𝗈𝗅𝗏𝖾𝗇𝖽𝗈…';
@@ -20,3 +20,5 @@ export const AFTER_TRY_MAX_TICKS = 120;
 
 // export const KICK_RATE_LIMIT = [10, 10, 15];
 export const KICK_RATE_LIMIT = [10, 60, 3];
+
+export const BALL_COLOR_TRANSITION_TICKS = 40;

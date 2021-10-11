@@ -52,7 +52,7 @@ class CommandService implements ICommandService {
           player.id,
         );
       } else {
-        this.gameService.roomUtil.setPlayerAsPosition(player, position);
+        this.gameService.util.setPlayerAsPosition(player, position);
       }
       return;
     }
@@ -79,7 +79,7 @@ class CommandService implements ICommandService {
           player.id,
         );
       } else {
-        this.gameService.roomUtil.setPlayerAsPosition(selectedPlayer, position);
+        this.gameService.util.setPlayerAsPosition(selectedPlayer, position);
       }
       return;
     }
