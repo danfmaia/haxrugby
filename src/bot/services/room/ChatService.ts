@@ -264,6 +264,13 @@ export default class ChatService implements IChatService {
         });
         this.sendSpace(playerId);
         return;
+      case RuleEnum.AIR_KICK:
+        this.sendBoldAnnouncement(MSG_RULES.AIR_KICK_TITLE, sound, playerId);
+        MSG_RULES.AIR_KICK.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        this.sendSpace(playerId);
+        return;
       case RuleEnum.OFFSIDE:
         this.sendBoldAnnouncement(MSG_RULES.OFFSIDE_TITLE, sound, playerId);
         MSG_RULES.OFFSIDE.forEach((rule) => {
@@ -343,12 +350,12 @@ export default class ChatService implements IChatService {
       if (player.id === kickerId && blocker) {
         if (kickerId !== blockerId) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  🚫  Você tentou um Chute Aéreo mas foi bloqueado por ${blocker.name}!`,
+            `🦵 🏉  🚫  Você tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!`,
             0,
             player.id,
           );
           this.sendNormalAnnouncement(
-            `Use um dos seguintes comandos para ativar/desativar seu Chute Aéreo: a z c d l p`,
+            'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
             0,
             player.id,
           );
@@ -359,7 +366,7 @@ export default class ChatService implements IChatService {
 
         if (kickerTeam && kickerId !== blockerId) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo mas foi bloqueado por ${blocker.name}!`,
+            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!`,
             0,
             player.id,
           );
@@ -374,13 +381,13 @@ export default class ChatService implements IChatService {
     players.forEach((player) => {
       if (player.id === kickerId) {
         this.sendBoldAnnouncement(
-          `🦵 🏉  ✅  Você conectou um Chute Aéreo!`,
+          `🦵 🏉  ✅  Você conectou um Chute Aéreo!  💨 `,
           0,
           player.id,
           colors.airKickMessage,
         );
         this.sendNormalAnnouncement(
-          `Use um dos seguintes comandos para ativar/desativar seu Chute Aéreo: a z c d l p`,
+          'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
           0,
           player.id,
           colors.airKickMessage,
@@ -391,7 +398,7 @@ export default class ChatService implements IChatService {
 
         if (kickerTeam) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  ✅  ${kicker.name} (${kickerTeam.name}) conectou um Chute Aéreo!`,
+            `🦵 🏉  ✅  ${kicker.name} (${kickerTeam.name}) conectou um Chute Aéreo!  🌫️🌫️🌫️`,
             0,
             player.id,
             colors.airKickMessage,

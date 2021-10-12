@@ -65,6 +65,16 @@ function getTouchInfoList(
   return null;
 }
 
+function getToucherIds(touchInfoList: (TTouchInfo | null)[]): number[] {
+  if (touchInfoList && touchInfoList.length) {
+    const currentTouchInfo = touchInfoList[0];
+    if (currentTouchInfo) {
+      return currentTouchInfo.toucherIds;
+    }
+  }
+  return [];
+}
+
 function getDriverIds(touchInfoList: (TTouchInfo | null)[]): number[] {
   let driverIds: number[] = [];
   let firstTouchInfo: TTouchInfo;
@@ -140,6 +150,7 @@ const Physics = {
   getTouchTriggerDistance,
   getIsTouching,
   getTouchInfoList,
+  getToucherIds,
   getDriverIds,
 };
 

@@ -10,7 +10,7 @@ const ptBr: DictionaryKeys = {
   MSG_GREETING_1: `𝖡𝖾𝗆 𝗏𝗂𝗇𝖽𝗈(𝖺) 𝖺𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GREETING_2:
     '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝖻𝗎𝗀𝗌, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
-  MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝗮 𝘇 𝗰 𝗱 𝗹 𝗽).`,
+  MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 𝗮).`,
   // MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗈 𝖼𝗈𝗇𝖼𝖾𝗂𝗍𝗈 𝖽𝗈 𝖥𝗂𝖾𝗅𝖽 𝖦𝗈𝖺𝗅 𝗆𝗎𝖽𝗈𝗎 𝖾 𝖺𝗀𝗈𝗋𝖺 𝖾𝗅𝖾 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹. 𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽 𝗉𝖺𝗋𝖺 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌.`,
   MSG_GREETING_4: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗋𝖾𝗀𝗋𝖺𝗌 𝖽𝗈 𝗃𝗈𝗀𝗈.',
   MSG_GREETING_5: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
@@ -27,7 +27,7 @@ const ptBr: DictionaryKeys = {
     DROP_GOAL: [
       _1 + 'É o tento secundário do rugby. Vale 3 pontos.',
       _1 + 'Só pode ser feito de fora da pequena área e com um Chute Aéreo.',
-      _1 + 'Use um dos seguintes comandos para ativar/desativar seu Chute Aéreo: a z c d l p',
+      _1 + 'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
       _1 + 'Não é possível fazer um Drop Goal contra.',
     ],
     SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
@@ -37,6 +37,15 @@ const ptBr: DictionaryKeys = {
         'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       _1 +
         'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
+    ],
+    AIR_KICK_TITLE: 'CHUTE AÉREO (AIR)     !air !aereo',
+    AIR_KICK: [
+      _1 +
+        'É um chute mais forte (1,15x no small e 1,3x no normal), que passa por cima dos jogadores.',
+      _1 + 'Para tentar um Chute Aéreo, conduza a bola e em seguida chute-a.',
+      _1 +
+        'Se nenhum jogador tocar na bola por 0,25s, ela então se tornará "aérea". A bola aérea dura 1,25s.',
+      _1 + 'O Drop Goal só será marcado se a bola atravessar o gol com o status de aérea.',
     ],
     OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
     OFFSIDE: [_1 + 'As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],

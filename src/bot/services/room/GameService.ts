@@ -5,8 +5,8 @@ import {
   DRIVE_MIN_TICKS,
   BALL_RADIUS,
   AFTER_TRY_MAX_TICKS,
-  AIR_BALL_TICKS,
-  AIR_BALL_BLOCK_TICKS,
+  AIR_KICK_TICKS,
+  AIR_KICK_BLOCK_TICKS,
   NORMAL_AIR_KICK_BOOST,
   SMALL_AIR_KICK_BOOST,
   BALL_TEAM_COLOR_TICKS,
@@ -220,12 +220,7 @@ export default class GameService implements IGameService {
       this.driverIds.includes(player.id)
     ) {
       this.airKickerId = player.id;
-      this.ballTransitionCount = AIR_BALL_TICKS;
-      if (player.team === TeamID.RedTeam) {
-        this.room.util.setBallColor(colors.ballRed);
-      } else if (player.team === TeamID.BlueTeam) {
-        this.room.util.setBallColor(colors.ballBlue);
-      }
+      this.ballTransitionCount = AIR_KICK_TICKS;
 
       // boost kick
       const isSmallMap = this.matchConfig.mapSize === MapSizeEnum.SMALL;
@@ -295,6 +290,7 @@ export default class GameService implements IGameService {
     this.isTry = false;
     this.isConversionAttempt = false;
     this.ballTransitionCount = 0;
+    this.airKickerId = null;
     this.room.util.toggleAerialBall(false);
     this.room.util.setBallColor(colors.ball);
     this.teams.fillAllPositions(this.room.getPlayerList());
@@ -530,8 +526,8 @@ export default class GameService implements IGameService {
 
     this.checkForTouches(players, ballPosition);
 
-    const touchInfoList = this.touchInfoList;
-    this.handleAirKick(touchInfoList);
+    const toucherIds = Physics.getToucherIds(this.touchInfoList);
+    this.handleAirKick(toucherIds);
 
     // register ball drivers if any
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
@@ -545,7 +541,9 @@ export default class GameService implements IGameService {
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
-    this.handleBall(ballPosition, this.isDefRec);
+    if (this.airKickerId === null) {
+      this.handleBall(ballPosition, this.isDefRec);
+    }
 
     if (this.lastDriveInfo) {
       if (this.checkForFieldGoal(ballPosition, this.lastDriveInfo)) {
@@ -608,25 +606,78 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleAirKick(touchInfoList: (TTouchInfo | null)[]) {
+  private handleAirKick(toucherIds: number[]) {
+    // this.ballTransitionCount < AIR_KICK_TICKS - 1 ||
+    // toucherIds.length !== 1 ||
+    // toucherIds[0] !== airKickerId
+
+    // decrement tick counter
+    if (this.airKickerId && this.ballTransitionCount > 0) {
+      this.ballTransitionCount = this.ballTransitionCount - 1;
+    }
+
+    // catch blocks during block phase
     if (
       this.airKickerId &&
-      this.ballTransitionCount > AIR_BALL_BLOCK_TICKS &&
-      touchInfoList &&
-      touchInfoList.length > 0
+      this.ballTransitionCount > AIR_KICK_BLOCK_TICKS &&
+      toucherIds.length > 0
     ) {
-      const currentTouchInfo = touchInfoList[0];
-      if (currentTouchInfo) {
-        const toucherIds = currentTouchInfo.toucherIds;
-        if (this.ballTransitionCount < AIR_BALL_TICKS - 1) {
-          this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
-          this.airKickerId = null;
-        }
+      console.log('passed 1: catch blocks during block phase');
+
+      this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
+      this.airKickerId = null;
+    }
+
+    // toggle aerial ball after block phase
+    if (
+      this.airKickerId &&
+      this.ballTransitionCount === AIR_KICK_BLOCK_TICKS &&
+      toucherIds.length === 0
+    ) {
+      console.log('passed 2: toggle aerial ball after block phase');
+
+      this.room.util.toggleAerialBall(true);
+      // this.chatService.announceSuccessfulAirKick(this.airKickerId);
+    }
+
+    // treat ball transformation delay to avoid bug
+    if (
+      this.airKickerId &&
+      this.ballTransitionCount < AIR_KICK_BLOCK_TICKS &&
+      this.ballTransitionCount > AIR_KICK_BLOCK_TICKS - 15 &&
+      toucherIds.length > 0
+    ) {
+      console.log('passed 3: treat ball transformation delay to avoid bug');
+
+      this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
+      this.airKickerId = null;
+      this.room.util.toggleAerialBall(false);
+    }
+
+    // set air kick ball color & announce successful air kick
+    if (
+      this.airKickerId &&
+      this.ballTransitionCount === AIR_KICK_BLOCK_TICKS - 15 &&
+      toucherIds.length === 0
+    ) {
+      console.log('passed 4: set air kick ball color & announce successful air kick');
+
+      this.chatService.announceSuccessfulAirKick(this.airKickerId);
+      if (this.isDefRec === false) {
+        this.room.util.setBallColor(colors.airKickBall);
       }
     }
-    if (this.airKickerId && this.ballTransitionCount === AIR_BALL_BLOCK_TICKS) {
-      this.room.util.toggleAerialBall(true);
-      this.chatService.announceSuccessfulAirKick(this.airKickerId);
+
+    // toggle off aerial ball
+    if (this.airKickerId && this.ballTransitionCount === 0) {
+      console.log('passed 5: toggle off aerial ball');
+
+      this.airKickerId = null;
+      this.room.util.toggleAerialBall(false);
+      const ballColor = this.room.getDiscProperties(0).color;
+      if (this.isDefRec === false && ballColor === colors.airKickBall) {
+        this.room.util.setBallColor(colors.ball);
+      }
     }
   }
 
@@ -849,18 +900,6 @@ export default class GameService implements IGameService {
   }
 
   private handleBall(ballPosition: IPosition, isDefRec: boolean) {
-    if (
-      this.airKickerId &&
-      this.ballTransitionCount <= AIR_BALL_BLOCK_TICKS &&
-      this.ballTransitionCount > 0
-    ) {
-      this.ballTransitionCount = this.ballTransitionCount - 1;
-      if (this.isDefRec === false) {
-        this.room.util.setBallColor(colors.airKickBall);
-      }
-      return;
-    }
-
     if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
@@ -889,19 +928,13 @@ export default class GameService implements IGameService {
         this.ballTransitionCount,
         BALL_TEAM_COLOR_TICKS,
       );
-      this.room.util.setBallColor(color);
-    } else if (this.airKickerId === null && isDefRec && this.isTry === false) {
+      if (color) {
+        this.room.util.setBallColor(color);
+      }
+    } else if (isDefRec && this.isTry === false) {
       const ballColor = this.room.getDiscProperties(0).color;
       if (ballColor !== colors.defrecWarning) {
         this.room.util.setBallColor(colors.defrecWarning);
-      }
-    }
-
-    if (this.ballTransitionCount === 0 && this.airKickerId) {
-      this.airKickerId = null;
-      this.room.util.toggleAerialBall(false);
-      if (isDefRec === false) {
-        this.room.util.setBallColor(colors.ball);
       }
     }
   }
@@ -968,15 +1001,18 @@ export default class GameService implements IGameService {
   }
 
   private restartGame(map: string, handleGameStop?: () => void) {
+    // won't pass here if is safety kick
     if (this.kickoffX === null && this.lastDriveInfo) {
       this.lastDriveInfo = {
         ...this.lastDriveInfo,
         ballPosition: { x: 0, y: 0 },
       };
     }
+
     this.driverCountByTeam = { red: 0, blue: 0 };
     this.isDefRec = false;
     this.ballTransitionCount = 0;
+    this.airKickerId = null;
     this.room.util.toggleAerialBall(false);
     this.room.util.setBallColor(colors.ball);
 

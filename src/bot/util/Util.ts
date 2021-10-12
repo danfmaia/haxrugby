@@ -80,7 +80,7 @@ function getPlayerNameAndId(player: HaxRugbyPlayer): string {
   return `${player.name} (ID: ${player.id})`;
 }
 
-function transitionBallColor(team: TeamEnum, count: number, totalTicks: number): number {
+function transitionBallColor(team: TeamEnum, count: number, totalTicks: number): number | false {
   const percentage = (totalTicks - count) / totalTicks;
   const step = Math.floor(10 * percentage);
 
@@ -134,7 +134,7 @@ function transitionBallColor(team: TeamEnum, count: number, totalTicks: number):
     }
   }
 
-  return 0xffffff;
+  return false;
 }
 
 const Util = {

@@ -7,20 +7,7 @@ import { HaxRugbyPlayerConfig } from '../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import { IChatService } from '../services/room/ChatService';
 
-export const AIR_KICK_COMMAND_HOTKEYS = [
-  'a',
-  'A',
-  'l',
-  'L',
-  'p',
-  'P',
-  'd',
-  'D',
-  'z',
-  'Z',
-  'c',
-  'C',
-];
+export const AIR_KICK_COMMAND_HOTKEYS = ['a', 'A'];
 
 @CommandDecorator({
   names: AIR_KICK_COMMAND_HOTKEYS,

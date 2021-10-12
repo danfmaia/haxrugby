@@ -38,6 +38,7 @@ import { CancelMatchCommand } from './commands/match/CancelMatchCommand';
 import { OnlyAdminCommand } from './commands/admin/OnlyAdminCommand';
 import { KickRateLimitCommand } from './commands/physics/KickRateLimitCommand';
 import { AirKickCommand } from './commands/AirKickCommand';
+import { AirKickRuleCommand } from './commands/rules/AirKickRuleCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -66,6 +67,7 @@ RulesCommand;
 TryCommand;
 FieldGoalCommand;
 SafetyCommand;
+AirKickRuleCommand;
 
 LinksCommand;
 DiscordCommand;
