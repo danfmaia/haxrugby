@@ -26,7 +26,7 @@ export interface IChatService {
   sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
 
-  sendSpace(playerId?: number): void;
+  sendBlankLine(playerId?: number): void;
 
   sendMatchStatus(sound?: number, playerId?: number): void;
   announceDefRec(
@@ -94,7 +94,7 @@ export default class ChatService implements IChatService {
     this.room.sendAnnouncement(message, playerId, colors.blue, 'bold', sound);
   }
 
-  public sendSpace(playerId?: number): void {
+  public sendBlankLine(playerId?: number): void {
     this.sendNormalAnnouncement('', 0, playerId);
   }
 
@@ -175,7 +175,7 @@ export default class ChatService implements IChatService {
     });
     Util.timeout(3000, () => {
       if (this.gameService.isMatchInProgress) {
-        this.sendSpace(playerId);
+        this.sendBlankLine(playerId);
         this.sendMatchStatus(2, playerId);
       }
     });
@@ -230,9 +230,9 @@ export default class ChatService implements IChatService {
   }
 
   public sendMainRules(sound: number = 2, playerId?: number): void {
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
     this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId);
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
 
     this.sendSingleRule(RuleEnum.TRY, 0, playerId);
     this.sendSingleRule(RuleEnum.FIELD_GOAL, 0, playerId);
@@ -253,7 +253,7 @@ export default class ChatService implements IChatService {
       'italic',
       0,
     );
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
   }
 
   public sendSingleRule(rule: RuleEnum, sound: number = 2, playerId?: number): void {
@@ -263,48 +263,47 @@ export default class ChatService implements IChatService {
         MSG_RULES.TRY.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendSpace(playerId);
+        this.sendBlankLine(playerId);
         return;
       case RuleEnum.FIELD_GOAL:
         this.sendBoldAnnouncement(MSG_RULES.DROP_GOAL_TITLE, sound, playerId);
         MSG_RULES.DROP_GOAL.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendSpace(playerId);
-        return;
-      case RuleEnum.SAFETY:
-        this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
-        MSG_RULES.SAFETY.forEach((rule) => {
-          this.sendNormalAnnouncement(rule, 0, playerId);
-        });
-        this.sendSpace(playerId);
+        this.sendBlankLine(playerId);
         return;
       case RuleEnum.AIR_KICK:
         this.sendBoldAnnouncement(MSG_RULES.AIR_KICK_TITLE, sound, playerId);
         MSG_RULES.AIR_KICK.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendSpace(playerId);
+        return;
+      case RuleEnum.SAFETY:
+        this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
+        MSG_RULES.SAFETY.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        this.sendBlankLine(playerId);
         return;
       case RuleEnum.OFFSIDE:
         this.sendBoldAnnouncement(MSG_RULES.OFFSIDE_TITLE, sound, playerId);
         MSG_RULES.OFFSIDE.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendSpace(playerId);
+        this.sendBlankLine(playerId);
         return;
       default:
     }
   }
 
   public sendHelp(sound: number = 2, playerId?: number): void {
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
     this.sendBoldAnnouncement(MSG_HELP.TITLE, sound, playerId);
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
 
     if (typeof playerId !== 'undefined' && this.room.getPlayer(playerId).admin) {
       this.sendBoldAnnouncement(MSG_HELP.ADMIN_COMMANDS, 0, playerId);
-      this.sendSpace(playerId);
+      this.sendBlankLine(playerId);
 
       this.sendBoldAnnouncement(MSG_HELP.NEW_MATCH, 0, playerId);
       this.sendNormalAnnouncement(MSG_HELP.NEW_MATCH_DESCRIPTION, 0, playerId);
@@ -314,10 +313,10 @@ export default class ChatService implements IChatService {
 
       this.sendBoldAnnouncement(MSG_HELP.PASSWORD, 0, playerId);
       this.sendNormalAnnouncement(MSG_HELP.PASSWORD_DESCRIPTION, 0, playerId);
-      this.sendSpace(playerId);
+      this.sendBlankLine(playerId);
 
       this.sendBoldAnnouncement(MSG_HELP.OTHER_COMMANDS, 0, playerId);
-      this.sendSpace(playerId);
+      this.sendBlankLine(playerId);
     }
 
     this.sendBoldAnnouncement(MSG_HELP.SCORE, 0, playerId);
@@ -343,7 +342,7 @@ export default class ChatService implements IChatService {
       this.sendNormalAnnouncement(MSG_HELP.HELP_DESCRIPTION, 0, playerId);
     }
 
-    this.sendSpace(playerId);
+    this.sendBlankLine(playerId);
   }
 
   public sendConversionHelp(playerId?: number): void {

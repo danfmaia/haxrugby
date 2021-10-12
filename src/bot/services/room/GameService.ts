@@ -371,7 +371,7 @@ export default class GameService implements IGameService {
     this.chatService.sendNormalAnnouncement(
       `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
     );
-    this.chatService.sendSpace();
+    this.chatService.sendBlankLine();
     if (restartMatch) {
       this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
     }

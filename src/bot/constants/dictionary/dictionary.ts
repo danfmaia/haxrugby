@@ -26,9 +26,19 @@ const ptBr: DictionaryKeys = {
     DROP_GOAL_TITLE: 'DROP GOAL (DG)     !drop !dg !gol',
     DROP_GOAL: [
       _1 + 'É o tento secundário do rugby. Vale 3 pontos.',
-      _1 + 'Só pode ser feito de fora da pequena área e com um Chute Aéreo.',
-      _1 + 'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
+      _1 +
+        'Só pode ser feito de fora da pequena área e com um Chute Aéreo (use !air para mais detalhes).',
       _1 + 'Não é possível fazer um Drop Goal contra.',
+    ],
+    AIR_KICK_TITLE: 'CHUTE AÉREO (AIR)     !air !aereo',
+    AIR_KICK: [
+      _1 +
+        'É um chute mais forte (1,15x no small e 1,3x no normal), que passa por cima dos jogadores.',
+      _1 + 'Para tentar um Chute Aéreo, conduza a bola e em seguida chute-a.',
+      _1 +
+        'Se nenhum jogador tocar na bola por 0,2s, ela então se tornará "aérea". A bola aérea dura 1,55s.',
+      _1 + 'O Drop Goal só será marcado se a bola atravessar o gol com o status de aérea.',
+      _1 + 'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
     ],
     SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
     SAFETY: [
@@ -37,15 +47,6 @@ const ptBr: DictionaryKeys = {
         'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       _1 +
         'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
-    ],
-    AIR_KICK_TITLE: 'CHUTE AÉREO (AIR)     !air !aereo',
-    AIR_KICK: [
-      _1 +
-        'É um chute mais forte (1,15x no small e 1,3x no normal), que passa por cima dos jogadores.',
-      _1 + 'Para tentar um Chute Aéreo, conduza a bola e em seguida chute-a.',
-      _1 +
-        'Se nenhum jogador tocar na bola por 0,25s, ela então se tornará "aérea". A bola aérea dura 1,25s.',
-      _1 + 'O Drop Goal só será marcado se a bola atravessar o gol com o status de aérea.',
     ],
     OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
     OFFSIDE: [_1 + 'As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],

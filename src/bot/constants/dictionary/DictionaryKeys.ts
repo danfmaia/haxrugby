@@ -11,11 +11,10 @@ type DictionaryKeys = {
     TRY: string[];
     DROP_GOAL_TITLE: string;
     DROP_GOAL: string[];
-    SAFETY_TITLE: string;
-    SAFETY: string[];
     AIR_KICK_TITLE: string;
     AIR_KICK: string[];
-
+    SAFETY_TITLE: string;
+    SAFETY: string[];
     OFFSIDE_TITLE: string;
     OFFSIDE: [string];
     POST_RULES: [string, string];

@@ -1,19 +1,28 @@
 ## CHANGELOG
 
+### v0.10d:
+
+- Corrigido o bug crítico da bola aérea não retornando ao normal (ainda são necessários testes).
+- Ajustes quanto ao Chute Aéreo:
+  - Diminuída a fase de bloqueio de `0,25s` para `0,2s`.
+  - Aumentado o tempo da bola aérea de `1,25s` para `1,55s`.
+- Melhoria nas explicações dos comandos `!drop` e `!air`.
+- Bola aérea desviada/recuada agora recebe uma mistura (meio a meio) do amarelo de bola desviada/recuada com o cinza de bola aérea.
+
 ### v0.10c:
 
-- Mais correções e melhorias quanto ao Chute Aéreo;
+- Mais correções e ajustes quanto ao Chute Aéreo.
 - Adicionado comando para exibir explicação do Chute Aéreo (`!air` ou `!aereo`).
 
 ### v0.10b:
 
-- Correções e melhorias de jogabilidade quanto ao Chute Aéreo;
+- Correções e melhorias de jogabilidade quanto ao Chute Aéreo.
 - Ajustes nas cores e nas mensagens de jogo quanto ao Chute Aéreo.
 
 ### v0.10a:
 
-- Tempo mínimo de condução revertido para 0.167s;
-- _[Experiência]_ Implementado o **Chute Aéreo**;
+- Tempo mínimo de condução revertido para 0.167s.
+- _[Experiência]_ Implementado o **Chute Aéreo**:
   - Use o comando `a` para ativar ou desativar o Chute Aéreo;
   - Para marcar um Drop Goal é necessário usar o Chute Aéreo.
 
