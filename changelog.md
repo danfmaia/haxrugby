@@ -1,15 +1,20 @@
 ## CHANGELOG
 
+### v0.10c:
+
+- Mais correções e melhorias quanto ao Chute Aéreo;
+- Adicionado comando para exibir explicação do Chute Aéreo (`!air` ou `!aereo`).
+
 ### v0.10b:
 
-- Correções e melhorias de jogabilidade;
+- Correções e melhorias de jogabilidade quanto ao Chute Aéreo;
 - Ajustes nas cores e nas mensagens de jogo quanto ao Chute Aéreo.
 
 ### v0.10a:
 
 - Tempo mínimo de condução revertido para 0.167s;
 - _[Experiência]_ Implementado o **Chute Aéreo**;
-  - Use os comandos `a`, `z`, `c`, `d`, `l` ou `p` para ativar ou desativar o Chute Aéreo;
+  - Use o comando `a` para ativar ou desativar o Chute Aéreo;
   - Para marcar um Drop Goal é necessário usar o Chute Aéreo.
 
 ### v0.10:

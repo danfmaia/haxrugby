@@ -607,10 +607,6 @@ export default class GameService implements IGameService {
   }
 
   private handleAirKick(toucherIds: number[]) {
-    // this.ballTransitionCount < AIR_KICK_TICKS - 1 ||
-    // toucherIds.length !== 1 ||
-    // toucherIds[0] !== airKickerId
-
     // decrement tick counter
     if (this.airKickerId && this.ballTransitionCount > 0) {
       this.ballTransitionCount = this.ballTransitionCount - 1;
@@ -622,7 +618,7 @@ export default class GameService implements IGameService {
       this.ballTransitionCount > AIR_KICK_BLOCK_TICKS &&
       toucherIds.length > 0
     ) {
-      console.log('passed 1: catch blocks during block phase');
+      // console.log('passed 1: catch blocks during block phase');
 
       this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
       this.airKickerId = null;
@@ -634,10 +630,9 @@ export default class GameService implements IGameService {
       this.ballTransitionCount === AIR_KICK_BLOCK_TICKS &&
       toucherIds.length === 0
     ) {
-      console.log('passed 2: toggle aerial ball after block phase');
+      // console.log('passed 2: toggle aerial ball after block phase');
 
       this.room.util.toggleAerialBall(true);
-      // this.chatService.announceSuccessfulAirKick(this.airKickerId);
     }
 
     // treat ball transformation delay to avoid bug
@@ -647,7 +642,7 @@ export default class GameService implements IGameService {
       this.ballTransitionCount > AIR_KICK_BLOCK_TICKS - 15 &&
       toucherIds.length > 0
     ) {
-      console.log('passed 3: treat ball transformation delay to avoid bug');
+      // console.log('passed 3: treat ball transformation delay to avoid bug');
 
       this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
       this.airKickerId = null;
@@ -660,7 +655,7 @@ export default class GameService implements IGameService {
       this.ballTransitionCount === AIR_KICK_BLOCK_TICKS - 15 &&
       toucherIds.length === 0
     ) {
-      console.log('passed 4: set air kick ball color & announce successful air kick');
+      // console.log('passed 4: set air kick ball color & announce successful air kick');
 
       this.chatService.announceSuccessfulAirKick(this.airKickerId);
       if (this.isDefRec === false) {
@@ -670,7 +665,7 @@ export default class GameService implements IGameService {
 
     // toggle off aerial ball
     if (this.airKickerId && this.ballTransitionCount === 0) {
-      console.log('passed 5: toggle off aerial ball');
+      // console.log('passed 5: toggle off aerial ball');
 
       this.airKickerId = null;
       this.room.util.toggleAerialBall(false);
