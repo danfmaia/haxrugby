@@ -35,6 +35,7 @@ import TLastDriveInfo from '../../models/game/TLastDriveInfo';
 import GameUtil from '../../util/GameUtil';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
+import { RoomUtil } from '../../util/RoomUtil';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -378,9 +379,9 @@ export default class GameService implements IGameService {
 
   private initializeKickoff(kickoffX: number) {
     // move ball to the correct place
-    const updatedBallProps = this.room.getDiscProperties(0);
-    updatedBallProps.x = kickoffX;
-    this.room.setDiscProperties(0, updatedBallProps);
+    const ballProps = RoomUtil.getOriginalBallProps(this.room);
+    ballProps.x = kickoffX;
+    this.room.setDiscProperties(0, ballProps);
 
     // move players to correct place
     const players = this.room.getPlayerList().filter((player) => player.team !== TeamID.Spectators);
@@ -1004,6 +1005,7 @@ export default class GameService implements IGameService {
       };
     }
 
+    this.driverIds = [];
     this.driverCountByTeam = { red: 0, blue: 0 };
     this.isDefRec = false;
     this.ballTransitionCount = 0;
