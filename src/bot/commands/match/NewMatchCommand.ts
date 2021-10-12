@@ -41,7 +41,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
 
       if (arg0 === 'x1' || arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
         updatedMatchConfig = getMatchConfig(arg0);
-        const stadium = this.getStadiumFromInput(updatedMatchConfig.stadium);
+        const stadium = this.getStadiumFromInput(updatedMatchConfig.mapSize);
         if (stadium) {
           this.gameService.map = stadium;
           if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
@@ -95,14 +95,14 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getStadiumFromInput(stadiumInput: string): null | HaxRugbyMap {
-    if (!stadiumInput) {
+  private getStadiumFromInput(mapSize: string): null | HaxRugbyMap {
+    if (!mapSize) {
       return null;
     }
 
-    if (stadiumInput.toUpperCase() === MapSizeEnum.SMALL) {
+    if (mapSize.toUpperCase() === MapSizeEnum.SMALL) {
       return smallMap;
-    } else if (stadiumInput.toUpperCase() === MapSizeEnum.NORMAL) {
+    } else if (mapSize.toUpperCase() === MapSizeEnum.NORMAL) {
       return normalMap;
     }
     return null;

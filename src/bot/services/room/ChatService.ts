@@ -42,6 +42,9 @@ export interface IChatService {
   sendSingleRule(rule: RuleEnum, sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
   sendConversionHelp(playerId?: number): void;
+
+  announceBlockedAirKick(kickerId: number, blockerId: number): void;
+  announceSuccessfulAirKick(kickerId: number): void;
 }
 
 export default class ChatService implements IChatService {
@@ -118,7 +121,6 @@ export default class ChatService implements IChatService {
     if (didBallEnterOrLeaveIngoal === 'enter') {
       if (isDefRec) {
         this.room.util.setBallColor(colors.defrecWarning);
-
         this.sendYellowBoldAnnouncement(MSG_DEF_REC[0], 2);
         this.sendYellowAnnouncement(MSG_DEF_REC[1]);
       } else {
@@ -331,5 +333,71 @@ export default class ChatService implements IChatService {
 
     this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
+  }
+
+  public announceBlockedAirKick(kickerId: number, blockerId: number): void {
+    const players = this.room.getPlayerList();
+    const blocker = this.room.getPlayer(blockerId);
+
+    players.forEach((player) => {
+      if (player.id === kickerId && blocker) {
+        if (kickerId !== blockerId) {
+          this.sendBoldAnnouncement(
+            `🦵 🏉  🚫  Você tentou um Chute Aéreo mas foi bloqueado por ${blocker.name}!`,
+            0,
+            player.id,
+          );
+          this.sendNormalAnnouncement(
+            `Use um dos seguintes comandos para ativar/desativar seu Chute Aéreo: a z c d l p`,
+            0,
+            player.id,
+          );
+        }
+      } else {
+        const kicker = this.room.getPlayer(kickerId);
+        const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
+
+        if (kickerTeam && kickerId !== blockerId) {
+          this.sendBoldAnnouncement(
+            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo mas foi bloqueado por ${blocker.name}!`,
+            0,
+            player.id,
+          );
+        }
+      }
+    });
+  }
+
+  public announceSuccessfulAirKick(kickerId: number): void {
+    const players = this.room.getPlayerList();
+
+    players.forEach((player) => {
+      if (player.id === kickerId) {
+        this.sendBoldAnnouncement(
+          `🦵 🏉  ✅  Você conectou um Chute Aéreo!`,
+          0,
+          player.id,
+          colors.airKickMessage,
+        );
+        this.sendNormalAnnouncement(
+          `Use um dos seguintes comandos para ativar/desativar seu Chute Aéreo: a z c d l p`,
+          0,
+          player.id,
+          colors.airKickMessage,
+        );
+      } else {
+        const kicker = this.room.getPlayer(kickerId);
+        const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
+
+        if (kickerTeam) {
+          this.sendBoldAnnouncement(
+            `🦵 🏉  ✅  ${kicker.name} (${kickerTeam.name}) conectou um Chute Aéreo!`,
+            0,
+            player.id,
+            colors.airKickMessage,
+          );
+        }
+      }
+    });
   }
 }

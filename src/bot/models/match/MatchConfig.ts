@@ -8,12 +8,12 @@ export interface IMatchConfig {
 class MatchConfig implements IMatchConfig {
   public timeLimit: number;
   public scoreLimit: number;
-  public stadium: MapSizeEnum;
+  public mapSize: MapSizeEnum;
 
   constructor(timeLimit: number, scoreLimit: number, stadium: MapSizeEnum) {
     this.timeLimit = timeLimit;
     this.scoreLimit = scoreLimit;
-    this.stadium = stadium;
+    this.mapSize = stadium;
   }
 
   public getTimeLimitInMs(): number {

@@ -19,6 +19,9 @@ const colors = {
   ball: 0xffffff,
   ballRed: 0xf6b6ac,
   ballBlue: 0xa8c5f0,
+
+  airKickBall: 0x95999a,
+  airKickMessage: 0xbac2c2,
 };
 
 export default colors;
