@@ -18,11 +18,10 @@ export const TOUCH_EPSILON = 0.01;
 export const DRIVE_MIN_TICKS = 10; // 10 ticks = 0.167s
 export const AFTER_TRY_MAX_TICKS = 120;
 
-// export const KICK_RATE_LIMIT = [10, 10, 15];
 export const KICK_RATE_LIMIT = [10, 60, 3];
 
 export const BALL_TEAM_COLOR_TICKS = 60;
 export const AIR_KICK_TICKS = 105;
-export const AIR_KICK_BLOCK_TICKS = 90;
+export const AIR_KICK_BLOCK_TICKS = 93;
 export const SMALL_AIR_KICK_BOOST = 1.3;
 export const NORMAL_AIR_KICK_BOOST = 1.3;

@@ -5,8 +5,7 @@ const colors = {
   blue: 0x00bcd5,
   green: 0x00ff00,
   red: 0xff0000,
-  // defrecWarning: 0x800080,
-  defrecWarning: 0xfec901,
+  // defRecWarning: 0x800080,
   discordPurple: 0xb8bcf2,
   // discordPurple: 0x9ea3e6,
 
@@ -20,7 +19,9 @@ const colors = {
   ballRed: 0xf6b6ac,
   ballBlue: 0xa8c5f0,
 
-  airKickBall: 0x95999a,
+  defRecBall: 0xfec901,
+  airBall: 0x95999a,
+  defRecAirBall: 0xcab14e,
   airKickMessage: 0xbac2c2,
 };
 

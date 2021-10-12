@@ -40,7 +40,7 @@ class CommandService implements ICommandService {
     const currentPlayer = team.positions[position];
     const positionString = Util.getPositionString(position);
 
-    if (args0 === 'me') {
+    if (['me', 'ME'].includes(args0)) {
       if (currentPlayer && currentPlayer.id === player.id) {
         this.chatService.sendNormalAnnouncement(
           `Você já é o ${positionString} do ${team.name}!`,

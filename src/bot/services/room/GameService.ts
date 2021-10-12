@@ -588,7 +588,21 @@ export default class GameService implements IGameService {
       return;
     }
 
-    this.chatService.announceDefRec(didBallEnterOrLeaveIngoal, this.isDefRec);
+    this.chatService.announceDefRec(
+      didBallEnterOrLeaveIngoal,
+      this.isDefRec,
+      this.airKickerId !== null,
+    );
+
+    //
+    // hard fix ball if broken by air kick
+    //
+    // TODO: find the root cause and fix it
+    //
+    // const isBallAerial = this.room.util.getIsAerialBall();
+    // if (isBallAerial && this.airKickerId === null) {
+    //   this.room.util.toggleAerialBall(false);
+    // }
   }
 
   private checkForTouches(players: HaxRugbyPlayer[], ballPosition: IPosition) {
@@ -620,7 +634,6 @@ export default class GameService implements IGameService {
       toucherIds.length > 0
     ) {
       // console.log('passed 1: catch blocks during block phase');
-
       this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
       this.airKickerId = null;
     }
@@ -632,7 +645,6 @@ export default class GameService implements IGameService {
       toucherIds.length === 0
     ) {
       // console.log('passed 2: toggle aerial ball after block phase');
-
       this.room.util.toggleAerialBall(true);
     }
 
@@ -644,34 +656,37 @@ export default class GameService implements IGameService {
       toucherIds.length > 0
     ) {
       // console.log('passed 3: treat ball transformation delay to avoid bug');
-
       this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
       this.airKickerId = null;
       this.room.util.toggleAerialBall(false);
     }
 
-    // set air kick ball color & announce successful air kick
+    // set air ball color & announce successful air kick
     if (
       this.airKickerId &&
       this.ballTransitionCount === AIR_KICK_BLOCK_TICKS - 15 &&
       toucherIds.length === 0
     ) {
-      // console.log('passed 4: set air kick ball color & announce successful air kick');
-
+      // console.log('passed 4: set air ball color & announce successful air kick');
       this.chatService.announceSuccessfulAirKick(this.airKickerId);
       if (this.isDefRec === false) {
-        this.room.util.setBallColor(colors.airKickBall);
+        this.room.util.setBallColor(colors.airBall);
       }
+    }
+
+    // set def rec air ball color
+    if (this.airKickerId && this.isDefRec) {
+      // console.log('passed 5: set def rec air ball color');
+      this.room.util.setBallColor(colors.defRecAirBall);
     }
 
     // toggle off aerial ball
     if (this.airKickerId && this.ballTransitionCount === 0) {
-      // console.log('passed 5: toggle off aerial ball');
-
+      // console.log('passed 6: toggle off aerial ball');
       this.airKickerId = null;
       this.room.util.toggleAerialBall(false);
       const ballColor = this.room.getDiscProperties(0).color;
-      if (this.isDefRec === false && ballColor === colors.airKickBall) {
+      if (this.isDefRec === false && ballColor === colors.airBall) {
         this.room.util.setBallColor(colors.ball);
       }
     }
@@ -929,8 +944,8 @@ export default class GameService implements IGameService {
       }
     } else if (isDefRec && this.isTry === false) {
       const ballColor = this.room.getDiscProperties(0).color;
-      if (ballColor !== colors.defrecWarning) {
-        this.room.util.setBallColor(colors.defrecWarning);
+      if (ballColor !== colors.defRecBall) {
+        this.room.util.setBallColor(colors.defRecBall);
       }
     }
   }

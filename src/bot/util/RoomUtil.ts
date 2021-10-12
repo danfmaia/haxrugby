@@ -110,12 +110,16 @@ export class RoomUtil {
   }
 
   public setBallColor(color: number): void {
-    const ballCurrentColor = this.room.getDiscProperties(0).color;
-    if (ballCurrentColor === color) {
-      return;
+    // return early if it's not changing color
+    const ballProps = this.room.getDiscProperties(0);
+    if (ballProps) {
+      const ballCurrentColor = ballProps.color;
+      if (ballCurrentColor === color) {
+        return;
+      }
     }
 
-    const ballProps = { color } as IDiscPropertiesObject;
-    this.room.setDiscProperties(0, ballProps);
+    const updatedBallProps = { color } as IDiscPropertiesObject;
+    this.room.setDiscProperties(0, updatedBallProps);
   }
 }

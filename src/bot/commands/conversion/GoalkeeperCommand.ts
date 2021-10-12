@@ -7,7 +7,7 @@ import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import CommandService, { ICommandService } from '../../services/command/CommandService';
 
 @CommandDecorator({
-  names: ['gk', 'goalkeeper'],
+  names: ['gk', 'GK', 'goalkeeper'],
 })
 export class GoalkeeperCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly commandService: ICommandService;

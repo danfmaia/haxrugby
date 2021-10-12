@@ -316,6 +316,14 @@ class HaxRugbyStadium {
       /* 138 */ getVertex(-5, goalPostY, TraitEnum.line),
       /* 139 */ getVertex(5, goalPostY, TraitEnum.line),
 
+      /**
+       *  DRAWING LINES
+       *
+       *  TODO 1: soften the code
+       *  TODO 2: replace Rugby Union with HaxRugby
+       *  TODO 3: bring lines closer to field in small
+       */
+
       // "JP's" drawing lines
 
       /* 140 */ { x: -15, y: -340, trait: 'fadeLine' },
@@ -559,6 +567,8 @@ class HaxRugbyStadium {
     this.planes = [
       getPlane([0, 1], -height, TraitEnum.ballArea),
       getPlane([0, -1], -height, TraitEnum.ballArea),
+      getPlane([1, 0], -width, TraitEnum.ballArea),
+      getPlane([-1, 0], -width, TraitEnum.ballArea),
       getPlane([0, 1], -outerHeight, TraitEnum.playerArea),
       getPlane([0, -1], -outerHeight, TraitEnum.playerArea),
       getPlane([1, 0], -outerWidth, TraitEnum.playerArea),

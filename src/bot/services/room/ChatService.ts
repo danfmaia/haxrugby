@@ -29,7 +29,11 @@ export interface IChatService {
   sendSpace(playerId?: number): void;
 
   sendMatchStatus(sound?: number, playerId?: number): void;
-  announceDefRec(didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal, isDefRec: boolean): void;
+  announceDefRec(
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+    isDefRec: boolean,
+    isAirBall: boolean,
+  ): void;
   announceRegularOvertime(): void;
   announceBallPositionOvertime(): void;
 
@@ -117,17 +121,28 @@ export default class ChatService implements IChatService {
   public announceDefRec(
     didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
     isDefRec: boolean,
+    isAirBall: boolean,
   ): void {
     if (didBallEnterOrLeaveIngoal === 'enter') {
+      // TODO: remove logical redundancy
       if (isDefRec) {
-        this.room.util.setBallColor(colors.defrecWarning);
+        if (isAirBall === false) {
+          this.room.util.setBallColor(colors.defRecBall);
+        } else {
+          this.room.util.setBallColor(colors.defRecAirBall);
+        }
         this.sendYellowBoldAnnouncement(MSG_DEF_REC[0], 2);
         this.sendYellowAnnouncement(MSG_DEF_REC[1]);
       } else {
         this.sendBoldAnnouncement(MSG_SAFETY_ALLOWED, 0);
       }
     } else if (didBallEnterOrLeaveIngoal === 'leave') {
-      this.room.util.setBallColor(colors.ball);
+      // TODO: remove logical redundancy
+      if (isAirBall === false) {
+        this.room.util.setBallColor(colors.ball);
+      } else {
+        this.room.util.setBallColor(colors.airBall);
+      }
 
       this.sendNormalAnnouncement(MSG_BALL_LEAVE_INGOAL);
     }
