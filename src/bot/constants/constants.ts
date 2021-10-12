@@ -22,7 +22,7 @@ export const AFTER_TRY_MAX_TICKS = 120;
 export const KICK_RATE_LIMIT = [10, 60, 3];
 
 export const BALL_TEAM_COLOR_TICKS = 60;
-export const AIR_KICK_TICKS = 90;
-export const AIR_KICK_BLOCK_TICKS = 75;
-export const SMALL_AIR_KICK_BOOST = 1.15;
+export const AIR_KICK_TICKS = 105;
+export const AIR_KICK_BLOCK_TICKS = 90;
+export const SMALL_AIR_KICK_BOOST = 1.3;
 export const NORMAL_AIR_KICK_BOOST = 1.3;
