@@ -5,10 +5,11 @@ import {
   DRIVE_MIN_TICKS,
   BALL_RADIUS,
   AFTER_TRY_MAX_TICKS,
-  BALL_TRANSITION_TICKS,
-  BALL_AERIAL_TICKS,
+  AIR_BALL_TICKS,
+  AIR_BALL_BLOCK_TICKS,
   NORMAL_AIR_KICK_BOOST,
   SMALL_AIR_KICK_BOOST,
+  BALL_TEAM_COLOR_TICKS,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -63,8 +64,6 @@ export default class GameService implements IGameService {
   private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private lastDriveInfo: null | TLastDriveInfo = null;
-  private airKickerId: number | null = null;
-  private ballTransitionCount: number = 0;
 
   private kickoffX: number | null = null;
 
@@ -78,6 +77,9 @@ export default class GameService implements IGameService {
   public isConversionAttempt: false | TeamEnum = false;
   public isReplacingBall: boolean = false;
   public isConversionShot: boolean = false;
+
+  private airKickerId: number | null = null;
+  private ballTransitionCount: number = 0;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
@@ -218,6 +220,12 @@ export default class GameService implements IGameService {
       this.driverIds.includes(player.id)
     ) {
       this.airKickerId = player.id;
+      this.ballTransitionCount = AIR_BALL_TICKS;
+      if (player.team === TeamID.RedTeam) {
+        this.room.util.setBallColor(colors.ballRed);
+      } else if (player.team === TeamID.BlueTeam) {
+        this.room.util.setBallColor(colors.ballBlue);
+      }
 
       // boost kick
       const isSmallMap = this.matchConfig.mapSize === MapSizeEnum.SMALL;
@@ -603,20 +611,20 @@ export default class GameService implements IGameService {
   private handleAirKick(touchInfoList: (TTouchInfo | null)[]) {
     if (
       this.airKickerId &&
-      this.ballTransitionCount > BALL_AERIAL_TICKS &&
+      this.ballTransitionCount > AIR_BALL_BLOCK_TICKS &&
       touchInfoList &&
       touchInfoList.length > 0
     ) {
       const currentTouchInfo = touchInfoList[0];
       if (currentTouchInfo) {
         const toucherIds = currentTouchInfo.toucherIds;
-        if (this.ballTransitionCount < BALL_TRANSITION_TICKS - 1) {
+        if (this.ballTransitionCount < AIR_BALL_TICKS - 1) {
           this.chatService.announceBlockedAirKick(this.airKickerId, toucherIds[0]);
           this.airKickerId = null;
         }
       }
     }
-    if (this.airKickerId && this.ballTransitionCount === BALL_AERIAL_TICKS) {
+    if (this.airKickerId && this.ballTransitionCount === AIR_BALL_BLOCK_TICKS) {
       this.room.util.toggleAerialBall(true);
       this.chatService.announceSuccessfulAirKick(this.airKickerId);
     }
@@ -843,7 +851,7 @@ export default class GameService implements IGameService {
   private handleBall(ballPosition: IPosition, isDefRec: boolean) {
     if (
       this.airKickerId &&
-      this.ballTransitionCount <= BALL_AERIAL_TICKS &&
+      this.ballTransitionCount <= AIR_BALL_BLOCK_TICKS &&
       this.ballTransitionCount > 0
     ) {
       this.ballTransitionCount = this.ballTransitionCount - 1;
@@ -858,27 +866,29 @@ export default class GameService implements IGameService {
         ballPosition,
         team: TeamEnum.RED,
       };
-      this.airKickerId = null;
 
       // change ball color to team's
-      this.ballTransitionCount = BALL_TRANSITION_TICKS;
+      this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
       this.room.util.setBallColor(colors.ballRed);
     } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
         team: TeamEnum.BLUE,
       };
-      this.airKickerId = null;
 
       // change ball color to team's
-      this.ballTransitionCount = BALL_TRANSITION_TICKS;
+      this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
       this.room.util.setBallColor(colors.ballBlue);
     }
 
     if (this.lastDriveInfo && this.ballTransitionCount > 0 && isDefRec === false) {
       // transition ball color to original
       this.ballTransitionCount = this.ballTransitionCount - 1;
-      const color = Util.transitionBallColor(this.lastDriveInfo.team, this.ballTransitionCount);
+      const color = Util.transitionBallColor(
+        this.lastDriveInfo.team,
+        this.ballTransitionCount,
+        BALL_TEAM_COLOR_TICKS,
+      );
       this.room.util.setBallColor(color);
     } else if (this.airKickerId === null && isDefRec && this.isTry === false) {
       const ballColor = this.room.getDiscProperties(0).color;
@@ -888,7 +898,7 @@ export default class GameService implements IGameService {
     }
 
     if (this.ballTransitionCount === 0 && this.airKickerId) {
-      this.airKickerId === null;
+      this.airKickerId = null;
       this.room.util.toggleAerialBall(false);
       if (isDefRec === false) {
         this.room.util.setBallColor(colors.ball);
