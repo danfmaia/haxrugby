@@ -1,11 +1,12 @@
 import {
   MSG_BALL_LEAVE_INGOAL,
   MSG_DEF_REC,
-  MSG_GREETING_1,
-  MSG_GREETING_2,
-  MSG_GREETING_3,
-  MSG_GREETING_4,
-  MSG_GREETING_5,
+  MSG_GAME_INFO_1,
+  MSG_GAME_INFO_2,
+  MSG_GAME_INFO_3,
+  MSG_GAME_INFO_4,
+  MSG_GAME_INFO_5,
+  MSG_GREETING,
   MSG_HELP,
   MSG_RULES,
   MSG_SAFETY_ALLOWED,
@@ -38,6 +39,7 @@ export interface IChatService {
   announceBallPositionOvertime(): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
+  sendGameInfo(): void;
   sendNewMatchHelp(): void;
   sendMainPromoLinks(sound?: number, playerId?: number): void;
   sendMainPromoLinksForSpectators(): void;
@@ -167,11 +169,11 @@ export default class ChatService implements IChatService {
 
   public sendGreetingsToIncomingPlayer(playerId: number): void {
     Util.timeout(1000, () => {
-      this.sendBoldAnnouncement(MSG_GREETING_1, 2, playerId, colors.haxRugbyBall);
-      this.sendYellowAnnouncement(MSG_GREETING_2, 0, playerId);
-      this.sendNormalAnnouncement(MSG_GREETING_3, 0, playerId);
-      this.sendBlueAnnouncement(MSG_GREETING_4, 0, playerId);
-      this.sendBlueAnnouncement(MSG_GREETING_5, 0, playerId);
+      this.sendBoldAnnouncement(MSG_GREETING, 2, playerId, colors.haxRugbyBall);
+      this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0, playerId);
+      this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0, playerId);
+      this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0, playerId);
+      this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0, playerId);
     });
     Util.timeout(3000, () => {
       if (this.gameService.isMatchInProgress) {
@@ -184,12 +186,21 @@ export default class ChatService implements IChatService {
     });
   }
 
+  public sendGameInfo(): void {
+    this.sendBoldAnnouncement(MSG_GAME_INFO_1, 0, undefined, colors.haxRugbyBall);
+    this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0);
+    this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0);
+    this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0);
+    this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0);
+    this.sendBlankLine();
+  }
+
   public sendNewMatchHelp(): void {
     this.sendBoldAnnouncement(
-      'Use !rr ou !rr x2/x3/x4 para iniciar uma nova partida!   Exemplo: !rr x4',
-      2,
+      '𝖴𝗌𝖾 !𝗿𝗿 𝗈𝗎 !𝗿𝗿 𝘅𝟮/𝘅𝟯/𝘅𝟰 𝗉𝖺𝗋𝖺 𝗂𝗇𝗂𝖼𝗂𝖺𝗋 𝗎𝗆𝖺 𝗇𝗈𝗏𝖺 𝗉𝖺𝗋𝗍𝗂𝖽𝖺!   𝖤𝗑𝖾𝗆𝗉𝗅𝗈: !𝗿𝗿 𝘅𝟰',
     );
-    this.sendNormalAnnouncement('Apenas admins podem usar esse comando.');
+    this.sendNormalAnnouncement('𝐴𝑝𝑒𝑛𝑎𝑠 𝑎𝑑𝑚𝑖𝑛𝑠 𝑝𝑜𝑑𝑒𝑚 𝑢𝑠𝑎𝑟 𝑒𝑠𝑠𝑒 𝑐𝑜𝑚𝑎𝑛𝑑𝑜.');
+    this.sendBlankLine();
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {
@@ -208,22 +219,34 @@ export default class ChatService implements IChatService {
   public sendSinglePromoLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
     switch (link) {
       case LinkEnum.RULES:
-        this.room.sendAnnouncement('REGRAS do jogo:', playerId, colors.haxRugbyBall, 'bold', 0);
+        this.room.sendAnnouncement('𝗥𝗘𝗚𝗥𝗔𝗦 𝗱𝗼 𝗷𝗼𝗴𝗼:', playerId, colors.haxRugbyBall, 'bold', 0);
         this.room.sendAnnouncement(
           '    sites.google.com/site/haxrugby/regras',
           playerId,
           colors.haxRugbyBall,
-          undefined,
+          'italic',
           0,
         );
         return;
       case LinkEnum.DISCORD:
-        this.sendBoldAnnouncement('Server no DISCORD:', sound, playerId, colors.discordPurple);
-        this.sendNormalAnnouncement('    discord.io/HaxRugby', 0, playerId, colors.discordPurple);
+        this.sendBoldAnnouncement('𝖲𝖾𝗋𝗏𝖾𝗋 𝗇𝗈 𝗗𝗜𝗦𝗖𝗢𝗥𝗗:', sound, playerId, colors.discordPurple);
+        this.room.sendAnnouncement(
+          '    discord.io/HaxRugby',
+          playerId,
+          colors.discordPurple,
+          'italic',
+          0,
+        );
         return;
       case LinkEnum.FACEBOOK:
-        this.sendBoldAnnouncement('Grupo no FACEBOOK:', sound, playerId);
-        this.sendNormalAnnouncement('    fb.com/groups/haxrugby', 0, playerId);
+        this.sendBoldAnnouncement('𝖦𝗋𝗎𝗉𝗈 𝗇𝗈 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞:', sound, playerId);
+        this.room.sendAnnouncement(
+          '    fb.com/groups/haxrugby',
+          playerId,
+          colors.haxRugbyGreen,
+          'italic',
+          0,
+        );
         return;
       default:
     }
@@ -358,29 +381,40 @@ export default class ChatService implements IChatService {
 
   public announceBlockedAirKick(kickerId: number, blockerId: number): void {
     const players = this.room.getPlayerList();
+    const kicker = this.room.getPlayer(kickerId);
     const blocker = this.room.getPlayer(blockerId);
 
-    players.forEach((player) => {
-      if (player.id === kickerId && blocker) {
-        if (kickerId !== blockerId) {
-          this.sendBoldAnnouncement(
-            `🦵 🏉  🚫  Você tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!`,
-            0,
-            player.id,
-          );
-          this.sendNormalAnnouncement(
-            'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
-            0,
-            player.id,
-          );
-        }
-      } else {
-        const kicker = this.room.getPlayer(kickerId);
-        const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
+    if (!kicker || !blocker) {
+      return;
+    }
 
+    players.forEach((player) => {
+      if (kickerId === blockerId) {
+        return;
+      }
+
+      if (player.id === kickerId) {
+        this.sendBoldAnnouncement(
+          `🦵 🏉  🚫  Seu Chute Aéreo foi bloqueado por ${blocker.name}!`,
+          0,
+          player.id,
+        );
+        this.sendNormalAnnouncement(
+          'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
+          0,
+          player.id,
+        );
+      } else if (player.id === blockerId) {
+        this.sendBoldAnnouncement(
+          `🦵 🏉  🚫  Você bloqueou o Chute Aéreo de ${kicker.name}!  🙌`,
+          0,
+          player.id,
+        );
+      } else {
+        const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
         if (kickerId !== blockerId && kickerTeam) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!`,
+            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!  🙌`,
             0,
             player.id,
           );

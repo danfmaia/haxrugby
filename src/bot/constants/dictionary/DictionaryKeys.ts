@@ -1,9 +1,10 @@
 type DictionaryKeys = {
-  MSG_GREETING_1: string;
-  MSG_GREETING_2: string;
-  MSG_GREETING_3: string;
-  MSG_GREETING_4: string;
-  MSG_GREETING_5: string;
+  MSG_GREETING: string;
+  MSG_GAME_INFO_1: string;
+  MSG_GAME_INFO_2: string;
+  MSG_GAME_INFO_3: string;
+  MSG_GAME_INFO_4: string;
+  MSG_GAME_INFO_5: string;
 
   MSG_RULES: {
     TITLE: string;

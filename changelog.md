@@ -5,6 +5,7 @@
 - Aplicada mais uma correção para o erro da bola área não retornando ao normal.
   - Com a correção do último patch, esse erro teve sua frequência bem reduzida, mas ainda insiste em ocorrer às vezes.
 - Diminuída a força do Chute Aéreo do map small de `1.3x` para `1.2x`.
+- Melhoradas as mensagens do bot.
 
 ### v0.10d:
 

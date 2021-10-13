@@ -92,14 +92,26 @@ export default class GameService implements IGameService {
     this.teams = new Teams(this.chatService);
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
 
+    this.sendGameInfoPeriodically();
     this.sendNewMatchHelpPeriodically();
   }
 
-  private sendNewMatchHelpPeriodically() {
-    Util.interval(0.5 * MINUTE_IN_MS, () => {
+  private sendGameInfoPeriodically() {
+    Util.interval(MINUTE_IN_MS, () => {
       if (this.isMatchInProgress === false) {
-        this.chatService.sendNewMatchHelp();
+        this.chatService.sendGameInfo();
       }
+    });
+  }
+
+  private sendNewMatchHelpPeriodically() {
+    Util.timeout(0.5 * MINUTE_IN_MS, () => {
+      this.chatService.sendNewMatchHelp();
+      Util.interval(MINUTE_IN_MS, () => {
+        if (this.isMatchInProgress === false) {
+          this.chatService.sendNewMatchHelp();
+        }
+      });
     });
   }
 
@@ -214,7 +226,7 @@ export default class GameService implements IGameService {
 
     this.registerKickAsTouch(player.id);
 
-    // set air kicker
+    // set air kick
     if (
       HaxRugbyPlayerConfig.getConfig(player.id).isAirKickEnabled &&
       this.driverIds.length > 0 &&
@@ -233,6 +245,17 @@ export default class GameService implements IGameService {
       this.room.setDiscProperties(0, updatedBallProps);
     } else {
       this.airKickerId = null;
+    }
+
+    // inform player that their air kick is disabled
+    if (
+      HaxRugbyPlayerConfig.getConfig(player.id).isAirKickEnabled === false &&
+      this.driverIds.length > 0 &&
+      this.driverIds.includes(player.id)
+    ) {
+      this.chatService.sendNormalAnnouncement(
+        'Seu Chute Aéreo está desativado. Use o comando `a` para ativá-lo ou desativá-lo.',
+      );
     }
   }
 
