@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+### v0.10e:
+
+- Aplicada mais uma correção para o erro da bola área não retornando ao normal.
+  - Com a correção do último patch, esse erro teve sua frequência bem reduzida, mas ainda insiste em ocorrer às vezes.
+- Diminuída a força do Chute Aéreo do map small de `1.3x` para `1.2x`.
+
 ### v0.10d:
 
 - Corrigido o bug crítico da bola aérea não retornando ao normal (ainda são necessários testes).
