@@ -293,6 +293,17 @@ export default class GameService implements IGameService {
     }
   }
 
+  public handleStadiumChange(newStadiumName: string, byPlayer: HaxRugbyPlayer): void {
+    if (newStadiumName.includes('HaxRugby') === false) {
+      const lastWinner = this.getLastWinner();
+      if (lastWinner === TeamEnum.BLUE) {
+        this.room.setCustomStadium(this.map.blueStadiums.getKickoff());
+      } else {
+        this.room.setCustomStadium(this.map.redStadiums.getKickoff());
+      }
+    }
+  }
+
   /**
    *  OWN METHODS
    */

@@ -116,6 +116,10 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
       this.gameService.handleTeamGoal(team);
     });
 
+    this.onStadiumChange.addHandler((newStadiumName, byPlayer) => {
+      this.gameService.handleStadiumChange(newStadiumName, byPlayer);
+    });
+
     this.initializeRoom();
   }
 

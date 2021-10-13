@@ -51,6 +51,8 @@ export interface IGameService {
 
   handleTeamGoal(team: TeamID): void;
 
+  handleStadiumChange(newStadiumName: string, byPlayer: HaxRugbyPlayer): void;
+
   /**
    *  OWN METHODS
    */
