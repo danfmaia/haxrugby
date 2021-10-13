@@ -599,10 +599,10 @@ export default class GameService implements IGameService {
     //
     // TODO: find the root cause and fix it
     //
-    // const isBallAerial = this.room.util.getIsAerialBall();
-    // if (isBallAerial && this.airKickerId === null) {
-    //   this.room.util.toggleAerialBall(false);
-    // }
+    const isBallAerial = this.room.util.getIsAerialBall();
+    if (isBallAerial && this.airKickerId === null) {
+      this.room.util.toggleAerialBall(false);
+    }
   }
 
   private checkForTouches(players: HaxRugbyPlayer[], ballPosition: IPosition) {
