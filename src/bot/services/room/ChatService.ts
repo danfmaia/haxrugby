@@ -21,11 +21,11 @@ import { IGameService } from './IGameService';
 
 export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
-  sendBoldAnnouncement(message: string, sound: number, playerId?: number, color?: number): void;
+  sendBoldAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
   sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
-  sendBlueBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+  sendBlueBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
-  sendYellowBoldAnnouncement(message: string, sound: number, playerId?: number): void;
+  sendYellowBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
 
   sendBlankLine(playerId?: number): void;
 
@@ -39,8 +39,8 @@ export interface IChatService {
   announceBallPositionOvertime(): void;
 
   sendGreetingsToIncomingPlayer(playerId: number): void;
-  sendGameInfo(): void;
-  sendNewMatchHelp(): void;
+  sendGameInfo(playerId?: number): void;
+  sendNewMatchHelp(link?: boolean, playerId?: number): void;
   sendMainPromoLinks(sound?: number, playerId?: number): void;
   sendMainPromoLinksForSpectators(): void;
   sendSinglePromoLink(link: LinkEnum, sound?: number, playerId?: number): void;
@@ -186,21 +186,26 @@ export default class ChatService implements IChatService {
     });
   }
 
-  public sendGameInfo(): void {
-    this.sendBoldAnnouncement(MSG_GAME_INFO_1, 0, undefined, colors.haxRugbyBall);
-    this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0);
-    this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0);
-    this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0);
-    this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0);
-    this.sendBlankLine();
+  public sendGameInfo(playerId: number): void {
+    this.sendNormalAnnouncement(MSG_GAME_INFO_1, 0, playerId, colors.haxRugbyBall);
+    this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0, playerId);
+    this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0, playerId);
+    this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0, playerId);
+    this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0, playerId);
+    this.sendBlankLine(playerId);
   }
 
-  public sendNewMatchHelp(): void {
-    this.sendBoldAnnouncement(
+  public sendNewMatchHelp(link: boolean = true, playerId: number): void {
+    if (link) {
+      this.sendSinglePromoLink(LinkEnum.DISCORD, 0, playerId);
+    }
+    this.sendNormalAnnouncement(
       '𝖴𝗌𝖾 !𝗿𝗿 𝗈𝗎 !𝗿𝗿 𝘅𝟮/𝘅𝟯/𝘅𝟰 𝗉𝖺𝗋𝖺 𝗂𝗇𝗂𝖼𝗂𝖺𝗋 𝗎𝗆𝖺 𝗇𝗈𝗏𝖺 𝗉𝖺𝗋𝗍𝗂𝖽𝖺!   𝖤𝗑𝖾𝗆𝗉𝗅𝗈: !𝗿𝗿 𝘅𝟰',
+      0,
+      playerId,
     );
-    this.sendNormalAnnouncement('𝐴𝑝𝑒𝑛𝑎𝑠 𝑎𝑑𝑚𝑖𝑛𝑠 𝑝𝑜𝑑𝑒𝑚 𝑢𝑠𝑎𝑟 𝑒𝑠𝑠𝑒 𝑐𝑜𝑚𝑎𝑛𝑑𝑜.');
-    this.sendBlankLine();
+    this.sendNormalAnnouncement('𝐴𝑝𝑒𝑛𝑎𝑠 𝑎𝑑𝑚𝑖𝑛𝑠 𝑝𝑜𝑑𝑒𝑚 𝑢𝑠𝑎𝑟 𝑒𝑠𝑠𝑒 𝑐𝑜𝑚𝑎𝑛𝑑𝑜.', 0, playerId);
+    this.sendBlankLine(playerId);
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {

@@ -10,7 +10,7 @@ const ptBr: DictionaryKeys = {
   MSG_GREETING: `𝖡𝖾𝗆 𝗏𝗂𝗇𝖽𝗈(𝖺) 𝖺𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GAME_INFO_1: `𝖵𝗈𝖼ê 𝖾𝗌𝗍á 𝗇𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GAME_INFO_2:
-    '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝖻𝗎𝗀𝗌, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
+    '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝗯𝘂𝗴𝘀, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
   MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗮𝗶𝗿).`,
   // MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗈 𝖼𝗈𝗇𝖼𝖾𝗂𝗍𝗈 𝖽𝗈 𝖥𝗂𝖾𝗅𝖽 𝖦𝗈𝖺𝗅 𝗆𝗎𝖽𝗈𝗎 𝖾 𝖺𝗀𝗈𝗋𝖺 𝖾𝗅𝖾 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹. 𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽 𝗉𝖺𝗋𝖺 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌.`,
   MSG_GAME_INFO_4: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗋𝖾𝗀𝗋𝖺𝗌 𝖽𝗈 𝗃𝗈𝗀𝗈.',
@@ -20,15 +20,16 @@ const ptBr: DictionaryKeys = {
     TITLE: 'Resumo das REGRAS do jogo:',
     TRY_TITLE: 'TRY     !try',
     TRY: [
-      _1 + 'É o tento mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
+      _1 +
+        'É o objetivo mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
       _1 + 'O in-goal é a região do campo atrás da linha de gol de cada time.',
       _1 + 'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
     ],
     DROP_GOAL_TITLE: 'DROP GOAL (DG)     !drop !dg !gol',
     DROP_GOAL: [
-      _1 + 'É o tento secundário do rugby. Vale 3 pontos.',
+      _1 + 'É o objetivo secundário do rugby. Vale 3 pontos.',
       _1 +
-        'Só pode ser feito de fora da pequena área e com uma Bola Aérea (use !air para mais detalhes).',
+        'Só pode ser feito de fora da pequena área e com um Chute Aéreo (use !air para mais detalhes).',
       _1 + 'Não é possível fazer um Drop Goal contra.',
     ],
     AIR_KICK_TITLE: 'CHUTE AÉREO (AIR)     !air !aereo',
@@ -46,8 +47,7 @@ const ptBr: DictionaryKeys = {
       _1 + 'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
       _1 +
         'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
-      _1 +
-        'O Safety concede à defesa um tiro de reinício no local da última condução de bola do adversário.',
+      _1 + 'O Safety concede à defesa um tiro de reinício no local da última condução de bola.',
     ],
     OFFSIDE_TITLE: 'IMPEDIMENTO (IMP)',
     OFFSIDE: [_1 + 'As regras de impedimento (OFFSIDE e INSIDE) ainda não foram implementadas.'],

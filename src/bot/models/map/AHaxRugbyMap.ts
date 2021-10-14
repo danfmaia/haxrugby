@@ -304,6 +304,30 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
         return true;
       }
     }
+    if (this.getIsBallDefendedOrHitPostAndReturned(ballXSpeed, ballPosition)) {
+      return true;
+    }
+    return false;
+  }
+
+  private getIsBallDefendedOrHitPostAndReturned(
+    ballXSpeed: number,
+    ballPosition: IPosition,
+  ): boolean {
+    if (
+      ballXSpeed < 0 &&
+      ballPosition.x > this.areaLineX &&
+      ballPosition.x < this.areaLineX + 2 * BALL_RADIUS
+    ) {
+      return true;
+    }
+    if (
+      ballXSpeed > 0 &&
+      ballPosition.x < -this.areaLineX &&
+      ballPosition.x > -(this.areaLineX + 2 * BALL_RADIUS)
+    ) {
+      return true;
+    }
     return false;
   }
 

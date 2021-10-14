@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { CommandBase, CommandDecorator, TeamID, Types } from 'inversihax';
+import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import colors from '../constants/style/colors';
 
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
@@ -24,7 +24,7 @@ export class AirKickCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public canExecute(player: HaxRugbyPlayer): boolean {
-    return player.team !== TeamID.Spectators;
+    return true;
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {

@@ -42,6 +42,16 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
+    // block usage before 2 seconds
+    if (this.gameService.safetyTime < 2000) {
+      this.chatService.sendNormalAnnouncement(
+        'Aguarde 2 segundos para usar commando `b`.',
+        0,
+        player.id,
+      );
+      return;
+    }
+
     const kickingTeam = this.gameService.isConversionAttempt;
     const allPlayersPropMap = this.room.util.getAllPlayerPropsMaps();
     const map = this.gameService.map;

@@ -20,6 +20,7 @@ export interface ITeams {
 
   getTeam(team: TeamEnum): TTeam;
   getTeamByTeamID(teamID: TeamID): TTeam | null;
+  getTeamName(teamEnum: TeamEnum): string;
 
   fillAllPositions(players: HaxRugbyPlayer[]): void;
   emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer): void;
@@ -62,6 +63,13 @@ class Teams implements ITeams {
     } else {
       return null;
     }
+  }
+
+  getTeamName(team: TeamEnum): string {
+    if (team === TeamEnum.RED) {
+      return this.red.name;
+    }
+    return this.blue.name;
   }
 
   public fillAllPositions(players: HaxRugbyPlayer[]): void {

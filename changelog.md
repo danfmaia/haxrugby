@@ -1,11 +1,22 @@
 ## CHANGELOG
 
+### v0.10f:
+
+- Adicionado **limite de 20 segundos** para cobrança da Conversão.
+- Eliminado o rebote da conversão.
+- O comando `b` agora só pode ser usado após 2 segundos.
+- O Chute Aéreo agora é desabilitado após a marcação do Try, permitindo assim um passe curte com o intuito de levar a bola mais para o centro do in-goal.
+- Adicionado o comando `!clearbans` (mesmo comportamento de `!clearban all`).
+- Melhoradas as mensagens do bot.
+- Corrigido bola ficando branca no pause automático após a marcação do Try.
+
 ### v0.10e:
 
 - Aplicada mais uma correção para o erro da bola área não retornando ao normal.
   - Com a correção do último patch, esse erro teve sua frequência bem reduzida, mas ainda insiste em ocorrer às vezes.
 - Diminuída a força do Chute Aéreo do map small de `1.3x` para `1.2x`.
 - Melhoradas as mensagens do bot.
+- Impedida a seleção de stadiums que não são do HaxRugby.
 
 ### v0.10d:
 

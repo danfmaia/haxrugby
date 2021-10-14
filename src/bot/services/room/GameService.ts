@@ -10,6 +10,7 @@ import {
   NORMAL_AIR_KICK_BOOST,
   SMALL_AIR_KICK_BOOST,
   BALL_TEAM_COLOR_TICKS,
+  SAFETY_MAX_TIME,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -75,6 +76,7 @@ export default class GameService implements IGameService {
   public tryY: number | null = null;
   private afterTryTickCount: number = 0;
 
+  public safetyTime: number = 0;
   public isConversionAttempt: false | TeamEnum = false;
   public isReplacingBall: boolean = false;
   public isConversionShot: boolean = false;
@@ -91,25 +93,22 @@ export default class GameService implements IGameService {
     this.matchConfig = getMatchConfig('x2');
     this.teams = new Teams(this.chatService);
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
-
-    this.sendGameInfoPeriodically();
-    this.sendNewMatchHelpPeriodically();
   }
 
-  private sendGameInfoPeriodically() {
+  private sendGameInfoPeriodically(playerId: number) {
     Util.interval(MINUTE_IN_MS, () => {
       if (this.isMatchInProgress === false) {
-        this.chatService.sendGameInfo();
+        this.chatService.sendGameInfo(playerId);
       }
     });
   }
 
-  private sendNewMatchHelpPeriodically() {
+  private sendNewMatchHelpPeriodically(playerId: number) {
     Util.timeout(0.5 * MINUTE_IN_MS, () => {
-      this.chatService.sendNewMatchHelp();
+      this.chatService.sendNewMatchHelp(false, playerId);
       Util.interval(MINUTE_IN_MS, () => {
         if (this.isMatchInProgress === false) {
-          this.chatService.sendNewMatchHelp();
+          this.chatService.sendNewMatchHelp(true, playerId);
         }
       });
     });
@@ -132,13 +131,16 @@ export default class GameService implements IGameService {
     if (this.isConversionAttempt === false) {
       this.tickCount = this.tickCount + 1;
       if (this.tickCount % 6 === 0) {
-        this.checkForTimeEvents(ballPosition);
+        this.handleTime(ballPosition);
       }
-
-      this.checkForGameEvents(ballPosition);
+      this.handleGame(ballPosition);
     }
 
     if (this.isConversionAttempt) {
+      this.tickCount = this.tickCount + 1;
+      if (this.tickCount % 6 === 0) {
+        this.handleConversionTime(this.isConversionAttempt);
+      }
       this.handleConversion(ballPosition);
     }
 
@@ -194,6 +196,8 @@ export default class GameService implements IGameService {
   public handlePlayerJoin(player: IPlayerObject): void {
     this.adminService.setFirstPlayerAsAdmin(player.id);
     this.chatService.sendGreetingsToIncomingPlayer(player.id);
+    this.sendGameInfoPeriodically(player.id);
+    this.sendNewMatchHelpPeriodically(player.id);
   }
 
   public handlePlayerLeave(player: HaxRugbyPlayer): void {
@@ -225,6 +229,11 @@ export default class GameService implements IGameService {
     }
 
     this.registerKickAsTouch(player.id);
+
+    // do not trigger air kick if is try
+    if (this.isTry) {
+      return;
+    }
 
     // set air kick
     if (
@@ -355,7 +364,6 @@ export default class GameService implements IGameService {
         if (this.isFinishing) {
           this.room.stopGame();
         }
-
         this.chatService.sendNewMatchHelp();
       });
       return;
@@ -372,7 +380,6 @@ export default class GameService implements IGameService {
           this.room.setCustomStadium(this.map.blueStadiums.getKickoff());
         }
       }
-
       this.chatService.sendNewMatchHelp();
     });
 
@@ -429,6 +436,8 @@ export default class GameService implements IGameService {
   }
 
   private initializeConversion(kickingTeam: TeamEnum, tryY: number) {
+    this.safetyTime = 0;
+
     // move ball to the correct place
     const updatedBallProps = this.room.getDiscProperties(0);
     updatedBallProps.x = this.map.moveDiscInXAxis(
@@ -516,7 +525,7 @@ export default class GameService implements IGameService {
     this.chatService.sendConversionHelp();
   }
 
-  private checkForTimeEvents(ballPosition: IPosition) {
+  private handleTime(ballPosition: IPosition) {
     this.remainingTime = this.remainingTime - 1000 / 10;
 
     if (this.isOvertime === false) {
@@ -556,7 +565,30 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForGameEvents(ballPosition: IPosition) {
+  private handleConversionTime(team: TeamEnum) {
+    if (this.safetyTime === 0) {
+      const teamName = this.teams.getTeamName(team);
+      this.chatService.sendYellowBoldAnnouncement(
+        `O ${teamName} tem ${SAFETY_MAX_TIME / 1000} segundos para cobrar.`,
+        2,
+      );
+    }
+
+    this.safetyTime = this.safetyTime + 1000 / 10;
+    const remainingTime = SAFETY_MAX_TIME - this.safetyTime;
+
+    if (remainingTime === 10000) {
+      this.chatService.sendNormalAnnouncement('10 segundos para a cobrança!', 2);
+    }
+    if ([5000, 4000, 3000, 2000, 1000].includes(remainingTime)) {
+      this.chatService.sendNormalAnnouncement(`${remainingTime / 1000}...`);
+    }
+    if (remainingTime === 0) {
+      this.handleMissedConversion(true);
+    }
+  }
+
+  private handleGame(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
     this.checkForTouches(players, ballPosition);
@@ -1010,7 +1042,7 @@ export default class GameService implements IGameService {
   }
 
   // TODO: improve state logic (here and in other related parts too)
-  private handleMissedConversion() {
+  private handleMissedConversion(timeout: boolean = false) {
     const isStillConversionAttempt = this.isConversionAttempt;
     this.isConversionShot = false;
 
@@ -1019,19 +1051,21 @@ export default class GameService implements IGameService {
       this.isConversionAttempt = false;
       this.tryY = null;
 
-      let teamName: string;
+      const teamName = this.teams.getTeamName(isStillConversionAttempt);
       let stadium: string;
 
       if (isStillConversionAttempt === TeamEnum.RED) {
-        teamName = this.teams.red.name;
         stadium = this.map.blueStadiums.getKickoff();
       } else {
-        teamName = this.teams.blue.name;
         stadium = this.map.redStadiums.getKickoff();
       }
 
       // announce missed conversion
-      this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
+      if (timeout === false) {
+        this.chatService.sendBoldAnnouncement(`O ${teamName} errou a conversão!`, 2);
+      } else {
+        this.chatService.sendBoldAnnouncement(`Acabou o tempo para a cobrança do ${teamName}!`, 2);
+      }
 
       this.handleRestartOrFinishing(stadium);
     }
@@ -1054,16 +1088,17 @@ export default class GameService implements IGameService {
       };
     }
 
-    this.driverIds = [];
-    this.driverCountByTeam = { red: 0, blue: 0 };
-    this.isDefRec = false;
-    this.ballTransitionCount = 0;
-    this.airKickerId = null;
-    this.room.util.toggleAerialBall(false);
-    this.room.util.setBallColor(colors.ball);
-
     this.chatService.sendMatchStatus();
+
     Util.timeout(3000, () => {
+      this.driverIds = [];
+      this.driverCountByTeam = { red: 0, blue: 0 };
+      this.isDefRec = false;
+      this.ballTransitionCount = 0;
+      this.airKickerId = null;
+      this.room.util.toggleAerialBall(false);
+      this.room.util.setBallColor(colors.ball);
+
       this.room.stopGame();
       this.room.setCustomStadium(map);
       if (handleGameStop) handleGameStop();

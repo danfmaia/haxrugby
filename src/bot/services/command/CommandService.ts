@@ -29,6 +29,11 @@ class CommandService implements ICommandService {
     return this._singleton;
   }
 
+  public clearAllBans(playerNameAndId: string): void {
+    this.room.clearBans();
+    Util.logMessageWithTime(`${playerNameAndId} tirou o ban de todos os jogadores.`);
+  }
+
   public setPlayerAsPosition(player: HaxRugbyPlayer, args: string[], position: PositionEnum): void {
     const args0 = args[0];
 

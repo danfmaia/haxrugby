@@ -29,13 +29,13 @@ export class ExecuteCommandInterceptor
       return true;
     }
 
-    // execute command
-    message.broadcastForward = false;
-    message.command.execute(message.sentBy, message.commandParameters);
-
     Util.logMessageWithTime(
       `${Util.getPlayerNameAndId(message.sentBy)} executou o comando \`${message.message}\`.`,
     );
+
+    // execute command
+    message.broadcastForward = false;
+    message.command.execute(message.sentBy, message.commandParameters);
 
     return false;
   }

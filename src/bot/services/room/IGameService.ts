@@ -28,6 +28,7 @@ export interface IGameService {
 
   tryY: number | null;
 
+  safetyTime: number;
   isConversionAttempt: false | TeamEnum;
   isReplacingBall: boolean;
   isConversionShot: boolean;
