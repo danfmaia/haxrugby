@@ -137,11 +137,7 @@ export default class GameService implements IGameService {
     }
 
     if (this.isConversionAttempt) {
-      this.tickCount = this.tickCount + 1;
-      if (this.tickCount % 6 === 0) {
-        this.handleConversionTime(this.isConversionAttempt);
-      }
-      this.handleConversion(ballPosition);
+      this.handleConversion(ballPosition, this.isConversionAttempt);
     }
 
     this.lastBallPosition = ballPosition;
@@ -283,19 +279,28 @@ export default class GameService implements IGameService {
         this.room.pauseGame(true);
 
         let teamName: string;
+        let msgColor: number;
         let stadium: string;
         if (team === TeamID.RedTeam) {
           this.score.red = this.score.red + 2;
           teamName = this.teams.red.name;
+          msgColor = colors.ballRed;
           stadium = this.map.blueStadiums.getKickoff();
         } else {
           this.score.blue = this.score.blue + 2;
           teamName = this.teams.blue.name;
+          msgColor = colors.ballBlue;
           stadium = this.map.redStadiums.getKickoff();
         }
 
         // announce successful conversion
-        this.chatService.sendBoldAnnouncement(`Conversão do ${teamName}!`, 2);
+        this.chatService.sendBoldAnnouncement(`CONVERSÃO do ${teamName}!`, 2, undefined, msgColor);
+        this.chatService.sendNormalAnnouncement(
+          `Mais 2 pontos para o ${teamName}!`,
+          0,
+          undefined,
+          msgColor,
+        );
 
         this.handleRestartOrFinishing(stadium);
       });
@@ -565,29 +570,6 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleConversionTime(team: TeamEnum) {
-    if (this.safetyTime === 0) {
-      const teamName = this.teams.getTeamName(team);
-      this.chatService.sendYellowBoldAnnouncement(
-        `O ${teamName} tem ${SAFETY_MAX_TIME / 1000} segundos para cobrar.`,
-        2,
-      );
-    }
-
-    this.safetyTime = this.safetyTime + 1000 / 10;
-    const remainingTime = SAFETY_MAX_TIME - this.safetyTime;
-
-    if (remainingTime === 10000) {
-      this.chatService.sendNormalAnnouncement('10 segundos para a cobrança!', 2);
-    }
-    if ([5000, 4000, 3000, 2000, 1000].includes(remainingTime)) {
-      this.chatService.sendNormalAnnouncement(`${remainingTime / 1000}...`);
-    }
-    if (remainingTime === 0) {
-      this.handleMissedConversion(true);
-    }
-  }
-
   private handleGame(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
@@ -608,9 +590,12 @@ export default class GameService implements IGameService {
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
-    if (this.airKickerId === null) {
-      this.handleBall(ballPosition, this.isDefRec);
-    }
+    this.handleBall(
+      ballPosition,
+      didBallEnterOrLeaveIngoal,
+      this.isDefRec,
+      this.airKickerId !== null,
+    );
 
     if (this.lastDriveInfo) {
       if (this.checkForFieldGoal(ballPosition, this.lastDriveInfo)) {
@@ -654,11 +639,7 @@ export default class GameService implements IGameService {
       return;
     }
 
-    this.chatService.announceDefRec(
-      didBallEnterOrLeaveIngoal,
-      this.isDefRec,
-      this.airKickerId !== null,
-    );
+    this.chatService.announceDefRec(didBallEnterOrLeaveIngoal, this.isDefRec);
 
     //
     // hard fix ball if broken by air kick
@@ -737,6 +718,8 @@ export default class GameService implements IGameService {
       this.chatService.announceSuccessfulAirKick(this.airKickerId);
       if (this.isDefRec === false) {
         this.room.util.setBallColor(colors.airBall);
+      } else {
+        this.room.util.setBallColor(colors.defRecAirBall);
       }
     }
 
@@ -775,6 +758,7 @@ export default class GameService implements IGameService {
       this.isTimeRunning = false;
       this.room.pauseGame(true);
       let teamName: string;
+      const msgColor = this.teams.getTeamColor(isGoal);
       let stadium: string;
 
       if (isGoal === TeamEnum.RED) {
@@ -788,7 +772,18 @@ export default class GameService implements IGameService {
       }
 
       // announce goal
-      this.chatService.sendBoldAnnouncement(`Drop Goal do ${teamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(
+        `💨  DROP GOAL do ${teamName}!!  💨`,
+        2,
+        undefined,
+        msgColor,
+      );
+      this.chatService.sendNormalAnnouncement(
+        `Mais 3 pontos para o ${teamName}!`,
+        0,
+        undefined,
+        msgColor,
+      );
 
       this.handleRestartOrFinishing(stadium);
       return true;
@@ -878,20 +873,27 @@ export default class GameService implements IGameService {
     if (isTry) {
       this.isTry = isTry;
       this.tryY = ballPosition.y;
-      let teamName: string;
+      const teamName = this.teams.getTeamName(isTry);
+      const msgColor = this.teams.getTeamColor(isTry);
 
       if (isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 5;
-        teamName = this.teams.red.name;
       } else {
         this.score.blue = this.score.blue + 5;
-        teamName = this.teams.blue.name;
       }
 
       // announce try
-      this.chatService.sendBoldAnnouncement(`Try do ${teamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(
+        `🏉  TRY do ${teamName}!!!  Mais 5 pontos para o time!  🏉`,
+        2,
+        undefined,
+        msgColor,
+      );
       this.chatService.sendNormalAnnouncement(
-        `O ${teamName} pode tentar levar a bola mais para o meio do campo.`,
+        `O ${teamName} ainda pode tentar levar a bola mais para o meio do campo.`,
+        0,
+        undefined,
+        msgColor,
       );
 
       return true;
@@ -976,13 +978,17 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleBall(ballPosition: IPosition, isDefRec: boolean) {
+  private handleBall(
+    ballPosition: IPosition,
+    didBallEnterOrLeaveIngoal: IBallEnterOrLeaveIngoal,
+    isDefRec: boolean,
+    isAirBall: boolean,
+  ) {
     if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
         team: TeamEnum.RED,
       };
-
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
       this.room.util.setBallColor(colors.ballRed);
@@ -991,14 +997,18 @@ export default class GameService implements IGameService {
         ballPosition,
         team: TeamEnum.BLUE,
       };
-
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
       this.room.util.setBallColor(colors.ballBlue);
     }
 
-    if (this.lastDriveInfo && this.ballTransitionCount > 0 && isDefRec === false) {
-      // transition ball color to original
+    // transition ball color to original
+    if (
+      this.lastDriveInfo &&
+      this.ballTransitionCount > 0 &&
+      isDefRec === false &&
+      isAirBall === false
+    ) {
       this.ballTransitionCount = this.ballTransitionCount - 1;
       const color = Util.transitionBallColor(
         this.lastDriveInfo.team,
@@ -1008,27 +1018,47 @@ export default class GameService implements IGameService {
       if (color) {
         this.room.util.setBallColor(color);
       }
-    } else if (isDefRec && this.isTry === false) {
-      const ballColor = this.room.getDiscProperties(0).color;
-      if (ballColor !== colors.defRecBall) {
+    }
+
+    // handle def/rec and air states
+    if (isDefRec && this.isTry === false) {
+      if (isAirBall === false) {
         this.room.util.setBallColor(colors.defRecBall);
+      } else {
+        this.room.util.setBallColor(colors.defRecAirBall);
+      }
+    }
+    if (
+      didBallEnterOrLeaveIngoal === 'leave' &&
+      this.driverCountByTeam.red === 0 &&
+      this.driverCountByTeam.blue === 0
+    ) {
+      if (isAirBall === false) {
+        this.room.util.setBallColor(colors.ball);
+      } else {
+        this.room.util.setBallColor(colors.airBall);
       }
     }
   }
 
-  private handleConversion(ballPosition: IPosition) {
-    // handle after shot
+  private handleConversion(ballPosition: IPosition, team: TeamEnum) {
     if (
       this.isConversionShot === false &&
       this.isReplacingBall === false &&
       ballPosition.x !== this.lastBallPosition.x &&
       ballPosition.y !== this.lastBallPosition.y
     ) {
+      // handle after shot
       this.isConversionShot = true;
-
       Util.timeout(2500, () => {
         this.handleMissedConversion();
       });
+    } else {
+      // handle conversion time
+      this.tickCount = this.tickCount + 1;
+      if (this.tickCount % 6 === 0) {
+        this.handleConversionTime(team);
+      }
     }
 
     // check missed conversion
@@ -1038,6 +1068,29 @@ export default class GameService implements IGameService {
     );
     if (isMissedConversion) {
       this.handleMissedConversion();
+    }
+  }
+
+  private handleConversionTime(team: TeamEnum) {
+    if (this.safetyTime === 0) {
+      const teamName = this.teams.getTeamName(team);
+      this.chatService.sendYellowBoldAnnouncement(
+        `O ${teamName} tem ${SAFETY_MAX_TIME / 1000} segundos para cobrar.`,
+        2,
+      );
+    }
+
+    this.safetyTime = this.safetyTime + 1000 / 10;
+    const remainingTime = SAFETY_MAX_TIME - this.safetyTime;
+
+    if (remainingTime === 10000) {
+      this.chatService.sendNormalAnnouncement('10 segundos para a cobrança!', 2);
+    }
+    if ([5000, 4000, 3000, 2000, 1000].includes(remainingTime)) {
+      this.chatService.sendNormalAnnouncement(`${remainingTime / 1000}...`);
+    }
+    if (remainingTime === 0) {
+      this.handleMissedConversion(true);
     }
   }
 

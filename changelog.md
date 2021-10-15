@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v0.10g:
+
+- Maior destaque para as mensagens de pontuação.
+- Correções de pequenos problemas do último patch.
+
 ### v0.10f:
 
 - Adicionado **limite de 20 segundos** para cobrança da Conversão.

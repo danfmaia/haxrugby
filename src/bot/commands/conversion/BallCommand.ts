@@ -8,7 +8,7 @@ import { IChatService } from '../../services/room/ChatService';
 import { IGameService } from '../../services/room/IGameService';
 import Util from '../../util/Util';
 
-export const BALL_COMMAND_HOTKEYS = ['b', 'B', 'ball', 'bola'];
+export const BALL_COMMAND_HOTKEYS = ['b', 'B'];
 
 @CommandDecorator({
   names: BALL_COMMAND_HOTKEYS,

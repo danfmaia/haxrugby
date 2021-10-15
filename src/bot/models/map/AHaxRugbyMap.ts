@@ -317,14 +317,14 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     if (
       ballXSpeed < 0 &&
       ballPosition.x > this.areaLineX &&
-      ballPosition.x < this.areaLineX + 2 * BALL_RADIUS
+      ballPosition.x < this.areaLineX + (this.goalLineX - this.miniAreaX)
     ) {
       return true;
     }
     if (
       ballXSpeed > 0 &&
       ballPosition.x < -this.areaLineX &&
-      ballPosition.x > -(this.areaLineX + 2 * BALL_RADIUS)
+      ballPosition.x > -(this.areaLineX + (this.goalLineX - this.miniAreaX))
     ) {
       return true;
     }

@@ -1,4 +1,5 @@
 import { TeamID } from 'inversihax';
+import colors from '../../constants/style/colors';
 
 import { BLUE_TEAM_NAME, RED_TEAM_NAME } from '../../constants/team/team';
 import PositionEnum from '../../enums/PositionEnum';
@@ -21,6 +22,7 @@ export interface ITeams {
   getTeam(team: TeamEnum): TTeam;
   getTeamByTeamID(teamID: TeamID): TTeam | null;
   getTeamName(teamEnum: TeamEnum): string;
+  getTeamColor(teamEnum: TeamEnum): number;
 
   fillAllPositions(players: HaxRugbyPlayer[]): void;
   emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer): void;
@@ -70,6 +72,13 @@ class Teams implements ITeams {
       return this.red.name;
     }
     return this.blue.name;
+  }
+
+  getTeamColor(team: TeamEnum): number {
+    if (team === TeamEnum.RED) {
+      return colors.ballRed;
+    }
+    return colors.ballBlue;
   }
 
   public fillAllPositions(players: HaxRugbyPlayer[]): void {
