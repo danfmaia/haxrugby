@@ -99,35 +99,38 @@ export class RoomUtil {
   }
 
   public toggleAerialBall(toggle: boolean, isDefRec: boolean = false): void {
-    const updatedBallProps = {} as IDiscPropertiesObject;
-    const updatedAirBallProps = {} as IDiscPropertiesObject;
-
     if (toggle) {
-      const currentBallProps = this.room.getDiscProperties(0);
-      // const ballPosition = this.room.getBallPosition();
-      updatedAirBallProps.x = currentBallProps.x - 2;
-      updatedAirBallProps.y = currentBallProps.y - 2;
-      updatedAirBallProps.xspeed = currentBallProps.xspeed;
-      updatedAirBallProps.yspeed = currentBallProps.yspeed;
+      this.room.setDiscProperties(0, {
+        cGroup: CollisionFlag.ball,
+        cMask: CollisionFlag.wall,
+        color: colors.airBall,
+      } as IDiscPropertiesObject);
 
-      this.room.setDiscProperties(1, updatedAirBallProps);
-      updatedBallProps.cGroup = CollisionFlag.ball;
-      updatedBallProps.cMask = CollisionFlag.wall;
-      updatedBallProps.color = colors.airBall;
-      this.room.setDiscProperties(0, updatedBallProps);
+      const airBallProps = this.room.getDiscProperties(0);
+      this.room.setDiscProperties(1, {
+        x: airBallProps.x - 3,
+        y: airBallProps.y - 3,
+        xspeed: airBallProps.xspeed,
+        yspeed: airBallProps.yspeed,
+        cGroup: 0,
+        cMask: CollisionFlag.c0,
+        color: colors.ball,
+      } as IDiscPropertiesObject);
     } else {
       const originalAirBallProps = RoomUtil.getOriginalAirBallProps(this.room);
-      updatedAirBallProps.x = originalAirBallProps.x;
-      updatedAirBallProps.y = originalAirBallProps.y;
-      updatedAirBallProps.xspeed = originalAirBallProps.xspeed;
-      updatedAirBallProps.yspeed = originalAirBallProps.yspeed;
-      this.room.setDiscProperties(1, updatedAirBallProps);
+      this.room.setDiscProperties(1, {
+        x: originalAirBallProps.x,
+        y: originalAirBallProps.y,
+        xspeed: originalAirBallProps.xspeed,
+        yspeed: originalAirBallProps.yspeed,
+      } as IDiscPropertiesObject);
 
       const originalBallProps = RoomUtil.getOriginalBallProps(this.room);
-      updatedBallProps.cGroup = originalBallProps.cGroup;
-      updatedBallProps.cMask = originalBallProps.cMask;
-      updatedBallProps.color = colors.ball;
-      this.room.setDiscProperties(0, updatedBallProps);
+      this.room.setDiscProperties(0, {
+        cGroup: originalBallProps.cGroup,
+        cMask: originalBallProps.cMask,
+        color: colors.ball,
+      } as IDiscPropertiesObject);
     }
   }
 
