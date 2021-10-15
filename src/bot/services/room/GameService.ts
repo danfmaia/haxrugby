@@ -591,7 +591,7 @@ export default class GameService implements IGameService {
     this.checkForTouches(players, ballPosition);
 
     const toucherIds = Physics.getToucherIds(this.touchInfoList);
-    this.handleAirKick(toucherIds);
+    this.handleAirKick(toucherIds, ballPosition);
 
     // register ball drivers if any
     this.driverIds = Physics.getDriverIds(this.touchInfoList);
@@ -683,7 +683,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleAirKick(toucherIds: number[]) {
+  private handleAirKick(toucherIds: number[], ballPosition: IPosition) {
     // decrement tick counter
     if (this.airKickerId && this.ballTransitionCount > 0) {
       this.ballTransitionCount = this.ballTransitionCount - 1;

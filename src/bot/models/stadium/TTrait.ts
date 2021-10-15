@@ -1,8 +1,8 @@
 import { Color } from 'inversihax';
 
 type TTrait = {
-  vis: boolean;
-  bCoef: number;
+  vis?: boolean;
+  bCoef?: number;
   cGroup?: [0] | string[];
   cMask?: [0] | string[];
   radius?: number;

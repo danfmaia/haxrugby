@@ -1,4 +1,7 @@
 enum TraitEnum {
+  ball = 'ball',
+  airBallEffect = 'airBallEffect',
+
   ballArea = 'ballArea',
   playerArea = 'playerArea',
   goalPost = 'goalPost',

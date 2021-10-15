@@ -20,7 +20,8 @@ const colors = {
   ballBlue: 0xa8c5f0,
 
   defRecBall: 0xfec901,
-  airBall: 0x95999a,
+  // airBall: 0x95999a,
+  airBall: 0x000000,
   defRecAirBall: 0xcab14e,
   airKickMessage: 0xbac2c2,
 };

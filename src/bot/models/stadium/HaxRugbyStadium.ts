@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { BALL_RADIUS, PLAYER_RADIUS } from '../../constants/constants';
+import { PLAYER_RADIUS } from '../../constants/constants';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TeamEnum from '../../enums/TeamEnum';
 import StadiumService, {
-  getBallPhysics,
   getDisc,
   getPlane,
   getSegment,
@@ -73,6 +72,9 @@ class HaxRugbyStadium {
     };
 
     this.traits = {
+      [TraitEnum.ball]: traits.ball,
+      [TraitEnum.airBallEffect]: traits.airBallEffect,
+
       [TraitEnum.ballArea]: traits.ballArea,
       [TraitEnum.goalPost]: traits.goalPost,
       [TraitEnum.goalNet]: traits.goalNet,
@@ -557,6 +559,10 @@ class HaxRugbyStadium {
     }
 
     this.discs = [
+      // ball
+      { trait: TraitEnum.ball },
+      { trait: TraitEnum.airBallEffect },
+
       // goal posts
       getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
       getDisc([-goalLineX, goalPostY], TraitEnum.goalPost),
@@ -575,7 +581,7 @@ class HaxRugbyStadium {
       getPlane([-1, 0], -outerWidth, TraitEnum.playerArea),
     ];
 
-    this.ballPhysics = getBallPhysics(BALL_RADIUS);
+    this.ballPhysics = 'disc0';
   }
 
   public static getNewStadium(

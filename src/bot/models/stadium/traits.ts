@@ -1,8 +1,33 @@
+import { BALL_RADIUS } from '../../constants/constants';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TTrait from './TTrait';
 
 const traits = {
-  // mandatory
+  // ball
+
+  [TraitEnum.ball]: {
+    radius: BALL_RADIUS,
+    bCoef: 0.5,
+    invMass: 1,
+    damping: 0.99,
+    cGroup: ['ball', 'kick', 'score'],
+    cMask: ['all'],
+    color: 'FFFFFF',
+  } as TTrait,
+
+  [TraitEnum.airBallEffect]: {
+    vis: true,
+    pos: [0, -1000],
+    radius: BALL_RADIUS,
+    bCoef: 0.5,
+    invMass: 1,
+    damping: 0.99,
+    cGroup: [0],
+    cMask: ['c1'],
+    color: 'FFFFFF',
+  } as TTrait,
+
+  // default
 
   [TraitEnum.ballArea]: {
     vis: false,
@@ -32,7 +57,7 @@ const traits = {
     cMask: ['red', 'blue'],
   } as TTrait,
 
-  // custom
+  // other
 
   [TraitEnum.null]: {
     vis: false,
