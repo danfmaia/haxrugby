@@ -2,6 +2,11 @@
 
 ### v0.10g:
 
+- Aumentado de 2s para 3s o acumulado de tempo para o time que fez o Try tentar levar a bola mais para o centro do in-goal.
+  - Para quem não entende como isso funciona, esse tempo de 3s (antes 2s) é congelado quando o time que fez o Try está encostando na bola, ou está levando a bola mais para o centro do in-goal.
+  - Sendo assim, o time tem um "acumulado" de 3s (antes 2s) para tentar centralizar o Try o máximo possível.
+- O período após o Try (mencionado acima) não conta mais para o tempo de jogo.
+  - O relógio de jogo agora será congelado assim que a bola mudar para a cor do time que fez o Try.
 - Maior destaque para as mensagens de pontuação.
 - Correções de pequenos problemas do último patch.
 

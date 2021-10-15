@@ -14,7 +14,7 @@ export const GOAL_POST_RADIUS = 2;
 export const TOUCH_EPSILON = 0.01;
 // minimal tick range for driving
 export const DRIVE_MIN_TICKS = 10; // 10 ticks = 0.167s
-export const AFTER_TRY_MAX_TICKS = 120;
+export const AFTER_TRY_MAX_TICKS = 180; // 3s
 
 export const KICK_RATE_LIMIT = [10, 60, 3];
 

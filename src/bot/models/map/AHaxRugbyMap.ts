@@ -16,7 +16,7 @@ interface IHaxRugbyMap {
 
   tryLineX: number;
 
-  getIsFieldGoal(
+  getIsDropGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastDriveInfo: TLastDriveInfo,
@@ -82,7 +82,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     this.areaLineX = areaLineX;
   }
 
-  public getIsFieldGoal(
+  public getIsDropGoal(
     ballPosition: IPosition,
     ballXSpeed: number,
     lastDriveInfo: TLastDriveInfo,
@@ -317,14 +317,14 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     if (
       ballXSpeed < 0 &&
       ballPosition.x > this.areaLineX &&
-      ballPosition.x < this.areaLineX + (this.goalLineX - this.miniAreaX)
+      ballPosition.x < this.goalLineX - this.miniAreaX
     ) {
       return true;
     }
     if (
       ballXSpeed > 0 &&
       ballPosition.x < -this.areaLineX &&
-      ballPosition.x > -(this.areaLineX + (this.goalLineX - this.miniAreaX))
+      ballPosition.x > -this.goalLineX - this.miniAreaX
     ) {
       return true;
     }

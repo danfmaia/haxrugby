@@ -129,14 +129,14 @@ export default class GameService implements IGameService {
     const ballPosition = this.room.getBallPosition();
 
     if (this.isConversionAttempt === false) {
-      this.tickCount = this.tickCount + 1;
-      if (this.tickCount % 6 === 0) {
-        this.handleTime(ballPosition);
+      if (this.isTry === false) {
+        this.tickCount = this.tickCount + 1;
+        if (this.tickCount % 6 === 0) {
+          this.handleTime(ballPosition);
+        }
       }
       this.handleGame(ballPosition);
-    }
-
-    if (this.isConversionAttempt) {
+    } else {
       this.handleConversion(ballPosition, this.isConversionAttempt);
     }
 
@@ -252,15 +252,30 @@ export default class GameService implements IGameService {
       this.airKickerId = null;
     }
 
-    // inform player that their air kick is disabled
+    // inform team that the player air kick is disabled
     if (
       HaxRugbyPlayerConfig.getConfig(player.id).isAirKickEnabled === false &&
       this.driverIds.length > 0 &&
       this.driverIds.includes(player.id)
     ) {
-      this.chatService.sendNormalAnnouncement(
-        'Seu Chute Aéreo está desativado. Use o comando `a` para ativá-lo ou desativá-lo.',
-      );
+      const ownTeamPlayers = this.room
+        .getPlayerList()
+        .filter((ownTeamPlayer) => ownTeamPlayer.team === player.team);
+      ownTeamPlayers.forEach((ownTeamPlayer) => {
+        if (ownTeamPlayer.id === player.id) {
+          this.chatService.sendNormalAnnouncement(
+            'Seu Chute Aéreo está desativado. Use o comando `a` para ativá-lo ou desativá-lo.',
+            0,
+            ownTeamPlayer.id,
+          );
+        } else {
+          this.chatService.sendNormalAnnouncement(
+            `O Chute Aéreo de ${player.name} está desativado. Será que isso é proposital? 🤔  Comando: a`,
+            0,
+            ownTeamPlayer.id,
+          );
+        }
+      });
     }
   }
 
@@ -598,12 +613,12 @@ export default class GameService implements IGameService {
     );
 
     if (this.lastDriveInfo) {
-      if (this.checkForFieldGoal(ballPosition, this.lastDriveInfo)) {
+      if (this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
         return;
       }
     }
 
-    // in case of try, let the scorer attempt to take the ball more to the middle
+    // in case of try, let the scorer attempt to take the ball more to the center
     if (this.isTry) {
       this.handleAfterTry(ballPosition, this.driverCountByTeam);
       return;
@@ -741,13 +756,13 @@ export default class GameService implements IGameService {
     }
   }
 
-  private checkForFieldGoal(ballPosition: IPosition, lastDriveInfo: TLastDriveInfo): boolean {
+  private checkForDropGoal(ballPosition: IPosition, lastDriveInfo: TLastDriveInfo): boolean {
     if (this.airKickerId === null) {
       return false;
     }
     const airKickerTeam = this.room.getPlayer(this.airKickerId).team;
 
-    const isGoal = this.map.getIsFieldGoal(
+    const isGoal = this.map.getIsDropGoal(
       ballPosition,
       this.room.getDiscProperties(0).xspeed,
       lastDriveInfo,
