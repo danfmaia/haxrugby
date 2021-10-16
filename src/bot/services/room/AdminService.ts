@@ -1,16 +1,109 @@
+import { IPlayerObject } from 'inversihax';
+import colors from '../../constants/style/colors';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
+import Util from '../../util/Util';
+import ChatService, { IChatService } from './ChatService';
 
 export interface IAdminService {
+  handlePlayerJoin(player: IPlayerObject): void;
+  handlePlayerLeave(player: HaxRugbyPlayer): void;
+  handlePlayerKicked(
+    player: HaxRugbyPlayer,
+    reason: string,
+    ban: boolean,
+    byPlayer: HaxRugbyPlayer,
+  ): void;
+
   setFirstPlayerAsAdmin(playerId: number): void;
   setEarliestPlayerAsAdmin(): void;
 }
 
 export default class AdminService implements IAdminService {
   private room: IHaxRugbyRoom;
+  private chatService: IChatService;
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
+    this.chatService = new ChatService(room, room.gameService);
+  }
+
+  public handlePlayerJoin(player: IPlayerObject): void {
+    HaxRugbyPlayerConfig.getConfig(player.id);
+
+    const playerTotal = this.room.getPlayerList().length;
+    Util.logWithTime(`${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`);
+
+    this.setFirstPlayerAsAdmin(player.id);
+  }
+
+  public handlePlayerLeave(player: HaxRugbyPlayer): void {
+    const playerTotal = this.room.getPlayerList().length;
+    Util.logWithTime(`${Util.getPlayerNameAndId(player)} saiu da sala. Total: ${playerTotal}`);
+    this.setEarliestPlayerAsAdmin();
+  }
+
+  public handlePlayerKicked(
+    player: HaxRugbyPlayer,
+    reason: string,
+    ban: boolean,
+    byPlayer: HaxRugbyPlayer,
+  ): void {
+    const BOT_KICK_MESSAGE = 'Você não tem permissão para kickar.';
+    const BOT_BAN_MESSAGE = 'Você não tem permissão para banir.';
+
+    if (['!bb', BOT_KICK_MESSAGE, BOT_BAN_MESSAGE].includes(reason)) {
+      return;
+    }
+
+    const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
+    const playerNameAndId = Util.getPlayerNameAndId(player);
+    const byPlayerNameAndId = Util.getPlayerNameAndId(byPlayer);
+
+    if (playerConfig.role.weight < 90) {
+      if (ban === false) {
+        this.chatService.sendBoldAnnouncement(
+          `${byPlayer.name} tentou kickar ${player.name} sem permissão.`,
+          2,
+          undefined,
+          colors.red,
+        );
+        Util.logWithTime(`${byPlayerNameAndId} tentou kickar ${playerNameAndId} sem permissão.`);
+        this.room.kickPlayer(byPlayer.id, BOT_KICK_MESSAGE, false);
+      } else {
+        this.chatService.sendBoldAnnouncement(
+          `${byPlayer.name} tentou banir ${player.name} sem permissão. O ban foi retirado.`,
+          2,
+          undefined,
+          colors.red,
+        );
+        Util.logWithTime(
+          `${byPlayerNameAndId} tentou banir ${playerNameAndId} sem permissão. O ban foi retirado.`,
+        );
+        this.room.clearBan(player.id);
+        this.room.kickPlayer(byPlayer.id, BOT_BAN_MESSAGE, false);
+      }
+      return;
+    }
+
+    if (ban === false) {
+      if (byPlayer.id > 0) {
+        Util.logWithTime(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
+      } else {
+        Util.logWithTime(`${playerNameAndId} foi kickado pelo bot.`);
+      }
+    } else {
+      if (byPlayer.id > 0) {
+        Util.logWithTime(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
+      } else {
+        Util.logWithTime(`${playerNameAndId} foi banido pelo bot.`);
+      }
+    }
+
+    if (reason) {
+      console.log(`    Motivo: ${reason}.`);
+    }
   }
 
   public setFirstPlayerAsAdmin(playerId: number): void {

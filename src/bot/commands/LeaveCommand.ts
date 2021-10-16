@@ -22,8 +22,6 @@ export class LeaveCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     this.room.kickPlayer(player.id, '!bb', false);
-    Util.logMessageWithTime(
-      `${Util.getPlayerNameAndId(player)} saiu da sala através do comando !bb.`,
-    );
+    Util.logWithTime(`${Util.getPlayerNameAndId(player)} saiu da sala através do comando !bb.`);
   }
 }

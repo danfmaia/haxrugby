@@ -1,12 +1,16 @@
+import { HaxRugbyRole } from './HaxRugbyRole';
+
 export class HaxRugbyPlayerConfig {
   public static configs: HaxRugbyPlayerConfig[] = [];
 
   public playerId: number;
+  public role: HaxRugbyRole;
   public isAirKickEnabled: boolean = true;
   public canBeTheOnlyAdmin: boolean = true;
 
   constructor(playerId: number) {
     this.playerId = playerId;
+    this.role = HaxRugbyRole.Player;
   }
 
   public static getConfig(playerId: number): HaxRugbyPlayerConfig {

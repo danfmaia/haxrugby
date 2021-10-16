@@ -23,7 +23,6 @@ import smallMap from '../../singletons/smallMap';
 import Physics from '../../util/Physics';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
-import AdminService, { IAdminService } from './AdminService';
 import ChatService, { IChatService } from './ChatService';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import TPlayerCountByTeam from '../../models/team/TPlayerCountByTeam';
@@ -42,7 +41,6 @@ import TAheadPlayers from '../../models/game/TAheadPlayers';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
-  private adminService: IAdminService;
   public chatService: IChatService;
   public util: GameUtil;
 
@@ -97,7 +95,6 @@ export default class GameService implements IGameService {
 
   constructor(room: IHaxRugbyRoom) {
     this.room = room;
-    this.adminService = new AdminService(room);
     this.chatService = new ChatService(room, this);
     this.util = new GameUtil(room, this);
 
@@ -214,14 +211,12 @@ export default class GameService implements IGameService {
   }
 
   public handlePlayerJoin(player: IPlayerObject): void {
-    this.adminService.setFirstPlayerAsAdmin(player.id);
     this.chatService.sendGreetingsToIncomingPlayer(player.id);
     this.sendGameInfoPeriodically(player.id);
     this.sendNewMatchHelpPeriodically(player.id);
   }
 
   public handlePlayerLeave(player: HaxRugbyPlayer): void {
-    this.adminService.setEarliestPlayerAsAdmin();
     this.unregisterPlayerFromMatchData(player.id);
     this.teams.removePlayerFromPositions(player);
     this.teams.fillAllPositions(this.room.getPlayerList());
@@ -761,7 +756,10 @@ export default class GameService implements IGameService {
       if (offendingTeam === null) {
         throw new Error();
       }
-      this.chatService.sendYellowBoldAnnouncement(`${offendingTeam.name} cometeu Impedimento!`, 2);
+      this.chatService.sendYellowBoldAnnouncement(
+        `🚫  ${offendingTeam.name} cometeu IMPEDIMENTO!  🚫`,
+        2,
+      );
       if (penalty === 'INSIDE') {
         this.chatService.sendYellowAnnouncement(
           `INSIDE: ${offendingPlayer.name} estava à frente da linha de gol no momento do passe.`,
@@ -829,7 +827,7 @@ export default class GameService implements IGameService {
       this.room.pauseGame(true);
       this.remainingTime = this.remainingTimeAtPenalty;
 
-      this.chatService.sendBoldAnnouncement(`PENAL para o ${offendedTeamName}!`, 2);
+      this.chatService.sendYellowBoldAnnouncement(`PENAL para o ${offendedTeamName}!`, 2);
 
       let stadium: string;
       if (offendedTeam === TeamEnum.RED) {
@@ -1013,6 +1011,11 @@ export default class GameService implements IGameService {
     }
 
     if (isSafety) {
+      if (this.isPenalty) {
+        this.handlePenalty(this.isPenalty);
+        return false;
+      }
+
       this.isTimeRunning = false;
       this.room.pauseGame(true);
       let teamName: string;
@@ -1035,7 +1038,7 @@ export default class GameService implements IGameService {
       }
 
       // announce safety
-      this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`);
 
       this.handleRestartOrFinishing(stadium);
       return true;

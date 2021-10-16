@@ -33,7 +33,7 @@ export class ExecuteCommandInterceptor
       return true;
     }
 
-    Util.logMessageWithTime(
+    Util.logWithTime(
       `${Util.getPlayerNameAndId(message.sentBy)} executou o comando \`${message.message}\`.`,
     );
 

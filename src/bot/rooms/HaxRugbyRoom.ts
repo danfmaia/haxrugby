@@ -11,14 +11,15 @@ import { IChatMessageInterceptorFactoryType } from 'inversihax/lib/Core/Utility/
 
 import { KICK_RATE_LIMIT } from '../constants/constants';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
+import AdminService, { IAdminService } from '../services/room/AdminService';
 import GameService from '../services/room/GameService';
 import { IGameService } from '../services/room/IGameService';
 import smallMap from '../singletons/smallMap';
 import { RoomUtil } from '../util/RoomUtil';
-import Util from '../util/Util';
 
 export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
   gameService: IGameService;
+  adminService: IAdminService;
   util: RoomUtil;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CollisionFlags: any;
@@ -26,6 +27,7 @@ export interface IHaxRugbyRoom extends IRoom<HaxRugbyPlayer> {
 
 export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyRoom {
   public gameService: IGameService = new GameService(this);
+  public adminService: IAdminService = new AdminService(this);
   public util: RoomUtil = new RoomUtil(this);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public CollisionFlags: any;
@@ -60,20 +62,12 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
     });
 
     this.onPlayerJoin.addHandler((player) => {
-      const playerTotal = this.getPlayerList().length;
-      Util.logMessageWithTime(
-        `${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`,
-      );
-
+      this.adminService.handlePlayerJoin(player);
       this.gameService.handlePlayerJoin(player);
     });
 
     this.onPlayerLeave.addHandler((player) => {
-      const playerTotal = this.getPlayerList().length;
-      Util.logMessageWithTime(
-        `${Util.getPlayerNameAndId(player)} saiu da sala. Total: ${playerTotal}`,
-      );
-
+      this.adminService.handlePlayerLeave(player);
       this.gameService.handlePlayerLeave(player);
     });
 
@@ -86,30 +80,7 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
     });
 
     this.onPlayerKicked.addHandler((player, reason, ban, byPlayer) => {
-      if (reason === '!bb') {
-        return;
-      }
-
-      const playerNameAndId: string = Util.getPlayerNameAndId(player);
-      const byPlayerNameAndId: string = Util.getPlayerNameAndId(byPlayer);
-
-      if (ban === false) {
-        if (byPlayer.id > 0) {
-          Util.logMessageWithTime(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
-        } else {
-          Util.logMessageWithTime(`${playerNameAndId} foi kickado pelo bot.`);
-        }
-      } else {
-        if (byPlayer.id > 0) {
-          Util.logMessageWithTime(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
-        } else {
-          Util.logMessageWithTime(`${playerNameAndId} foi banido pelo bot.`);
-        }
-      }
-
-      if (reason) {
-        console.log(`    Motivo: ${reason}.`);
-      }
+      this.adminService.handlePlayerKicked(player, reason, ban, byPlayer);
     });
 
     this.onTeamGoal.addHandler((team) => {

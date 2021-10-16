@@ -60,7 +60,7 @@ function getRemainingTimeString(remainingTimeInMs: number): string {
   return moment.utc(remaniningTime.as('milliseconds')).format('mm:ss');
 }
 
-function logMessageWithTime(message: string): void {
+function logWithTime(message: string): void {
   const time = moment().format('HH:mm:ss');
   console.log(`${time} > ${message}`);
 }
@@ -144,7 +144,7 @@ const Util = {
   parseNumericInput,
   getDurationString,
   getRemainingTimeString,
-  logMessageWithTime,
+  logWithTime,
   getPositionString,
   getPlayerNameAndId,
   transitionBallColor,
