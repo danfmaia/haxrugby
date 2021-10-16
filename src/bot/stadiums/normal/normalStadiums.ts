@@ -1,3 +1,4 @@
+import { IPosition } from 'inversihax';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import TeamEnum from '../../enums/TeamEnum';
 import THaxRugbyStadiums from '../../models/map/THaxRugbyStadiums';
@@ -17,6 +18,7 @@ export const DIMENSIONS = {
   miniArea: 65,
   kickoffLineX: 179,
   areaLineX: 412,
+  penaltyBoundaryY: 180,
 };
 
 const dimensions = new MapDimensions(
@@ -30,15 +32,16 @@ const dimensions = new MapDimensions(
   DIMENSIONS.miniArea,
   DIMENSIONS.kickoffLineX,
   DIMENSIONS.areaLineX,
+  DIMENSIONS.penaltyBoundaryY,
 );
 
-function red_getKickoff(kickoffX: number = 0): string {
+function red_getKickoff(kickoffPosition?: IPosition): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 R by JP',
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
-    kickoffX,
+    kickoffPosition,
   );
 }
 
@@ -53,13 +56,25 @@ function red_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
-function blue_getKickoff(kickoffX: number = 0): string {
+function red_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+  return HaxRugbyStadium.getNewStadium(
+    'HaxRugby v9 RP by JP',
+    MapSizeEnum.NORMAL,
+    dimensions,
+    TeamEnum.RED,
+    kickoffPosition,
+    undefined,
+    isPenalty,
+  );
+}
+
+function blue_getKickoff(kickoffPosition?: IPosition): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 B by JP',
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
-    kickoffX,
+    kickoffPosition,
   );
 }
 
@@ -74,14 +89,28 @@ function blue_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
+function blue_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+  return HaxRugbyStadium.getNewStadium(
+    'HaxRugby v9 BP by JP',
+    MapSizeEnum.NORMAL,
+    dimensions,
+    TeamEnum.BLUE,
+    kickoffPosition,
+    undefined,
+    isPenalty,
+  );
+}
+
 const redMaps: THaxRugbyStadiums = {
   getKickoff: red_getKickoff,
   getConversion: red_getConversion,
+  getPenaltyKick: red_getPenaltyKick,
 };
 
 const blueMaps: THaxRugbyStadiums = {
   getKickoff: blue_getKickoff,
   getConversion: blue_getConversion,
+  getPenaltyKick: blue_getPenaltyKick,
 };
 
 const normalMaps = {

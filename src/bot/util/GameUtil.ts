@@ -1,4 +1,5 @@
-import { IPosition } from 'inversihax';
+import { IPosition, TeamID } from 'inversihax';
+import { OFFSIDE_EMOJI } from '../constants/constants';
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
@@ -89,6 +90,115 @@ class GameUtil {
       this.room.setPlayerDiscProperties(oldPlayer.id, newPlayerProps);
       this.room.setPlayerDiscProperties(player.id, oldPlayerProps);
     }
+  }
+
+  public updateAheadPlayers(originPlayer: HaxRugbyPlayer): void {
+    this.updateInsidePlayers(originPlayer);
+  }
+
+  private updateInsidePlayers(originPlayer: HaxRugbyPlayer): void {
+    const players = this.room.getPlayerList().filter((player) => player.id !== originPlayer.id);
+    const ballPosition = this.room.getBallPosition();
+
+    if (originPlayer.team === TeamID.RedTeam) {
+      const redPlayers = players.filter((player) => player.team === TeamID.RedTeam);
+      redPlayers.forEach((player) => {
+        if (ballPosition.x < this.gameService.map.tryLineX) {
+          if (player.position.x >= this.gameService.map.tryLineXForPlayer) {
+            // set own player inside
+            this.setAheadPlayer(player);
+            this.gameService.penaltyPosition = this.getPenaltyPosition(originPlayer.position);
+          } else {
+            // clear own player inside
+            this.clearAheadPlayer(player);
+          }
+        } else {
+          if (player.position.x < this.gameService.map.tryLineXForPlayer) {
+            // clear own player inside
+            this.clearAheadPlayer(player);
+          }
+        }
+      });
+      const bluePlayers = players.filter((player) => player.team === TeamID.BlueTeam);
+      bluePlayers.forEach((player) => {
+        if (player.position.x > -this.gameService.map.tryLineXForPlayer) {
+          // clear opponent player inside
+          this.clearAheadPlayer(player);
+        }
+      });
+    }
+
+    if (originPlayer.team === TeamID.BlueTeam) {
+      const bluePlayers = players.filter((player) => player.team === TeamID.BlueTeam);
+      bluePlayers.forEach((player) => {
+        if (ballPosition.x > -this.gameService.map.tryLineX) {
+          if (player.position.x <= -this.gameService.map.tryLineXForPlayer) {
+            // set own player inside
+            this.setAheadPlayer(player);
+            this.gameService.penaltyPosition = this.getPenaltyPosition(originPlayer.position);
+          } else {
+            // clear own player inside
+            this.clearAheadPlayer(player);
+          }
+        } else {
+          if (player.position.x > -this.gameService.map.tryLineXForPlayer) {
+            // clear own player inside
+            this.clearAheadPlayer(player);
+          }
+        }
+      });
+      const redPlayers = players.filter((player) => player.team === TeamID.RedTeam);
+      redPlayers.forEach((player) => {
+        if (player.position.x < this.gameService.map.tryLineXForPlayer) {
+          // clear opponent player inside
+          this.clearAheadPlayer(player);
+        }
+      });
+    }
+  }
+
+  private getPenaltyPosition(offenderPosition: IPosition): IPosition {
+    const revisedPosition = offenderPosition;
+    const map = this.gameService.map;
+
+    if (offenderPosition.x < -map.areaLineX) {
+      revisedPosition.x = -map.areaLineX;
+    } else if (offenderPosition.x > map.areaLineX) {
+      revisedPosition.x = map.areaLineX;
+    }
+    if (offenderPosition.y < -map.penaltyBoundaryY) {
+      revisedPosition.y = -map.penaltyBoundaryY;
+    } else if (offenderPosition.y > map.penaltyBoundaryY) {
+      revisedPosition.y = map.penaltyBoundaryY;
+    }
+    return revisedPosition;
+  }
+
+  private setAheadPlayer(player: HaxRugbyPlayer) {
+    this.gameService.aheadPlayers.inside.push(player.id);
+    this.room.setPlayerAvatar(player.id, OFFSIDE_EMOJI);
+  }
+
+  private clearAheadPlayer(player: HaxRugbyPlayer) {
+    this.gameService.aheadPlayers.inside = this.gameService.aheadPlayers.inside.filter(
+      (playerId) => playerId !== player.id,
+    );
+    // @ts-ignore: Unreachable code error
+    this.room.setPlayerAvatar(player.id, null);
+  }
+
+  public clearAllAheadPlayers(): void {
+    this.gameService.aheadPlayers = {
+      inside: [],
+      offside: [],
+    };
+    const players = this.room.getPlayerList();
+    players.forEach((player) => {
+      if (player) {
+        // @ts-ignore: Unreachable code error
+        this.room.setPlayerAvatar(player.id, null);
+      }
+    });
   }
 }
 

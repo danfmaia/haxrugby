@@ -17,8 +17,8 @@ type DictionaryKeys = {
     SAFETY_TITLE: string;
     SAFETY: string[];
     OFFSIDE_TITLE: string;
-    OFFSIDE: [string];
-    POST_RULES: [string, string];
+    OFFSIDE: string[];
+    POST_RULES: [string, string, string];
   };
 
   MSG_HELP: {

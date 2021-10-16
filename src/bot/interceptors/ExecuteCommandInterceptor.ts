@@ -5,6 +5,7 @@ import { AirKickCommand, AIR_KICK_COMMAND_HOTKEYS } from '../commands/AirKickCom
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import Util from '../util/Util';
+import { AdvantageCommand, ADVANTAGE_COMMAND_HOTKEYS } from '../commands/penalty/AdvantageCommand';
 
 @injectable()
 export class ExecuteCommandInterceptor
@@ -22,6 +23,9 @@ export class ExecuteCommandInterceptor
     }
     if (AIR_KICK_COMMAND_HOTKEYS.includes(message.message)) {
       message.command = new AirKickCommand(this.room);
+    }
+    if (ADVANTAGE_COMMAND_HOTKEYS.includes(message.message)) {
+      message.command = new AdvantageCommand(this.room);
     }
 
     // other commands' interceptor

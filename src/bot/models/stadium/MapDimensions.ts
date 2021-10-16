@@ -12,6 +12,7 @@ class MapDimensions {
     public miniArea: number,
     public kickoffLineX: number,
     public areaLineX: number,
+    public penaltyBoundaryY: number,
   ) {}
 }
 

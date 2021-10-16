@@ -1,7 +1,8 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆®';
 export const ROOM_TITLE = "🏉 𝓙𝓟'𝓼 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆®";
-export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟬';
-const APP_PATCH_VERSION = '𝗴';
+// export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆® TESTES';
+export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟭';
+const APP_PATCH_VERSION = '';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const MINUTE_IN_MS = 60 * 1000;
@@ -25,3 +26,6 @@ export const SMALL_AIR_KICK_BOOST = 1.2;
 export const NORMAL_AIR_KICK_BOOST = 1.3;
 
 export const SAFETY_MAX_TIME = 20000;
+
+export const OFFSIDE_EMOJI = '✖️';
+export const PENALTY_ADVANTAGE_TIME = 5000;

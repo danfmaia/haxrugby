@@ -8,6 +8,7 @@ import { IChatService } from './ChatService';
 import { ITeams } from '../../models/team/Teams';
 import TeamEnum from '../../enums/TeamEnum';
 import GameUtil from '../../util/GameUtil';
+import TAheadPlayers from '../../models/game/TAheadPlayers';
 
 export interface IGameService {
   chatService: IChatService;
@@ -32,6 +33,11 @@ export interface IGameService {
   isConversionAttempt: false | TeamEnum;
   isReplacingBall: boolean;
   isConversionShot: boolean;
+
+  aheadPlayers: TAheadPlayers;
+  remainingTimeAtPenalty: number | null;
+  isPenalty: TeamEnum | false;
+  penaltyPosition: IPosition | null;
 
   /**
    *  ROOM EVENT HANDLERS
