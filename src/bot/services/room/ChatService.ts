@@ -382,7 +382,7 @@ export default class ChatService implements IChatService {
 
       if (player.id === kickerId) {
         this.sendBoldAnnouncement(
-          `🦵 🏉  🚫  Seu Chute Aéreo foi bloqueado por ${blocker.name}!`,
+          `🦵 🏉   🚫   Seu Chute Aéreo foi bloqueado por ${blocker.name}!`,
           0,
           player.id,
         );
@@ -393,7 +393,7 @@ export default class ChatService implements IChatService {
         );
       } else if (player.id === blockerId) {
         this.sendBoldAnnouncement(
-          `🦵 🏉  🚫  Você bloqueou o Chute Aéreo de ${kicker.name}!  🙌`,
+          `🦵 🏉   🚫   Você bloqueou o Chute Aéreo de ${kicker.name}!   🙌`,
           0,
           player.id,
         );
@@ -401,7 +401,7 @@ export default class ChatService implements IChatService {
         const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
         if (kickerId !== blockerId && kickerTeam) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  🚫  ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!  🙌`,
+            `🦵 🏉   🚫   ${kicker.name} (${kickerTeam.name}) tentou um Chute Aéreo, mas foi bloqueado por ${blocker.name}!   🙌`,
             0,
             player.id,
           );
@@ -416,7 +416,7 @@ export default class ChatService implements IChatService {
     players.forEach((player) => {
       if (player.id === kickerId) {
         this.sendBoldAnnouncement(
-          `🦵 🏉  ✅  Você conectou um Chute Aéreo!  💨`,
+          `🦵 🏉   ✅   Você conectou um Chute Aéreo!   💨`,
           0,
           player.id,
           colors.airKickMessage,
@@ -433,7 +433,7 @@ export default class ChatService implements IChatService {
 
         if (kickerTeam) {
           this.sendBoldAnnouncement(
-            `🦵 🏉  ✅  ${kicker.name} (${kickerTeam.name}) conectou um Chute Aéreo!  💨`,
+            `🦵 🏉   ✅   ${kicker.name} (${kickerTeam.name}) conectou um Chute Aéreo!   💨`,
             0,
             player.id,
             colors.airKickMessage,

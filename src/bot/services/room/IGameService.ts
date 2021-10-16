@@ -35,6 +35,7 @@ export interface IGameService {
   isConversionShot: boolean;
 
   aheadPlayers: TAheadPlayers;
+  remainingTimeAtPenalty: number | null;
   isPenalty: TeamEnum | false;
   penaltyPosition: IPosition | null;
 

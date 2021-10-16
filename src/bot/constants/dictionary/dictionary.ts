@@ -50,13 +50,13 @@ const ptBr: DictionaryKeys = {
         'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       _1 + 'O Safety concede à defesa um tiro de reinício no local da última condução de bola.',
     ],
-    OFFSIDE_TITLE: 'Impedimento     !imp !impedimento',
+    OFFSIDE_TITLE: 'IMPEDIMENTO     !imp !impedimento',
     OFFSIDE: [
       _1 + 'Todo jogador está impedido se:',
-      _2 + '(1) Estiver dentro do in-goal (INSIDE) no momento do passe (linha é dentro).',
+      _2 + '(1) Estiver dentro do in-goal (INSIDE) no momento do passe (linha é dentro);',
       _2 +
         '(2) Estiver à frente do jogador mais recuado do time adversário (OFFSIDE) no momento do passe.',
-      _3 + 'O impedimento do tipo "Offside" ainda não foi implementado',
+      _3 + '- O impedimento do tipo "Offside" ainda não foi implementado.',
     ],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,

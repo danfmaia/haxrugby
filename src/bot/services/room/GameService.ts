@@ -87,7 +87,7 @@ export default class GameService implements IGameService {
     inside: [],
     offside: [],
   };
-  private remainingTimeAtPenalty: number | null = null;
+  public remainingTimeAtPenalty: number | null = null;
   public isPenalty: TeamEnum | false = false;
   private isPenaltyKick: TeamEnum | false = false;
   public penaltyPosition: IPosition | null = null;
@@ -180,7 +180,7 @@ export default class GameService implements IGameService {
     if (this.isConversionAttempt === false) {
       if (this.kickoffX) {
         this.initializeKickoff({ x: this.kickoffX, y: 0 });
-      } else if (this.penaltyPosition) {
+      } else if (this.isPenaltyKick && this.penaltyPosition) {
         this.initializeKickoff(this.penaltyPosition);
       }
     }
@@ -804,6 +804,17 @@ export default class GameService implements IGameService {
         }
       });
 
+      const secondsPassed = [2000, 3000, 4000];
+      secondsPassed.forEach((secondPassed) =>
+        Util.timeout(secondPassed, () => {
+          if (this.isPenalty) {
+            this.chatService.sendNormalAnnouncement(
+              `${(PENALTY_ADVANTAGE_TIME - secondPassed) / 1000}...`,
+            );
+          }
+        }),
+      );
+
       return true;
     }
 
@@ -827,10 +838,10 @@ export default class GameService implements IGameService {
         stadium = this.map.blueStadiums.getPenaltyKick(this.penaltyPosition, true);
       }
 
+      this.isPenalty = false;
       this.handleRestartOrFinishing(stadium, () => {
         this.remainingTimeAtPenalty = null;
         this.isPenaltyKick = offendedTeam;
-        this.isPenalty = false;
         this.lastTouchInfo = null;
       });
     }
@@ -1327,7 +1338,6 @@ export default class GameService implements IGameService {
       this.isDefRec = false;
       this.util.clearAllAheadPlayers();
       this.remainingTimeAtPenalty = null;
-      this.isPenalty = false;
       this.ballTransitionCount = 0;
       this.airKickerId = null;
       this.room.util.toggleAerialBall(false);
