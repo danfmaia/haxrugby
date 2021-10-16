@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { IPosition } from 'inversihax';
 import { BALL_RADIUS, PLAYER_RADIUS } from '../../constants/constants';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import TraitEnum from '../../enums/stadium/TraitEnum';
@@ -38,8 +39,9 @@ class HaxRugbyStadium {
     name: string,
     size: MapSizeEnum,
     team: TeamEnum,
-    kickoffX: number = 0,
+    kickoffPosition: IPosition = { x: 0, y: 0 },
     convProps: TConversionProps | null = null,
+    isPenalty: boolean = false,
 
     dimensions: MapDimensions,
 
@@ -57,7 +59,7 @@ class HaxRugbyStadium {
     areaLineX: number,
   ) {
     this.name = name;
-    this.serv = new StadiumService(dimensions, size, team, kickoffX, convProps);
+    this.serv = new StadiumService(dimensions, size, team, kickoffPosition, convProps, isPenalty);
 
     this.width = outerWidth;
     this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
@@ -122,8 +124,8 @@ class HaxRugbyStadium {
       getVertex(this.serv.getRightKickoffX(), -outerHeight, this.serv.getRightKOBarrierTrait()), // 26
       getVertex(this.serv.getRightKickoffX(), outerHeight, this.serv.getRightKOBarrierTrait()), // 27
 
-      getVertex(kickoffX, -outerHeight, TraitEnum.kickOffBarrier), // 28
-      getVertex(kickoffX, outerHeight, TraitEnum.kickOffBarrier), // 29
+      getVertex(kickoffPosition.x, -outerHeight, TraitEnum.kickOffBarrier), // 28
+      getVertex(kickoffPosition.x, outerHeight, TraitEnum.kickOffBarrier), // 29
 
       this.serv.getTopBallVertex(), // 30
       this.serv.getBottomBallVertex(), // 31
@@ -583,16 +585,18 @@ class HaxRugbyStadium {
     size: MapSizeEnum,
     dimensions: MapDimensions,
     team: TeamEnum,
-    kickoffX?: number,
+    kickoffPosition?: IPosition,
     convProps?: TConversionProps,
+    isPenalty?: boolean,
   ): string {
     return JSON.stringify(
       new HaxRugbyStadium(
         name,
         size,
         team,
-        kickoffX,
+        kickoffPosition,
         convProps,
+        isPenalty,
         dimensions,
         dimensions.outerWidth,
         dimensions.outerHeight,

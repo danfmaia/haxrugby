@@ -9,14 +9,14 @@ class HaxRugbyMap extends AHaxRugbyMap {
     redStadiums: THaxRugbyStadiums,
     blueStadiums: THaxRugbyStadiums,
 
-    spawnDistance: number,
     goalLineX: number,
     goalPostY: number,
     miniAreaX: number,
     kickoffLineX: number,
     areaLineX: number,
+    penaltyBoundaryY: number,
   ) {
-    super(goalLineX, goalPostY, miniAreaX, kickoffLineX, areaLineX);
+    super(goalLineX, goalPostY, miniAreaX, kickoffLineX, areaLineX, penaltyBoundaryY);
 
     this.redStadiums = redStadiums;
     this.blueStadiums = blueStadiums;

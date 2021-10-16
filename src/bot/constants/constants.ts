@@ -25,3 +25,6 @@ export const SMALL_AIR_KICK_BOOST = 1.2;
 export const NORMAL_AIR_KICK_BOOST = 1.3;
 
 export const SAFETY_MAX_TIME = 20000;
+
+export const OFFSIDE_EMOJI = '✖️';
+export const PENALTY_ADVANTAGE_TIME = 5000;

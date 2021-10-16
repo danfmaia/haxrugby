@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Color } from 'inversihax';
+import { Color, IPosition } from 'inversihax';
 import { BALL_RADIUS } from '../constants/constants';
 import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TraitEnum from '../enums/stadium/TraitEnum';
@@ -52,12 +52,13 @@ class StadiumService {
     private dims: MapDimensions,
     private size: MapSizeEnum,
     private team: TeamEnum,
-    private kickoffX: number,
+    private kickoffPosition: IPosition,
     private convProps: TConversionProps | null,
+    private isPenalty: boolean,
   ) {}
 
   getLeftKickoffX(): number {
-    const leftKickoffX = this.kickoffX - this.dims.kickoffLineX;
+    const leftKickoffX = this.kickoffPosition.x - this.dims.kickoffLineX;
     if (leftKickoffX < -this.dims.goalLineX) {
       return -this.dims.goalLineX;
     }
@@ -65,26 +66,22 @@ class StadiumService {
   }
 
   getRightKickoffX(): number {
-    const rightKickoffX = this.kickoffX + this.dims.kickoffLineX;
+    const rightKickoffX = this.kickoffPosition.x + this.dims.kickoffLineX;
     if (rightKickoffX > this.dims.goalLineX) {
       return this.dims.goalLineX;
     }
     return rightKickoffX;
   }
 
-  getRightKOVertexes(): any {
-    if (this.kickoffX === null) {
-      return getVertex(-this.dims.kickoffLineX, -outerHeight, this.getLeftKOBarrierTrait());
-    } else {
-      let kickoffX = this.kickoffX - this.dims.kickoffLineX;
-      if (kickoffX < -this.dims.goalLineX) {
-        kickoffX = -this.dims.goalLineX;
-      } else if (kickoffX > this.dims.goalLineX) {
-        kickoffX = this.dims.goalLineX;
-      }
-      return getVertex(kickoffX, -outerHeight, this.getLeftKOBarrierTrait());
-    }
-  }
+  // getRightKOVertexes(): any {
+  //   let kickoffX = this.kickoffPosition.x - this.dims.kickoffLineX;
+  //   if (kickoffX < -this.dims.goalLineX) {
+  //     kickoffX = -this.dims.goalLineX;
+  //   } else if (kickoffX > this.dims.goalLineX) {
+  //     kickoffX = this.dims.goalLineX;
+  //   }
+  //   return getVertex(kickoffX, -outerHeight, this.getLeftKOBarrierTrait());
+  // }
 
   getLeftKOSegment(v0: number, v1: number): any {
     let trait: TraitEnum;
@@ -102,6 +99,14 @@ class StadiumService {
     return getSegment(v0, v1, trait);
   }
 
+  getKickOffSegment(v0: number, v1: number): any {
+    if (this.convProps || this.isPenalty) {
+      return getSegment(v0, v1, TraitEnum.null);
+    } else {
+      return getSegment(v0, v1, TraitEnum.kickOffBarrier);
+    }
+  }
+
   getRightKOSegment(v0: number, v1: number): any {
     let trait: TraitEnum;
 
@@ -116,14 +121,6 @@ class StadiumService {
     }
 
     return getSegment(v0, v1, trait);
-  }
-
-  getKickOffSegment(v0: number, v1: number): any {
-    if (!this.convProps) {
-      return getSegment(v0, v1, TraitEnum.kickOffBarrier);
-    } else {
-      return getSegment(v0, v1, TraitEnum.null);
-    }
   }
 
   getLeftKOBarrierTrait(): TraitEnum {
@@ -166,7 +163,7 @@ class StadiumService {
 
   getTopBallVertex(): any {
     if (!this.convProps) {
-      return getVertex(this.kickoffX, -(BALL_RADIUS + 2.3), TraitEnum.kickOffBarrier);
+      return getVertex(this.kickoffPosition.x, -(BALL_RADIUS + 2.3), TraitEnum.null);
     }
     return getVertex(
       this.convProps.ballX,
@@ -177,7 +174,7 @@ class StadiumService {
 
   getBottomBallVertex(): any {
     if (!this.convProps) {
-      return getVertex(this.kickoffX, BALL_RADIUS + 2.3, TraitEnum.kickOffBarrier);
+      return getVertex(this.kickoffPosition.x, BALL_RADIUS + 2.3, TraitEnum.null);
     }
     return getVertex(
       this.convProps.ballX,
@@ -189,20 +186,22 @@ class StadiumService {
   getBallSegment(v0: number, v1: number): any {
     let curve: number;
 
-    if (this.convProps === null) {
-      if (this.team === TeamEnum.RED) {
-        curve = -180;
-      } else {
-        curve = 180;
-      }
-      return getSegment(v0, v1, TraitEnum.kickOffBarrier, curve);
-    } else {
+    if (this.convProps) {
       if (this.team === TeamEnum.RED) {
         curve = 180;
       } else {
         curve = -180;
       }
       return getSegment(v0, v1, TraitEnum.powerBoost, curve);
+    } else if (this.isPenalty) {
+      return getSegment(v0, v1, TraitEnum.null);
+    } else {
+      if (this.team === TeamEnum.RED) {
+        curve = -180;
+      } else {
+        curve = 180;
+      }
+      return getSegment(v0, v1, TraitEnum.kickOffBarrier, curve);
     }
   }
 

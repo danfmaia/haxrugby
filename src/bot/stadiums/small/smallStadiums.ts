@@ -4,6 +4,7 @@ import MapDimensions from '../../models/stadium/MapDimensions';
 import TConversionProps from '../../models/stadium/TConversionProps';
 import THaxRugbyStadiums from '../../models/map/THaxRugbyStadiums';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
+import { IPosition } from 'inversihax';
 
 export const DIMENSIONS = {
   outerWidth: 514,
@@ -17,6 +18,7 @@ export const DIMENSIONS = {
   miniArea: 54,
   kickoffLineX: 120,
   areaLineX: 240,
+  penaltyBoundaryY: 110.1,
 
   // outerWidth: 440,
   // outerHeight: 200,
@@ -42,15 +44,16 @@ const dimensions = new MapDimensions(
   DIMENSIONS.miniArea,
   DIMENSIONS.kickoffLineX,
   DIMENSIONS.areaLineX,
+  DIMENSIONS.penaltyBoundaryY,
 );
 
-function red_getKickoff(safetyX: number = 0): string {
+function red_getKickoff(kickoffPosition?: IPosition): string {
   return HaxRugbyStadium.getNewStadium(
     'S-HaxRugby v9 R by JP',
     MapSizeEnum.SMALL,
     dimensions,
     TeamEnum.RED,
-    safetyX,
+    kickoffPosition,
   );
 }
 
@@ -65,13 +68,25 @@ function red_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
-function blue_getKickoff(safetyX: number = 0): string {
+function red_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+  return HaxRugbyStadium.getNewStadium(
+    'S-HaxRugby v9 RP by JP',
+    MapSizeEnum.SMALL,
+    dimensions,
+    TeamEnum.RED,
+    kickoffPosition,
+    undefined,
+    isPenalty,
+  );
+}
+
+function blue_getKickoff(kickoffPosition?: IPosition): string {
   return HaxRugbyStadium.getNewStadium(
     'S-HaxRugby v9 B by JP',
     MapSizeEnum.SMALL,
     dimensions,
     TeamEnum.BLUE,
-    safetyX,
+    kickoffPosition,
   );
 }
 
@@ -86,14 +101,28 @@ function blue_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
+function blue_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+  return HaxRugbyStadium.getNewStadium(
+    'S-HaxRugby v9 BP by JP',
+    MapSizeEnum.SMALL,
+    dimensions,
+    TeamEnum.BLUE,
+    kickoffPosition,
+    undefined,
+    isPenalty,
+  );
+}
+
 const redMaps: THaxRugbyStadiums = {
   getKickoff: red_getKickoff,
   getConversion: red_getConversion,
+  getPenaltyKick: red_getPenaltyKick,
 };
 
 const blueMaps: THaxRugbyStadiums = {
   getKickoff: blue_getKickoff,
   getConversion: blue_getConversion,
+  getPenaltyKick: blue_getPenaltyKick,
 };
 
 const smallMaps = {

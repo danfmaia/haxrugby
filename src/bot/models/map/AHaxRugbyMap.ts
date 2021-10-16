@@ -1,6 +1,11 @@
 import { IDiscPropertiesObject, IPosition, TeamID } from 'inversihax';
 
-import { BALL_RADIUS, GOAL_POST_RADIUS, TOUCH_EPSILON } from '../../constants/constants';
+import {
+  BALL_RADIUS,
+  GOAL_POST_RADIUS,
+  PLAYER_RADIUS,
+  TOUCH_EPSILON,
+} from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Physics from '../../util/Physics';
@@ -13,8 +18,10 @@ interface IHaxRugbyMap {
   miniAreaX: number;
   kickoffLineX: number;
   areaLineX: number;
+  penaltyBoundaryY: number;
 
   tryLineX: number;
+  tryLineXForPlayer: number;
 
   getIsDropGoal(
     ballPosition: IPosition,
@@ -63,9 +70,13 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
   public miniAreaX: number;
   public kickoffLineX: number;
   public areaLineX: number;
+  public penaltyBoundaryY: number;
 
   public get tryLineX(): number {
     return this.goalLineX - BALL_RADIUS;
+  }
+  public get tryLineXForPlayer(): number {
+    return this.goalLineX - PLAYER_RADIUS;
   }
 
   constructor(
@@ -74,12 +85,14 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     miniAreaX: number,
     kickoffLineX: number,
     areaLineX: number,
+    penaltyBoundaryY: number,
   ) {
     this.goalLineX = goalLineX;
     this.goalPostY = goalPostY;
     this.miniAreaX = miniAreaX;
     this.kickoffLineX = kickoffLineX;
     this.areaLineX = areaLineX;
+    this.penaltyBoundaryY = penaltyBoundaryY;
   }
 
   public getIsDropGoal(
@@ -324,7 +337,7 @@ abstract class AHaxRugbyMap implements IHaxRugbyMap {
     if (
       ballXSpeed > 0 &&
       ballPosition.x < -this.areaLineX &&
-      ballPosition.x > -this.goalLineX - this.miniAreaX
+      ballPosition.x > -(this.goalLineX - this.miniAreaX)
     ) {
       return true;
     }
