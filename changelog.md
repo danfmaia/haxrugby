@@ -1,5 +1,21 @@
 ## CHANGELOG
 
+### v0.11:
+
+- Introduzido o **INSIDE**, uma das partes da regra do **Impedimento**.
+  - Todos os jogadores de ataque estão impedidos se estiverem com qualquer parte do disco dentro do in-goal (linha é dentro).
+  - Para a regra do Impedimento, ocorre uma nova origem de jogada sempre que houver um chute ou condução por parte de qualquer time.
+  - Desvios simples não eliminam a condição de impedimento! Como dito acima, apenas chutes ou conduções fazem a jogada ser reavaliada.
+  - _A infração só acontece se o jogador impedido encostar na bola._
+- Introduzida a **VANTAGEM**.
+  - Se ocorrer um Impedimento por parte de um time, o outro time tem até **5 segundos** para aceitar ou não a Vantagem. Para isso, qualquer jogador do time pode usar o comando `v`.
+  - Se a vantagem for aceita, a jogada prossegue normalmente e a infração é retirada (_todos os jogadores impedidos tem suas condições de jogo normalizadas_).
+- Introduzido o **PENAL**.
+  - Penal é como se chama "falta" no Rugby.
+  - Diferente do Kickoff e do Tiro de Safety, o time pode optar por **sair conduzindo a bola**.
+  - _[Não implementado ainda]_ O time também pode pedir **Chute ao Gol** (como se fosse uma conversão), porém nesse caso valendo 3 pontos.
+- Correções referentes ao último patch.
+
 ### v0.10g:
 
 - Aumentado de 2s para 3s o acumulado de tempo para o time que fez o Try tentar levar a bola mais para o centro do in-goal.
