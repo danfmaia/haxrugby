@@ -808,8 +808,8 @@ export default class GameService implements IGameService {
       secondsPassed.forEach((secondPassed) =>
         Util.timeout(secondPassed, () => {
           if (this.isPenalty) {
-            this.chatService.sendNormalAnnouncement(
-              `${(PENALTY_ADVANTAGE_TIME - secondPassed) / 1000}...`,
+            this.chatService.sendYellowAnnouncement(
+              `${(PENALTY_ADVANTAGE_TIME - secondPassed) / 1000}... (vantagem)`,
             );
           }
         }),

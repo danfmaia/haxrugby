@@ -249,20 +249,9 @@ export default class ChatService implements IChatService {
     this.sendSingleRule(RuleEnum.SAFETY, 0, playerId);
     this.sendSingleRule(RuleEnum.OFFSIDE, 0, playerId);
 
-    this.room.sendAnnouncement(
-      MSG_RULES.POST_RULES[0],
-      playerId,
-      colors.haxRugbyGreen,
-      'italic',
-      0,
-    );
-    this.room.sendAnnouncement(
-      MSG_RULES.POST_RULES[1],
-      playerId,
-      colors.haxRugbyGreen,
-      'italic',
-      0,
-    );
+    MSG_RULES.POST_RULES.forEach((rule) => {
+      this.room.sendAnnouncement(rule, playerId, colors.haxRugbyGreen, 'italic', 0);
+    });
     this.sendBlankLine(playerId);
   }
 

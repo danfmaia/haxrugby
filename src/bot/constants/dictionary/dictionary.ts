@@ -60,7 +60,8 @@ const ptBr: DictionaryKeys = {
     ],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,
-      'Para ler as regras completas, acesse sites.google.com/site/haxrugby/regras',
+      'Para ler esse mesmo resumo no Discord, acesse o seguinte link:',
+      _1 + 'https://discord.com/channels/888810050041303050/891749504938815538/898839813673877564',
     ],
   },
 
