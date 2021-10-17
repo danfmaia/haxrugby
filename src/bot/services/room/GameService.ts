@@ -623,10 +623,6 @@ export default class GameService implements IGameService {
       if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
         this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
       }
-
-      if (this.isPenalty && this.remainingTimeAtPenalty) {
-        this.handleAdvantageQueryTime(this.isPenalty, this.remainingTimeAtPenalty);
-      }
     }
 
     if (this.remainingTime <= 0) {
@@ -643,6 +639,10 @@ export default class GameService implements IGameService {
         this.isOvertime = true;
         this.chatService.announceRegularOvertime();
       }
+    }
+
+    if (this.isPenalty && this.remainingTimeAtPenalty !== null) {
+      this.handleAdvantageQueryTime(this.isPenalty, this.remainingTimeAtPenalty);
     }
   }
 
@@ -799,11 +799,11 @@ export default class GameService implements IGameService {
       );
       if (penalty === AheadEnum.INSIDE) {
         this.chatService.sendYellowAnnouncement(
-          `${offendingPlayer.name} estava dentro do in-goal (INSIDE) no momento do passe.`,
+          `INSIDE: ${offendingPlayer.name} estava dentro do in-goal no momento do passe.`,
         );
       } else if (penalty === AheadEnum.OFFSIDE) {
         this.chatService.sendYellowAnnouncement(
-          `${offendingPlayer.name} estava à frente do último defensor (ou da bola) no momento do passe.`,
+          `OFFSIDE: ${offendingPlayer.name} estava à frente do último defensor (ou do passador) no momento do passe.`,
         );
       }
 

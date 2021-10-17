@@ -144,24 +144,12 @@ class GameUtil {
       });
 
       bluePlayers.forEach((player) => {
-        const isBluePlayerInside = this.isPlayerInside(player);
-        const isBluePlayerOffside = this.isPlayerOffside(
-          originPlayer.position.x,
-          player,
-          redPlayers,
-        );
-
-        if (isBluePlayerInside === false) {
-          // clear opposing player inside
-          this.clearAheadPlayer(player, AheadEnum.INSIDE);
-        }
-        if (isBluePlayerOffside === false) {
-          // clear opposing player offside
-          this.clearAheadPlayer(player, AheadEnum.OFFSIDE);
-        }
-
-        // if not ahead, clear player avatar
-        if (isBluePlayerInside === false && isBluePlayerOffside === false) {
+        if (
+          ballPosition.x > -this.gameService.map.tryLineX &&
+          player.position.x > -this.gameService.map.tryLineXForPlayer
+        ) {
+          // clear opposing player inside & offside
+          this.clearAheadPlayer(player, true);
           this.clearPlayerAvatar(player.id);
         }
       });
@@ -211,24 +199,12 @@ class GameUtil {
       });
 
       redPlayers.forEach((player) => {
-        const isRedPlayerInside = this.isPlayerInside(player);
-        const isRedPlayerOffside = this.isPlayerOffside(
-          originPlayer.position.x,
-          player,
-          bluePlayers,
-        );
-
-        if (isRedPlayerInside === false) {
-          // clear opposing player inside
-          this.clearAheadPlayer(player, AheadEnum.INSIDE);
-        }
-        if (isRedPlayerOffside === false) {
-          // clear opposing player offside
-          this.clearAheadPlayer(player, AheadEnum.OFFSIDE);
-        }
-
-        // if not ahead, clear player avatar
-        if (isRedPlayerInside === false && isRedPlayerOffside === false) {
+        if (
+          ballPosition.x < this.gameService.map.tryLineX &&
+          player.position.x < this.gameService.map.tryLineXForPlayer
+        ) {
+          // clear opposing player inside & offside
+          this.clearAheadPlayer(player, true);
           this.clearPlayerAvatar(player.id);
         }
       });
@@ -338,12 +314,19 @@ class GameUtil {
     this.room.setPlayerAvatar(player.id, AHEAD_EMOJI);
   }
 
-  private clearAheadPlayer(player: HaxRugbyPlayer, aheadEnum: AheadEnum) {
+  private clearAheadPlayer(player: HaxRugbyPlayer, aheadEnum: AheadEnum | true) {
     if (aheadEnum === AheadEnum.INSIDE) {
       this.gameService.aheadPlayers.inside = this.gameService.aheadPlayers.inside.filter(
         (playerId) => playerId !== player.id,
       );
+    } else if (aheadEnum === AheadEnum.OFFSIDE) {
+      this.gameService.aheadPlayers.offside = this.gameService.aheadPlayers.offside.filter(
+        (playerId) => playerId !== player.id,
+      );
     } else {
+      this.gameService.aheadPlayers.inside = this.gameService.aheadPlayers.inside.filter(
+        (playerId) => playerId !== player.id,
+      );
       this.gameService.aheadPlayers.offside = this.gameService.aheadPlayers.offside.filter(
         (playerId) => playerId !== player.id,
       );
