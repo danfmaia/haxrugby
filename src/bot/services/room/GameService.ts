@@ -236,18 +236,24 @@ export default class GameService implements IGameService {
 
     // cancel match if both teams are empty for 15s
     if (this.isMatchInProgress) {
-      const teamPlayers = this.room
+      let playersOnTeams = this.room
         .getPlayerList()
         .filter((player) => player.team !== TeamID.Spectators);
 
-      if (teamPlayers.length === 0) {
+      if (playersOnTeams.length === 0) {
         Util.timeout(15000, () => {
-          this.chatService.sendBoldAnnouncement(
-            `Partida cancelada automaticamente por ausência de jogadores.`,
-            2,
-          );
-          console.log('Partida cancelada automaticamente por ausência de jogadores.');
-          this.cancelMatch();
+          playersOnTeams = this.room
+            .getPlayerList()
+            .filter((player) => player.team !== TeamID.Spectators);
+
+          if (playersOnTeams.length === 0) {
+            this.chatService.sendBoldAnnouncement(
+              `Partida cancelada automaticamente por ausência de jogadores.`,
+              2,
+            );
+            console.log('Partida cancelada automaticamente por ausência de jogadores.');
+            this.cancelMatch();
+          }
         });
       }
     }
