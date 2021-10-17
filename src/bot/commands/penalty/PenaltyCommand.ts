@@ -26,6 +26,9 @@ export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public canExecute(player: HaxRugbyPlayer): boolean {
+    if (this.gameService.isTimeRunning === false) {
+      return false;
+    }
     const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
     if (!playerTeam) {
       return false;

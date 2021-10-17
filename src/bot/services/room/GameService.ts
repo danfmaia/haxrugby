@@ -57,7 +57,7 @@ export default class GameService implements IGameService {
   public isGameStopped: boolean = true;
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
-  private isTimeRunning: boolean = false;
+  public isTimeRunning: boolean = false;
   public isOvertime: boolean = false;
   private isFinishing: boolean = false;
 
