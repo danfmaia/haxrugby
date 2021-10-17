@@ -650,10 +650,9 @@ export default class GameService implements IGameService {
 
     if ([2000, 3000, 4000].includes(timePassed)) {
       this.chatService.sendYellowAnnouncement(
-        `${(PENALTY_ADVANTAGE_TIME - timePassed) / 1000}...    (para aceitar a vantagem)`,
+        `${(PENALTY_ADVANTAGE_TIME - timePassed) / 1000}...    (para optar por Vantagem)`,
       );
     }
-
     if (timePassed === PENALTY_ADVANTAGE_TIME) {
       this.handlePenalty(isPenalty);
     }
@@ -799,7 +798,7 @@ export default class GameService implements IGameService {
       );
       if (penalty === 'INSIDE') {
         this.chatService.sendYellowAnnouncement(
-          `INSIDE: ${offendingPlayer.name} estava à frente da linha de gol no momento do passe.`,
+          `${offendingPlayer.name} estava dentro do in-goal (INSIDE) no momento do passe.`,
         );
       }
 
@@ -812,21 +811,29 @@ export default class GameService implements IGameService {
       players.forEach((player) => {
         if (player.team === offendedTeamID) {
           this.chatService.sendBoldAnnouncement(
-            'Use `v` para aceitar a VANTAGEM!',
+            'Seu time tem 5 segundos para optar por Vantagem.',
+            0,
+            player.id,
+            offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+          );
+          this.chatService.sendBoldAnnouncement(
+            'Use `v` para optar por VANTAGEM...',
             0,
             player.id,
             colors.green,
           );
-          this.chatService.sendYellowBoldAnnouncement(
-            'Seu time tem 5 segundos para aceitar a Vantagem.',
+          this.chatService.sendNormalAnnouncement(
+            '...ou use `p` para aceitar imediatamente o PENAL.',
             0,
             player.id,
+            colors.green,
           );
         } else {
-          this.chatService.sendYellowBoldAnnouncement(
-            `O ${offendedTeam.name} tem 5 segundos para aceitar a Vantagem.`,
+          this.chatService.sendBoldAnnouncement(
+            `O ${offendedTeam.name} tem 5 segundos para optar por Vantagem.`,
             0,
             player.id,
+            offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
           );
         }
       });
@@ -840,7 +847,7 @@ export default class GameService implements IGameService {
     return false;
   }
 
-  private handlePenalty(offendedTeam: TeamEnum) {
+  public handlePenalty(offendedTeam: TeamEnum): void {
     const offendedTeamName = this.teams.getTeamName(offendedTeam);
 
     if (this.remainingTimeAtPenalty && this.penaltyPosition) {
@@ -848,7 +855,12 @@ export default class GameService implements IGameService {
       this.room.pauseGame(true);
       this.remainingTime = this.remainingTimeAtPenalty;
 
-      this.chatService.sendYellowBoldAnnouncement(`PENAL para o ${offendedTeamName}!`, 2);
+      this.chatService.sendBoldAnnouncement(
+        `PENAL para o ${offendedTeamName}!`,
+        2,
+        undefined,
+        offendedTeam === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+      );
 
       let stadium: string;
       if (offendedTeam === TeamEnum.RED) {

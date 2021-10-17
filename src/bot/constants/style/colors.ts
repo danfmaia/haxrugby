@@ -2,9 +2,11 @@ const colors = {
   haxRugbyGreen: 0x7ec577,
 
   yellow: 0xffff00,
-  blue: 0x00bcd5,
+  mediumBlue: 0x00bcd5,
   green: 0x00ff00,
   red: 0xff0000,
+  // chatRed: 0xf88881,
+  // chatBlue: 0x7e94f4,
   // defRecWarning: 0x800080,
   discordPurple: 0xb8bcf2,
   // discordPurple: 0x9ea3e6,

@@ -1,11 +1,16 @@
 ## CHANGELOG
 
+### v0.11b:
+
+- Adicionado comando para aceitar imediatamente o Penal (`p`), não precisando esperar os 5s.
+- A partida agora é automaticamente cancelada se ambos os times ficarem vazios por 15s.
+- Correções e melhorias referentes às novas funcionalidades da versão v0.11.
+
 ### v0.11a:
 
 - Adicionada **gestão de kick e ban**:
   - Jogadores sem senha de admin que tentarem kickar ou banir alguém agora serão imediatamente kickados.
   - E em caso de ban, o ban será retirado.
-- A partida agora é automaticamente cancelada se ambos os times ficarem vazios por 15s.
 - Correções e melhorias referentes às novas funcionalidades da versão v0.11.
 
 ### v0.11:

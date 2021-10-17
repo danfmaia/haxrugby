@@ -85,11 +85,11 @@ export default class ChatService implements IChatService {
   }
 
   public sendBlueAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.blue, undefined, sound);
+    this.room.sendAnnouncement(message, playerId, colors.mediumBlue, undefined, sound);
   }
 
   public sendBlueBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
-    this.room.sendAnnouncement(message, playerId, colors.blue, 'bold', sound);
+    this.room.sendAnnouncement(message, playerId, colors.mediumBlue, 'bold', sound);
   }
 
   public sendBlankLine(playerId?: number): void {

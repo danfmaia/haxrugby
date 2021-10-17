@@ -7,12 +7,12 @@ import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 import { IGameService } from '../../services/room/IGameService';
 
-export const ADVANTAGE_COMMAND_HOTKEYS = ['v'];
+export const PENALTY_COMMAND_HOTKEYS = ['p'];
 
 @CommandDecorator({
-  names: ADVANTAGE_COMMAND_HOTKEYS,
+  names: PENALTY_COMMAND_HOTKEYS,
 })
-export class AdvantageCommand extends CommandBase<HaxRugbyPlayer> {
+export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private gameService: IGameService;
   private readonly chatService: IChatService;
@@ -37,19 +37,21 @@ export class AdvantageCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
-    this.gameService.remainingTimeAtPenalty = null;
-    this.gameService.isPenalty = false;
-    this.gameService.util.clearAllAheadPlayers();
+    if (this.gameService.isPenalty === false) {
+      return;
+    }
 
     const team = this.gameService.teams.getTeamByTeamID(player.team);
     if (!team) {
       return;
     }
     this.chatService.sendBoldAnnouncement(
-      `${player.name} (${team.name}) optou por Vantagem!   Segue o jogo!   ⏩`,
-      2,
+      `${player.name} (${team.name}) aceitou o Penal!   Pára o lance, seu juiz!   ⏸️`,
+      0,
       undefined,
       colors.green,
     );
+
+    this.gameService.handlePenalty(this.gameService.isPenalty);
   }
 }
