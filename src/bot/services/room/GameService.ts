@@ -232,6 +232,24 @@ export default class GameService implements IGameService {
     if (this.isConversionAttempt && this.isGameStopped === false) {
       this.room.setPlayerTeam(player.id, TeamID.Spectators);
     }
+
+    // cancel match if both teams are empty for 15s
+    if (this.isMatchInProgress) {
+      const teamPlayers = this.room
+        .getPlayerList()
+        .filter((player) => player.team !== TeamID.Spectators);
+
+      if (teamPlayers.length === 0) {
+        Util.timeout(15000, () => {
+          this.chatService.sendBoldAnnouncement(
+            `Partida cancelada automaticamente por ausência de jogadores.`,
+            2,
+          );
+          console.log('Partida cancelada automaticamente por ausência de jogadores.');
+          this.cancelMatch();
+        });
+      }
+    }
   }
 
   public handlePlayerBallKick(player: HaxRugbyPlayer): void {
@@ -448,7 +466,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  public cancelMatch(player: HaxRugbyPlayer, restartMatch?: () => void): void {
+  public cancelMatch(player?: HaxRugbyPlayer, restartMatch?: () => void): void {
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
@@ -457,7 +475,9 @@ export default class GameService implements IGameService {
       if (restartMatch) restartMatch();
     });
 
-    this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
+    if (player) {
+      this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
+    }
     this.chatService.sendNormalAnnouncement(
       `Placar parcial:  ${this.score.red}-${this.score.blue}`,
     );
@@ -602,6 +622,10 @@ export default class GameService implements IGameService {
       if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
         this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
       }
+
+      if (this.isPenalty && this.remainingTimeAtPenalty) {
+        this.handleAdvantageQueryTime(this.isPenalty, this.remainingTimeAtPenalty);
+      }
     }
 
     if (this.remainingTime <= 0) {
@@ -621,12 +645,26 @@ export default class GameService implements IGameService {
     }
   }
 
+  private handleAdvantageQueryTime(isPenalty: TeamEnum, remainingTimeAtPenalty: number): void {
+    const timePassed = remainingTimeAtPenalty - this.remainingTime;
+
+    if ([2000, 3000, 4000].includes(timePassed)) {
+      this.chatService.sendYellowAnnouncement(
+        `${(PENALTY_ADVANTAGE_TIME - timePassed) / 1000}...    (para aceitar a vantagem)`,
+      );
+    }
+
+    if (timePassed === PENALTY_ADVANTAGE_TIME) {
+      this.handlePenalty(isPenalty);
+    }
+  }
+
   private handleGame(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
     this.checkForTouches(players, ballPosition);
 
-    if (this.lastTouchInfo && this.remainingTimeAtPenalty === null) {
+    if (this.lastTouchInfo && this.isPenalty === false) {
       if (this.checkForAheadPenalty(this.lastTouchInfo.toucherIds)) {
         return;
       }
@@ -748,9 +786,8 @@ export default class GameService implements IGameService {
       }
     }
 
+    // initiate advantage query time
     if (aheadPlayerId && penalty) {
-      this.remainingTimeAtPenalty = this.remainingTime;
-
       const offendingPlayer = this.room.getPlayer(aheadPlayerId);
       const offendingTeam = this.teams.getTeamByTeamID(offendingPlayer.team);
       if (offendingTeam === null) {
@@ -794,24 +831,8 @@ export default class GameService implements IGameService {
         }
       });
 
+      this.remainingTimeAtPenalty = this.remainingTime;
       this.isPenalty = offendedTeam.teamEnum;
-
-      Util.timeout(PENALTY_ADVANTAGE_TIME, () => {
-        if (this.isPenalty) {
-          this.handlePenalty(offendedTeam.teamEnum);
-        }
-      });
-
-      const secondsPassed = [2000, 3000, 4000];
-      secondsPassed.forEach((secondPassed) =>
-        Util.timeout(secondPassed, () => {
-          if (this.isPenalty) {
-            this.chatService.sendYellowAnnouncement(
-              `${(PENALTY_ADVANTAGE_TIME - secondPassed) / 1000}... (vantagem)`,
-            );
-          }
-        }),
-      );
 
       return true;
     }
@@ -836,9 +857,9 @@ export default class GameService implements IGameService {
         stadium = this.map.blueStadiums.getPenaltyKick(this.penaltyPosition, true);
       }
 
-      this.isPenalty = false;
       this.handleRestartOrFinishing(stadium, () => {
         this.remainingTimeAtPenalty = null;
+        this.isPenalty = false;
         this.isPenaltyKick = offendedTeam;
         this.lastTouchInfo = null;
       });
@@ -1100,6 +1121,11 @@ export default class GameService implements IGameService {
 
     let isStillAttempting: boolean = true;
 
+    if (this.isPenalty) {
+      // finish attempt when is penalty
+      isStillAttempting = false;
+    }
+
     if (Math.abs(ballPosition.x) < this.map.tryLineX) {
       // finish attempt when ball is moved out of the in-goal
       isStillAttempting = false;
@@ -1276,7 +1302,7 @@ export default class GameService implements IGameService {
     const remainingTime = SAFETY_MAX_TIME - this.safetyTime;
 
     if (remainingTime === 10000) {
-      this.chatService.sendNormalAnnouncement('10 segundos para a cobrança!', 2);
+      this.chatService.sendYellowBoldAnnouncement('10 segundos para a cobrança!', 2);
     }
     if ([5000, 4000, 3000, 2000, 1000].includes(remainingTime)) {
       this.chatService.sendNormalAnnouncement(`${remainingTime / 1000}...`);

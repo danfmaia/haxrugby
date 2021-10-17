@@ -3,9 +3,10 @@
 ### v0.11a:
 
 - Adicionada **gestão de kick e ban**:
-  - Jogadores sem senha de admin que tentarem kickar ou banir alguém serão imediatamente kickados.
-  - Em caso de ban, o ban será retirado.
-- Correções e melhorias referentes ao último patch.
+  - Jogadores sem senha de admin que tentarem kickar ou banir alguém agora serão imediatamente kickados.
+  - E em caso de ban, o ban será retirado.
+- A partida agora é automaticamente cancelada se ambos os times ficarem vazios por 15s.
+- Correções e melhorias referentes às novas funcionalidades da versão v0.11.
 
 ### v0.11:
 
