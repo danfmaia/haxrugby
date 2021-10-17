@@ -881,10 +881,7 @@ export default class GameService implements IGameService {
       }
 
       this.handleRestartOrFinishing(stadium, () => {
-        this.remainingTimeAtPenalty = null;
-        this.isPenalty = false;
         this.isPenaltyKick = offendedTeam;
-        this.lastTouchInfo = null;
       });
     }
   }
@@ -1144,8 +1141,11 @@ export default class GameService implements IGameService {
 
     let isStillAttempting: boolean = true;
 
+    // TODO: maybe improve or change this penalty-try or ball centering rule
     if (this.isPenalty) {
       // finish attempt when is penalty
+      //   - in this case, the ball is centered (penalty-try)
+      this.tryY = 0;
       isStillAttempting = false;
     }
 
@@ -1397,7 +1397,14 @@ export default class GameService implements IGameService {
 
       this.room.stopGame();
       this.room.setCustomStadium(map);
-      if (handleGameStop) handleGameStop();
+
+      if (handleGameStop) {
+        handleGameStop();
+        this.remainingTimeAtPenalty = null;
+        this.isPenalty = false;
+        this.lastTouchInfo = null;
+      }
+
       this.room.startGame();
     });
   }
