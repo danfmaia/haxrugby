@@ -11,11 +11,13 @@ const ptBr: DictionaryKeys = {
   MSG_GAME_INFO_1: `𝖵𝗈𝖼ê 𝖾𝗌𝗍á 𝗇𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GAME_INFO_2:
     '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝗯𝘂𝗴𝘀, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
-  MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 "𝗜𝗻𝘀𝗶𝗱𝗲" (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽), 𝖺 𝗩𝗮𝗻𝘁𝗮𝗴𝗲𝗺 𝖾 𝗈 𝗣𝗲𝗻𝗮𝗹.`,
+  MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 𝘃𝟬.𝟭𝟭 𝗂𝗇𝗍𝗋𝗈𝖽𝗎𝗓𝗂𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 "𝗜𝗻𝘀𝗶𝗱𝗲" (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽), 𝖺 𝗩𝗮𝗻𝘁𝗮𝗴𝗲𝗺 𝖾 𝗈 𝗣𝗲𝗻𝗮𝗹.`,
+  MSG_GAME_INFO_4: `𝖤 𝗇𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗇𝗍𝗋𝗈𝖽𝗎𝗓𝗂𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 "𝗢𝗳𝗳𝘀𝗶𝗱𝗲" (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽). 𝖠𝗀𝗈𝗋𝖺 𝖺 𝗋𝖾𝗀𝗋𝖺 𝖽𝗈 𝖨𝗆𝗉𝖾𝖽𝗂𝗆𝖾𝗇𝗍𝗈 𝖾𝗌𝗍á 𝗰𝗼𝗺𝗽𝗹𝗲𝘁𝗮!`,
   // MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗮𝗶𝗿).`,
   // MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗈 𝖼𝗈𝗇𝖼𝖾𝗂𝗍𝗈 𝖽𝗈 𝖥𝗂𝖾𝗅𝖽 𝖦𝗈𝖺𝗅 𝗆𝗎𝖽𝗈𝗎 𝖾 𝖺𝗀𝗈𝗋𝖺 𝖾𝗅𝖾 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹. 𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽 𝗉𝖺𝗋𝖺 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌.`,
-  MSG_GAME_INFO_4: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗋𝖾𝗀𝗋𝖺𝗌 𝖽𝗈 𝗃𝗈𝗀𝗈.',
-  MSG_GAME_INFO_5: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
+  MSG_GAME_INFO_5:
+    '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗋𝖾𝗀𝗋𝖺𝗌 𝖽𝗈 𝗃𝗈𝗀𝗈. 𝖤 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
+  // MSG_GAME_INFO_6: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
 
   MSG_RULES: {
     TITLE: 'Resumo das REGRAS do jogo:',
@@ -55,8 +57,9 @@ const ptBr: DictionaryKeys = {
       _1 + 'Todo jogador está impedido se:',
       _2 + '(1) Estiver dentro do in-goal (INSIDE) no momento do passe (linha é dentro);',
       _2 +
-        '(2) Estiver à frente do jogador mais recuado do time adversário (OFFSIDE) no momento do passe.',
-      _3 + '- O impedimento do tipo "Offside" ainda não foi implementado.',
+        '(2) Estiver à frente da linha do último defensor ou do passador (OFFSIDE) no momento do passe.',
+      _3 +
+        '- Jogadores totalmente dentro de sua Safe Zone (Zona Protegida) estão imunes ao Offside.',
     ],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,

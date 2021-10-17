@@ -38,6 +38,7 @@ import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import { RoomUtil } from '../../util/RoomUtil';
 import TAheadPlayers from '../../models/game/TAheadPlayers';
+import AheadEnum from '../../enums/AheadEnum';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -769,23 +770,23 @@ export default class GameService implements IGameService {
   }
 
   private checkForAheadPenalty(toucherIds: number[]): boolean {
-    let penalty: false | 'INSIDE' | 'OFFSIDE' = false;
+    let penalty: false | AheadEnum = false;
     let aheadPlayerId: number | undefined;
 
     for (let i = 0; i < toucherIds.length; i++) {
       const toucherId = toucherIds[i];
       aheadPlayerId = this.aheadPlayers.inside.find((playerId) => playerId === toucherId);
       if (aheadPlayerId) {
-        penalty = 'INSIDE';
+        penalty = AheadEnum.INSIDE;
       } else {
         aheadPlayerId = this.aheadPlayers.offside.find((playerId) => playerId === toucherId);
         if (aheadPlayerId) {
-          penalty = 'OFFSIDE';
+          penalty = AheadEnum.OFFSIDE;
         }
       }
     }
 
-    // initiate advantage query time
+    // initialize advantage query time
     if (aheadPlayerId && penalty) {
       const offendingPlayer = this.room.getPlayer(aheadPlayerId);
       const offendingTeam = this.teams.getTeamByTeamID(offendingPlayer.team);
@@ -796,9 +797,13 @@ export default class GameService implements IGameService {
         `🚫  ${offendingTeam.name} cometeu IMPEDIMENTO!  🚫`,
         2,
       );
-      if (penalty === 'INSIDE') {
+      if (penalty === AheadEnum.INSIDE) {
         this.chatService.sendYellowAnnouncement(
           `${offendingPlayer.name} estava dentro do in-goal (INSIDE) no momento do passe.`,
+        );
+      } else if (penalty === AheadEnum.OFFSIDE) {
+        this.chatService.sendYellowAnnouncement(
+          `${offendingPlayer.name} estava à frente do último defensor (ou da bola) no momento do passe.`,
         );
       }
 

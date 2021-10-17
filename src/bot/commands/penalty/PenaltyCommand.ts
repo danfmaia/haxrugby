@@ -49,7 +49,7 @@ export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
       `${player.name} (${team.name}) aceitou o Penal!   Pára o lance, seu juiz!   ⏸️`,
       0,
       undefined,
-      colors.green,
+      colors.yellow,
     );
 
     this.gameService.handlePenalty(this.gameService.isPenalty);

@@ -154,7 +154,7 @@ export default class ChatService implements IChatService {
       this.sendBoldAnnouncement(MSG_GREETING, 2, playerId, colors.haxRugbyBall);
       this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0, playerId);
       this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0, playerId);
-      this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0, playerId);
+      this.sendNormalAnnouncement(MSG_GAME_INFO_4, 0, playerId);
       this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0, playerId);
     });
     Util.timeout(3000, () => {
@@ -172,7 +172,7 @@ export default class ChatService implements IChatService {
     this.sendNormalAnnouncement(MSG_GAME_INFO_1, 0, playerId, colors.haxRugbyBall);
     this.sendYellowAnnouncement(MSG_GAME_INFO_2, 0, playerId);
     this.sendNormalAnnouncement(MSG_GAME_INFO_3, 0, playerId);
-    this.sendBlueAnnouncement(MSG_GAME_INFO_4, 0, playerId);
+    this.sendNormalAnnouncement(MSG_GAME_INFO_4, 0, playerId);
     this.sendBlueAnnouncement(MSG_GAME_INFO_5, 0, playerId);
     this.sendBlankLine(playerId);
   }

@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+### v0.12:
+
+- Introduzido o **OFFSIDE**, a 2ª parte da regra do **Impedimento**:
+  - Junto ao Inside introduzido na última versão (`v0.11`), a regra do Impedimento agora está completa.
+  - Estão em posição de Offside os jogadores localizados à frente da linha do último defensor ou do passador no momento do passe.
+  - O Offside considera todos os jogadores adversários, não existe algo como "goleiro".
+  - Jogadores totalmente dentro de sua **Safe Zone (Zona Protegida)** estão imunes ao Offside.
+  - A Safe Zone de um time vai do fundo do seu in-goal até a primeira linha branca depois do in-goal.
+
 ### v0.11b:
 
 - Adicionado comando para aceitar imediatamente o Penal (`p`), não precisando esperar os 5s.
@@ -15,7 +24,7 @@
 
 ### v0.11:
 
-- Introduzido o **INSIDE**, uma das partes da regra do **Impedimento**:
+- Introduzido o **INSIDE**, uma das duas partes da regra do **Impedimento**:
   - Todos os jogadores de ataque estão impedidos se estiverem com qualquer parte do disco dentro do in-goal (linha é dentro).
   - Para a regra do Impedimento, ocorre uma nova origem de jogada sempre que houver um chute ou condução por parte de qualquer time.
   - Desvios simples não eliminam a condição de impedimento! Como dito acima, apenas chutes ou conduções fazem a jogada ser reavaliada.
