@@ -2,6 +2,7 @@ import { IPlayerObject } from 'inversihax';
 import colors from '../../constants/style/colors';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
+import { HaxRugbyRole } from '../../models/player/HaxRugbyRole';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import ChatService, { IChatService } from './ChatService';
@@ -18,6 +19,7 @@ export interface IAdminService {
 
   setFirstPlayerAsAdmin(playerId: number): void;
   setEarliestPlayerAsAdmin(): void;
+  setPlayerAsSuperAdmin(player: HaxRugbyPlayer): void;
 }
 
 export default class AdminService implements IAdminService {
@@ -57,9 +59,11 @@ export default class AdminService implements IAdminService {
       return;
     }
 
-    const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
+    const playerConfig = HaxRugbyPlayerConfig.getConfig(byPlayer.id);
     const playerNameAndId = Util.getPlayerNameAndId(player);
     const byPlayerNameAndId = Util.getPlayerNameAndId(byPlayer);
+
+    console.log('playerConfig: ', JSON.stringify(playerConfig.role));
 
     if (playerConfig.role.weight < 90) {
       if (ban === false) {
@@ -104,6 +108,20 @@ export default class AdminService implements IAdminService {
     if (reason) {
       console.log(`    Motivo: ${reason}.`);
     }
+  }
+
+  public setPlayerAsSuperAdmin(player: HaxRugbyPlayer): void {
+    this.room.setPlayerAdmin(player.id, true);
+    const config = HaxRugbyPlayerConfig.getConfig(player.id);
+    config.role = HaxRugbyRole.SuperAdmin;
+    this.chatService.sendHaxRugbyBoldAnnouncement(
+      `🏉 ${player.name} se autenticou como SuperAdmin. 🏉`,
+      2,
+    );
+    this.chatService.sendHaxRugbyAnnouncement(
+      '🙌 Curvem-se perante seu poder supremo rugbístico! 🙌',
+      2,
+    );
   }
 
   public setFirstPlayerAsAdmin(playerId: number): void {

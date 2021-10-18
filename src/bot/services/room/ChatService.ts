@@ -1,3 +1,4 @@
+import { DISCORD_RULES_URL } from '../../constants/constants';
 import {
   MSG_BALL_LEAVE_INGOAL,
   MSG_DEF_REC,
@@ -22,10 +23,12 @@ import { IGameService } from './IGameService';
 export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
   sendBoldAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
-  sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
-  sendBlueBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendBlueBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendHaxRugbyAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendHaxRugbyBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
 
   sendBlankLine(playerId?: number): void;
 
@@ -90,6 +93,14 @@ export default class ChatService implements IChatService {
 
   public sendBlueBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, colors.mediumBlue, 'bold', sound);
+  }
+
+  public sendHaxRugbyAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.haxRugbyBall, undefined, sound);
+  }
+
+  public sendHaxRugbyBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.haxRugbyBall, 'bold', sound);
   }
 
   public sendBlankLine(playerId?: number): void {
@@ -208,7 +219,7 @@ export default class ChatService implements IChatService {
       case LinkEnum.RULES:
         this.room.sendAnnouncement('𝗥𝗘𝗚𝗥𝗔𝗦 𝗱𝗼 𝗷𝗼𝗴𝗼:', playerId, colors.haxRugbyBall, 'bold', 0);
         this.room.sendAnnouncement(
-          '    sites.google.com/site/haxrugby/regras',
+          '    ' + DISCORD_RULES_URL,
           playerId,
           colors.haxRugbyBall,
           'italic',

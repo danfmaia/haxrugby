@@ -1,9 +1,9 @@
-import PositionEnum from '../../enums/PositionEnum';
-import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
-import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import Util from '../../util/Util';
-import { IChatService } from '../room/ChatService';
-import { IGameService } from '../room/IGameService';
+import PositionEnum from '../enums/PositionEnum';
+import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
+import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
+import Util from '../util/Util';
+import { IChatService } from './room/ChatService';
+import { IGameService } from './room/IGameService';
 
 export interface ICommandService {
   setPlayerAsPosition(player: HaxRugbyPlayer, args: string[], position: PositionEnum): void;

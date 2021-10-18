@@ -4,7 +4,7 @@ import { CommandBase, CommandDecorator, TeamID, Types } from 'inversihax';
 import PositionEnum from '../../enums/PositionEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import CommandService, { ICommandService } from '../../services/command/CommandService';
+import CommandService, { ICommandService } from '../../services/CommandService';
 
 @CommandDecorator({
   names: ['gk', 'GK', 'goalkeeper'],

@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import CommandService from '../../services/command/CommandService';
+import CommandService from '../../services/CommandService';
 import Util from '../../util/Util';
 
 @CommandDecorator({

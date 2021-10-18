@@ -1,5 +1,11 @@
 import { lang, LanguageEnum } from '../appConfig';
-import { APP_MINOR_VERSION, APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
+import {
+  APP_MINOR_VERSION,
+  APP_VERSION,
+  DISCORD_RULES_URL,
+  GAME_TITLE,
+  ROOM_TITLE,
+} from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
 export const _1: string = '   ';
@@ -64,7 +70,7 @@ const ptBr: DictionaryKeys = {
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,
       'Para ler esse mesmo resumo no Discord, acesse o seguinte link:',
-      _1 + 'https://discord.com/channels/888810050041303050/891749504938815538/898839813673877564',
+      _1 + DISCORD_RULES_URL,
     ],
   },
 
