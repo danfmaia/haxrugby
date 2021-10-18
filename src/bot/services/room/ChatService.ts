@@ -1,4 +1,4 @@
-import { DISCORD_RULES_URL } from '../../constants/constants';
+import { LINK_DISCORD, LINK_DISCORD_RULES } from '../../constants/constants';
 import {
   MSG_BALL_LEAVE_INGOAL,
   MSG_DEF_REC,
@@ -217,9 +217,9 @@ export default class ChatService implements IChatService {
   public sendSinglePromoLink(link: LinkEnum, sound: number = 2, playerId?: number): void {
     switch (link) {
       case LinkEnum.RULES:
-        this.room.sendAnnouncement('𝗥𝗘𝗚𝗥𝗔𝗦 𝗱𝗼 𝗷𝗼𝗴𝗼:', playerId, colors.haxRugbyBall, 'bold', 0);
+        this.sendHaxRugbyBoldAnnouncement('𝗥𝗘𝗚𝗥𝗔𝗦 𝗱𝗼 𝗷𝗼𝗴𝗼:', 0, playerId);
         this.room.sendAnnouncement(
-          '    ' + DISCORD_RULES_URL,
+          '    ' + LINK_DISCORD_RULES,
           playerId,
           colors.haxRugbyBall,
           'italic',
@@ -227,9 +227,9 @@ export default class ChatService implements IChatService {
         );
         return;
       case LinkEnum.DISCORD:
-        this.sendBoldAnnouncement('𝖲𝖾𝗋𝗏𝖾𝗋 𝗇𝗈 𝗗𝗜𝗦𝗖𝗢𝗥𝗗:', sound, playerId, colors.discordPurple);
+        this.sendBoldAnnouncement('𝗦𝗲𝗿𝘃𝗲𝗿 𝗻𝗼 𝗗𝗜𝗦𝗖𝗢𝗥𝗗:', sound, playerId, colors.discordPurple);
         this.room.sendAnnouncement(
-          '    discord.io/HaxRugby',
+          '    ' + LINK_DISCORD,
           playerId,
           colors.discordPurple,
           'italic',
@@ -237,7 +237,7 @@ export default class ChatService implements IChatService {
         );
         return;
       case LinkEnum.FACEBOOK:
-        this.sendBoldAnnouncement('𝖦𝗋𝗎𝗉𝗈 𝗇𝗈 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞:', sound, playerId);
+        this.sendBoldAnnouncement('𝗚𝗿𝘂𝗽𝗼 𝗻𝗼 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞:', sound, playerId);
         this.room.sendAnnouncement(
           '    fb.com/groups/haxrugby',
           playerId,

@@ -63,8 +63,6 @@ export default class AdminService implements IAdminService {
     const playerNameAndId = Util.getPlayerNameAndId(player);
     const byPlayerNameAndId = Util.getPlayerNameAndId(byPlayer);
 
-    console.log('playerConfig: ', JSON.stringify(playerConfig.role));
-
     if (playerConfig.role.weight < 90) {
       if (ban === false) {
         this.chatService.sendBoldAnnouncement(
@@ -115,11 +113,11 @@ export default class AdminService implements IAdminService {
     const config = HaxRugbyPlayerConfig.getConfig(player.id);
     config.role = HaxRugbyRole.SuperAdmin;
     this.chatService.sendHaxRugbyBoldAnnouncement(
-      `🏉 ${player.name} se autenticou como SuperAdmin. 🏉`,
+      `  🏉  ${player.name} se autenticou como SuperAdmin.  🏉`,
       2,
     );
     this.chatService.sendHaxRugbyAnnouncement(
-      '🙌 Curvem-se perante seu poder supremo rugbístico! 🙌',
+      '  🙌  Curvem-se perante seu supremo poder rugbístico!  🙌',
       2,
     );
   }

@@ -2,7 +2,7 @@ import { lang, LanguageEnum } from '../appConfig';
 import {
   APP_MINOR_VERSION,
   APP_VERSION,
-  DISCORD_RULES_URL,
+  LINK_DISCORD_RULES,
   GAME_TITLE,
   ROOM_TITLE,
 } from '../constants';
@@ -70,7 +70,7 @@ const ptBr: DictionaryKeys = {
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,
       'Para ler esse mesmo resumo no Discord, acesse o seguinte link:',
-      _1 + DISCORD_RULES_URL,
+      _1 + LINK_DISCORD_RULES,
     ],
   },
 

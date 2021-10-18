@@ -252,7 +252,7 @@ export default class GameService implements IGameService {
               `Partida cancelada automaticamente por ausência de jogadores.`,
               2,
             );
-            console.log('Partida cancelada automaticamente por ausência de jogadores.');
+            Util.logWithTime('Partida cancelada automaticamente por ausência de jogadores.');
             this.cancelMatch();
           }
         });
@@ -1125,7 +1125,7 @@ export default class GameService implements IGameService {
         msgColor,
       );
       this.chatService.sendNormalAnnouncement(
-        `O ${teamName} ainda pode tentar levar a bola mais para o meio do campo.`,
+        `O ${teamName} ainda pode tentar levar a bola mais para o centro do in-goal.`,
         0,
         undefined,
         msgColor,
