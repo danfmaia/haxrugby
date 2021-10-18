@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.12a:
+
+- Jogadores que cometem Impedimento agora recebem um emoji diferenciado (⚠️).
+
 ### v0.12:
 
 - Introduzido o **OFFSIDE**, a 2ª parte da regra do **Impedimento**:

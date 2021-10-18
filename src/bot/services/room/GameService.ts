@@ -12,6 +12,7 @@ import {
   BALL_TEAM_COLOR_TICKS,
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
+  AHEAD_PENALTY_EMOJI,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -779,18 +780,19 @@ export default class GameService implements IGameService {
     let penalty: false | AheadEnum = false;
     let aheadPlayerId: number | undefined;
 
-    for (let i = 0; i < toucherIds.length; i++) {
-      const toucherId = toucherIds[i];
+    toucherIds.forEach((toucherId) => {
       aheadPlayerId = this.aheadPlayers.inside.find((playerId) => playerId === toucherId);
       if (aheadPlayerId) {
         penalty = AheadEnum.INSIDE;
+        this.room.setPlayerAvatar(aheadPlayerId, AHEAD_PENALTY_EMOJI);
       } else {
         aheadPlayerId = this.aheadPlayers.offside.find((playerId) => playerId === toucherId);
         if (aheadPlayerId) {
           penalty = AheadEnum.OFFSIDE;
+          this.room.setPlayerAvatar(aheadPlayerId, AHEAD_PENALTY_EMOJI);
         }
       }
-    }
+    });
 
     // initialize advantage query time
     if (aheadPlayerId && penalty) {
@@ -800,7 +802,7 @@ export default class GameService implements IGameService {
         throw new Error();
       }
       this.chatService.sendYellowBoldAnnouncement(
-        `🚫  ${offendingTeam.name} cometeu IMPEDIMENTO!  🚫`,
+        `🚫 ⚠️  ${offendingTeam.name} cometeu IMPEDIMENTO!  ⚠️ 🚫`,
         2,
       );
       if (penalty === AheadEnum.INSIDE) {
