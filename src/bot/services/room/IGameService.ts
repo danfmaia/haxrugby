@@ -23,6 +23,7 @@ export interface IGameService {
 
   isGameStopped: boolean;
   isMatchInProgress: boolean;
+  isTimeRunning: boolean;
   isOvertime: boolean;
 
   lastBallPosition: IPosition;

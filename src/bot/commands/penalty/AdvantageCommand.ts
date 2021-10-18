@@ -49,7 +49,7 @@ export class AdvantageCommand extends CommandBase<HaxRugbyPlayer> {
       `${player.name} (${team.name}) optou por Vantagem!   Segue o jogo!   ⏩`,
       2,
       undefined,
-      colors.green,
+      colors.yellow,
     );
   }
 }

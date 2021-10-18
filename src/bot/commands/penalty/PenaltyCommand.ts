@@ -26,6 +26,9 @@ export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public canExecute(player: HaxRugbyPlayer): boolean {
+    if (this.gameService.isTimeRunning === false) {
+      return false;
+    }
     const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
     if (!playerTeam) {
       return false;
@@ -49,7 +52,7 @@ export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
       `${player.name} (${team.name}) aceitou o Penal!   Pára o lance, seu juiz!   ⏸️`,
       0,
       undefined,
-      colors.green,
+      colors.yellow,
     );
 
     this.gameService.handlePenalty(this.gameService.isPenalty);

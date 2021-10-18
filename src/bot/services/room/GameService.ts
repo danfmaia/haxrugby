@@ -12,6 +12,7 @@ import {
   BALL_TEAM_COLOR_TICKS,
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
+  AHEAD_PENALTY_EMOJI,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -38,6 +39,7 @@ import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import { RoomUtil } from '../../util/RoomUtil';
 import TAheadPlayers from '../../models/game/TAheadPlayers';
+import AheadEnum from '../../enums/AheadEnum';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -56,7 +58,7 @@ export default class GameService implements IGameService {
   public isGameStopped: boolean = true;
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
-  private isTimeRunning: boolean = false;
+  public isTimeRunning: boolean = false;
   public isOvertime: boolean = false;
   private isFinishing: boolean = false;
 
@@ -235,18 +237,24 @@ export default class GameService implements IGameService {
 
     // cancel match if both teams are empty for 15s
     if (this.isMatchInProgress) {
-      const teamPlayers = this.room
+      let playersOnTeams = this.room
         .getPlayerList()
         .filter((player) => player.team !== TeamID.Spectators);
 
-      if (teamPlayers.length === 0) {
+      if (playersOnTeams.length === 0) {
         Util.timeout(15000, () => {
-          this.chatService.sendBoldAnnouncement(
-            `Partida cancelada automaticamente por ausência de jogadores.`,
-            2,
-          );
-          console.log('Partida cancelada automaticamente por ausência de jogadores.');
-          this.cancelMatch();
+          playersOnTeams = this.room
+            .getPlayerList()
+            .filter((player) => player.team !== TeamID.Spectators);
+
+          if (playersOnTeams.length === 0) {
+            this.chatService.sendBoldAnnouncement(
+              `Partida cancelada automaticamente por ausência de jogadores.`,
+              2,
+            );
+            console.log('Partida cancelada automaticamente por ausência de jogadores.');
+            this.cancelMatch();
+          }
         });
       }
     }
@@ -622,10 +630,6 @@ export default class GameService implements IGameService {
       if ([5000, 4000, 3000, 2000, 1000].includes(this.remainingTime)) {
         this.chatService.sendNormalAnnouncement(`${this.remainingTime / 1000}...`, 2);
       }
-
-      if (this.isPenalty && this.remainingTimeAtPenalty) {
-        this.handleAdvantageQueryTime(this.isPenalty, this.remainingTimeAtPenalty);
-      }
     }
 
     if (this.remainingTime <= 0) {
@@ -642,6 +646,10 @@ export default class GameService implements IGameService {
         this.isOvertime = true;
         this.chatService.announceRegularOvertime();
       }
+    }
+
+    if (this.isPenalty && this.remainingTimeAtPenalty !== null) {
+      this.handleAdvantageQueryTime(this.isPenalty, this.remainingTimeAtPenalty);
     }
   }
 
@@ -769,23 +777,24 @@ export default class GameService implements IGameService {
   }
 
   private checkForAheadPenalty(toucherIds: number[]): boolean {
-    let penalty: false | 'INSIDE' | 'OFFSIDE' = false;
+    let penalty: false | AheadEnum = false;
     let aheadPlayerId: number | undefined;
 
-    for (let i = 0; i < toucherIds.length; i++) {
-      const toucherId = toucherIds[i];
+    toucherIds.forEach((toucherId) => {
       aheadPlayerId = this.aheadPlayers.inside.find((playerId) => playerId === toucherId);
       if (aheadPlayerId) {
-        penalty = 'INSIDE';
+        penalty = AheadEnum.INSIDE;
+        this.room.setPlayerAvatar(aheadPlayerId, AHEAD_PENALTY_EMOJI);
       } else {
         aheadPlayerId = this.aheadPlayers.offside.find((playerId) => playerId === toucherId);
         if (aheadPlayerId) {
-          penalty = 'OFFSIDE';
+          penalty = AheadEnum.OFFSIDE;
+          this.room.setPlayerAvatar(aheadPlayerId, AHEAD_PENALTY_EMOJI);
         }
       }
-    }
+    });
 
-    // initiate advantage query time
+    // initialize advantage query time
     if (aheadPlayerId && penalty) {
       const offendingPlayer = this.room.getPlayer(aheadPlayerId);
       const offendingTeam = this.teams.getTeamByTeamID(offendingPlayer.team);
@@ -793,12 +802,16 @@ export default class GameService implements IGameService {
         throw new Error();
       }
       this.chatService.sendYellowBoldAnnouncement(
-        `🚫  ${offendingTeam.name} cometeu IMPEDIMENTO!  🚫`,
+        `🚫 ⚠️  ${offendingTeam.name} cometeu IMPEDIMENTO!  ⚠️ 🚫`,
         2,
       );
-      if (penalty === 'INSIDE') {
+      if (penalty === AheadEnum.INSIDE) {
         this.chatService.sendYellowAnnouncement(
-          `${offendingPlayer.name} estava dentro do in-goal (INSIDE) no momento do passe.`,
+          `INSIDE: ${offendingPlayer.name} estava dentro do in-goal no momento do passe.`,
+        );
+      } else if (penalty === AheadEnum.OFFSIDE) {
+        this.chatService.sendYellowAnnouncement(
+          `OFFSIDE: ${offendingPlayer.name} estava à frente do último defensor (ou do passador) no momento do passe.`,
         );
       }
 
@@ -870,10 +883,7 @@ export default class GameService implements IGameService {
       }
 
       this.handleRestartOrFinishing(stadium, () => {
-        this.remainingTimeAtPenalty = null;
-        this.isPenalty = false;
         this.isPenaltyKick = offendedTeam;
-        this.lastTouchInfo = null;
       });
     }
   }
@@ -1133,8 +1143,11 @@ export default class GameService implements IGameService {
 
     let isStillAttempting: boolean = true;
 
+    // TODO: maybe improve or change this penalty-try or ball centering rule
     if (this.isPenalty) {
       // finish attempt when is penalty
+      //   - in this case, the ball is centered (penalty-try)
+      this.tryY = 0;
       isStillAttempting = false;
     }
 
@@ -1386,7 +1399,14 @@ export default class GameService implements IGameService {
 
       this.room.stopGame();
       this.room.setCustomStadium(map);
-      if (handleGameStop) handleGameStop();
+
+      if (handleGameStop) {
+        handleGameStop();
+        this.remainingTimeAtPenalty = null;
+        this.isPenalty = false;
+        this.lastTouchInfo = null;
+      }
+
       this.room.startGame();
     });
   }
