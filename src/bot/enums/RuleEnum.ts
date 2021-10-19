@@ -4,6 +4,8 @@ enum RuleEnum {
   AIR_KICK = 'AIR_KICK',
   SAFETY = 'SAFETY',
   OFFSIDE = 'OFFSIDE',
+  PENALTY = 'PENALTY',
+  ADVANTAGE = 'ADVANTAGE',
 }
 
 export default RuleEnum;

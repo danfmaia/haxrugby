@@ -30,21 +30,21 @@ const ptBr: DictionaryKeys = {
     TRY_TITLE: 'TRY     !try',
     TRY: [
       _1 +
-        'É o objetivo mais importante do rugby. É feito conduzindo a bola no in-goal adversário.',
+        'É o objetivo mais importante do rugby. É feito CONDUZINDO a bola no in-goal adversário.',
       _1 + 'O in-goal é a região do campo atrás da linha de gol de cada time.',
-      _1 + 'O Try vale 5 pontos e dá direito a uma conversão de 2 pontos.',
+      _1 + 'O Try vale 5 pontos e dá direito a uma CONVERSÃO DE 2 PONTOS.',
     ],
     DROP_GOAL_TITLE: 'DROP GOAL (DG)     !drop !dg !gol',
     DROP_GOAL: [
       _1 + 'É o objetivo secundário do rugby. Vale 3 pontos.',
       _1 +
-        'Só pode ser feito de fora da pequena área e com um Chute Aéreo (use !air para mais detalhes).',
+        'Só pode ser feito de fora da pequena área e com um CHUTE AÉREO (use !air para mais detalhes).',
       _1 + 'Não é possível fazer um Drop Goal contra.',
     ],
     AIR_KICK_TITLE: 'CHUTE AÉREO (AIR)     !air !aereo',
     AIR_KICK: [
       _1 +
-        'É um chute mais forte (1,2x no small e 1,3x no normal), que passa por cima dos jogadores.',
+        'É um chute mais forte (1,2x no small e 1,3x no normal), que PASSA POR CIMA dos jogadores.',
       _1 + 'Para tentar um Chute Aéreo, conduza a bola e em seguida chute-a.',
       _1 +
         'Se nenhum jogador tocar na bola por 0,2s, ela então se tornará "Aérea". A Bola Aérea dura 1,55s.',
@@ -53,7 +53,7 @@ const ptBr: DictionaryKeys = {
     ],
     SAFETY_TITLE: 'SAFETY (SF)     !sf !safety',
     SAFETY: [
-      _1 + 'É a jogada de segurança da defesa. É feito conduzindo a bola no próprio in-goal.',
+      _1 + 'É a jogada de segurança da defesa. É feito CONDUZINDO a bola no próprio in-goal.',
       _1 +
         'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
       _1 + 'O Safety concede à defesa um tiro de reinício no local da última condução de bola.',
@@ -66,6 +66,18 @@ const ptBr: DictionaryKeys = {
         '(2) Estiver à frente da linha do último defensor ou do passador (OFFSIDE) no momento do passe.',
       _3 +
         '- Jogadores totalmente dentro de sua Safe Zone (Zona Protegida) estão imunes ao Offside.',
+      _1 + 'A infração só é marcada se um jogador impedido encostar na bola.',
+      _1 + 'Para mais informações, use o comando !penal ou !vantagem.',
+    ],
+    PENALTY_TITLE: 'PENAL / VANTAGEM     !penal !pen !vantagem !vant',
+    PENALTY: [
+      _1 + 'Penal é como se chama "falta" no Rugby.',
+      _1 +
+        'Quando um Impedimento é cometido, o time que sofreu a infração tem até 5 segundos para aceitar o Penal.',
+      _1 +
+        'Se dentro dos 5 segundos o time que sofreu a infração usar o comando `p` ou o time infrator pontuar, a jogada é anulada e é marcado o PENAL. ⏸️',
+      _1 +
+        'Se o time que sofreu a infração usar o comando `v` ou esperar os 5 segundos, é dada VANTAGEM e o jogo continua normalmente. ⏩',
     ],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,

@@ -2,7 +2,7 @@ export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆';
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑·𝗥𝘂𝗴𝗯𝘆 🏉';
 // export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆 𝖳𝖾𝗌𝗍𝖾𝗌';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟮';
-const APP_PATCH_VERSION = '𝗯';
+const APP_PATCH_VERSION = '𝗰';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';

@@ -1,9 +1,11 @@
 import { IPosition, TeamID } from 'inversihax';
 import { AHEAD_EMOJI, PLAYER_RADIUS } from '../constants/constants';
+import colors from '../constants/style/colors';
 import AheadEnum from '../enums/AheadEnum';
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
+import { TTeam } from '../models/team/Teams';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 import { IGameService } from '../services/room/IGameService';
@@ -373,6 +375,39 @@ class GameUtil {
   public clearPlayerAvatar(playerId: number): void {
     // @ts-ignore: Unreachable code error
     this.room.setPlayerAvatar(playerId, null);
+  }
+
+  public grantAdvantage(player?: HaxRugbyPlayer, team?: TTeam): void {
+    if (this.gameService.isPenalty === false) {
+      return;
+    }
+
+    this.gameService.remainingTimeAtPenalty = null;
+    this.gameService.isPenalty = false;
+    this.gameService.util.clearAllAheadPlayers();
+
+    if (player) {
+      const playerTeam = this.gameService.teams.getTeamByTeamID(player.team);
+      if (!playerTeam) {
+        return;
+      }
+      this.gameService.chatService.sendBoldAnnouncement(
+        `${player.name} (${playerTeam.name}) optou por VANTAGEM!   Segue o jogo!   ⏩`,
+        2,
+        undefined,
+        colors.green,
+      );
+      return;
+    }
+
+    if (team) {
+      this.gameService.chatService.sendBoldAnnouncement(
+        `O ${team.name} optou por VANTAGEM!   Segue o jogo!   ⏩`,
+        2,
+        undefined,
+        colors.green,
+      );
+    }
   }
 }
 

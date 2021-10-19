@@ -1,10 +1,16 @@
 ## CHANGELOG
 
+### v0.12c:
+
+- **Alterado o padrão no pós-impedimento de Penal para Vantagem.**
+  - Agora os times devem usar o comando `p` para aceitar o Penal. Se em 5 segundos nenhuma escolha for feita, será concedida Vantagem automática.
+- Adicionado um único comando para explicar o Penal e a Vantagem (`!penal` ou `!vantagem`).
+- Corrigido erro do tempo da conversão acabar mesmo depois de realizado o disparo.
+
 ### v0.12b:
 
 - Substituído o desenho de campo "Rugby Union" por "HaxRugby".
 - Leve ajuste no desenho de campo "JP's".
-- Corrigido tempo da conversão acabando mesmo depois de realizado o disparo.
 
 ### v0.12a:
 
