@@ -25,9 +25,9 @@ export class TryCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.TRY);
+      this.chatService.sendLongRule(RuleEnum.TRY);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.TRY, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.TRY, 0, player.id);
     }
   }
 }

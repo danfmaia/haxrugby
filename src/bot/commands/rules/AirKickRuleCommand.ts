@@ -25,9 +25,9 @@ export class AirKickRuleCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.AIR_KICK);
+      this.chatService.sendLongRule(RuleEnum.AIR_KICK);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.AIR_KICK, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.AIR_KICK, 0, player.id);
     }
   }
 }

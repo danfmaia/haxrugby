@@ -25,9 +25,9 @@ export class SafetyCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.SAFETY);
+      this.chatService.sendLongRule(RuleEnum.SAFETY);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.SAFETY, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.SAFETY, 0, player.id);
     }
   }
 }

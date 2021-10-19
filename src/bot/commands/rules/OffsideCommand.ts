@@ -25,9 +25,9 @@ export class OffsideCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.OFFSIDE);
+      this.chatService.sendLongRule(RuleEnum.OFFSIDE);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.OFFSIDE, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.OFFSIDE, 0, player.id);
     }
   }
 }

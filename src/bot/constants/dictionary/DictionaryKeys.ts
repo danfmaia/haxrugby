@@ -1,3 +1,5 @@
+import { RuleMessage } from './RuleMessage';
+
 type DictionaryKeys = {
   MSG_GREETING: string;
   MSG_GAME_INFO_1: string;
@@ -8,19 +10,13 @@ type DictionaryKeys = {
 
   MSG_RULES: {
     TITLE: string;
-    TRY_TITLE: string;
-    TRY: string[];
-    DROP_GOAL_TITLE: string;
-    DROP_GOAL: string[];
-    AIR_KICK_TITLE: string;
-    AIR_KICK: string[];
-    SAFETY_TITLE: string;
-    SAFETY: string[];
-    OFFSIDE_TITLE: string;
-    OFFSIDE: string[];
-    PENALTY_TITLE: string;
-    PENALTY: string[];
-    POST_RULES: [string, string, string];
+    TRY: RuleMessage;
+    DROP_GOAL: RuleMessage;
+    AIR_KICK: RuleMessage;
+    SAFETY: RuleMessage;
+    OFFSIDE: RuleMessage;
+    PENALTY: RuleMessage;
+    POST_RULES: string;
   };
 
   MSG_HELP: {

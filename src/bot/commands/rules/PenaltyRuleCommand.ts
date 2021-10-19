@@ -25,9 +25,9 @@ export class PenaltyRuleCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.PENALTY);
+      this.chatService.sendLongRule(RuleEnum.PENALTY);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.PENALTY, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.PENALTY, 0, player.id);
     }
   }
 }

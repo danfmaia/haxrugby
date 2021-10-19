@@ -44,7 +44,7 @@ export interface IChatService {
   sendMainPromoLinksForSpectators(): void;
   sendSinglePromoLink(link: LinkEnum, sound?: number, playerId?: number): void;
   sendMainRules(sound?: number, playerId?: number): void;
-  sendSingleRule(rule: RuleEnum, sound?: number, playerId?: number): void;
+  sendLongRule(rule: RuleEnum, sound?: number, playerId?: number): void;
   sendHelp(sound?: number, playerId?: number): void;
   sendConversionHelp(playerId?: number): void;
 
@@ -252,59 +252,54 @@ export default class ChatService implements IChatService {
 
   public sendMainRules(sound: number = 2, playerId?: number): void {
     this.sendBlankLine(playerId);
-    this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId);
-    this.sendBlankLine(playerId);
+    this.sendBoldAnnouncement(MSG_RULES.TITLE, sound, playerId, colors.green);
 
-    this.sendSingleRule(RuleEnum.TRY, 0, playerId);
-    this.sendSingleRule(RuleEnum.FIELD_GOAL, 0, playerId);
-    this.sendSingleRule(RuleEnum.SAFETY, 0, playerId);
-    this.sendSingleRule(RuleEnum.OFFSIDE, 0, playerId);
+    this.sendNormalAnnouncement(MSG_RULES.TRY.shortDescription, 0, playerId);
+    this.sendNormalAnnouncement(MSG_RULES.DROP_GOAL.shortDescription, 0, playerId);
+    this.sendNormalAnnouncement(MSG_RULES.SAFETY.shortDescription, 0, playerId);
+    this.sendNormalAnnouncement(MSG_RULES.OFFSIDE.shortDescription, 0, playerId);
 
-    MSG_RULES.POST_RULES.forEach((rule) => {
-      this.room.sendAnnouncement(rule, playerId, colors.haxRugbyGreen, 'italic', 0);
-    });
-    this.sendBlankLine(playerId);
+    this.sendNormalAnnouncement(MSG_RULES.POST_RULES, 0, playerId);
   }
 
-  public sendSingleRule(rule: RuleEnum, sound: number = 2, playerId?: number): void {
+  public sendLongRule(rule: RuleEnum, sound: number = 2, playerId?: number): void {
     switch (rule) {
       case RuleEnum.TRY:
-        this.sendBoldAnnouncement(MSG_RULES.TRY_TITLE, sound, playerId);
-        MSG_RULES.TRY.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.TRY.title, sound, playerId);
+        MSG_RULES.TRY.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         this.sendBlankLine(playerId);
         return;
       case RuleEnum.FIELD_GOAL:
-        this.sendBoldAnnouncement(MSG_RULES.DROP_GOAL_TITLE, sound, playerId);
-        MSG_RULES.DROP_GOAL.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.DROP_GOAL.title, sound, playerId);
+        MSG_RULES.DROP_GOAL.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         this.sendBlankLine(playerId);
         return;
       case RuleEnum.AIR_KICK:
-        this.sendBoldAnnouncement(MSG_RULES.AIR_KICK_TITLE, sound, playerId);
-        MSG_RULES.AIR_KICK.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.AIR_KICK.title, sound, playerId);
+        MSG_RULES.AIR_KICK.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         return;
       case RuleEnum.SAFETY:
-        this.sendBoldAnnouncement(MSG_RULES.SAFETY_TITLE, sound, playerId);
-        MSG_RULES.SAFETY.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.SAFETY.title, sound, playerId);
+        MSG_RULES.SAFETY.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         this.sendBlankLine(playerId);
         return;
       case RuleEnum.OFFSIDE:
-        this.sendBoldAnnouncement(MSG_RULES.OFFSIDE_TITLE, sound, playerId);
-        MSG_RULES.OFFSIDE.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.OFFSIDE.title, sound, playerId);
+        MSG_RULES.OFFSIDE.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendBlankLine(playerId);
         return;
       case RuleEnum.PENALTY:
-        this.sendBoldAnnouncement(MSG_RULES.PENALTY_TITLE, sound, playerId);
-        MSG_RULES.PENALTY.forEach((rule) => {
+        this.sendBoldAnnouncement(MSG_RULES.PENALTY.title, sound, playerId);
+        MSG_RULES.PENALTY.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
         return;

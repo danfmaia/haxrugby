@@ -25,9 +25,9 @@ export class FieldGoalCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     if (player.admin) {
-      this.chatService.sendSingleRule(RuleEnum.FIELD_GOAL);
+      this.chatService.sendLongRule(RuleEnum.FIELD_GOAL);
     } else {
-      this.chatService.sendSingleRule(RuleEnum.FIELD_GOAL, 0, player.id);
+      this.chatService.sendLongRule(RuleEnum.FIELD_GOAL, 0, player.id);
     }
   }
 }
