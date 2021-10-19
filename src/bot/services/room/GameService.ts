@@ -1275,22 +1275,23 @@ export default class GameService implements IGameService {
   }
 
   private handleConversion(ballPosition: IPosition, team: TeamEnum) {
-    if (
-      this.isConversionShot === false &&
-      this.isReplacingBall === false &&
-      ballPosition.x !== this.lastBallPosition.x &&
-      ballPosition.y !== this.lastBallPosition.y
-    ) {
-      // handle after shot
-      this.isConversionShot = true;
-      Util.timeout(2500, () => {
-        this.handleMissedConversion();
-      });
-    } else {
-      // handle conversion time
-      this.tickCount = this.tickCount + 1;
-      if (this.tickCount % 6 === 0) {
-        this.handleConversionTime(team);
+    if (this.isConversionShot === false) {
+      if (
+        this.isReplacingBall === false &&
+        ballPosition.x !== this.lastBallPosition.x &&
+        ballPosition.y !== this.lastBallPosition.y
+      ) {
+        // handle after shot
+        this.isConversionShot = true;
+        Util.timeout(2500, () => {
+          this.handleMissedConversion();
+        });
+      } else {
+        // handle conversion time
+        this.tickCount = this.tickCount + 1;
+        if (this.tickCount % 6 === 0) {
+          this.handleConversionTime(team);
+        }
       }
     }
 

@@ -4,6 +4,7 @@
 
 - Substituído o desenho de campo "Rugby Union" por "HaxRugby".
 - Leve ajuste no desenho de campo "JP's".
+- Corrigido tempo da conversão acabando mesmo depois de realizado o disparo.
 
 ### v0.12a:
 
