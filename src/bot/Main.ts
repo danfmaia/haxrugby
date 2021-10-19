@@ -42,6 +42,7 @@ import { AirKickRuleCommand } from './commands/rules/AirKickRuleCommand';
 import { AdvantageCommand } from './commands/penalty/AdvantageCommand';
 import { OffsideCommand } from './commands/rules/OffsideCommand';
 import { PenaltyCommand } from './commands/penalty/PenaltyCommand';
+import { PenaltyRuleCommand } from './commands/rules/PenaltyRuleCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -71,9 +72,10 @@ PenaltyCommand;
 RulesCommand;
 TryCommand;
 FieldGoalCommand;
+AirKickRuleCommand;
 SafetyCommand;
 OffsideCommand;
-AirKickRuleCommand;
+PenaltyRuleCommand;
 
 LinksCommand;
 DiscordCommand;

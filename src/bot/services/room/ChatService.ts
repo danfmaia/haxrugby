@@ -302,6 +302,12 @@ export default class ChatService implements IChatService {
         });
         this.sendBlankLine(playerId);
         return;
+      case RuleEnum.PENALTY:
+        this.sendBoldAnnouncement(MSG_RULES.PENALTY_TITLE, sound, playerId);
+        MSG_RULES.PENALTY.forEach((rule) => {
+          this.sendNormalAnnouncement(rule, 0, playerId);
+        });
+        return;
       default:
     }
   }

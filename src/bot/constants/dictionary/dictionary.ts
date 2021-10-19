@@ -22,8 +22,8 @@ const ptBr: DictionaryKeys = {
   // MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗮𝗶𝗿).`,
   // MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗈 𝖼𝗈𝗇𝖼𝖾𝗂𝗍𝗈 𝖽𝗈 𝖥𝗂𝖾𝗅𝖽 𝖦𝗈𝖺𝗅 𝗆𝗎𝖽𝗈𝗎 𝖾 𝖺𝗀𝗈𝗋𝖺 𝖾𝗅𝖾 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹. 𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽 𝗉𝖺𝗋𝖺 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌.`,
   MSG_GAME_INFO_5:
-    '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗋𝖾𝗀𝗋𝖺𝗌 𝖽𝗈 𝗃𝗈𝗀𝗈. 𝖤 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
-  // MSG_GAME_INFO_6: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗅𝗂𝗌𝗍𝖺 𝖽𝖾 𝖼𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
+    '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗿𝗲𝗴𝗿𝗮𝘀 𝗱𝗼 𝗷𝗼𝗴𝗼. 𝖤 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗹𝗶𝘀𝘁𝗮 𝗱𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
+  // MSG_GAME_INFO_6: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗹𝗶𝘀𝘁𝗮 𝗱𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
 
   MSG_RULES: {
     TITLE: 'Resumo das REGRAS do jogo:',
@@ -69,15 +69,15 @@ const ptBr: DictionaryKeys = {
       _1 + 'A infração só é marcada se um jogador impedido encostar na bola.',
       _1 + 'Para mais informações, use o comando !penal ou !vantagem.',
     ],
-    PENALTY_TITLE: 'PENAL / VANTAGEM     !penal !pen !vantagem !vant',
+    PENALTY_TITLE: 'PENAL / VANTAGEM     !𝚙𝚎𝚗𝚊𝚕 !𝚙𝚎𝚗 !𝚟𝚊𝚗𝚝𝚊𝚐𝚎𝚖 !𝚟𝚊𝚗𝚝',
     PENALTY: [
-      _1 + 'Penal é como se chama "falta" no Rugby.',
+      _1 + '• 𝖯𝖾𝗇𝖺𝗅 é 𝖼𝗈𝗆𝗈 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 "𝗳𝗮𝗹𝘁𝗮" 𝗇𝗈 𝖱𝗎𝗀𝖻𝗒.',
       _1 +
-        'Quando um Impedimento é cometido, o time que sofreu a infração tem até 5 segundos para aceitar o Penal.',
+        '• 𝖰𝗎𝖺𝗇𝖽𝗈 𝗎𝗆 𝖨𝗆𝗉𝖾𝖽𝗂𝗆𝖾𝗇𝗍𝗈 é 𝖼𝗈𝗆𝖾𝗍𝗂𝖽𝗈, 𝗈 𝗍𝗂𝗆𝖾 𝗊𝗎𝖾 𝗌𝗈𝖿𝗋𝖾𝗎 𝖺 𝗂𝗇𝖿𝗋𝖺çã𝗈 𝗍𝖾𝗆 𝖺𝗍é 𝟱 𝘀𝗲𝗴𝘂𝗻𝗱𝗼𝘀 𝗽𝗮𝗿𝗮 𝗮𝗰𝗲𝗶𝘁𝗮𝗿 𝗼 𝗣𝗲𝗻𝗮𝗹.',
       _1 +
-        'Se dentro dos 5 segundos o time que sofreu a infração usar o comando `p` ou o time infrator pontuar, a jogada é anulada e é marcado o PENAL. ⏸️',
+        '• 𝖲𝖾 𝖽𝖾𝗇𝗍𝗋𝗈 𝖽𝗈𝗌 𝟧 𝗌𝖾𝗀𝗎𝗇𝖽𝗈𝗌 𝗈 𝗍𝗂𝗆𝖾 𝗊𝗎𝖾 𝗌𝗈𝖿𝗋𝖾𝗎 𝖺 𝗂𝗇𝖿𝗋𝖺çã𝗈 𝗎𝗌𝖺𝗋 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 `𝚙` 𝗈𝗎 𝗈 𝗍𝗂𝗆𝖾 𝗂𝗇𝖿𝗋𝖺𝗍𝗈𝗋 𝗉𝗈𝗇𝗍𝗎𝖺𝗋, 𝖺 𝗃𝗈𝗀𝖺𝖽𝖺 é 𝖺𝗇𝗎𝗅𝖺𝖽𝖺 𝖾 é 𝗆𝖺𝗋𝖼𝖺𝖽𝗈 𝗈 𝗣𝗘𝗡𝗔𝗟. ⏸️',
       _1 +
-        'Se o time que sofreu a infração usar o comando `v` ou esperar os 5 segundos, é dada VANTAGEM e o jogo continua normalmente. ⏩',
+        '• 𝖲𝖾 𝗈 𝗍𝗂𝗆𝖾 𝗊𝗎𝖾 𝗌𝗈𝖿𝗋𝖾𝗎 𝖺 𝗂𝗇𝖿𝗋𝖺çã𝗈 𝗎𝗌𝖺𝗋 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 `𝚟` 𝗈𝗎 𝖾𝗌𝗉𝖾𝗋𝖺𝗋 𝗈𝗌 𝟧 𝗌𝖾𝗀𝗎𝗇𝖽𝗈𝗌, é 𝖽𝖺𝖽𝖺 𝗩𝗔𝗡𝗧𝗔𝗚𝗘𝗠 𝖾 𝗈 𝗃𝗈𝗀𝗈 𝖼𝗈𝗇𝗍𝗂𝗇𝗎𝖺 𝗇𝗈𝗋𝗆𝖺𝗅𝗆𝖾𝗇𝗍𝖾. ⏩',
     ],
     POST_RULES: [
       `O ${GAME_TITLE} é um jogo intuitivo e dinâmico. As regras podem ser pegas em pouco tempo com a prática.`,

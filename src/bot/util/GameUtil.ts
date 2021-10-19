@@ -402,7 +402,7 @@ class GameUtil {
 
     if (team) {
       this.gameService.chatService.sendBoldAnnouncement(
-        `O ${team.name} optou por VANTAGEM!   Segue o jogo!   ⏩`,
+        `VANTAGEM AUTOMÁTICA para o ${team.name}!   Segue o jogo!   ⏩`,
         2,
         undefined,
         colors.green,

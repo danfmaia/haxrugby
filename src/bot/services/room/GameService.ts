@@ -873,6 +873,7 @@ export default class GameService implements IGameService {
         stadium = this.map.blueStadiums.getPenaltyKick(this.penaltyPosition, true);
       }
 
+      this.isPenalty = false;
       this.handleRestartOrFinishing(stadium, () => {
         this.isPenaltyKick = offendedTeam;
       });

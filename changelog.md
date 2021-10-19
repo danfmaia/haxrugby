@@ -3,9 +3,10 @@
 ### v0.12c:
 
 - **Alterado o padrão no pós-impedimento de Penal para Vantagem.**
-  - Agora os times devem usar o comando `p` para aceitar o Penal. Se em 5 segundos nenhuma escolha for feita, será concedida Vantagem automática.
+  - Agora os times devem usar o comando `p` para aceitar o Penal. Se dentro de 5 segundos nenhuma escolha for feita, será concedida _Vantagem Automática_.
 - Adicionado um único comando para explicar o Penal e a Vantagem (`!penal` ou `!vantagem`).
 - Corrigido erro do tempo da conversão acabar mesmo depois de realizado o disparo.
+- Corrigido comando `v` podendo ser utilizado mesmo depois de aceitar o Penal.
 
 ### v0.12b:
 
