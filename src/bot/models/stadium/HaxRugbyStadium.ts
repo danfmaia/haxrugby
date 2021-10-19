@@ -322,8 +322,8 @@ class HaxRugbyStadium {
        *  DRAWING LINES
        *
        *  TODO 1: soften the code
-       *  TODO 2: replace Rugby Union with HaxRugby
-       *  TODO 3: bring lines closer to field in small
+       *  TODO 2: [DONE] replace Rugby Union with HaxRugby
+       *  TODO 3: bring drawings closer to field in small
        */
 
       // "JP's" drawing lines
@@ -334,8 +334,8 @@ class HaxRugbyStadium {
       /* 143 */ { x: -10, y: -310, trait: 'fadeLine' },
       /* 144 */ { x: -10, y: -340, curve: 230, trait: 'fadeLine' },
       /* 145 */ { x: -10, y: -325, curve: 230, trait: 'fadeLine' },
-      /* 146 */ { x: 5, y: -345, curve: 0, trait: 'fadeLine' },
-      /* 147 */ { x: 5, y: -335, curve: 0, trait: 'fadeLine' },
+      /* 146 */ { x: 7, y: -345, curve: 0, trait: 'fadeLine' },
+      /* 147 */ { x: 7, y: -335, curve: 0, trait: 'fadeLine' },
       /* 148 */ { x: 25, y: -326, curve: -120, trait: 'fadeLine' },
       /* 149 */ { x: 10, y: -324, curve: -120, trait: 'fadeLine' },
       /* 150 */ { x: 17.5, y: -320, curve: 0, trait: 'fadeLine' },
@@ -352,51 +352,83 @@ class HaxRugbyStadium {
       /* 158 */ { x: 0, y: 0, trait: 'null' },
       /* 159 */ { x: 0, y: 0, trait: 'null' },
 
-      // "Rugby Union" drawing lines
+      // "Rugby" drawing vertexes - part 1
 
-      /* 160 */ { x: -95, y: 310, curve: 230, trait: 'fadeLine' },
-      /* 161 */ { x: -95, y: 340, trait: 'fadeLine' },
-      /* 162 */ { x: -95, y: 325, curve: 230, trait: 'fadeLine' },
-      /* 163 */ { x: -86, y: 324, curve: 0, trait: 'fadeLine' },
-      /* 164 */ { x: -80, y: 340, curve: 0, trait: 'fadeLine' },
-      /* 165 */ { x: -75, y: 335, curve: -110, trait: 'fadeLine' },
-      /* 166 */ { x: -60, y: 335, trait: 'fadeLine', curve: -110 },
-      /* 167 */ { x: -60, y: 340, trait: 'fadeLine' },
-      /* 168 */ { x: -40, y: 320, trait: 'fadeLine' },
-      /* 169 */ { x: -40, y: 343, trait: 'fadeLine', curve: -110 },
-      /* 170 */ { x: -55, y: 343, trait: 'fadeLine', curve: -110 },
-      /* 171 */ { x: -35, y: 340, curve: 0, trait: 'fadeLine' },
-      /* 172 */ { x: -35, y: 305, curve: 0, trait: 'fadeLine' },
-      /* 173 */ { x: -35, y: 325, curve: 290, trait: 'fadeLine' },
-      /* 174 */ { x: -15, y: 320, curve: 0, trait: 'fadeLine' },
-      /* 175 */ { x: -7.5, y: 335, curve: 0, trait: 'fadeLine' },
-      /* 176 */ { x: 0, y: 320, trait: 'fadeLine' },
-      /* 177 */ { x: -15, y: 350, trait: 'fadeLine' },
-      /* 178 */ { x: 10, y: 310, trait: 'fadeLine' },
-      /* 179 */ { x: 10, y: 335, trait: 'fadeLine', curve: -110 },
-      /* 180 */ { x: 25, y: 335, trait: 'fadeLine', curve: -110 },
-      /* 181 */ { x: 25, y: 310, trait: 'fadeLine' },
-      /* 182 */ { x: 30, y: 320, trait: 'fadeLine' },
-      /* 183 */ { x: 30, y: 340, trait: 'fadeLine' },
-      /* 184 */ { x: -40, y: 325, curve: -290, trait: 'fadeLine' },
-      /* 185 */ { x: -35, y: 335, curve: 290, trait: 'fadeLine' },
-      /* 186 */ { x: 30, y: 325, trait: 'fadeLine', curve: 110 },
-      /* 187 */ { x: 45, y: 325, trait: 'fadeLine', curve: 110 },
-      /* 188 */ { x: 45, y: 340, trait: 'fadeLine' },
-      /* 189 */ { x: 50, y: 320, trait: 'fadeLine' },
-      /* 190 */ { x: 50, y: 340, trait: 'fadeLine' },
-      /* 191 */ { x: 49, y: 314, trait: 'fadeLine' },
-      /* 192 */ { x: 51, y: 314, trait: 'fadeLine' },
-      /* 193 */ { x: 65, y: 320, curve: 180, trait: 'fadeLine' },
-      /* 194 */ { x: 65, y: 340, curve: 180, trait: 'fadeLine' },
-      /* 195 */ { x: 80, y: 320, trait: 'fadeLine' },
-      /* 196 */ { x: 80, y: 340, trait: 'fadeLine' },
-      /* 197 */ { x: 80, y: 325, trait: 'fadeLine', curve: 110 },
-      /* 198 */ { x: 95, y: 325, trait: 'fadeLine', curve: 110 },
-      /* 199 */ { x: 95, y: 340, trait: 'fadeLine' },
-      /* 200 */ { x: -75, y: 320, curve: 0, trait: 'fadeLine' },
-      /* 201 */ { x: -60, y: 320, trait: 'fadeLine' },
-      /* 202 */ { x: -40, y: 335, curve: -290, trait: 'fadeLine' },
+      /* 160 */ { x: -17, y: 310, curve: 230, trait: 'fadeLine' },
+      /* 161 */ { x: -17, y: 340, trait: 'fadeLine' },
+      /* 162 */ { x: -17, y: 325, curve: 230, trait: 'fadeLine' },
+      /* 163 */ { x: -8, y: 324, curve: 0, trait: 'fadeLine' },
+      /* 164 */ { x: -2, y: 340, curve: 0, trait: 'fadeLine' },
+      /* 165 */ { x: 3, y: 335, curve: -110, trait: 'fadeLine' },
+      /* 166 */ { x: 18, y: 335, trait: 'fadeLine', curve: -110 },
+      /* 167 */ { x: 18, y: 340, trait: 'fadeLine' },
+      /* 168 */ { x: 38, y: 320, trait: 'fadeLine' },
+      /* 169 */ { x: 38, y: 343, trait: 'fadeLine', curve: -110 },
+      /* 170 */ { x: 23, y: 343, trait: 'fadeLine', curve: -110 },
+      /* 171 */ { x: 43, y: 340, curve: 0, trait: 'fadeLine' },
+      /* 172 */ { x: 43, y: 305, curve: 0, trait: 'fadeLine' },
+      /* 173 */ { x: 43, y: 325, curve: 290, trait: 'fadeLine' },
+      /* 174 */ { x: 63, y: 320, curve: 0, trait: 'fadeLine' },
+      /* 175 */ { x: 70.5, y: 335, curve: 0, trait: 'fadeLine' },
+      /* 176 */ { x: 78, y: 320, trait: 'fadeLine' },
+      /* 177 */ { x: 63, y: 350, trait: 'fadeLine' },
+
+      // empty drawing vertexes
+
+      /* 178 */ { x: 10, y: 310, trait: 'null' },
+      /* 179 */ { x: 10, y: 335, trait: 'null', curve: -110 },
+      /* 180 */ { x: 25, y: 335, trait: 'null', curve: -110 },
+      /* 181 */ { x: 25, y: 310, trait: 'null' },
+      /* 182 */ { x: 30, y: 320, trait: 'null' },
+      /* 183 */ { x: 30, y: 340, trait: 'null' },
+
+      // "Rugby" drawing vertexes - part 2
+
+      /* 184 */ { x: 38, y: 325, curve: -290, trait: 'fadeLine' },
+      /* 185 */ { x: 43, y: 335, curve: 290, trait: 'fadeLine' },
+
+      // empty drawing vertexes
+
+      /* 186 */ { x: 30, y: 325, trait: 'null', curve: 110 },
+      /* 187 */ { x: 45, y: 325, trait: 'null', curve: 110 },
+      /* 188 */ { x: 45, y: 340, trait: 'null' },
+      /* 189 */ { x: 50, y: 320, trait: 'null' },
+      /* 190 */ { x: 50, y: 340, trait: 'null' },
+      /* 191 */ { x: 49, y: 314, trait: 'null' },
+      /* 192 */ { x: 51, y: 314, trait: 'null' },
+      /* 193 */ { x: 65, y: 320, curve: 180, trait: 'null' },
+      /* 194 */ { x: 65, y: 340, curve: 180, trait: 'null' },
+      /* 195 */ { x: 80, y: 320, trait: 'null' },
+      /* 196 */ { x: 80, y: 340, trait: 'null' },
+      /* 197 */ { x: 80, y: 325, trait: 'null', curve: 110 },
+      /* 198 */ { x: 95, y: 325, trait: 'null', curve: 110 },
+      /* 199 */ { x: 95, y: 340, trait: 'null' },
+
+      // "Rugby" drawing vertexes - part 3
+
+      /* 200 */ { x: 3, y: 320, curve: 0, trait: 'fadeLine' },
+      /* 201 */ { x: 18, y: 320, trait: 'fadeLine' },
+      /* 202 */ { x: 38, y: 335, curve: -290, trait: 'fadeLine' },
+
+      // "Hax" drawing vertexes
+
+      /* 203 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 310 },
+      /* 204 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 325 },
+      /* 205 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 340 },
+      /* 206 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 310 },
+      /* 207 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 325 },
+      /* 208 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 340 },
+      /* 209 */ { bCoef: 0, trait: 'fadeLine', x: -56, y: 325, curve: 110 },
+      /* 210 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 325, curve: 0 },
+      /* 211 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 328, curve: 0 },
+      /* 212 */ { bCoef: 0, trait: 'fadeLine', x: -53, y: 330, curve: 0 },
+      /* 213 */ { bCoef: 0, trait: 'fadeLine', x: -48, y: 338 },
+      /* 214 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 336, curve: -100 },
+      /* 215 */ { bCoef: 0, trait: 'fadeLine', x: -40, y: 338, curve: -100 },
+      /* 216 */ { bCoef: 0, trait: 'fadeLine', x: -37, y: 320 },
+      /* 217 */ { bCoef: 0, trait: 'fadeLine', x: -22, y: 340 },
+      /* 218 */ { bCoef: 0, trait: 'fadeLine', x: -37, y: 340 },
+      /* 219 */ { bCoef: 0, trait: 'fadeLine', x: -22, y: 320 },
     ];
 
     this.segments = [
@@ -520,7 +552,7 @@ class HaxRugbyStadium {
       { curve: 80, vis: true, v0: 150, v1: 151, trait: 'fadeLine' },
       { curve: 120, vis: true, v0: 151, v1: 152, y: -312, trait: 'fadeLine' },
 
-      // "Rugby Union" drawing lines
+      // "Rugby" drawing lines
 
       { vis: true, v0: 160, v1: 161, trait: 'fadeLine' },
       { vis: true, v0: 160, v1: 162, curve: 230, trait: 'fadeLine' },
@@ -536,20 +568,20 @@ class HaxRugbyStadium {
       { curve: 290, vis: true, v0: 173, v1: 185, trait: 'fadeLine' },
       { curve: 0, vis: true, v0: 174, v1: 175, trait: 'fadeLine' },
       { curve: 0, vis: true, v0: 176, v1: 177, trait: 'fadeLine' },
-      { vis: true, v0: 178, v1: 179, trait: 'fadeLine' },
-      { vis: true, v0: 181, v1: 180, trait: 'fadeLine' },
-      { vis: true, v0: 183, v1: 182, trait: 'fadeLine' },
-      { vis: true, v0: 188, v1: 187, trait: 'fadeLine' },
-      { vis: true, v0: 190, v1: 189, x: 50, trait: 'fadeLine' },
-      { vis: true, v0: 193, v1: 194, curve: 180, trait: 'fadeLine' },
-      { vis: true, v0: 196, v1: 195, x: 80, trait: 'fadeLine' },
-      { vis: true, v0: 199, v1: 198, x: 95, trait: 'fadeLine' },
-      { vis: true, v0: 179, v1: 180, curve: -110, trait: 'fadeLine' },
-      { curve: 110, vis: true, v0: 186, v1: 187, trait: 'fadeLine' },
-      { curve: 180, vis: true, v0: 191, v1: 192, trait: 'fadeLine' },
-      { curve: -180, vis: true, v0: 191, v1: 192, trait: 'fadeLine' },
-      { curve: -180, vis: true, v0: 193, v1: 194, trait: 'fadeLine' },
-      { vis: true, v0: 197, v1: 198, curve: 110, trait: 'fadeLine' },
+
+      // "Hax" drawing lines
+
+      { vis: true, trait: 'fadeLine', v0: 203, v1: 205 },
+      { vis: true, trait: 'fadeLine', v0: 204, v1: 207 },
+      { vis: true, trait: 'fadeLine', v0: 206, v1: 208 },
+      { vis: true, trait: 'fadeLine', v0: 209, v1: 210, curve: 110 },
+      { curve: 0, vis: true, trait: 'fadeLine', v0: 211, v1: 212 },
+      { curve: -175, vis: true, trait: 'fadeLine', v0: 212, v1: 213 },
+      { curve: -20, vis: true, trait: 'fadeLine', v0: 213, v1: 214 },
+      { curve: 0, vis: true, trait: 'fadeLine', v0: 210, v1: 214 },
+      { curve: -100, vis: true, trait: 'fadeLine', v0: 214, v1: 215 },
+      { vis: true, trait: 'fadeLine', v0: 216, v1: 217 },
+      { vis: true, trait: 'fadeLine', v0: 218, v1: 219 },
     ];
 
     if (!convProps) {

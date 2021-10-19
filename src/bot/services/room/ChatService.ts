@@ -197,13 +197,13 @@ export default class ChatService implements IChatService {
       0,
       playerId,
     );
-    this.sendNormalAnnouncement('𝐴𝑝𝑒𝑛𝑎𝑠 𝑎𝑑𝑚𝑖𝑛𝑠 𝑝𝑜𝑑𝑒𝑚 𝑢𝑠𝑎𝑟 𝑒𝑠𝑠𝑒 𝑐𝑜𝑚𝑎𝑛𝑑𝑜.', 0, playerId);
+    this.sendNormalAnnouncement('    𝐴𝑝𝑒𝑛𝑎𝑠 𝑎𝑑𝑚𝑖𝑛𝑠 𝑝𝑜𝑑𝑒𝑚 𝑢𝑠𝑎𝑟 𝑒𝑠𝑠𝑒 𝑐𝑜𝑚𝑎𝑛𝑑𝑜.', 0, playerId);
     this.sendBlankLine(playerId);
   }
 
   public sendMainPromoLinks(sound: number = 2, playerId?: number): void {
-    this.sendSinglePromoLink(LinkEnum.RULES, sound, playerId);
     this.sendSinglePromoLink(LinkEnum.DISCORD, 0, playerId);
+    this.sendSinglePromoLink(LinkEnum.RULES, sound, playerId);
     // this.sendSinglePromoLink(LinkEnum.FACEBOOK, 0, playerId);
   }
 

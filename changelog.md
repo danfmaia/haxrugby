@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v0.12b:
+
+- Substituído o desenho de campo "Rugby Union" por "HaxRugby".
+- Leve ajuste no desenho de campo "JP's".
+
 ### v0.12a:
 
 - Jogadores que cometem Impedimento agora recebem um emoji diferenciado (⚠️).
