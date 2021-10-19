@@ -5,10 +5,10 @@ export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟮';
 const APP_PATCH_VERSION = '𝗮';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
-// export const DISCORD_LINK = 'discord.io/HaxRugby';
-export const LINK_DISCORD = 'discord.gg/WBcmrk8G';
+export const LINK_DISCORD = 'discord.io/HaxRugby';
+// export const LINK_DISCORD = 'discord.gg/WBcmrk8G';
 export const LINK_DISCORD_RULES =
-  'https://discord.com/channels/888810050041303050/891749504938815538/898839813673877564';
+  'discord.com/channels/888810050041303050/891749504938815538/898839813673877564';
 
 export const MINUTE_IN_MS = 60 * 1000;
 

@@ -7,6 +7,7 @@ import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 import { IGameService } from '../services/room/IGameService';
+import Util from './Util';
 
 class GameUtil {
   constructor(public room: IHaxRugbyRoom, public gameService: IGameService) {}
@@ -90,6 +91,29 @@ class GameUtil {
 
       this.room.setPlayerDiscProperties(oldPlayer.id, newPlayerProps);
       this.room.setPlayerDiscProperties(player.id, oldPlayerProps);
+    }
+  }
+
+  public cancelEmptyMatch(): void {
+    const playersOnTeams_1 = this.room
+      .getPlayerList()
+      .filter((_player) => _player.team !== TeamID.Spectators);
+
+    if (playersOnTeams_1.length === 0) {
+      Util.timeout(15000, () => {
+        const playersOnTeams_2 = this.room
+          .getPlayerList()
+          .filter((_player) => _player.team !== TeamID.Spectators);
+
+        if (this.gameService.isMatchInProgress && playersOnTeams_2.length === 0) {
+          this.gameService.chatService.sendBoldAnnouncement(
+            `Partida cancelada automaticamente por ausência de jogadores.`,
+            2,
+          );
+          Util.logWithTime('Partida cancelada automaticamente por ausência de jogadores.');
+          this.gameService.cancelMatch();
+        }
+      });
     }
   }
 

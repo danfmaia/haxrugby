@@ -5,6 +5,7 @@
 - Jogadores que cometem Impedimento agora recebem um emoji diferenciado (⚠️).
 - Corrigido bug de ser desconectado após kickar ou banir alguém, mesmo sendo SuperAdmin.
 - Melhorias nas mensagens do bot referentes ao cargo de SuperAdmin.
+- Corrigido partida não sendo cancelada devido a ausência de jogadores durante 15 segundos.
 
 ### v0.12:
 

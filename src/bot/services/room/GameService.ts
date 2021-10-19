@@ -222,6 +222,10 @@ export default class GameService implements IGameService {
     this.unregisterPlayerFromMatchData(player.id);
     this.teams.removePlayerFromPositions(player);
     this.teams.fillAllPositions(this.room.getPlayerList());
+
+    if (this.isMatchInProgress) {
+      this.util.cancelEmptyMatch();
+    }
   }
 
   public handlePlayerTeamChange(player: HaxRugbyPlayer): void {
@@ -235,28 +239,8 @@ export default class GameService implements IGameService {
       this.room.setPlayerTeam(player.id, TeamID.Spectators);
     }
 
-    // cancel match if both teams are empty for 15s
     if (this.isMatchInProgress) {
-      let playersOnTeams = this.room
-        .getPlayerList()
-        .filter((player) => player.team !== TeamID.Spectators);
-
-      if (playersOnTeams.length === 0) {
-        Util.timeout(15000, () => {
-          playersOnTeams = this.room
-            .getPlayerList()
-            .filter((player) => player.team !== TeamID.Spectators);
-
-          if (playersOnTeams.length === 0) {
-            this.chatService.sendBoldAnnouncement(
-              `Partida cancelada automaticamente por ausência de jogadores.`,
-              2,
-            );
-            Util.logWithTime('Partida cancelada automaticamente por ausência de jogadores.');
-            this.cancelMatch();
-          }
-        });
-      }
+      this.util.cancelEmptyMatch();
     }
   }
 
@@ -426,6 +410,8 @@ export default class GameService implements IGameService {
     }
     this.chatService.sendNormalAnnouncement(Util.getDurationString(this.matchConfig.timeLimit));
     this.chatService.sendNormalAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
+
+    this.util.cancelEmptyMatch();
   }
 
   private finishMatch() {
@@ -475,6 +461,10 @@ export default class GameService implements IGameService {
   }
 
   public cancelMatch(player?: HaxRugbyPlayer, restartMatch?: () => void): void {
+    if (this.isMatchInProgress === false) {
+      return;
+    }
+
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
     this.room.pauseGame(true);
