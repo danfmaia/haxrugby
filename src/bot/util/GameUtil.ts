@@ -171,7 +171,7 @@ class GameUtil {
 
       bluePlayers.forEach((player) => {
         if (
-          ballPosition.x > -this.gameService.map.tryLineX &&
+          ballPosition.x > -this.gameService.map.tryLineX ||
           player.position.x > -this.gameService.map.tryLineXForPlayer
         ) {
           // clear opposing player inside & offside
@@ -226,7 +226,7 @@ class GameUtil {
 
       redPlayers.forEach((player) => {
         if (
-          ballPosition.x < this.gameService.map.tryLineX &&
+          ballPosition.x < this.gameService.map.tryLineX ||
           player.position.x < this.gameService.map.tryLineXForPlayer
         ) {
           // clear opposing player inside & offside
@@ -264,7 +264,7 @@ class GameUtil {
 
     if (team === TeamID.RedTeam) {
       if (
-        player.position.x >= -(this.gameService.map.areaLineX + PLAYER_RADIUS) &&
+        player.position.x > -(this.gameService.map.areaLineX - PLAYER_RADIUS) &&
         player.position.x < this.gameService.map.tryLineXForPlayer
       ) {
         const offsideLineX = this.getOffsideLineX(originX, opposingPlayers);
@@ -276,7 +276,7 @@ class GameUtil {
 
     if (team === TeamID.BlueTeam) {
       if (
-        player.position.x <= this.gameService.map.areaLineX + PLAYER_RADIUS &&
+        player.position.x < this.gameService.map.areaLineX - PLAYER_RADIUS &&
         player.position.x > -this.gameService.map.tryLineXForPlayer
       ) {
         const offsideLineX = this.getOffsideLineX(originX, opposingPlayers);

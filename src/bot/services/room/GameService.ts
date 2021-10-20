@@ -834,7 +834,7 @@ export default class GameService implements IGameService {
           );
         } else {
           this.chatService.sendBoldAnnouncement(
-            `O ${offendedTeam.name} time tem 5 segundos para aceitar o Penal.`,
+            `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
             0,
             player.id,
             offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
