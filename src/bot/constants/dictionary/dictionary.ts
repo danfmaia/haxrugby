@@ -27,9 +27,9 @@ const ptBr: DictionaryKeys = {
       title: 'TRY     !try',
       longDescription: [
         _1 +
-          'É o objetivo mais importante do rugby. É feito CONDUZINDO a bola no in-goal adversário.',
-        _1 + 'O in-goal é a região do campo atrás da linha de gol de cada time.',
-        _1 + 'O Try vale 5 pontos e dá direito a uma CONVERSÃO DE 2 PONTOS.',
+          '• É 𝗈 𝗈𝖻𝗃𝖾𝗍𝗂𝗏𝗈 𝗺𝗮𝗶𝘀 𝗶𝗺𝗽𝗼𝗿𝘁𝗮𝗻𝘁𝗲 𝖽𝗈 𝗋𝗎𝗀𝖻𝗒. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖺 𝖻𝗈𝗅𝖺 𝗇𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅 𝖺𝖽𝗏𝖾𝗋𝗌á𝗋𝗂𝗈.',
+        _1 + '• 𝖮 𝗂𝗇-𝗀𝗈𝖺𝗅 é 𝖺 𝗋𝖾𝗀𝗂ã𝗈 𝖽𝗈 𝖼𝖺𝗆𝗉𝗈 𝖺𝗍𝗋á𝗌 𝖽𝖺 𝗅𝗂𝗇𝗁𝖺 𝖽𝖾 𝗀𝗈𝗅 𝖽𝖾 𝖼𝖺𝖽𝖺 𝗍𝗂𝗆𝖾.',
+        _1 + '• 𝖮 𝖳𝗋𝗒 𝗏𝖺𝗅𝖾 𝟱 𝗽𝗼𝗻𝘁𝗼𝘀 𝖾 𝖽á 𝖽𝗂𝗋𝖾𝗂𝗍𝗈 𝖺 𝗎𝗆𝖺 𝗖𝗢𝗡𝗩𝗘𝗥𝗦Ã𝗢 𝗗𝗘 𝟮 𝗣𝗢𝗡𝗧𝗢𝗦.',
       ],
     },
     DROP_GOAL: {
@@ -37,10 +37,10 @@ const ptBr: DictionaryKeys = {
         '• 𝗗𝗥𝗢𝗣 𝗚𝗢𝗔𝗟 - 𝖵𝖺𝗅𝖾 𝟯 𝗽𝗼𝗻𝘁𝗼𝘀 𝖾 é 𝖿𝖾𝗂𝗍𝗈 𝖺𝖼𝖾𝗋𝗍𝖺𝗇𝖽𝗈 𝗎𝗆 𝗖𝗛𝗨𝗧𝗘 𝗔É𝗥𝗘𝗢 𝗇𝗈 𝗀𝗈𝗅 𝖺𝖽𝗏𝖾𝗋𝗌á𝗋𝗂𝗈. 𝘜𝘴𝘦 !𝚍𝚛𝚘𝚙 𝘦 !𝚊𝚎𝚛𝚎𝚘 𝘱𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘥𝘦𝘵𝘢𝘭𝘩𝘦𝘴.',
       title: 'DROP GOAL (DG)     !drop !dg !gol',
       longDescription: [
-        _1 + 'É o objetivo secundário do rugby. Vale 3 pontos.',
+        _1 + '• É 𝗈 𝗈𝖻𝗃𝖾𝗍𝗂𝗏𝗈 𝗌𝖾𝖼𝗎𝗇𝖽á𝗋𝗂𝗈 𝖽𝗈 𝗋𝗎𝗀𝖻𝗒. 𝖵𝖺𝗅𝖾 𝟯 𝗽𝗼𝗻𝘁𝗼𝘀.',
         _1 +
-          'Só pode ser feito de fora da pequena área e com um CHUTE AÉREO (use !air para mais detalhes).',
-        _1 + 'Não é possível fazer um Drop Goal contra.',
+          '• 𝖲ó 𝗉𝗈𝖽𝖾 𝗌𝖾𝗋 𝖿𝖾𝗂𝗍𝗈 𝗱𝗲 𝗳𝗼𝗿𝗮 𝗱𝗮 𝗽𝗲𝗾𝘂𝗲𝗻𝗮 á𝗿𝗲𝗮 𝖾 𝖼𝗈𝗆 𝗎𝗆 𝗖𝗛𝗨𝗧𝗘 𝗔É𝗥𝗘𝗢 (𝘶𝘴𝘦 !𝚊𝚒𝚛 𝘱𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘥𝘦𝘵𝘢𝘭𝘩𝘦𝘴).',
+        _1 + '• 𝖭ã𝗈 é 𝗉𝗈𝗌𝗌í𝗏𝖾𝗅 𝖿𝖺𝗓𝖾𝗋 𝗎𝗆 𝖣𝗋𝗈𝗉 𝖦𝗈𝖺𝗅 𝖼𝗈𝗇𝗍𝗋𝖺.',
       ],
     },
     AIR_KICK: {
@@ -48,36 +48,36 @@ const ptBr: DictionaryKeys = {
       title: 'CHUTE AÉREO (AIR)     !air !aereo',
       longDescription: [
         _1 +
-          'É um chute mais forte (1,2x no small e 1,3x no normal), que PASSA POR CIMA dos jogadores.',
-        _1 + 'Para tentar um Chute Aéreo, conduza a bola e em seguida chute-a.',
+          '• É 𝗎𝗆 𝗰𝗵𝘂𝘁𝗲 𝗺𝗮𝗶𝘀 𝗳𝗼𝗿𝘁𝗲 (𝟣,𝟤𝗑 𝗇𝗈 𝗌𝗆𝖺𝗅𝗅 𝖾 𝟣,𝟥𝗑 𝗇𝗈 𝗇𝗈𝗋𝗆𝖺𝗅), 𝗊𝗎𝖾 𝗣𝗔𝗦𝗦𝗔 𝗣𝗢𝗥 𝗖𝗜𝗠𝗔 𝖽𝗈𝗌 𝗃𝗈𝗀𝖺𝖽𝗈𝗋𝖾𝗌.',
+        _1 + '• 𝖯𝖺𝗋𝖺 𝗍𝖾𝗇𝗍𝖺𝗋 𝗎𝗆 𝖢𝗁𝗎𝗍𝖾 𝖠é𝗋𝖾𝗈, 𝗰𝗼𝗻𝗱𝘂𝘇𝗮 𝗮 𝗯𝗼𝗹𝗮 𝗲 𝗲𝗺 𝘀𝗲𝗴𝘂𝗶𝗱𝗮 𝗰𝗵𝘂𝘁𝗲-𝗮.',
         _1 +
-          'Se nenhum jogador tocar na bola por 0,2s, ela então se tornará "Aérea". A Bola Aérea dura 1,55s.',
-        _1 + 'O Drop Goal só será marcado se a bola atravessar o gol com o status de Aérea.',
-        _1 + 'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
+          '• 𝖲𝖾 𝗇𝖾𝗇𝗁𝗎𝗆 𝗃𝗈𝗀𝖺𝖽𝗈𝗋 𝗍𝗈𝖼𝖺𝗋 𝗇𝖺 𝖻𝗈𝗅𝖺 𝗉𝗈𝗋 𝟬,𝟮𝘀, 𝖾𝗅𝖺 𝖾𝗇𝗍ã𝗈 𝗌𝖾 𝗍𝗈𝗋𝗇𝖺𝗋á "𝖠é𝗋𝖾𝖺". 𝖠 𝖡𝗈𝗅𝖺 𝖠é𝗋𝖾𝖺 𝖽𝗎𝗋𝖺 𝟭,𝟱𝟱𝘀 𝖾 é 𝗌𝗂𝗇𝖺𝗅𝗂𝗓𝖺𝖽𝖺 𝖼𝗈𝗆 𝖺 𝗰𝗼𝗿 𝗰𝗶𝗻𝘇𝗮.',
+        _1 + '• 𝖮 𝖣𝗋𝗈𝗉 𝖦𝗈𝖺𝗅 𝗌ó 𝗌𝖾𝗋á 𝗆𝖺𝗋𝖼𝖺𝖽𝗈 𝗌𝖾 𝖺 𝖻𝗈𝗅𝖺 𝖺𝗍𝗋𝖺𝗏𝖾𝗌𝗌𝖺𝗋 𝗈 𝗀𝗈𝗅 𝖼𝗈𝗆 𝗈 𝗌𝗍𝖺𝗍𝗎𝗌 𝖽𝖾 𝖠é𝗋𝖾𝖺.',
+        _1 + '• 𝘜𝘴𝘦 𝘰 𝘤𝘰𝘮𝘢𝘯𝘥𝘰 `𝚊` 𝘱𝘢𝘳𝘢 𝘢𝘵𝘪𝘷𝘢𝘳/𝘥𝘦𝘴𝘢𝘵𝘪𝘷𝘢𝘳 𝘴𝘦𝘶 𝘊𝘩𝘶𝘵𝘦 𝘈é𝘳𝘦𝘰.',
       ],
     },
     SAFETY: {
       shortDescription:
-        '• 𝗦𝗔𝗙𝗘𝗧𝗬 - É 𝖺 𝗃𝗈𝗀𝖺𝖽𝖺 𝖽𝖾 𝗌𝖾𝗀𝗎𝗋𝖺𝗇ç𝖺 𝖽𝖺 𝖽𝖾𝖿𝖾𝗌𝖺. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖺 𝖻𝗈𝗅𝖺 𝗇𝗈 𝗉𝗋ó𝗉𝗋𝗂𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅. 𝘜𝘴𝘦 !𝚜𝚊𝚏𝚎𝚝𝚢 𝘱𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘥𝘦𝘵𝘢𝘭𝘩𝘦𝘴.',
+        '• 𝗦𝗔𝗙𝗘𝗧𝗬 - 𝖩𝗈𝗀𝖺𝖽𝖺 𝖽𝖾 𝗌𝖾𝗀𝗎𝗋𝖺𝗇ç𝖺 𝖽𝖺 𝖽𝖾𝖿𝖾𝗌𝖺. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖻𝗈𝗅𝖺 𝗻ã𝗼-𝗮𝗺𝗮𝗿𝗲𝗹𝗮 𝗇𝗈 𝗉𝗋ó𝗉𝗋𝗂𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅. 𝘜𝘴𝘦 !𝗌𝖿 𝘱𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘥𝘦𝘵𝘢𝘭𝘩𝘦𝘴.',
       title: 'SAFETY (SF)     !sf !safety',
       longDescription: [
-        _1 + 'É a jogada de segurança da defesa. É feito CONDUZINDO a bola no próprio in-goal.',
         _1 +
-          'O Safety só é possível se o último toque na bola antes dela entrar no in-goal for do ataque.',
-        _1 + 'O Safety concede à defesa um tiro de reinício no local da última condução de bola.',
+          '• É 𝖺 𝗃𝗈𝗀𝖺𝖽𝖺 𝖽𝖾 𝗌𝖾𝗀𝗎𝗋𝖺𝗇ç𝖺 𝖽𝖺 𝖽𝖾𝖿𝖾𝗌𝖺. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖻𝗈𝗅𝖺 𝗻ã𝗼-𝗮𝗺𝗮𝗿𝗲𝗹𝗮 𝗇𝗈 𝗉𝗋ó𝗉𝗋𝗂𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅.',
+        _1 +
+          '• 𝖮 𝖲𝖺𝖿𝖾𝗍𝗒 𝗌ó é 𝗉𝗈𝗌𝗌í𝗏𝖾𝗅 𝗌𝖾 𝖺 𝖻𝗈𝗅𝖺 𝗻ã𝗼 𝗲𝘀𝘁𝗶𝘃𝗲𝗿 𝗮𝗺𝗮𝗿𝗲𝗹𝗮, 𝗈𝗎 𝗌𝖾𝗃𝖺, 𝗌𝖾 𝗈 ú𝗅𝗍𝗂𝗆𝗈 𝗍𝗈𝗊𝗎𝖾 𝗇𝖺 𝖻𝗈𝗅𝖺 𝖺𝗇𝗍𝖾𝗌 𝖽𝖾𝗅𝖺 𝖾𝗇𝗍𝗋𝖺𝗋 𝗇𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅 𝖿𝗈𝗋 𝖽𝗈 𝖺𝗍𝖺𝗊𝗎𝖾.',
+        _1 + '• 𝖮 𝖲𝖺𝖿𝖾𝗍𝗒 𝖼𝗈𝗇𝖼𝖾𝖽𝖾 à 𝖽𝖾𝖿𝖾𝗌𝖺 𝗎𝗆 𝗍𝗂𝗋𝗈 𝖽𝖾 𝗋𝖾𝗂𝗇í𝖼𝗂𝗈 𝗇𝗈 𝗅𝗈𝖼𝖺𝗅 𝖽𝖺 ú𝗅𝗍𝗂𝗆𝖺 𝖼𝗈𝗇𝖽𝗎çã𝗈 𝖽𝖾 𝖻𝗈𝗅𝖺.',
       ],
     },
     OFFSIDE: {
       shortDescription: `• 𝗜𝗠𝗣𝗘𝗗𝗜𝗠𝗘𝗡𝗧𝗢 - 𝖯𝖺𝗋𝖺 𝗅𝖾𝗋 𝗌𝗈𝖻𝗋𝖾 𝖺 𝗋𝖾𝗀𝗋𝖺 𝖽𝗈 𝖨𝗆𝗉𝖾𝖽𝗂𝗆𝖾𝗇𝗍𝗈 𝗇𝗈 ${GAME_TITLE}, 𝗎𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝚒𝚖𝚙.`,
       title: 'IMPEDIMENTO     !imp !impedimento',
       longDescription: [
-        _1 + 'Todo jogador está impedido se:',
-        _2 + '(1) Estiver dentro do in-goal (INSIDE) no momento do passe (linha é dentro);',
+        _1 + '• 𝖳𝗈𝖽𝗈 𝗃𝗈𝗀𝖺𝖽𝗈𝗋 𝖾𝗌𝗍á 𝗂𝗆𝗉𝖾𝖽𝗂𝖽𝗈 𝗌𝖾:',
+        _2 + '  (𝟭) 𝖤𝗌𝗍𝗂𝗏𝖾𝗋 𝗱𝗲𝗻𝘁𝗿𝗼 𝗱𝗼 𝗶𝗻-𝗴𝗼𝗮𝗹 (𝗜𝗡𝗦𝗜𝗗𝗘) 𝗇𝗈 𝗆𝗈𝗆𝖾𝗇𝗍𝗈 𝖽𝗈 𝗉𝖺𝗌𝗌𝖾 (𝗅𝗂𝗇𝗁𝖺 é 𝖽𝖾𝗇𝗍𝗋𝗈);',
         _2 +
-          '(2) Estiver à frente da linha do último defensor ou do passador (OFFSIDE) no momento do passe.',
-        _3 +
-          '- Jogadores totalmente dentro de sua Safe Zone (Zona Protegida) estão imunes ao Offside.',
-        _1 + 'Para mais informações, use o comando !penal ou !vantagem.',
+          '  (𝟮) 𝖤𝗌𝗍𝗂𝗏𝖾𝗋 à 𝗳𝗿𝗲𝗻𝘁𝗲 𝗱𝗮 𝗹𝗶𝗻𝗵𝗮 𝗱𝗼 ú𝗹𝘁𝗶𝗺𝗼 𝗱𝗲𝗳𝗲𝗻𝘀𝗼𝗿 𝗈𝗎 𝖽𝗈 𝗉𝖺𝗌𝗌𝖺𝖽𝗈𝗋 (𝗢𝗙𝗙𝗦𝗜𝗗𝗘) 𝗇𝗈 𝗆𝗈𝗆𝖾𝗇𝗍𝗈 𝖽𝗈 𝗉𝖺𝗌𝗌𝖾.',
+        _1 + '• 𝖩𝗈𝗀𝖺𝖽𝗈𝗋𝖾𝗌 𝖽𝖾𝗇𝗍𝗋𝗈 𝖽𝖾 𝗌𝗎𝖺 𝗦𝗔𝗙𝗘 𝗭𝗢𝗡𝗘 (𝗭𝗼𝗻𝗮 𝗣𝗿𝗼𝘁𝗲𝗴𝗶𝗱𝗮) 𝖾𝗌𝗍ã𝗈 𝗶𝗺𝘂𝗻𝗲𝘀 𝗮𝗼 𝗢𝗳𝗳𝘀𝗶𝗱𝗲.',
+        _1 + '• 𝘗𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘪𝘯𝘧𝘰𝘳𝘮𝘢çõ𝘦𝘴, 𝘶𝘴𝘦 𝘰 𝘤𝘰𝘮𝘢𝘯𝘥𝘰 !𝚙𝚎𝚗𝚊𝚕 𝘰𝘶 !𝚟𝚊𝚗𝚝𝚊𝚐𝚎𝚖.',
       ],
     },
     PENALTY: {

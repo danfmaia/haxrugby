@@ -13,7 +13,7 @@ import TeamEnum from '../../enums/TeamEnum';
 import getMatchConfig from '../../singletons/getMatchConfig';
 
 @CommandDecorator({
-  names: ['rr', 'new', 'new-match'],
+  names: ['rr', 'RR', 'rR', 'Rr', 'new', 'new-match'],
 })
 export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly room: IHaxRugbyRoom;
