@@ -324,6 +324,10 @@ class HaxRugbyStadium {
        *  TODO 1: soften the code
        *  TODO 2: [DONE] replace Rugby Union with HaxRugby
        *  TODO 3: bring drawings closer to field in small
+       *  TODO 4: add rugby H post effect to H in HaxRugby
+       *  TODO 5: add light team colors to in-goal
+       *  TODO 6: add goal posts shadows
+       *  TODO 7: add intense team colors to the line between goal posts
        */
 
       // "JP's" drawing lines

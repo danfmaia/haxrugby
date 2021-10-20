@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v0.12d:
+
+- Tentativa de correção do bug da bola ficando permanentemente no estado "Aérea".
+  - São necessários testes para certificar que o problema foi solucionado.
+- Melhoria no texto e estilo das regras dos comandos `!try`, `!drop`, `!sf`, `!air`, `!imp` e `!penal`.
+- _Loading..._
+
 ### v0.12c:
 
 - **Alterado o padrão no pós-impedimento de Penal para Vantagem.**

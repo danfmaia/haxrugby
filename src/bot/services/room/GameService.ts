@@ -951,6 +951,16 @@ export default class GameService implements IGameService {
         this.room.util.setBallColor(colors.ball);
       }
     }
+
+    // hard-fix bug of ball stuck in air state
+    // TODO: fix bug at root cause
+    if (
+      (this.ballTransitionCount === 0 || this.airKickerId === null) &&
+      this.room.util.getIsAerialBall()
+    ) {
+      // console.log('*** PASSED 7: hard-fix bug of ball stuck in air state ***');
+      this.room.util.toggleAerialBall(false);
+    }
   }
 
   private checkForDropGoal(ballPosition: IPosition, lastDriveInfo: TLastDriveInfo): boolean {
