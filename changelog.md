@@ -4,9 +4,12 @@
 
 - Corrigido erro na lógica de Impedimento quando, em certas situações, a condição de um ou mais jogadores deveria ser normalizada, mas não estava sendo.
   - Sempre que o time X chuta ou conduz a bola, normaliza-se a condição de todos os jogadores do time Y, exceto se tanto a bola quanto o jogador do time Y estiverem dentro do in-goal do time X no momento do chute/condição. Foi corrigido um erro nessa lógica.
-- Não é mais necessário estar com o disco totalmente dentro da Safe Zone para se considerar dentro dela. Agora basta ter qualquer parte do disco tocando a linha da Safe Zone.
+- Corrigido bug do bot informando Penal depois de um Try.
+- Corrigido Try sendo centralizado mesmo quando o Impedimento é contra o time que fez o Try.
+  - Apenas quando a defesa comete um Impedimento depois do Try, é que o Try é centralizado (é dado _Penal-Try_). Mas isso é bem difícil de acontecer por conta da _Safe Zone_. _Eu nem consegui reproduzir isso testando sozinho aqui..._
+- Não é mais necessário estar com o disco totalmente dentro da Safe Zone para se considerar dentro dela. Agora basta ter qualquer parte do disco sobre a linha da Safe Zone.
   - Lembrando a regra: _jogadores dentro de sua Safe Zone estão imunes ao Offside_.
-- _Loading..._
+- Comando `!tempo` agora também exibe o placar e o tempo.
 
 ### v0.12d:
 

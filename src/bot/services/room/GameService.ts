@@ -792,17 +792,24 @@ export default class GameService implements IGameService {
       if (offendingTeam === null) {
         throw new Error();
       }
-      this.chatService.sendYellowBoldAnnouncement(
-        `🚫 ⚠️  ${offendingTeam.name} cometeu IMPEDIMENTO!  ⚠️ 🚫`,
-        2,
-      );
+      if (this.isTry === false) {
+        this.chatService.sendYellowBoldAnnouncement(
+          `🚫 ⚠️  ${offendingTeam.name} cometeu IMPEDIMENTO!  ⚠️ 🚫`,
+          2,
+        );
+      } else {
+        this.chatService.sendYellowBoldAnnouncement(
+          `🚫 ⚠️  ${offendingTeam.name} cometeu IMPEDIMENTO depois do Try!  ⚠️ 🚫`,
+          2,
+        );
+      }
       if (penalty === AheadEnum.INSIDE) {
         this.chatService.sendNormalAnnouncement(
-          `INSIDE: ${offendingPlayer.name} estava dentro do in-goal no momento do passe.`,
+          `𝗜𝗡𝗦𝗜𝗗𝗘 - ${offendingPlayer.name} estava dentro do in-goal no momento do passe.`,
         );
       } else if (penalty === AheadEnum.OFFSIDE) {
         this.chatService.sendNormalAnnouncement(
-          `OFFSIDE: ${offendingPlayer.name} estava à frente do último defensor (ou do passador) no momento do passe.`,
+          `𝗢𝗙𝗙𝗦𝗜𝗗𝗘 - ${offendingPlayer.name} estava à frente do último defensor (ou do passador) no momento do passe.`,
         );
       }
 
@@ -811,36 +818,52 @@ export default class GameService implements IGameService {
       if (offendedTeam === null) {
         throw new Error();
       }
-      const players = this.room.getPlayerList();
-      players.forEach((player) => {
-        if (player.team === offendedTeamID) {
-          this.chatService.sendBoldAnnouncement(
-            'Seu time tem 5 segundos para aceitar o Penal.',
-            0,
-            player.id,
-            colors.yellow,
-          );
-          this.chatService.sendBoldAnnouncement(
-            'Use `p` para aceitar o PENAL...',
-            0,
-            player.id,
-            colors.green,
-          );
-          this.chatService.sendNormalAnnouncement(
-            '...ou use `v` para optar por VANTAGEM.',
-            0,
-            player.id,
-            colors.green,
-          );
+
+      if (this.isTry === false) {
+        const players = this.room.getPlayerList();
+        players.forEach((player) => {
+          if (player.team === offendedTeamID) {
+            this.chatService.sendBoldAnnouncement(
+              'Seu time tem 5 segundos para aceitar o Penal.',
+              0,
+              player.id,
+              colors.yellow,
+            );
+            this.chatService.sendBoldAnnouncement(
+              'Use `p` para aceitar o PENAL...',
+              0,
+              player.id,
+              colors.green,
+            );
+            this.chatService.sendNormalAnnouncement(
+              '...ou use `v` para optar por VANTAGEM.',
+              0,
+              player.id,
+              colors.green,
+            );
+          } else {
+            this.chatService.sendBoldAnnouncement(
+              `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
+              0,
+              player.id,
+              offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+            );
+          }
+        });
+      } else {
+        let message: string;
+        if (this.isTry === offendedTeam.teamEnum) {
+          message = `𝗣𝗘𝗡𝗔𝗟-𝗧𝗥𝗬! A defesa cometeu uma infração depois do Try. A conversão então será no centro do in-goal!`;
         } else {
-          this.chatService.sendBoldAnnouncement(
-            `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
-            0,
-            player.id,
-            offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
-          );
+          message = 'A infração aconteceu depois do Try, logo o Try é legal!';
         }
-      });
+        this.chatService.sendNormalAnnouncement(
+          message,
+          0,
+          undefined,
+          offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+        );
+      }
 
       this.remainingTimeAtPenalty = this.remainingTime;
       this.isPenalty = offendedTeam.teamEnum;
@@ -860,7 +883,7 @@ export default class GameService implements IGameService {
       this.remainingTime = this.remainingTimeAtPenalty;
 
       this.chatService.sendBoldAnnouncement(
-        `PENAL para o ${offendedTeamName}!`,
+        `PENAL a favor do ${offendedTeamName}!`,
         2,
         undefined,
         offendedTeam === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
@@ -1145,12 +1168,14 @@ export default class GameService implements IGameService {
 
     let isStillAttempting: boolean = true;
 
-    // TODO: maybe improve or change this penalty-try or ball centering rule
+    // TODO: maybe improve or change this Penalty-Try / ball centering rule
     if (this.isPenalty) {
       // finish attempt when is penalty
-      //   - in this case, the ball is centered (penalty-try)
-      this.tryY = 0;
       isStillAttempting = false;
+      if (this.isPenalty === this.isTry) {
+        // in case of penalty favoring the team that scored, center the try (Penalty-Try)
+        this.tryY = 0;
+      }
     }
 
     if (Math.abs(ballPosition.x) < this.map.tryLineX) {
