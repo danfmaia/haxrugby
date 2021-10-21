@@ -565,48 +565,32 @@ class HaxRugbyStadium {
       /* 220 */ getVertex(-goalLineX, -goalPostY, TraitEnum.shadow),
       /* 221 */ getVertex(-goalLineX, goalPostY, TraitEnum.shadow),
       /* 222 */ getVertex(
-        -goalLineX + 0.7 * goalPostBottomZ,
+        -goalLineX + goalPostBottomZ,
         -goalPostY + goalPostBottomZ,
         TraitEnum.shadow,
       ),
       /* 223 */ getVertex(
-        -goalLineX + 0.7 * goalPostBottomZ,
+        -goalLineX + goalPostBottomZ,
         goalPostY + goalPostBottomZ,
         TraitEnum.shadow,
       ),
-      /* 224 */ getVertex(
-        -goalLineX + 0.7 * goalPostTopZ,
-        -goalPostY + goalPostTopZ,
-        TraitEnum.shadow,
-      ),
-      /* 225 */ getVertex(
-        -goalLineX + 0.7 * goalPostTopZ,
-        goalPostY + goalPostTopZ,
-        TraitEnum.shadow,
-      ),
+      /* 224 */ getVertex(-goalLineX + goalPostTopZ, -goalPostY + goalPostTopZ, TraitEnum.shadow),
+      /* 225 */ getVertex(-goalLineX + goalPostTopZ, goalPostY + goalPostTopZ, TraitEnum.shadow),
 
       /* 226 */ getVertex(goalLineX, -goalPostY, TraitEnum.shadow),
       /* 227 */ getVertex(goalLineX, goalPostY, TraitEnum.shadow),
       /* 228 */ getVertex(
-        goalLineX + 0.7 * goalPostBottomZ,
+        goalLineX + goalPostBottomZ,
         -goalPostY + goalPostBottomZ,
         TraitEnum.shadow,
       ),
       /* 229 */ getVertex(
-        goalLineX + 0.7 * goalPostBottomZ,
+        goalLineX + goalPostBottomZ,
         goalPostY + goalPostBottomZ,
         TraitEnum.shadow,
       ),
-      /* 230 */ getVertex(
-        goalLineX + 0.7 * goalPostTopZ,
-        -goalPostY + goalPostTopZ,
-        TraitEnum.shadow,
-      ),
-      /* 231 */ getVertex(
-        goalLineX + 0.7 * goalPostTopZ,
-        goalPostY + goalPostTopZ,
-        TraitEnum.shadow,
-      ),
+      /* 230 */ getVertex(goalLineX + goalPostTopZ, -goalPostY + goalPostTopZ, TraitEnum.shadow),
+      /* 231 */ getVertex(goalLineX + goalPostTopZ, goalPostY + goalPostTopZ, TraitEnum.shadow),
     ];
 
     this.segments = [
