@@ -26,11 +26,12 @@ class HaxRugbyStadium {
 
   public bg: any;
   public traits: any;
-  public vertexes: any;
-  public segments: any;
-  public goals: any;
-  public discs: any;
-  public planes: any;
+  public vertexes: any[];
+  public segments: any[];
+  public goals: any[];
+  public discs: any[];
+  // public joints: any[];
+  public planes: any[];
   public ballPhysics: any;
 
   private serv: StadiumService | null = null;
@@ -57,6 +58,9 @@ class HaxRugbyStadium {
     miniArea: number,
     kickoffLineX: number,
     areaLineX: number,
+
+    goalPostBottomZ: number,
+    goalPostTopZ: number,
   ) {
     this.name = name;
     this.serv = new StadiumService(dimensions, size, team, kickoffPosition, convProps, isPenalty);
@@ -77,16 +81,22 @@ class HaxRugbyStadium {
     this.traits = {
       [TraitEnum.ballArea]: traits.ballArea,
       [TraitEnum.goalPost]: traits.goalPost,
+      [TraitEnum.ingoalCone]: traits.ingoalCone,
       [TraitEnum.goalNet]: traits.goalNet,
       [TraitEnum.kickOffBarrier]: traits.kickOffBarrier,
 
       [TraitEnum.null]: traits.null,
       [TraitEnum.playerArea]: traits.playerArea,
-      [TraitEnum.line]: traits.line,
-      [TraitEnum.fadeLine]: traits.fadeLine,
       [TraitEnum.redKOBarrier]: traits.redKOBarrier,
       [TraitEnum.blueKOBarrier]: traits.blueKOBarrier,
       [TraitEnum.powerBoost]: traits.powerBoost,
+
+      [TraitEnum.line]: traits.line,
+      [TraitEnum.redLine]: traits.redLine,
+      [TraitEnum.blueLine]: traits.blueLine,
+      [TraitEnum.fadeLine]: traits.fadeLine,
+      [TraitEnum.drawingLine]: traits.drawingLine,
+      [TraitEnum.shadow]: traits.shadow,
     };
 
     this.vertexes = [
@@ -95,10 +105,10 @@ class HaxRugbyStadium {
       getVertex(width, -height, TraitEnum.ballArea), // 2
       getVertex(width, height, TraitEnum.ballArea), // 3
 
-      getVertex(-goalLineX, -height, TraitEnum.line), // 4
-      getVertex(-goalLineX, height, TraitEnum.line), // 5
-      getVertex(goalLineX, -height, TraitEnum.line), // 6
-      getVertex(goalLineX, height, TraitEnum.line), // 7
+      getVertex(-goalLineX, -height, TraitEnum.redLine), // 4
+      getVertex(-goalLineX, height, TraitEnum.redLine), // 5
+      getVertex(goalLineX, -height, TraitEnum.blueLine), // 6
+      getVertex(goalLineX, height, TraitEnum.blueLine), // 7
 
       getVertex(-goalLineX, -(goalPostY + miniArea), TraitEnum.line), // 8
       getVertex(-(goalLineX - miniArea), -goalPostY, TraitEnum.line), // 9
@@ -150,71 +160,71 @@ class HaxRugbyStadium {
       getVertex(this.serv.getSign() * width, -outerHeight, TraitEnum.playerArea), // 38
       getVertex(this.serv.getSign() * width, outerHeight, TraitEnum.playerArea), // 39
 
-      // Red's non-small in-goal lines
+      // [REMOVED] Red's non-small in-goal lines
 
-      getVertex(-(width - 1.5), (-4 / 5) * height, TraitEnum.fadeLine), // 40
-      getVertex(-(goalLineX + 1.5), (-4 / 5) * height, TraitEnum.fadeLine), // 41
+      getVertex(-(width - 1.5), (-4 / 5) * height, TraitEnum.null), // 40
+      getVertex(-(goalLineX + 1.5), (-4 / 5) * height, TraitEnum.null), // 41
 
-      getVertex(-width, (-3 / 5) * height, TraitEnum.line), // 42
-      getVertex(-goalLineX, (-3 / 5) * height, TraitEnum.line), // 43
+      getVertex(-width, (-3 / 5) * height, TraitEnum.null), // 42
+      getVertex(-goalLineX, (-3 / 5) * height, TraitEnum.null), // 43
 
-      getVertex(-(width - 1.5), (-2 / 5) * height, TraitEnum.fadeLine), // 44
-      getVertex(-(goalLineX + 1.5), (-2 / 5) * height, TraitEnum.fadeLine), // 45
+      getVertex(-(width - 1.5), (-2 / 5) * height, TraitEnum.null), // 44
+      getVertex(-(goalLineX + 1.5), (-2 / 5) * height, TraitEnum.null), // 45
 
-      getVertex(-width, (-1 / 5) * height, TraitEnum.line), // 46
-      getVertex(-goalLineX, (-1 / 5) * height, TraitEnum.line), // 47
+      getVertex(-width, (-1 / 5) * height, TraitEnum.null), // 46
+      getVertex(-goalLineX, (-1 / 5) * height, TraitEnum.null), // 47
 
-      getVertex(-width, (1 / 5) * height, TraitEnum.line), // 48
-      getVertex(-goalLineX, (1 / 5) * height, TraitEnum.line), // 49
+      getVertex(-width, (1 / 5) * height, TraitEnum.null), // 48
+      getVertex(-goalLineX, (1 / 5) * height, TraitEnum.null), // 49
 
-      getVertex(-(width - 1.5), (2 / 5) * height, TraitEnum.fadeLine), // 50
-      getVertex(-(goalLineX + 1.5), (2 / 5) * height, TraitEnum.fadeLine), // 51
+      getVertex(-(width - 1.5), (2 / 5) * height, TraitEnum.null), // 50
+      getVertex(-(goalLineX + 1.5), (2 / 5) * height, TraitEnum.null), // 51
 
-      getVertex(-width, (3 / 5) * height, TraitEnum.line), // 52
-      getVertex(-goalLineX, (3 / 5) * height, TraitEnum.line), // 53
+      getVertex(-width, (3 / 5) * height, TraitEnum.null), // 52
+      getVertex(-goalLineX, (3 / 5) * height, TraitEnum.null), // 53
 
-      getVertex(-(width - 1.5), (4 / 5) * height, TraitEnum.fadeLine), // 54
-      getVertex(-(goalLineX + 1.5), (4 / 5) * height, TraitEnum.fadeLine), // 55
+      getVertex(-(width - 1.5), (4 / 5) * height, TraitEnum.null), // 54
+      getVertex(-(goalLineX + 1.5), (4 / 5) * height, TraitEnum.null), // 55
 
-      // Blue's non-small in-goal lines
+      // [REMOVED] Blue's non-small in-goal lines
 
-      getVertex(width - 1.5, (-4 / 5) * height, TraitEnum.fadeLine), // 56
-      getVertex(goalLineX + 1.5, (-4 / 5) * height, TraitEnum.fadeLine), // 57
+      getVertex(width - 1.5, (-4 / 5) * height, TraitEnum.null), // 56
+      getVertex(goalLineX + 1.5, (-4 / 5) * height, TraitEnum.null), // 57
 
-      getVertex(width, (-3 / 5) * height, TraitEnum.line), // 58
-      getVertex(goalLineX, (-3 / 5) * height, TraitEnum.line), // 59
+      getVertex(width, (-3 / 5) * height, TraitEnum.null), // 58
+      getVertex(goalLineX, (-3 / 5) * height, TraitEnum.null), // 59
 
-      getVertex(width - 1.5, (-2 / 5) * height, TraitEnum.fadeLine), // 60
-      getVertex(goalLineX + 1.5, (-2 / 5) * height, TraitEnum.fadeLine), // 61
+      getVertex(width - 1.5, (-2 / 5) * height, TraitEnum.null), // 60
+      getVertex(goalLineX + 1.5, (-2 / 5) * height, TraitEnum.null), // 61
 
-      getVertex(width, (-1 / 5) * height, TraitEnum.line), // 62
-      getVertex(goalLineX, (-1 / 5) * height, TraitEnum.line), // 63
+      getVertex(width, (-1 / 5) * height, TraitEnum.null), // 62
+      getVertex(goalLineX, (-1 / 5) * height, TraitEnum.null), // 63
 
-      getVertex(width, (1 / 5) * height, TraitEnum.line), // 64
-      getVertex(goalLineX, (1 / 5) * height, TraitEnum.line), // 65
+      getVertex(width, (1 / 5) * height, TraitEnum.null), // 64
+      getVertex(goalLineX, (1 / 5) * height, TraitEnum.null), // 65
 
-      getVertex(width - 1.5, (2 / 5) * height, TraitEnum.fadeLine), // 66
-      getVertex(goalLineX + 1.5, (2 / 5) * height, TraitEnum.fadeLine), // 67
+      getVertex(width - 1.5, (2 / 5) * height, TraitEnum.null), // 66
+      getVertex(goalLineX + 1.5, (2 / 5) * height, TraitEnum.null), // 67
 
-      getVertex(width, (3 / 5) * height, TraitEnum.line), // 68
-      getVertex(goalLineX, (3 / 5) * height, TraitEnum.line), // 69
+      getVertex(width, (3 / 5) * height, TraitEnum.null), // 68
+      getVertex(goalLineX, (3 / 5) * height, TraitEnum.null), // 69
 
-      getVertex(width - 1.5, (4 / 5) * height, TraitEnum.fadeLine), // 70
-      getVertex(goalLineX + 1.5, (4 / 5) * height, TraitEnum.fadeLine), // 71
+      getVertex(width - 1.5, (4 / 5) * height, TraitEnum.null), // 70
+      getVertex(goalLineX + 1.5, (4 / 5) * height, TraitEnum.null), // 71
 
-      // small in-goal lines
+      // [REMOVED] small in-goal lines
 
-      /* 72 */ getVertex(-width, -goalPostY, TraitEnum.line),
-      /* 73 */ getVertex(-goalLineX, -goalPostY, TraitEnum.line),
+      /* 72 */ getVertex(-width, -goalPostY, TraitEnum.null),
+      /* 73 */ getVertex(-goalLineX, -goalPostY, TraitEnum.null),
 
-      /* 74 */ getVertex(-width, goalPostY, TraitEnum.line),
-      /* 75 */ getVertex(-goalLineX, goalPostY, TraitEnum.line),
+      /* 74 */ getVertex(-width, goalPostY, TraitEnum.null),
+      /* 75 */ getVertex(-goalLineX, goalPostY, TraitEnum.null),
 
-      /* 76 */ getVertex(width, -goalPostY, TraitEnum.line),
-      /* 77 */ getVertex(goalLineX, -goalPostY, TraitEnum.line),
+      /* 76 */ getVertex(width, -goalPostY, TraitEnum.null),
+      /* 77 */ getVertex(goalLineX, -goalPostY, TraitEnum.null),
 
-      /* 78 */ getVertex(width, goalPostY, TraitEnum.line),
-      /* 79 */ getVertex(goalLineX, goalPostY, TraitEnum.line),
+      /* 78 */ getVertex(width, goalPostY, TraitEnum.null),
+      /* 79 */ getVertex(goalLineX, goalPostY, TraitEnum.null),
 
       // non-small safe line orientation lines
 
@@ -332,19 +342,19 @@ class HaxRugbyStadium {
 
       // "JP's" drawing lines
 
-      /* 140 */ { x: -15, y: -340, trait: 'fadeLine' },
-      /* 141 */ { x: -15, y: -316, trait: 'fadeLine' },
-      /* 142 */ { x: -27, y: -305, trait: 'fadeLine' },
-      /* 143 */ { x: -10, y: -310, trait: 'fadeLine' },
-      /* 144 */ { x: -10, y: -340, curve: 230, trait: 'fadeLine' },
-      /* 145 */ { x: -10, y: -325, curve: 230, trait: 'fadeLine' },
-      /* 146 */ { x: 7, y: -345, curve: 0, trait: 'fadeLine' },
-      /* 147 */ { x: 7, y: -335, curve: 0, trait: 'fadeLine' },
-      /* 148 */ { x: 25, y: -326, curve: -120, trait: 'fadeLine' },
-      /* 149 */ { x: 10, y: -324, curve: -120, trait: 'fadeLine' },
-      /* 150 */ { x: 17.5, y: -320, curve: 0, trait: 'fadeLine' },
-      /* 151 */ { x: 25, y: -316, curve: 120, trait: 'fadeLine' },
-      /* 152 */ { x: 10, y: -314, curve: 120, trait: 'fadeLine' },
+      /* 140 */ { x: -15, y: -this.serv.dHeight - 40, trait: 'drawingLine' },
+      /* 141 */ { x: -15, y: -this.serv.dHeight - 16, trait: 'drawingLine' },
+      /* 142 */ { x: -27, y: -this.serv.dHeight - 5, trait: 'drawingLine' },
+      /* 143 */ { x: -10, y: -this.serv.dHeight - 10, trait: 'drawingLine' },
+      /* 144 */ { x: -10, y: -this.serv.dHeight - 40, curve: 230, trait: 'drawingLine' },
+      /* 145 */ { x: -10, y: -this.serv.dHeight - 25, curve: 230, trait: 'drawingLine' },
+      /* 146 */ { x: 7, y: -this.serv.dHeight - 45, curve: 0, trait: 'drawingLine' },
+      /* 147 */ { x: 7, y: -this.serv.dHeight - 35, curve: 0, trait: 'drawingLine' },
+      /* 148 */ { x: 25, y: -this.serv.dHeight - 26, curve: -120, trait: 'drawingLine' },
+      /* 149 */ { x: 10, y: -this.serv.dHeight - 24, curve: -120, trait: 'drawingLine' },
+      /* 150 */ { x: 17.5, y: -this.serv.dHeight - 20, curve: 0, trait: 'drawingLine' },
+      /* 151 */ { x: 25, y: -this.serv.dHeight - 16, curve: 120, trait: 'drawingLine' },
+      /* 152 */ { x: 10, y: -this.serv.dHeight - 14, curve: 120, trait: 'drawingLine' },
 
       // empty drawing vertexes
 
@@ -358,24 +368,24 @@ class HaxRugbyStadium {
 
       // "Rugby" drawing vertexes - part 1
 
-      /* 160 */ { x: -17, y: 310, curve: 230, trait: 'fadeLine' },
-      /* 161 */ { x: -17, y: 340, trait: 'fadeLine' },
-      /* 162 */ { x: -17, y: 325, curve: 230, trait: 'fadeLine' },
-      /* 163 */ { x: -8, y: 324, curve: 0, trait: 'fadeLine' },
-      /* 164 */ { x: -2, y: 340, curve: 0, trait: 'fadeLine' },
-      /* 165 */ { x: 3, y: 335, curve: -110, trait: 'fadeLine' },
-      /* 166 */ { x: 18, y: 335, trait: 'fadeLine', curve: -110 },
-      /* 167 */ { x: 18, y: 340, trait: 'fadeLine' },
-      /* 168 */ { x: 38, y: 320, trait: 'fadeLine' },
-      /* 169 */ { x: 38, y: 343, trait: 'fadeLine', curve: -110 },
-      /* 170 */ { x: 23, y: 343, trait: 'fadeLine', curve: -110 },
-      /* 171 */ { x: 43, y: 340, curve: 0, trait: 'fadeLine' },
-      /* 172 */ { x: 43, y: 305, curve: 0, trait: 'fadeLine' },
-      /* 173 */ { x: 43, y: 325, curve: 290, trait: 'fadeLine' },
-      /* 174 */ { x: 63, y: 320, curve: 0, trait: 'fadeLine' },
-      /* 175 */ { x: 70.5, y: 335, curve: 0, trait: 'fadeLine' },
-      /* 176 */ { x: 78, y: 320, trait: 'fadeLine' },
-      /* 177 */ { x: 63, y: 350, trait: 'fadeLine' },
+      /* 160 */ { x: -17, y: this.serv.dHeight + 10, curve: 230, trait: 'drawingLine' },
+      /* 161 */ { x: -17, y: this.serv.dHeight + 40, trait: 'drawingLine' },
+      /* 162 */ { x: -17, y: this.serv.dHeight + 25, curve: 230, trait: 'drawingLine' },
+      /* 163 */ { x: -8, y: this.serv.dHeight + 24, curve: 0, trait: 'drawingLine' },
+      /* 164 */ { x: -2, y: this.serv.dHeight + 40, curve: 0, trait: 'drawingLine' },
+      /* 165 */ { x: 3, y: this.serv.dHeight + 35, curve: -110, trait: 'drawingLine' },
+      /* 166 */ { x: 18, y: this.serv.dHeight + 35, trait: 'drawingLine', curve: -110 },
+      /* 167 */ { x: 18, y: this.serv.dHeight + 40, trait: 'drawingLine' },
+      /* 168 */ { x: 38, y: this.serv.dHeight + 20, trait: 'drawingLine' },
+      /* 169 */ { x: 38, y: this.serv.dHeight + 43, trait: 'drawingLine', curve: -110 },
+      /* 170 */ { x: 23, y: this.serv.dHeight + 43, trait: 'drawingLine', curve: -110 },
+      /* 171 */ { x: 43, y: this.serv.dHeight + 40, curve: 0, trait: 'drawingLine' },
+      /* 172 */ { x: 43, y: this.serv.dHeight + 5, curve: 0, trait: 'drawingLine' },
+      /* 173 */ { x: 43, y: this.serv.dHeight + 25, curve: 290, trait: 'drawingLine' },
+      /* 174 */ { x: 63, y: this.serv.dHeight + 20, curve: 0, trait: 'drawingLine' },
+      /* 175 */ { x: 70.5, y: this.serv.dHeight + 35, curve: 0, trait: 'drawingLine' },
+      /* 176 */ { x: 78, y: this.serv.dHeight + 20, trait: 'drawingLine' },
+      /* 177 */ { x: 63, y: this.serv.dHeight + 50, trait: 'drawingLine' },
 
       // empty drawing vertexes
 
@@ -388,8 +398,8 @@ class HaxRugbyStadium {
 
       // "Rugby" drawing vertexes - part 2
 
-      /* 184 */ { x: 38, y: 325, curve: -290, trait: 'fadeLine' },
-      /* 185 */ { x: 43, y: 335, curve: 290, trait: 'fadeLine' },
+      /* 184 */ { x: 38, y: this.serv.dHeight + 25, curve: -290, trait: 'drawingLine' },
+      /* 185 */ { x: 43, y: this.serv.dHeight + 35, curve: 290, trait: 'drawingLine' },
 
       // empty drawing vertexes
 
@@ -410,37 +420,198 @@ class HaxRugbyStadium {
 
       // "Rugby" drawing vertexes - part 3
 
-      /* 200 */ { x: 3, y: 320, curve: 0, trait: 'fadeLine' },
-      /* 201 */ { x: 18, y: 320, trait: 'fadeLine' },
-      /* 202 */ { x: 38, y: 335, curve: -290, trait: 'fadeLine' },
+      /* 200 */ { x: 3, y: this.serv.dHeight + 20, curve: 0, trait: 'drawingLine' },
+      /* 201 */ { x: 18, y: this.serv.dHeight + 20, trait: 'drawingLine' },
+      /* 202 */ { x: 38, y: this.serv.dHeight + 35, curve: -290, trait: 'drawingLine' },
 
       // "Hax" drawing vertexes
 
-      /* 203 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 310 },
-      /* 204 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 325 },
-      /* 205 */ { bCoef: 0, trait: 'fadeLine', x: -77, y: 340 },
-      /* 206 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 310 },
-      /* 207 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 325 },
-      /* 208 */ { bCoef: 0, trait: 'fadeLine', x: -62, y: 340 },
-      /* 209 */ { bCoef: 0, trait: 'fadeLine', x: -56, y: 325, curve: 110 },
-      /* 210 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 325, curve: 0 },
-      /* 211 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 328, curve: 0 },
-      /* 212 */ { bCoef: 0, trait: 'fadeLine', x: -53, y: 330, curve: 0 },
-      /* 213 */ { bCoef: 0, trait: 'fadeLine', x: -48, y: 338 },
-      /* 214 */ { bCoef: 0, trait: 'fadeLine', x: -43, y: 336, curve: -100 },
-      /* 215 */ { bCoef: 0, trait: 'fadeLine', x: -40, y: 338, curve: -100 },
-      /* 216 */ { bCoef: 0, trait: 'fadeLine', x: -37, y: 320 },
-      /* 217 */ { bCoef: 0, trait: 'fadeLine', x: -22, y: 340 },
-      /* 218 */ { bCoef: 0, trait: 'fadeLine', x: -37, y: 340 },
-      /* 219 */ { bCoef: 0, trait: 'fadeLine', x: -22, y: 320 },
+      /* 203 */ { bCoef: 0, trait: 'drawingLine', x: -77, y: this.serv.dHeight + 10 },
+      /* 204 */ { bCoef: 0, trait: 'drawingLine', x: -77, y: this.serv.dHeight + 25 },
+      /* 205 */ { bCoef: 0, trait: 'drawingLine', x: -77, y: this.serv.dHeight + 40 },
+      /* 206 */ { bCoef: 0, trait: 'drawingLine', x: -62, y: this.serv.dHeight + 10 },
+      /* 207 */ { bCoef: 0, trait: 'drawingLine', x: -62, y: this.serv.dHeight + 25 },
+      /* 208 */ { bCoef: 0, trait: 'drawingLine', x: -62, y: this.serv.dHeight + 40 },
+      /* 209 */ {
+        bCoef: 0,
+        trait: 'drawingLine',
+        x: -57,
+        y: this.serv.dHeight + 25,
+        curve: 110,
+      },
+      /* 210 */ { bCoef: 0, trait: 'drawingLine', x: -44, y: this.serv.dHeight + 25, curve: 0 },
+      /* 211 */ { bCoef: 0, trait: 'drawingLine', x: -44, y: this.serv.dHeight + 28, curve: 0 },
+      /* 212 */ { bCoef: 0, trait: 'drawingLine', x: -54, y: this.serv.dHeight + 30, curve: 0 },
+      /* 213 */ { bCoef: 0, trait: 'drawingLine', x: -49, y: this.serv.dHeight + 38 },
+      /* 214 */ {
+        bCoef: 0,
+        trait: 'drawingLine',
+        x: -44,
+        y: this.serv.dHeight + 36,
+        curve: -100,
+      },
+      /* 215 */ {
+        bCoef: 0,
+        trait: 'drawingLine',
+        x: -41,
+        y: this.serv.dHeight + 38,
+        curve: -100,
+      },
+      /* 216 */ { bCoef: 0, trait: 'drawingLine', x: -37, y: this.serv.dHeight + 20 },
+      /* 217 */ { bCoef: 0, trait: 'drawingLine', x: -22, y: this.serv.dHeight + 40 },
+      /* 218 */ { bCoef: 0, trait: 'drawingLine', x: -37, y: this.serv.dHeight + 40 },
+      /* 219 */ { bCoef: 0, trait: 'drawingLine', x: -22, y: this.serv.dHeight + 20 },
+
+      // empty drawing vertexes
+
+      // // 220s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 230s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 240s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 250s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 260s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 270s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 280s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // // 290s
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+      // { x: 0, y: 0, trait: 'null' },
+
+      // goal post shadow vertexes
+
+      /* 220 */ getVertex(-goalLineX, -goalPostY, TraitEnum.shadow),
+      /* 221 */ getVertex(-goalLineX, goalPostY, TraitEnum.shadow),
+      /* 222 */ getVertex(
+        -goalLineX + 0.7 * goalPostBottomZ,
+        -goalPostY + goalPostBottomZ,
+        TraitEnum.shadow,
+      ),
+      /* 223 */ getVertex(
+        -goalLineX + 0.7 * goalPostBottomZ,
+        goalPostY + goalPostBottomZ,
+        TraitEnum.shadow,
+      ),
+      /* 224 */ getVertex(
+        -goalLineX + 0.7 * goalPostTopZ,
+        -goalPostY + goalPostTopZ,
+        TraitEnum.shadow,
+      ),
+      /* 225 */ getVertex(
+        -goalLineX + 0.7 * goalPostTopZ,
+        goalPostY + goalPostTopZ,
+        TraitEnum.shadow,
+      ),
+
+      /* 226 */ getVertex(goalLineX, -goalPostY, TraitEnum.shadow),
+      /* 227 */ getVertex(goalLineX, goalPostY, TraitEnum.shadow),
+      /* 228 */ getVertex(
+        goalLineX + 0.7 * goalPostBottomZ,
+        -goalPostY + goalPostBottomZ,
+        TraitEnum.shadow,
+      ),
+      /* 229 */ getVertex(
+        goalLineX + 0.7 * goalPostBottomZ,
+        goalPostY + goalPostBottomZ,
+        TraitEnum.shadow,
+      ),
+      /* 230 */ getVertex(
+        goalLineX + 0.7 * goalPostTopZ,
+        -goalPostY + goalPostTopZ,
+        TraitEnum.shadow,
+      ),
+      /* 231 */ getVertex(
+        goalLineX + 0.7 * goalPostTopZ,
+        goalPostY + goalPostTopZ,
+        TraitEnum.shadow,
+      ),
     ];
 
     this.segments = [
       getSegment(0, 1, TraitEnum.ballArea),
       getSegment(2, 3, TraitEnum.ballArea),
-
-      getSegment(4, 5, TraitEnum.line),
-      getSegment(6, 7, TraitEnum.line),
 
       getSegment(8, 9, TraitEnum.line, 90),
       getSegment(9, 10, TraitEnum.line),
@@ -455,6 +626,20 @@ class HaxRugbyStadium {
       getSegment(20, 21, TraitEnum.fadeLine),
       getSegment(22, 23, TraitEnum.fadeLine),
 
+      // in-goal segments
+      getSegment(4, 5, TraitEnum.line),
+      getSegment(6, 7, TraitEnum.line),
+
+      // colored in-goal segments
+      // getSegment(0, 1, TraitEnum.redLine),
+      // getSegment(0, 4, TraitEnum.redLine),
+      // getSegment(1, 5, TraitEnum.redLine),
+      // getSegment(4, 5, TraitEnum.redLine),
+      // getSegment(2, 3, TraitEnum.blueLine),
+      // getSegment(2, 6, TraitEnum.blueLine),
+      // getSegment(3, 7, TraitEnum.blueLine),
+      // getSegment(6, 7, TraitEnum.blueLine),
+
       this.serv.getLeftKOSegment(24, 25),
       this.serv.getRightKOSegment(26, 27),
 
@@ -467,34 +652,34 @@ class HaxRugbyStadium {
       this.serv.getConversionSegment(34, 37, TraitEnum.kickOffBarrier),
       this.serv.getConversionSegment(38, 39, TraitEnum.playerArea),
 
-      // Red's non-small in-goal lines
+      // [REMOVED] Red's non-small in-goal lines
 
-      getSegment(40, 41, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(42, 43, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(44, 45, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(46, 47, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(48, 49, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(50, 51, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(52, 53, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(54, 55, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(40, 41, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(42, 43, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(44, 45, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(46, 47, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(48, 49, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(50, 51, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(52, 53, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(54, 55, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
 
-      // Blue's non-small in-goal lines
+      // [REMOVED] Blue's non-small in-goal lines
 
-      getSegment(56, 57, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(58, 59, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(60, 61, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(62, 63, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(64, 65, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(66, 67, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
-      getSegment(68, 69, this.serv.getNonSmallTrait(TraitEnum.line)),
-      getSegment(70, 71, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(56, 57, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(58, 59, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(60, 61, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(62, 63, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(64, 65, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(66, 67, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
+      // getSegment(68, 69, this.serv.getNonSmallTrait(TraitEnum.line)),
+      // getSegment(70, 71, this.serv.getNonSmallTrait(TraitEnum.fadeLine)),
 
-      // small in-goal lines
+      // [REMOVED] small in-goal lines
 
-      getSegment(72, 73, this.serv.getSmallTrait(TraitEnum.line)),
-      getSegment(74, 75, this.serv.getSmallTrait(TraitEnum.line)),
-      getSegment(76, 77, this.serv.getSmallTrait(TraitEnum.line)),
-      getSegment(78, 79, this.serv.getSmallTrait(TraitEnum.line)),
+      // getSegment(72, 73, this.serv.getSmallTrait(TraitEnum.line)),
+      // getSegment(74, 75, this.serv.getSmallTrait(TraitEnum.line)),
+      // getSegment(76, 77, this.serv.getSmallTrait(TraitEnum.line)),
+      // getSegment(78, 79, this.serv.getSmallTrait(TraitEnum.line)),
 
       // non-small safe line orientation lines
 
@@ -546,46 +731,56 @@ class HaxRugbyStadium {
 
       // "JP's" drawing lines
 
-      { vis: true, v0: 140, v1: 141, trait: 'fadeLine' },
-      { vis: true, v0: 141, v1: 142, curve: 106.99711775898741, trait: 'fadeLine' },
-      { vis: true, v0: 144, v1: 143, trait: 'fadeLine' },
-      { vis: true, v0: 144, v1: 145, curve: 230, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 146, v1: 147, trait: 'fadeLine' },
-      { curve: -120, vis: true, v0: 148, v1: 149, trait: 'fadeLine' },
-      { curve: -80, vis: true, v0: 149, v1: 150, trait: 'fadeLine' },
-      { curve: 80, vis: true, v0: 150, v1: 151, trait: 'fadeLine' },
-      { curve: 120, vis: true, v0: 151, v1: 152, y: -312, trait: 'fadeLine' },
+      { vis: true, v0: 140, v1: 141, trait: 'drawingLine' },
+      { vis: true, v0: 141, v1: 142, curve: 106.99711775898741, trait: 'drawingLine' },
+      { vis: true, v0: 144, v1: 143, trait: 'drawingLine' },
+      { vis: true, v0: 144, v1: 145, curve: 230, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 146, v1: 147, trait: 'drawingLine' },
+      { curve: -120, vis: true, v0: 148, v1: 149, trait: 'drawingLine' },
+      { curve: -80, vis: true, v0: 149, v1: 150, trait: 'drawingLine' },
+      { curve: 80, vis: true, v0: 150, v1: 151, trait: 'drawingLine' },
+      { curve: 120, vis: true, v0: 151, v1: 152, trait: 'drawingLine' },
 
       // "Rugby" drawing lines
 
-      { vis: true, v0: 160, v1: 161, trait: 'fadeLine' },
-      { vis: true, v0: 160, v1: 162, curve: 230, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 164, v1: 163, trait: 'fadeLine' },
-      { curve: -110, vis: true, v0: 165, v1: 166, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 200, v1: 165, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 201, v1: 167, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 168, v1: 169, trait: 'fadeLine' },
-      { curve: -110, vis: true, v0: 170, v1: 169, trait: 'fadeLine' },
-      { vis: true, v0: 184, v1: 169, x: -45, trait: 'fadeLine' },
-      { curve: -290, vis: true, v0: 184, v1: 202, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 171, v1: 172, trait: 'fadeLine' },
-      { curve: 290, vis: true, v0: 173, v1: 185, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 174, v1: 175, trait: 'fadeLine' },
-      { curve: 0, vis: true, v0: 176, v1: 177, trait: 'fadeLine' },
+      { vis: true, v0: 160, v1: 161, trait: 'drawingLine' },
+      { vis: true, v0: 160, v1: 162, curve: 230, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 164, v1: 163, trait: 'drawingLine' },
+      { curve: -110, vis: true, v0: 165, v1: 166, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 200, v1: 165, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 201, v1: 167, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 168, v1: 169, trait: 'drawingLine' },
+      { curve: -110, vis: true, v0: 170, v1: 169, trait: 'drawingLine' },
+      { vis: true, v0: 184, v1: 169, x: -45, trait: 'drawingLine' },
+      { curve: -290, vis: true, v0: 184, v1: 202, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 171, v1: 172, trait: 'drawingLine' },
+      { curve: 290, vis: true, v0: 173, v1: 185, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 174, v1: 175, trait: 'drawingLine' },
+      { curve: 0, vis: true, v0: 176, v1: 177, trait: 'drawingLine' },
 
       // "Hax" drawing lines
 
-      { vis: true, trait: 'fadeLine', v0: 203, v1: 205 },
-      { vis: true, trait: 'fadeLine', v0: 204, v1: 207 },
-      { vis: true, trait: 'fadeLine', v0: 206, v1: 208 },
-      { vis: true, trait: 'fadeLine', v0: 209, v1: 210, curve: 110 },
-      { curve: 0, vis: true, trait: 'fadeLine', v0: 211, v1: 212 },
-      { curve: -175, vis: true, trait: 'fadeLine', v0: 212, v1: 213 },
-      { curve: -20, vis: true, trait: 'fadeLine', v0: 213, v1: 214 },
-      { curve: 0, vis: true, trait: 'fadeLine', v0: 210, v1: 214 },
-      { curve: -100, vis: true, trait: 'fadeLine', v0: 214, v1: 215 },
-      { vis: true, trait: 'fadeLine', v0: 216, v1: 217 },
-      { vis: true, trait: 'fadeLine', v0: 218, v1: 219 },
+      { vis: true, trait: 'drawingLine', v0: 203, v1: 205 },
+      { vis: true, trait: 'drawingLine', v0: 204, v1: 207 },
+      { vis: true, trait: 'drawingLine', v0: 206, v1: 208 },
+      { vis: true, trait: 'drawingLine', v0: 209, v1: 210, curve: 110 },
+      { curve: 0, vis: true, trait: 'drawingLine', v0: 211, v1: 212 },
+      { curve: -175, vis: true, trait: 'drawingLine', v0: 212, v1: 213 },
+      { curve: -20, vis: true, trait: 'drawingLine', v0: 213, v1: 214 },
+      { curve: 0, vis: true, trait: 'drawingLine', v0: 210, v1: 214 },
+      { curve: -100, vis: true, trait: 'drawingLine', v0: 214, v1: 215 },
+      { vis: true, trait: 'drawingLine', v0: 216, v1: 217 },
+      { vis: true, trait: 'drawingLine', v0: 218, v1: 219 },
+
+      // goal post shadow segments
+
+      getSegment(220, 224, TraitEnum.shadow),
+      getSegment(221, 225, TraitEnum.shadow),
+      getSegment(222, 223, TraitEnum.shadow),
+
+      getSegment(226, 230, TraitEnum.shadow),
+      getSegment(227, 231, TraitEnum.shadow),
+      getSegment(228, 229, TraitEnum.shadow),
     ];
 
     if (!convProps) {
@@ -596,11 +791,29 @@ class HaxRugbyStadium {
 
     this.discs = [
       // goal posts
+
       getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
       getDisc([-goalLineX, goalPostY], TraitEnum.goalPost),
       getDisc([goalLineX, -goalPostY], TraitEnum.goalPost),
       getDisc([goalLineX, goalPostY], TraitEnum.goalPost),
+
+      // in-goal cones
+
+      // getDisc([-width, -height], TraitEnum.ingoalCone, colors.redRGB),
+      // getDisc([-width, height], TraitEnum.ingoalCone, colors.redRGB),
+      // getDisc([-goalLineX, -height], TraitEnum.ingoalCone, colors.redRGB),
+      // getDisc([-goalLineX, height], TraitEnum.ingoalCone, colors.redRGB),
+
+      // getDisc([width, -height], TraitEnum.ingoalCone, colors.blueRGB),
+      // getDisc([width, height], TraitEnum.ingoalCone, colors.blueRGB),
+      // getDisc([goalLineX, -height], TraitEnum.ingoalCone, colors.blueRGB),
+      // getDisc([goalLineX, height], TraitEnum.ingoalCone, colors.blueRGB),
     ];
+
+    // this.joints = [
+    //   { d0: 1, d1: 2 },
+    //   { d0: 3, d1: 4 },
+    // ];
 
     this.planes = [
       getPlane([0, 1], -height, TraitEnum.ballArea),
@@ -644,6 +857,8 @@ class HaxRugbyStadium {
         dimensions.miniArea,
         dimensions.kickoffLineX,
         dimensions.areaLineX,
+        dimensions.goalPostBottomZ,
+        dimensions.goalPostTopZ,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import colors from '../../constants/style/colors';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TTrait from './TTrait';
 
@@ -17,6 +18,12 @@ const traits = {
     radius: 2,
     invMass: 0,
     color: '000000',
+  } as TTrait,
+
+  [TraitEnum.ingoalCone]: {
+    vis: true,
+    cMask: [0],
+    radius: 3,
   } as TTrait,
 
   [TraitEnum.goalNet]: {
@@ -47,22 +54,6 @@ const traits = {
     cMask: ['red', 'blue'],
   } as TTrait,
 
-  [TraitEnum.line]: {
-    vis: true,
-    bCoef: 0,
-    cGroup: [0],
-    cMask: [0],
-    color: [199, 230, 189],
-  } as TTrait,
-
-  [TraitEnum.fadeLine]: {
-    vis: true,
-    bCoef: 0,
-    cGroup: [0],
-    cMask: [0],
-    color: [150, 173, 142],
-  } as TTrait,
-
   [TraitEnum.redKOBarrier]: {
     vis: false,
     bCoef: 0.1,
@@ -82,6 +73,55 @@ const traits = {
     bCoef: -2.4,
     cMask: ['ball'],
   },
+
+  [TraitEnum.line]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: [199, 230, 189],
+  } as TTrait,
+
+  [TraitEnum.redLine]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: colors.playerRedRGB,
+  } as TTrait,
+
+  [TraitEnum.blueLine]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: colors.playerBlueRGB,
+  } as TTrait,
+
+  [TraitEnum.fadeLine]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: [150, 173, 142],
+  } as TTrait,
+
+  [TraitEnum.drawingLine]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: colors.haxRugbyBallRGB,
+  } as TTrait,
+
+  [TraitEnum.shadow]: {
+    vis: true,
+    bCoef: 0,
+    cGroup: [0],
+    cMask: [0],
+    color: '587653',
+    // color: '00000080',
+  } as TTrait,
 };
 
 export default traits;

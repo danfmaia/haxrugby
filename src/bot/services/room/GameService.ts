@@ -336,12 +336,12 @@ export default class GameService implements IGameService {
         if (team === TeamID.RedTeam) {
           this.score.red = this.score.red + 2;
           teamName = this.teams.red.name;
-          msgColor = colors.ballRed;
+          msgColor = colors.teamRed;
           stadium = this.map.blueStadiums.getKickoff();
         } else {
           this.score.blue = this.score.blue + 2;
           teamName = this.teams.blue.name;
-          msgColor = colors.ballBlue;
+          msgColor = colors.teamBlue;
           stadium = this.map.redStadiums.getKickoff();
         }
 
@@ -725,9 +725,9 @@ export default class GameService implements IGameService {
       if (isTryOnGoalLine === false) {
         if (this.checkForSafety(ballPosition)) {
           if (ballPosition.x < 0) {
-            this.room.util.setBallColor(colors.ballRed);
+            this.room.util.setBallColor(colors.teamRed);
           } else {
-            this.room.util.setBallColor(colors.ballBlue);
+            this.room.util.setBallColor(colors.teamBlue);
           }
           return;
         }
@@ -846,7 +846,7 @@ export default class GameService implements IGameService {
               `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
               0,
               player.id,
-              offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+              offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
             );
           }
         });
@@ -861,7 +861,7 @@ export default class GameService implements IGameService {
           message,
           0,
           undefined,
-          offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+          offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
         );
       }
 
@@ -886,7 +886,7 @@ export default class GameService implements IGameService {
         `PENAL a favor do ${offendedTeamName}!`,
         2,
         undefined,
-        offendedTeam === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+        offendedTeam === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
       );
 
       let stadium: string;
@@ -1261,7 +1261,7 @@ export default class GameService implements IGameService {
       };
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.ballRed);
+      this.room.util.setBallColor(colors.teamRed);
     } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
@@ -1269,7 +1269,7 @@ export default class GameService implements IGameService {
       };
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.ballBlue);
+      this.room.util.setBallColor(colors.teamBlue);
     }
 
     // transition ball color to original

@@ -20,6 +20,9 @@ export const DIMENSIONS = {
   areaLineX: 240,
   penaltyBoundaryY: 110.1,
 
+  goalPostBottomZ: 12,
+  goalPostTopZ: 64,
+
   // outerWidth: 440,
   // outerHeight: 200,
 
@@ -45,6 +48,8 @@ const dimensions = new MapDimensions(
   DIMENSIONS.kickoffLineX,
   DIMENSIONS.areaLineX,
   DIMENSIONS.penaltyBoundaryY,
+  DIMENSIONS.goalPostBottomZ,
+  DIMENSIONS.goalPostTopZ,
 );
 
 function red_getKickoff(kickoffPosition?: IPosition): string {

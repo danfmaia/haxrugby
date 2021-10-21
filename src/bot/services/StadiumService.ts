@@ -57,6 +57,14 @@ class StadiumService {
     private isPenalty: boolean,
   ) {}
 
+  // drawing height
+  get dHeight(): number {
+    if (this.size === MapSizeEnum.SMALL) {
+      return this.dims.height - 50;
+    }
+    return this.dims.height;
+  }
+
   getLeftKickoffX(): number {
     const leftKickoffX = this.kickoffPosition.x - this.dims.kickoffLineX;
     if (leftKickoffX < -this.dims.goalLineX) {

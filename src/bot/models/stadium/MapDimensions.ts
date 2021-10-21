@@ -13,6 +13,9 @@ class MapDimensions {
     public kickoffLineX: number,
     public areaLineX: number,
     public penaltyBoundaryY: number,
+
+    public goalPostBottomZ: number,
+    public goalPostTopZ: number,
   ) {}
 }
 
