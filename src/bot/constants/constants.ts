@@ -1,6 +1,7 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆';
-export const ROOM_TITLE = '🏉 𝖧𝖺𝗑·𝗥𝘂𝗴𝗯𝘆 🏉';
+export const ROOM_TITLE = "🏉 𝖩𝖯'𝗌 𝖧𝖺𝗑·𝗥𝘂𝗴𝗯𝘆 🏉";
 // export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆 𝖳𝖾𝗌𝗍𝖾𝗌';
+export const APP_VERSION_IN_ROOM_LIST = 'v0.12e';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟮';
 const APP_PATCH_VERSION = '𝗲';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;

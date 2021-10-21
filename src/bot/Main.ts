@@ -16,7 +16,7 @@ import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './commands/match/NewMatchCommand';
-import { APP_VERSION, ROOM_TITLE } from './constants/constants';
+import { APP_VERSION_IN_ROOM_LIST, ROOM_TITLE } from './constants/constants';
 import { ScoreCommand } from './commands/match/ScoreCommand';
 import { LinksCommand } from './commands/links/LinksCommand';
 import { AdminCommand } from './commands/admin/AdminCommand';
@@ -85,7 +85,7 @@ KickRateLimitCommand;
 
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
-    roomName: `${ROOM_TITLE} ${APP_VERSION}`,
+    roomName: `${ROOM_TITLE} ${APP_VERSION_IN_ROOM_LIST}`,
     public: false,
     // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: true,
