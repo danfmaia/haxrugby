@@ -7,6 +7,7 @@ type TTrait = {
   cMask?: [0] | string[];
   radius?: number;
   invMass?: number;
+  damping?: number;
   color?: Color;
 };
 

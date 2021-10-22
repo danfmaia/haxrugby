@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Color, IPosition } from 'inversihax';
+import { IPosition } from 'inversihax';
 import { BALL_RADIUS } from '../constants/constants';
 import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TraitEnum from '../enums/stadium/TraitEnum';
@@ -25,11 +25,25 @@ export function getSegment(v0: number, v1: number, trait: TraitEnum, curve?: num
   };
 }
 
-export function getDisc(pos: [number, number], trait: TraitEnum, color?: Color): any {
+export function getDisc(
+  pos: [number, number],
+  trait: TraitEnum,
+  xSpeed: number = 0,
+  ySpeed: number = 0,
+): any {
   return {
     pos,
     trait,
-    color,
+    speed: [xSpeed, ySpeed],
+  };
+}
+
+export function getJoint(d0: number, d1: number, trait: TraitEnum, length?: [number, number]): any {
+  return {
+    d0,
+    d1,
+    trait,
+    length: length ? length : [0, 500],
   };
 }
 
@@ -49,6 +63,8 @@ export function getBallPhysics(radius: number): any {
 
 class StadiumService {
   constructor(
+    private tickCount: number,
+    private matchDuration: number,
     private dims: MapDimensions,
     private size: MapSizeEnum,
     private team: TeamEnum,
@@ -241,6 +257,29 @@ class StadiumService {
       return trait;
     }
     return TraitEnum.null;
+  }
+
+  get approximateDurationInRunningTime(): number {
+    return this.matchDuration * 1.75;
+  }
+
+  get tickCountInMinutes(): number {
+    return this.tickCount / 60 / 60;
+  }
+
+  getShadowFactor(): number {
+    return (
+      (2 * this.tickCountInMinutes - this.approximateDurationInRunningTime) /
+      this.approximateDurationInRunningTime
+    );
+  }
+
+  getTopPostXSpeed(): number {
+    return (-0.0006 * this.dims.goalPostTopZ) / this.approximateDurationInRunningTime;
+  }
+
+  getBottomPostXSpeed(): number {
+    return (this.dims.goalPostBottomZ / this.dims.goalPostTopZ) * this.getTopPostXSpeed();
   }
 }
 

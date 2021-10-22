@@ -18,6 +18,7 @@ export interface IGameService {
   matchConfig: MatchConfig;
   teams: ITeams;
 
+  tickCount: number;
   remainingTime: number;
   score: IScore;
 

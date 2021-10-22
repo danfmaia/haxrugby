@@ -20,6 +20,12 @@ const traits = {
     color: '000000',
   } as TTrait,
 
+  [TraitEnum.pointDisc]: {
+    cMask: [0],
+    radius: 0,
+    damping: 1,
+  } as TTrait,
+
   [TraitEnum.ingoalCone]: {
     vis: true,
     cMask: [0],

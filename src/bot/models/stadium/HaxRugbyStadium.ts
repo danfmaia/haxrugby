@@ -8,6 +8,7 @@ import TeamEnum from '../../enums/TeamEnum';
 import StadiumService, {
   getBallPhysics,
   getDisc,
+  getJoint,
   getPlane,
   getSegment,
   getVertex,
@@ -30,7 +31,7 @@ class HaxRugbyStadium {
   public segments: any[];
   public goals: any[];
   public discs: any[];
-  // public joints: any[];
+  public joints: any[];
   public planes: any[];
   public ballPhysics: any;
 
@@ -38,6 +39,8 @@ class HaxRugbyStadium {
 
   constructor(
     name: string,
+    tickCount: number,
+    matchDuration: number,
     size: MapSizeEnum,
     team: TeamEnum,
     kickoffPosition: IPosition = { x: 0, y: 0 },
@@ -63,7 +66,16 @@ class HaxRugbyStadium {
     goalPostTopZ: number,
   ) {
     this.name = name;
-    this.serv = new StadiumService(dimensions, size, team, kickoffPosition, convProps, isPenalty);
+    this.serv = new StadiumService(
+      tickCount,
+      matchDuration,
+      dimensions,
+      size,
+      team,
+      kickoffPosition,
+      convProps,
+      isPenalty,
+    );
 
     this.width = outerWidth;
     this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
@@ -81,6 +93,7 @@ class HaxRugbyStadium {
     this.traits = {
       [TraitEnum.ballArea]: traits.ballArea,
       [TraitEnum.goalPost]: traits.goalPost,
+      [TraitEnum.pointDisc]: traits.pointDisc,
       [TraitEnum.ingoalCone]: traits.ingoalCone,
       [TraitEnum.goalNet]: traits.goalNet,
       [TraitEnum.kickOffBarrier]: traits.kickOffBarrier,
@@ -333,10 +346,10 @@ class HaxRugbyStadium {
        *
        *  TODO 1: soften the code
        *  TODO 2: [DONE] replace Rugby Union with HaxRugby
-       *  TODO 3: bring drawings closer to field in small
+       *  TODO 3: [DONE] bring drawings closer to field in small
        *  TODO 4: add rugby H post effect to H in HaxRugby
-       *  TODO 5: add light team colors to in-goal
-       *  TODO 6: add goal posts shadows
+       *  TODO 5: [doing] add light team colors to in-goal
+       *  TODO 6: [DONE] add goal posts shadows
        *  TODO 7: add intense team colors to the line between goal posts
        */
 
@@ -758,13 +771,13 @@ class HaxRugbyStadium {
 
       // goal post shadow segments
 
-      getSegment(220, 224, TraitEnum.shadow),
-      getSegment(221, 225, TraitEnum.shadow),
-      getSegment(222, 223, TraitEnum.shadow),
+      // getSegment(220, 224, TraitEnum.shadow),
+      // getSegment(221, 225, TraitEnum.shadow),
+      // getSegment(222, 223, TraitEnum.shadow),
 
-      getSegment(226, 230, TraitEnum.shadow),
-      getSegment(227, 231, TraitEnum.shadow),
-      getSegment(228, 229, TraitEnum.shadow),
+      // getSegment(226, 230, TraitEnum.shadow),
+      // getSegment(227, 231, TraitEnum.shadow),
+      // getSegment(228, 229, TraitEnum.shadow),
     ];
 
     if (!convProps) {
@@ -774,12 +787,56 @@ class HaxRugbyStadium {
     }
 
     this.discs = [
-      // goal posts
+      // goal post discs
 
-      getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
-      getDisc([-goalLineX, goalPostY], TraitEnum.goalPost),
-      getDisc([goalLineX, -goalPostY], TraitEnum.goalPost),
-      getDisc([goalLineX, goalPostY], TraitEnum.goalPost),
+      /* 1 */ getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
+      /* 2 */ getDisc([-goalLineX, goalPostY], TraitEnum.goalPost),
+      /* 3 */ getDisc([goalLineX, -goalPostY], TraitEnum.goalPost),
+      /* 4 */ getDisc([goalLineX, goalPostY], TraitEnum.goalPost),
+
+      // goal post shadow discs
+
+      /* 5 */ getDisc(
+        [-goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
+        TraitEnum.pointDisc,
+        this.serv.getBottomPostXSpeed(),
+      ),
+      /* 6 */ getDisc(
+        [-goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
+        TraitEnum.pointDisc,
+        this.serv.getBottomPostXSpeed(),
+      ),
+      /* 7 */ getDisc(
+        [-goalLineX - this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
+        TraitEnum.pointDisc,
+        this.serv.getTopPostXSpeed(),
+      ),
+      /* 8 */ getDisc(
+        [-goalLineX - this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
+        TraitEnum.pointDisc,
+        this.serv.getTopPostXSpeed(),
+      ),
+
+      /* 9 */ getDisc(
+        [goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
+        TraitEnum.pointDisc,
+        this.serv.getBottomPostXSpeed(),
+      ),
+      /* 10 */ getDisc(
+        [goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
+        TraitEnum.pointDisc,
+        this.serv.getBottomPostXSpeed(),
+      ),
+      /* 11 */ getDisc(
+        [goalLineX - this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
+        TraitEnum.pointDisc,
+        this.serv.getTopPostXSpeed(),
+      ),
+      /* 12 */ getDisc(
+        [goalLineX - this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
+        TraitEnum.pointDisc,
+        this.serv.getTopPostXSpeed(),
+      ),
 
       // in-goal cones
 
@@ -794,10 +851,17 @@ class HaxRugbyStadium {
       // getDisc([goalLineX, height], TraitEnum.ingoalCone, colors.blueRGB),
     ];
 
-    // this.joints = [
-    //   { d0: 1, d1: 2 },
-    //   { d0: 3, d1: 4 },
-    // ];
+    this.joints = [
+      // goal post shadow joints
+
+      getJoint(1, 7, TraitEnum.shadow),
+      getJoint(2, 8, TraitEnum.shadow),
+      getJoint(5, 6, TraitEnum.shadow),
+
+      getJoint(3, 11, TraitEnum.shadow),
+      getJoint(4, 12, TraitEnum.shadow),
+      getJoint(9, 10, TraitEnum.shadow),
+    ];
 
     this.planes = [
       getPlane([0, 1], -height, TraitEnum.ballArea),
@@ -815,6 +879,8 @@ class HaxRugbyStadium {
 
   public static getNewStadium(
     name: string,
+    tickCount: number,
+    matchDuration: number,
     size: MapSizeEnum,
     dimensions: MapDimensions,
     team: TeamEnum,
@@ -825,6 +891,8 @@ class HaxRugbyStadium {
     return JSON.stringify(
       new HaxRugbyStadium(
         name,
+        tickCount,
+        matchDuration,
         size,
         team,
         kickoffPosition,

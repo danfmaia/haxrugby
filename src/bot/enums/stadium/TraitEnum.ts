@@ -2,6 +2,7 @@ enum TraitEnum {
   ballArea = 'ballArea',
   playerArea = 'playerArea',
   goalPost = 'goalPost',
+  pointDisc = 'pointDisc',
   ingoalCone = 'ingoalCone',
   goalNet = 'goalNet',
 

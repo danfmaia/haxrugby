@@ -52,6 +52,9 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
       return;
     }
 
+    const tickCount = this.gameService.tickCount;
+    const matchDuration = this.gameService.matchConfig.timeLimit;
+
     const kickingTeam = this.gameService.isConversionAttempt;
     const allPlayersPropMap = this.room.util.getAllPlayerPropsMaps();
     const map = this.gameService.map;
@@ -82,12 +85,12 @@ export class BallCommand extends CommandBase<HaxRugbyPlayer> {
     }
 
     if (this.gameService.isConversionAttempt === TeamEnum.RED) {
-      stadium = map.redStadiums.getConversion({
+      stadium = map.redStadiums.getConversion(tickCount, matchDuration, {
         ballX: newBallX,
         tryY: this.gameService.tryY,
       });
     } else {
-      stadium = map.blueStadiums.getConversion({
+      stadium = map.blueStadiums.getConversion(tickCount, matchDuration, {
         ballX: newBallX,
         tryY: this.gameService.tryY,
       });

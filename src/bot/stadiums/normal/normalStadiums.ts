@@ -40,9 +40,15 @@ const dimensions = new MapDimensions(
   DIMENSIONS.goalPostTopZ,
 );
 
-function red_getKickoff(kickoffPosition?: IPosition): string {
+function red_getKickoff(
+  tickCount: number,
+  matchDuration: number,
+  kickoffPosition?: IPosition,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 R by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
@@ -50,9 +56,15 @@ function red_getKickoff(kickoffPosition?: IPosition): string {
   );
 }
 
-function red_getConversion(conversionProps: TConversionProps): string {
+function red_getConversion(
+  tickCount: number,
+  matchDuration: number,
+  conversionProps: TConversionProps,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 RC by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
@@ -61,9 +73,16 @@ function red_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
-function red_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+function red_getPenaltyKick(
+  tickCount: number,
+  matchDuration: number,
+  kickoffPosition: IPosition,
+  isPenalty: boolean,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v9 RP by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.RED,
@@ -73,9 +92,15 @@ function red_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): str
   );
 }
 
-function blue_getKickoff(kickoffPosition?: IPosition): string {
+function blue_getKickoff(
+  tickCount: number,
+  matchDuration: number,
+  kickoffPosition?: IPosition,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 B by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
@@ -83,9 +108,15 @@ function blue_getKickoff(kickoffPosition?: IPosition): string {
   );
 }
 
-function blue_getConversion(conversionProps: TConversionProps): string {
+function blue_getConversion(
+  tickCount: number,
+  matchDuration: number,
+  conversionProps: TConversionProps,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v20 BC by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
@@ -94,9 +125,16 @@ function blue_getConversion(conversionProps: TConversionProps): string {
   );
 }
 
-function blue_getPenaltyKick(kickoffPosition: IPosition, isPenalty: boolean): string {
+function blue_getPenaltyKick(
+  tickCount: number,
+  matchDuration: number,
+  kickoffPosition: IPosition,
+  isPenalty: boolean,
+): string {
   return HaxRugbyStadium.getNewStadium(
     'HaxRugby v9 BP by JP',
+    tickCount,
+    matchDuration,
     MapSizeEnum.NORMAL,
     dimensions,
     TeamEnum.BLUE,
