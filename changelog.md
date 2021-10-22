@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### v0.13:
+
+- Incluído o nome "JP's HaxRugby" no map tamanho small.
+- Alterada a cor do nome "JP's HaxRugby" desenhado no campo.
+- Adicionado _efeito de sombra_ para o gol:
+  - A sombra se desloca ao longo da partida;
+  - A velocidade da sombra depende da duração total da partida. Em partidas curtas a sombra se deslocará mais rapidamente.
+
 ### v0.12e:
 
 - Corrigido erro na lógica de Impedimento quando, em certas situações, a condição de um ou mais jogadores deveria ser normalizada, mas não estava sendo.

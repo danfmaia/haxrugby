@@ -5,7 +5,7 @@ import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
 @CommandDecorator({
-  names: ['s', 'score', 'tempo', 'placar'],
+  names: ['s', 'S', 'score', 'tempo', 't', 'T', 'placar'],
 })
 export class ScoreCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;

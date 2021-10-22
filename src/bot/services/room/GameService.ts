@@ -50,7 +50,7 @@ export default class GameService implements IGameService {
   public matchConfig: MatchConfig;
   public teams: ITeams;
 
-  private tickCount: number = 0;
+  public tickCount: number = 0;
   public remainingTime: number;
   public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
@@ -336,13 +336,13 @@ export default class GameService implements IGameService {
         if (team === TeamID.RedTeam) {
           this.score.red = this.score.red + 2;
           teamName = this.teams.red.name;
-          msgColor = colors.ballRed;
-          stadium = this.map.blueStadiums.getKickoff();
+          msgColor = colors.teamRed;
+          stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
         } else {
           this.score.blue = this.score.blue + 2;
           teamName = this.teams.blue.name;
-          msgColor = colors.ballBlue;
-          stadium = this.map.redStadiums.getKickoff();
+          msgColor = colors.teamBlue;
+          stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
         }
 
         // announce successful conversion
@@ -363,9 +363,13 @@ export default class GameService implements IGameService {
     if (newStadiumName.includes('HaxRugby') === false) {
       const lastWinner = this.getLastWinner();
       if (lastWinner === TeamEnum.BLUE) {
-        this.room.setCustomStadium(this.map.blueStadiums.getKickoff());
+        this.room.setCustomStadium(
+          this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
+        );
       } else {
-        this.room.setCustomStadium(this.map.redStadiums.getKickoff());
+        this.room.setCustomStadium(
+          this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
+        );
       }
     }
   }
@@ -375,6 +379,7 @@ export default class GameService implements IGameService {
    */
 
   public initializeMatch(player?: HaxRugbyPlayer): void {
+    this.tickCount = 0;
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
     this.isMatchInProgress = true;
     this.isOvertime = false;
@@ -439,9 +444,13 @@ export default class GameService implements IGameService {
       if (this.isFinishing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
-          this.room.setCustomStadium(this.map.redStadiums.getKickoff());
+          this.room.setCustomStadium(
+            this.map.redStadiums.getKickoff(0, this.matchConfig.timeLimit),
+          );
         } else if (lastWinner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(this.map.blueStadiums.getKickoff());
+          this.room.setCustomStadium(
+            this.map.blueStadiums.getKickoff(0, this.matchConfig.timeLimit),
+          );
         }
       }
       this.chatService.sendNewMatchHelp();
@@ -725,9 +734,9 @@ export default class GameService implements IGameService {
       if (isTryOnGoalLine === false) {
         if (this.checkForSafety(ballPosition)) {
           if (ballPosition.x < 0) {
-            this.room.util.setBallColor(colors.ballRed);
+            this.room.util.setBallColor(colors.teamRed);
           } else {
-            this.room.util.setBallColor(colors.ballBlue);
+            this.room.util.setBallColor(colors.teamBlue);
           }
           return;
         }
@@ -846,7 +855,7 @@ export default class GameService implements IGameService {
               `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
               0,
               player.id,
-              offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+              offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
             );
           }
         });
@@ -861,7 +870,7 @@ export default class GameService implements IGameService {
           message,
           0,
           undefined,
-          offendedTeam.teamEnum === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+          offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
         );
       }
 
@@ -886,14 +895,24 @@ export default class GameService implements IGameService {
         `PENAL a favor do ${offendedTeamName}!`,
         2,
         undefined,
-        offendedTeam === TeamEnum.RED ? colors.ballRed : colors.ballBlue,
+        offendedTeam === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
       );
 
       let stadium: string;
       if (offendedTeam === TeamEnum.RED) {
-        stadium = this.map.redStadiums.getPenaltyKick(this.penaltyPosition, true);
+        stadium = this.map.redStadiums.getPenaltyKick(
+          this.tickCount,
+          this.matchConfig.timeLimit,
+          this.penaltyPosition,
+          true,
+        );
       } else {
-        stadium = this.map.blueStadiums.getPenaltyKick(this.penaltyPosition, true);
+        stadium = this.map.blueStadiums.getPenaltyKick(
+          this.tickCount,
+          this.matchConfig.timeLimit,
+          this.penaltyPosition,
+          true,
+        );
       }
 
       this.isPenalty = false;
@@ -1014,11 +1033,11 @@ export default class GameService implements IGameService {
       if (isGoal === TeamEnum.RED) {
         this.score.red = this.score.red + 3;
         teamName = this.teams.red.name;
-        stadium = this.map.blueStadiums.getKickoff();
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       } else {
         this.score.blue = this.score.blue + 3;
         teamName = this.teams.blue.name;
-        stadium = this.map.redStadiums.getKickoff();
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
 
       // announce goal
@@ -1099,10 +1118,16 @@ export default class GameService implements IGameService {
 
       if (isSafety === TeamEnum.RED) {
         teamName = this.teams.red.name;
-        stadium = this.map.redStadiums.getKickoff({ x: kickoffX, y: 0 });
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit, {
+          x: kickoffX,
+          y: 0,
+        });
       } else {
         teamName = this.teams.blue.name;
-        stadium = this.map.blueStadiums.getKickoff({ x: kickoffX, y: 0 });
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit, {
+          x: kickoffX,
+          y: 0,
+        });
       }
 
       // announce safety
@@ -1230,12 +1255,12 @@ export default class GameService implements IGameService {
 
       let stadium: string;
       if (this.isTry === TeamEnum.RED) {
-        stadium = this.map.redStadiums.getConversion({
+        stadium = this.map.redStadiums.getConversion(this.tickCount, this.matchConfig.timeLimit, {
           ballX: this.map.areaLineX,
           tryY: this.tryY,
         });
       } else {
-        stadium = this.map.blueStadiums.getConversion({
+        stadium = this.map.blueStadiums.getConversion(this.tickCount, this.matchConfig.timeLimit, {
           ballX: -this.map.areaLineX,
           tryY: this.tryY,
         });
@@ -1261,7 +1286,7 @@ export default class GameService implements IGameService {
       };
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.ballRed);
+      this.room.util.setBallColor(colors.teamRed);
     } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
@@ -1269,7 +1294,7 @@ export default class GameService implements IGameService {
       };
       // change ball color to team's
       this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.ballBlue);
+      this.room.util.setBallColor(colors.teamBlue);
     }
 
     // transition ball color to original
@@ -1379,9 +1404,9 @@ export default class GameService implements IGameService {
       let stadium: string;
 
       if (isStillConversionAttempt === TeamEnum.RED) {
-        stadium = this.map.blueStadiums.getKickoff();
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       } else {
-        stadium = this.map.redStadiums.getKickoff();
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
 
       // announce missed conversion

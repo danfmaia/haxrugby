@@ -76,9 +76,9 @@ class Teams implements ITeams {
 
   getTeamColor(team: TeamEnum): number {
     if (team === TeamEnum.RED) {
-      return colors.ballRed;
+      return colors.teamRed;
     }
-    return colors.ballBlue;
+    return colors.teamBlue;
   }
 
   public fillAllPositions(players: HaxRugbyPlayer[]): void {

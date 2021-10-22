@@ -33,6 +33,9 @@ export class SetScoreCommand extends CommandBase<HaxRugbyPlayer> {
     const newRedScore = Util.parseNumericInput(args[0]);
     const newBlueScore = Util.parseNumericInput(args[1]);
 
+    const tickCount = this.gameService.tickCount;
+    const matchDuration = this.gameService.matchConfig.timeLimit;
+
     if (newRedScore === false) {
       this.chatService.sendNormalAnnouncement(
         'O argumento <pontos_do_red> é obrigatório.',
@@ -56,9 +59,13 @@ export class SetScoreCommand extends CommandBase<HaxRugbyPlayer> {
     if (args[2]) {
       const teamArg = args[2].toUpperCase();
       if (teamArg === TeamEnum.RED) {
-        this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
+        this.room.setCustomStadium(
+          this.gameService.map.redStadiums.getKickoff(tickCount, matchDuration),
+        );
       } else if (teamArg === TeamEnum.BLUE) {
-        this.room.setCustomStadium(this.gameService.map.blueStadiums.getKickoff());
+        this.room.setCustomStadium(
+          this.gameService.map.blueStadiums.getKickoff(tickCount, matchDuration),
+        );
       }
     }
 

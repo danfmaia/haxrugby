@@ -45,9 +45,13 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         if (stadium) {
           this.gameService.map = stadium;
           if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
-            this.room.setCustomStadium(stadium.blueStadiums.getKickoff());
+            this.room.setCustomStadium(
+              stadium.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            );
           } else {
-            this.room.setCustomStadium(stadium.redStadiums.getKickoff());
+            this.room.setCustomStadium(
+              stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            );
           }
         }
       } else {
@@ -64,17 +68,25 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         const stadium = this.getStadiumFromInput(arg2);
         if (stadium) {
           this.gameService.map = stadium;
-          this.room.setCustomStadium(stadium.redStadiums.getKickoff());
+          this.room.setCustomStadium(
+            stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+          );
         } else {
-          this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
+          this.room.setCustomStadium(
+            this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+          );
         }
 
         if (arg3) {
           const teamArg = arg3.toUpperCase();
           if (teamArg === TeamEnum.RED) {
-            this.room.setCustomStadium(this.gameService.map.redStadiums.getKickoff());
+            this.room.setCustomStadium(
+              this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            );
           } else if (teamArg === TeamEnum.BLUE) {
-            this.room.setCustomStadium(this.gameService.map.blueStadiums.getKickoff());
+            this.room.setCustomStadium(
+              this.gameService.map.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            );
           }
         }
       }
