@@ -260,7 +260,7 @@ class StadiumService {
   }
 
   get approximateDurationInRunningTime(): number {
-    return this.matchDuration * 1.75;
+    return this.matchDuration * 1.5;
   }
 
   get tickCountInMinutes(): number {
@@ -275,7 +275,11 @@ class StadiumService {
   }
 
   getTopPostXSpeed(): number {
-    return (-0.0006 * this.dims.goalPostTopZ) / this.approximateDurationInRunningTime;
+    // 1.8165 < speedFactor > 1.8175
+    const speedFactor = 1.817;
+    return (
+      (-speedFactor * this.dims.goalPostTopZ) / (60 * 60 * this.approximateDurationInRunningTime)
+    );
   }
 
   getBottomPostXSpeed(): number {

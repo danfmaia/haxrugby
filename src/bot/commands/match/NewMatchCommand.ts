@@ -38,7 +38,6 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
 
     const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
-      const tickCount = this.gameService.tickCount;
 
       if (arg0 === 'x1' || arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
         updatedMatchConfig = getMatchConfig(arg0);
@@ -47,11 +46,11 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           this.gameService.map = stadium;
           if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
             this.room.setCustomStadium(
-              stadium.blueStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+              stadium.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           } else {
             this.room.setCustomStadium(
-              stadium.redStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+              stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           }
         }
@@ -70,11 +69,11 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         if (stadium) {
           this.gameService.map = stadium;
           this.room.setCustomStadium(
-            stadium.redStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+            stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
           );
         } else {
           this.room.setCustomStadium(
-            this.gameService.map.redStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+            this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
           );
         }
 
@@ -82,11 +81,11 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           const teamArg = arg3.toUpperCase();
           if (teamArg === TeamEnum.RED) {
             this.room.setCustomStadium(
-              this.gameService.map.redStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+              this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           } else if (teamArg === TeamEnum.BLUE) {
             this.room.setCustomStadium(
-              this.gameService.map.blueStadiums.getKickoff(tickCount, updatedMatchConfig.timeLimit),
+              this.gameService.map.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           }
         }

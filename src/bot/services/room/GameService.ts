@@ -445,11 +445,11 @@ export default class GameService implements IGameService {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
           this.room.setCustomStadium(
-            this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
+            this.map.redStadiums.getKickoff(0, this.matchConfig.timeLimit),
           );
         } else if (lastWinner === TeamEnum.BLUE) {
           this.room.setCustomStadium(
-            this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
+            this.map.blueStadiums.getKickoff(0, this.matchConfig.timeLimit),
           );
         }
       }
