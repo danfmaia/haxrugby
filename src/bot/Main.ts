@@ -16,7 +16,12 @@ import { InfoBackgroundTask } from './BackgroundTasks/InfoBackgroundTask';
 import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandInterceptor';
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './commands/match/NewMatchCommand';
-import { APP_VERSION_IN_ROOM_LIST, ROOM_TITLE } from './constants/constants';
+import {
+  APP_VERSION_IN_ROOM_LIST,
+  CLOSED_PLAYER_NAME,
+  CLOSED_ROOM_TITLE,
+  ROOM_TITLE,
+} from './constants/constants';
 import { ScoreCommand } from './commands/match/ScoreCommand';
 import { LinksCommand } from './commands/links/LinksCommand';
 import { AdminCommand } from './commands/admin/AdminCommand';
@@ -43,6 +48,7 @@ import { AdvantageCommand } from './commands/penalty/AdvantageCommand';
 import { OffsideCommand } from './commands/rules/OffsideCommand';
 import { PenaltyCommand } from './commands/penalty/PenaltyCommand';
 import { PenaltyRuleCommand } from './commands/rules/PenaltyRuleCommand';
+import appConfig from './constants/appConfig';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -83,12 +89,15 @@ FacebookCommand;
 
 KickRateLimitCommand;
 
+const roomName = appConfig.isOpen ? `${ROOM_TITLE} ${APP_VERSION_IN_ROOM_LIST}` : CLOSED_ROOM_TITLE;
+
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({
-    roomName: `${ROOM_TITLE} ${APP_VERSION_IN_ROOM_LIST}`,
-    public: false,
+    roomName,
+    playerName: CLOSED_PLAYER_NAME,
+    public: true,
     // password: 'WJ-wges!B3J)M/Tx',
-    noPlayer: true,
+    noPlayer: appConfig.isOpen,
     maxPlayers: 15,
   });
 

@@ -1,4 +1,5 @@
 import { IPlayerObject } from 'inversihax';
+import appConfig from '../../constants/appConfig';
 import colors from '../../constants/style/colors';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
@@ -14,7 +15,7 @@ export interface IAdminService {
     player: HaxRugbyPlayer,
     reason: string,
     ban: boolean,
-    byPlayer: HaxRugbyPlayer,
+    byPlayer?: HaxRugbyPlayer,
   ): void;
 
   setFirstPlayerAsAdmin(playerId: number): void;
@@ -37,12 +38,26 @@ export default class AdminService implements IAdminService {
     const playerTotal = this.room.getPlayerList().length;
     Util.logWithTime(`${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`);
 
+    if (appConfig.isOpen === false) {
+      Util.timeout(7000, () => {
+        if (player.id > 1) {
+          this.room.kickPlayer(player.id, '𝗗𝗶𝘀𝗰𝗼𝗿𝗱: discord.io/HaxRugby', false);
+        }
+      });
+      return;
+    }
+
     this.setFirstPlayerAsAdmin(player.id);
   }
 
   public handlePlayerLeave(player: HaxRugbyPlayer): void {
     const playerTotal = this.room.getPlayerList().length;
     Util.logWithTime(`${Util.getPlayerNameAndId(player)} saiu da sala. Total: ${playerTotal}`);
+
+    if (appConfig.isOpen === false) {
+      return;
+    }
+
     this.setEarliestPlayerAsAdmin();
   }
 
@@ -50,7 +65,7 @@ export default class AdminService implements IAdminService {
     player: HaxRugbyPlayer,
     reason: string,
     ban: boolean,
-    byPlayer: HaxRugbyPlayer,
+    byPlayer?: HaxRugbyPlayer,
   ): void {
     const BOT_KICK_MESSAGE = 'Você não tem permissão para kickar.';
     const BOT_BAN_MESSAGE = 'Você não tem permissão para banir.';
@@ -59,45 +74,46 @@ export default class AdminService implements IAdminService {
       return;
     }
 
-    const playerConfig = HaxRugbyPlayerConfig.getConfig(byPlayer.id);
     const playerNameAndId = Util.getPlayerNameAndId(player);
-    const byPlayerNameAndId = Util.getPlayerNameAndId(byPlayer);
 
-    if (playerConfig.role.weight < 90) {
-      if (ban === false) {
-        this.chatService.sendBoldAnnouncement(
-          `${byPlayer.name} tentou kickar ${player.name} sem permissão.`,
-          2,
-          undefined,
-          colors.red,
-        );
-        Util.logWithTime(`${byPlayerNameAndId} tentou kickar ${playerNameAndId} sem permissão.`);
-        this.room.kickPlayer(byPlayer.id, BOT_KICK_MESSAGE, false);
-      } else {
-        this.chatService.sendBoldAnnouncement(
-          `${byPlayer.name} tentou banir ${player.name} sem permissão. O ban foi retirado.`,
-          2,
-          undefined,
-          colors.red,
-        );
-        Util.logWithTime(
-          `${byPlayerNameAndId} tentou banir ${playerNameAndId} sem permissão. O ban foi retirado.`,
-        );
-        this.room.clearBan(player.id);
-        this.room.kickPlayer(byPlayer.id, BOT_BAN_MESSAGE, false);
+    if (byPlayer && byPlayer.id > 0) {
+      const playerConfig = HaxRugbyPlayerConfig.getConfig(byPlayer.id);
+      const byPlayerNameAndId = Util.getPlayerNameAndId(byPlayer);
+
+      if (playerConfig.role.weight < 90) {
+        if (ban === false) {
+          this.chatService.sendBoldAnnouncement(
+            `${byPlayer.name} tentou kickar ${player.name} sem permissão.`,
+            2,
+            undefined,
+            colors.red,
+          );
+          Util.logWithTime(`${byPlayerNameAndId} tentou kickar ${playerNameAndId} sem permissão.`);
+          this.room.kickPlayer(byPlayer.id, BOT_KICK_MESSAGE, false);
+        } else {
+          this.chatService.sendBoldAnnouncement(
+            `${byPlayer.name} tentou banir ${player.name} sem permissão. O ban foi retirado.`,
+            2,
+            undefined,
+            colors.red,
+          );
+          Util.logWithTime(
+            `${byPlayerNameAndId} tentou banir ${playerNameAndId} sem permissão. O ban foi retirado.`,
+          );
+          this.room.clearBan(player.id);
+          this.room.kickPlayer(byPlayer.id, BOT_BAN_MESSAGE, false);
+        }
+        return;
       }
-      return;
-    }
 
-    if (ban === false) {
-      if (byPlayer.id > 0) {
+      if (ban === false) {
         Util.logWithTime(`${playerNameAndId} foi kickado por ${byPlayerNameAndId}).`);
       } else {
-        Util.logWithTime(`${playerNameAndId} foi kickado pelo bot.`);
+        Util.logWithTime(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
       }
     } else {
-      if (byPlayer.id > 0) {
-        Util.logWithTime(`${playerNameAndId} foi banido por ${byPlayerNameAndId}).`);
+      if (ban === false) {
+        Util.logWithTime(`${playerNameAndId} foi kickado pelo bot.`);
       } else {
         Util.logWithTime(`${playerNameAndId} foi banido pelo bot.`);
       }

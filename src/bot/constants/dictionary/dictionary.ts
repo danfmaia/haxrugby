@@ -1,4 +1,5 @@
-import { lang, LanguageEnum } from '../appConfig';
+import { LanguageEnum } from '../../enums/stadium/LanguageEnum';
+import appConfig from '../appConfig';
 import { APP_VERSION, GAME_TITLE, ROOM_TITLE } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
@@ -160,7 +161,7 @@ const ptBr: DictionaryKeys = {
 };
 
 function getDict() {
-  switch (lang) {
+  switch (appConfig.language) {
     case LanguageEnum['pt-BR']:
       return ptBr;
     default:

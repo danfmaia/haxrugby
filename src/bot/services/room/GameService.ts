@@ -748,16 +748,6 @@ export default class GameService implements IGameService {
     }
 
     this.chatService.announceDefRec(didBallEnterOrLeaveIngoal, this.isDefRec);
-
-    //
-    // hard fix ball if broken by air kick
-    //
-    // TODO: find the root cause and fix it
-    //
-    // const isBallAerial = this.room.util.getIsAerialBall();
-    // if (isBallAerial && this.airKickerId === null) {
-    //   this.room.util.toggleAerialBall(false);
-    // }
   }
 
   private checkForTouches(players: HaxRugbyPlayer[], ballPosition: IPosition) {

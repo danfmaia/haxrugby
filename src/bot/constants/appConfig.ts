@@ -1,6 +1,13 @@
-export enum LanguageEnum {
-  'pt-BR' = 'pt-BR',
-  'en-US' = 'en-US',
-}
+import { LanguageEnum } from '../enums/stadium/LanguageEnum';
 
-export const lang: LanguageEnum = LanguageEnum['pt-BR'];
+type TAppConfig = {
+  isOpen: boolean;
+  language: LanguageEnum;
+};
+
+const appConfig: TAppConfig = {
+  isOpen: false,
+  language: LanguageEnum['pt-BR'],
+};
+
+export default appConfig;
