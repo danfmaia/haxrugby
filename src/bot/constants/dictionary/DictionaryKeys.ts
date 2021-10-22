@@ -8,6 +8,9 @@ type DictionaryKeys = {
   MSG_GAME_INFO_4: string;
   MSG_GAME_INFO_5: string;
 
+  MSG_CLOSED_ROOM_1: string;
+  MSG_CLOSED_ROOM_2: string;
+
   MSG_RULES: {
     TITLE: string;
     TRY: RuleMessage;

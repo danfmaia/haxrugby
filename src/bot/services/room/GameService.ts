@@ -13,6 +13,7 @@ import {
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
   AHEAD_PENALTY_EMOJI,
+  LINK_DISCORD,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -40,6 +41,7 @@ import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import { RoomUtil } from '../../util/RoomUtil';
 import TAheadPlayers from '../../models/game/TAheadPlayers';
 import AheadEnum from '../../enums/AheadEnum';
+import appConfig from '../../constants/appConfig';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -213,9 +215,13 @@ export default class GameService implements IGameService {
   }
 
   public handlePlayerJoin(player: IPlayerObject): void {
-    this.chatService.sendGreetingsToIncomingPlayer(player.id);
-    this.sendGameInfoPeriodically(player.id);
-    this.sendNewMatchHelpPeriodically(player.id);
+    if (player.name !== LINK_DISCORD) {
+      this.chatService.sendGreetingsToIncomingPlayer(player.id);
+      if (appConfig.isOpen) {
+        this.sendGameInfoPeriodically(player.id);
+        this.sendNewMatchHelpPeriodically(player.id);
+      }
+    }
   }
 
   public handlePlayerLeave(player: HaxRugbyPlayer): void {
