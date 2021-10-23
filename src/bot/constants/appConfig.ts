@@ -6,7 +6,7 @@ type TAppConfig = {
 };
 
 const appConfig: TAppConfig = {
-  isOpen: false,
+  isOpen: true,
   language: LanguageEnum['pt-BR'],
 };
 

@@ -275,8 +275,8 @@ class StadiumService {
   }
 
   getTopPostXSpeed(): number {
-    // 1.8165 < speedFactor > 1.8175
-    const speedFactor = 1.817;
+    // 1.81780 < speedFactor > 1.81800
+    const speedFactor = 1.81785;
     return (
       (-speedFactor * this.dims.goalPostTopZ) / (60 * 60 * this.approximateDurationInRunningTime)
     );
