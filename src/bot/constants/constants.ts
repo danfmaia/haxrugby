@@ -4,9 +4,9 @@ export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉';
 export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 às 20:15';
 export const CLOSED_PLAYER_NAME = 'Abriremos às 20:15';
 
-export const APP_VERSION_IN_ROOM_LIST = 'v0.13';
+export const APP_VERSION_IN_ROOM_LIST = 'v0.13a';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';
-const APP_PATCH_VERSION = '';
+const APP_PATCH_VERSION = '𝗮';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';

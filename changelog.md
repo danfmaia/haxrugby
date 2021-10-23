@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### v0.13a:
+
+- Aumentado o _boost_ de conversão de 2,4x para 2,7x.
+  - Lembrando que esse boost está localizado no campo, logo à frente da bola. Não é necessário usar o `x` para utilizá-lo, basta empurrar a bola.
+- Invertidos o lado inicial e o sentido de deslocamento da sombra.
+  - Isso é pra simular que sol está se deslocando da direita para a esquerda no céu (leste a oeste).
+- Leves ajustes na precisão do efeito de deslocamento de sombra.
+
 ### v0.13:
 
 - Incluído o nome "JP's HaxRugby" no map tamanho small.

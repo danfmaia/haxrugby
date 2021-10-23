@@ -572,38 +572,6 @@ class HaxRugbyStadium {
       // { x: 0, y: 0, trait: 'null' },
       // { x: 0, y: 0, trait: 'null' },
       // { x: 0, y: 0, trait: 'null' },
-
-      // goal post shadow vertexes
-
-      /* 220 */ getVertex(-goalLineX, -goalPostY, TraitEnum.shadow),
-      /* 221 */ getVertex(-goalLineX, goalPostY, TraitEnum.shadow),
-      /* 222 */ getVertex(
-        -goalLineX + goalPostBottomZ,
-        -goalPostY + goalPostBottomZ,
-        TraitEnum.shadow,
-      ),
-      /* 223 */ getVertex(
-        -goalLineX + goalPostBottomZ,
-        goalPostY + goalPostBottomZ,
-        TraitEnum.shadow,
-      ),
-      /* 224 */ getVertex(-goalLineX + goalPostTopZ, -goalPostY + goalPostTopZ, TraitEnum.shadow),
-      /* 225 */ getVertex(-goalLineX + goalPostTopZ, goalPostY + goalPostTopZ, TraitEnum.shadow),
-
-      /* 226 */ getVertex(goalLineX, -goalPostY, TraitEnum.shadow),
-      /* 227 */ getVertex(goalLineX, goalPostY, TraitEnum.shadow),
-      /* 228 */ getVertex(
-        goalLineX + goalPostBottomZ,
-        -goalPostY + goalPostBottomZ,
-        TraitEnum.shadow,
-      ),
-      /* 229 */ getVertex(
-        goalLineX + goalPostBottomZ,
-        goalPostY + goalPostBottomZ,
-        TraitEnum.shadow,
-      ),
-      /* 230 */ getVertex(goalLineX + goalPostTopZ, -goalPostY + goalPostTopZ, TraitEnum.shadow),
-      /* 231 */ getVertex(goalLineX + goalPostTopZ, goalPostY + goalPostTopZ, TraitEnum.shadow),
     ];
 
     this.segments = [
@@ -768,16 +736,6 @@ class HaxRugbyStadium {
       { curve: -100, vis: true, trait: 'drawingLine', v0: 214, v1: 215 },
       { vis: true, trait: 'drawingLine', v0: 216, v1: 217 },
       { vis: true, trait: 'drawingLine', v0: 218, v1: 219 },
-
-      // goal post shadow segments
-
-      // getSegment(220, 224, TraitEnum.shadow),
-      // getSegment(221, 225, TraitEnum.shadow),
-      // getSegment(222, 223, TraitEnum.shadow),
-
-      // getSegment(226, 230, TraitEnum.shadow),
-      // getSegment(227, 231, TraitEnum.shadow),
-      // getSegment(228, 229, TraitEnum.shadow),
     ];
 
     if (!convProps) {
@@ -797,43 +755,43 @@ class HaxRugbyStadium {
       // goal post shadow discs
 
       /* 5 */ getDisc(
-        [-goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
+        [-goalLineX + this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
         TraitEnum.pointDisc,
         this.serv.getBottomPostXSpeed(),
       ),
       /* 6 */ getDisc(
-        [-goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
+        [-goalLineX + this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
         TraitEnum.pointDisc,
         this.serv.getBottomPostXSpeed(),
       ),
       /* 7 */ getDisc(
-        [-goalLineX - this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
+        [-goalLineX + this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
         TraitEnum.pointDisc,
         this.serv.getTopPostXSpeed(),
       ),
       /* 8 */ getDisc(
-        [-goalLineX - this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
+        [-goalLineX + this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
         TraitEnum.pointDisc,
         this.serv.getTopPostXSpeed(),
       ),
 
       /* 9 */ getDisc(
-        [goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
+        [goalLineX + this.serv.getShadowFactor() * goalPostBottomZ, -goalPostY + goalPostBottomZ],
         TraitEnum.pointDisc,
         this.serv.getBottomPostXSpeed(),
       ),
       /* 10 */ getDisc(
-        [goalLineX - this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
+        [goalLineX + this.serv.getShadowFactor() * goalPostBottomZ, goalPostY + goalPostBottomZ],
         TraitEnum.pointDisc,
         this.serv.getBottomPostXSpeed(),
       ),
       /* 11 */ getDisc(
-        [goalLineX - this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
+        [goalLineX + this.serv.getShadowFactor() * goalPostTopZ, -goalPostY + goalPostTopZ],
         TraitEnum.pointDisc,
         this.serv.getTopPostXSpeed(),
       ),
       /* 12 */ getDisc(
-        [goalLineX - this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
+        [goalLineX + this.serv.getShadowFactor() * goalPostTopZ, goalPostY + goalPostTopZ],
         TraitEnum.pointDisc,
         this.serv.getTopPostXSpeed(),
       ),

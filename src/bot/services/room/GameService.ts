@@ -215,13 +215,16 @@ export default class GameService implements IGameService {
   }
 
   public handlePlayerJoin(player: IPlayerObject): void {
-    if (player.name !== LINK_DISCORD) {
-      this.chatService.sendGreetingsToIncomingPlayer(player.id);
-      if (appConfig.isOpen) {
-        this.sendGameInfoPeriodically(player.id);
-        this.sendNewMatchHelpPeriodically(player.id);
+    if (appConfig.isOpen === false) {
+      if (player.name !== LINK_DISCORD) {
+        this.chatService.sendGreetingsToIncomingPlayer(player.id);
       }
+      return;
     }
+
+    this.chatService.sendGreetingsToIncomingPlayer(player.id);
+    this.sendGameInfoPeriodically(player.id);
+    this.sendNewMatchHelpPeriodically(player.id);
   }
 
   public handlePlayerLeave(player: HaxRugbyPlayer): void {

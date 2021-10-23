@@ -39,7 +39,7 @@ export default class AdminService implements IAdminService {
     Util.logWithTime(`${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`);
 
     if (appConfig.isOpen === false) {
-      Util.timeout(7000, () => {
+      Util.timeout(15000, () => {
         if (player.id > 1) {
           this.room.kickPlayer(player.id, '𝗗𝗶𝘀𝗰𝗼𝗿𝗱: discord.io/HaxRugby', false);
         }
