@@ -1,5 +1,6 @@
 import { IPlayerObject } from 'inversihax';
 import appConfig from '../../constants/appConfig';
+import { MINUTE_IN_MS } from '../../constants/constants';
 import colors from '../../constants/style/colors';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
@@ -39,7 +40,7 @@ export default class AdminService implements IAdminService {
     Util.logWithTime(`${player.name} (ID: ${player.id}) entrou na sala. Total: ${playerTotal}`);
 
     if (appConfig.isOpen === false) {
-      Util.timeout(15000, () => {
+      Util.timeout(MINUTE_IN_MS, () => {
         if (player.id > 1) {
           this.room.kickPlayer(player.id, '𝗗𝗶𝘀𝗰𝗼𝗿𝗱: discord.io/HaxRugby', false);
         }

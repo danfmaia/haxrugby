@@ -13,7 +13,6 @@ import {
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
   AHEAD_PENALTY_EMOJI,
-  LINK_DISCORD,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -216,9 +215,7 @@ export default class GameService implements IGameService {
 
   public handlePlayerJoin(player: IPlayerObject): void {
     if (appConfig.isOpen === false) {
-      if (player.name !== LINK_DISCORD) {
-        this.chatService.sendGreetingsToIncomingPlayer(player.id);
-      }
+      this.chatService.sendGreetingsToIncomingPlayer(player.id);
       return;
     }
 

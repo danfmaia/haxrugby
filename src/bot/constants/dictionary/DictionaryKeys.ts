@@ -10,6 +10,7 @@ type DictionaryKeys = {
 
   MSG_CLOSED_ROOM_1: string;
   MSG_CLOSED_ROOM_2: string;
+  MSG_CLOSED_ROOM_3: string;
 
   MSG_RULES: {
     TITLE: string;

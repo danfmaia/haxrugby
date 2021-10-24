@@ -1,8 +1,8 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆';
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉';
 // export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 𝖳𝖾𝗌𝗍𝖾𝗌';
-export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 às 20:15';
-export const CLOSED_PLAYER_NAME = 'Abriremos às 20:15';
+export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 ter/sex/sáb';
+export const CLOSED_PLAYER_NAME = 'Abrimos ter/sex/sáb';
 
 export const APP_VERSION_IN_ROOM_LIST = 'v0.13a';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';

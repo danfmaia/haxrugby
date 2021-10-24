@@ -4,6 +4,7 @@ import {
   MSG_BALL_LEAVE_INGOAL,
   MSG_CLOSED_ROOM_1,
   MSG_CLOSED_ROOM_2,
+  MSG_CLOSED_ROOM_3,
   MSG_DEF_REC,
   MSG_GAME_INFO_1,
   MSG_GAME_INFO_2,
@@ -166,11 +167,13 @@ export default class ChatService implements IChatService {
   public sendGreetingsToIncomingPlayer(playerId: number): void {
     if (appConfig.isOpen === false) {
       Util.timeout(1000, () => {
+        this.sendBlankLine(playerId);
         this.sendBoldAnnouncement(MSG_GREETING, 2, playerId, colors.haxRugbyBall);
-        this.sendBlankLine(playerId);
-        this.sendYellowAnnouncement(MSG_CLOSED_ROOM_1, 0, playerId);
-        this.sendBlankLine(playerId);
+        // this.sendBlankLine(playerId);
+        this.sendYellowBoldAnnouncement(MSG_CLOSED_ROOM_1, 0, playerId);
+        // this.sendBlankLine(playerId);
         this.sendNormalAnnouncement(MSG_CLOSED_ROOM_2, 0, playerId, colors.discordPurple);
+        this.sendNormalAnnouncement(MSG_CLOSED_ROOM_3, 0, playerId);
       });
       return;
     }

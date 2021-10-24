@@ -33,7 +33,7 @@ export class ExecuteCommandInterceptor
     }
 
     // other commands' interceptor
-    if (message.command == null || !message.command.canExecute(message.sentBy)) {
+    if (message.command == null || message.command.canExecute(message.sentBy) === false) {
       return true;
     }
 

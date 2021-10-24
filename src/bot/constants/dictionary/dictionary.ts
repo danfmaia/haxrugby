@@ -20,8 +20,11 @@ const ptBr: DictionaryKeys = {
     '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗿𝗲𝗴𝗿𝗮𝘀 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺𝗌 𝗿𝗲𝗴𝗿𝗮𝘀 𝗱𝗼 𝗷𝗼𝗴𝗼. 𝖤 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗹𝗶𝘀𝘁𝗮 𝗱𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
   // MSG_GAME_INFO_6: '𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗵𝗲𝗹𝗽 𝗈𝗎 !𝗵 𝗉𝖺𝗋𝖺 𝗏𝖾𝗋 𝖺 𝗹𝗶𝘀𝘁𝗮 𝗱𝗲 𝗰𝗼𝗺𝗮𝗻𝗱𝗼𝘀 𝖽𝗂𝗌𝗉𝗈𝗇í𝗏𝖾𝗂𝗌.',
 
-  MSG_CLOSED_ROOM_1: '𝖭𝗈𝗌𝗌𝖺 𝗦𝗔𝗟𝗔 𝗢𝗙𝗜𝗖𝗜𝗔𝗟 𝖺𝖻𝗋𝗂𝗋á 𝗁𝗈𝗃𝖾 à𝗌 𝟮𝟬:𝟭𝟱.',
+  MSG_CLOSED_ROOM_1: '𝖭𝗈𝗌𝗌𝖺 𝗦𝗔𝗟𝗔 𝗢𝗙𝗜𝗖𝗜𝗔𝗟 𝖺𝖻𝗋𝖾 𝗇𝖺𝗌 𝗇𝗈𝗂𝗍𝖾𝗌 𝖽𝖾 𝘁𝗲𝗿ç𝗮, 𝘀𝗲𝘅𝘁𝗮 𝖾 𝘀á𝗯𝗮𝗱𝗼.',
   MSG_CLOSED_ROOM_2: `𝖥𝗂𝗊𝗎𝖾 𝗉𝗈𝗋 𝖽𝖾𝗇𝗍𝗋𝗈 𝖽𝖾 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌 𝖾𝗆 𝗇𝗈𝗌𝗌𝗈 𝗗𝗜𝗦𝗖𝗢𝗥𝗗 👉 ${LINK_DISCORD}`,
+  MSG_CLOSED_ROOM_3: '𝙌𝙪𝙚𝙧 𝙨𝙖𝙡𝙖 𝗔𝗚𝗢𝗥𝗔? 𝘚𝘰𝘭𝘪𝘤𝘪𝘵𝘦 𝘯𝘰 𝘤𝘢𝘯𝘢𝘭 #𝚜𝚊𝚕𝚊𝚜 𝘥𝘰 𝘯𝘰𝘴𝘴𝘰 𝘋𝘪𝘴𝘤𝘰𝘳𝘥.',
+  // MSG_CLOSED_ROOM_3:
+  // '𝘛𝘢𝘮𝘣é𝘮 𝘢𝘣𝘳𝘪𝘮𝘰𝘴 𝘴𝘢𝘭𝘢𝘴 𝘦𝘮 𝘰𝘶𝘵𝘳𝘰𝘴 𝘥𝘪𝘢𝘴 𝘦 𝘩𝘰𝘳á𝘳𝘪𝘰𝘴 𝘤𝘰𝘯𝘧𝘰𝘳𝘮𝘦 𝘥𝘦𝘮𝘢𝘯𝘥𝘢, 𝘢𝘵𝘳𝘢𝘷é𝘴 𝘥𝘦 𝘶𝘮 𝘱𝘰𝘴𝘵 𝘭𝘢𝘯ç𝘢𝘥𝘰 𝙖 𝙦𝙪𝙖𝙡𝙦𝙪𝙚𝙧 𝙢𝙤𝙢𝙚𝙣𝙩𝙤 𝘯𝘰 𝘤𝘢𝘯𝘢𝘭 #𝚜𝚊𝚕𝚊𝚜 𝘥𝘰 𝘯𝘰𝘴𝘴𝘰 𝘋𝘪𝘴𝘤𝘰𝘳𝘥.',
 
   MSG_RULES: {
     TITLE: 'Resumo das REGRAS do jogo:',
@@ -183,6 +186,7 @@ export const MSG_GAME_INFO_5 = Dict['MSG_GAME_INFO_5'];
 
 export const MSG_CLOSED_ROOM_1 = Dict['MSG_CLOSED_ROOM_1'];
 export const MSG_CLOSED_ROOM_2 = Dict['MSG_CLOSED_ROOM_2'];
+export const MSG_CLOSED_ROOM_3 = Dict['MSG_CLOSED_ROOM_3'];
 
 export const MSG_RULES = Dict['MSG_RULES'];
 export const MSG_HELP = Dict['MSG_HELP'];
