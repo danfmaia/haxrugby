@@ -99,6 +99,7 @@ const services = new ContainerModule((bind) => {
     // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: appConfig.isOpen,
     maxPlayers: 15,
+    // token: 'thr1.AAAAAGF1yoyfzb1jFbcUvw.X_RZsWLMO-I',
   });
 
   bind<IPlayerService<HaxRugbyPlayer>>(Types.IPlayerService)

@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.14:
+
+- Nosso bot agora está num **VPS**!
+
 ### v0.13a:
 
 - Aumentado o _boost_ de conversão de 2,4x para 2,7x.
