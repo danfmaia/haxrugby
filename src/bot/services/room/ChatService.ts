@@ -27,6 +27,8 @@ import { IGameService } from './IGameService';
 export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
   sendBoldAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
+  sendGreenAnnouncement(message: string, sound?: number, playerId?: number): void;
+  sendGreenBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendYellowBoldAnnouncement(message: string, sound?: number, playerId?: number): void;
   sendBlueAnnouncement(message: string, sound?: number, playerId?: number): void;
@@ -83,6 +85,14 @@ export default class ChatService implements IChatService {
     this.room.sendAnnouncement(message, playerId, color || colors.haxRugbyGreen, 'bold', sound);
   }
 
+  public sendGreenAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.green, undefined, sound);
+  }
+
+  public sendGreenBoldAnnouncement(message: string, sound: number = 0, playerId?: number): void {
+    this.room.sendAnnouncement(message, playerId, colors.green, 'bold', sound);
+  }
+
   public sendYellowAnnouncement(message: string, sound: number = 0, playerId?: number): void {
     this.room.sendAnnouncement(message, playerId, colors.yellow, undefined, sound);
   }
@@ -117,9 +127,9 @@ export default class ChatService implements IChatService {
       timeString = Util.getRemainingTimeString(this.gameService.remainingTime);
     } else {
       if (this.gameService.remainingTime === 0) {
-        timeString = 'Início do overtime';
+        timeString = 'Início do Overtime';
       } else {
-        timeString = `${Util.getRemainingTimeString(this.gameService.remainingTime)} do overtime`;
+        timeString = `${Util.getRemainingTimeString(this.gameService.remainingTime)} do Overtime`;
       }
     }
 
@@ -128,6 +138,7 @@ export default class ChatService implements IChatService {
       `Placar e Tempo restante: ${this.gameService.score.red}-${this.gameService.score.blue} | ${timeString}`,
       sound,
       playerId,
+      colors.green,
     );
   }
 

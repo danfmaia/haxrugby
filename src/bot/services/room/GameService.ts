@@ -140,11 +140,6 @@ export default class GameService implements IGameService {
       }
     }
 
-    if (this.isGameFrozen) {
-      // this.handleFreeze(this.freezeInfo);
-      return;
-    }
-
     if (
       this.isMatchInProgress === false ||
       (this.isTimeRunning === false && this.isConversionAttempt === false)
@@ -161,7 +156,7 @@ export default class GameService implements IGameService {
           this.handleTime(ballPosition);
         }
       }
-      this.handleGame(ballPosition);
+      this.handleGame(this.isGameFrozen, ballPosition);
     } else {
       this.handleConversion(ballPosition, this.isConversionAttempt);
     }
@@ -420,12 +415,12 @@ export default class GameService implements IGameService {
     this.room.startGame();
 
     if (player) {
-      this.chatService.sendBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
+      this.chatService.sendGreenBoldAnnouncement(`${player.name} iniciou uma nova partida!`, 2);
     } else {
-      this.chatService.sendBoldAnnouncement('Iniciando nova partida!', 2);
+      this.chatService.sendGreenBoldAnnouncement('Iniciando nova partida!', 2);
     }
-    this.chatService.sendNormalAnnouncement(Util.getDurationString(this.matchConfig.timeLimit));
-    this.chatService.sendNormalAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
+    this.chatService.sendGreenAnnouncement(Util.getDurationString(this.matchConfig.timeLimit));
+    this.chatService.sendGreenAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
 
     this.util.cancelEmptyMatch();
   }
@@ -436,11 +431,11 @@ export default class GameService implements IGameService {
     this.lastScores.unshift(this.score);
 
     this.isTimeRunning = false;
-    this.isGameFrozen = true;
+    this.room.pauseGame(true);
 
     const lastWinner = this.getLastWinner();
     if (!lastWinner) {
-      Util.timeout(3500, () => {
+      Util.timeout(2500, () => {
         if (this.isFinishing) {
           this.room.stopGame();
         }
@@ -451,7 +446,7 @@ export default class GameService implements IGameService {
 
     const winnerTeam = this.teams.getTeam(lastWinner);
 
-    Util.timeout(3500, () => {
+    Util.timeout(2500, () => {
       if (this.isFinishing) {
         this.room.stopGame();
         if (lastWinner === TeamEnum.RED) {
@@ -467,17 +462,32 @@ export default class GameService implements IGameService {
       this.chatService.sendNewMatchHelp();
     });
 
+    const msgColor = this.teams.getTeamColor(lastWinner);
     const remainingTimeString = Util.getRemainingTimeString(this.remainingTime);
 
-    this.chatService.sendBoldAnnouncement(`Fim da partida. Vitória do ${winnerTeam.name}!`, 2);
-    this.chatService.sendNormalAnnouncement(`Placar final: ${this.score.red}-${this.score.blue}`);
+    this.chatService.sendBlankLine();
+    this.chatService.sendBoldAnnouncement(
+      `Fim da partida. Vitória do ${winnerTeam.name}!`,
+      2,
+      undefined,
+      msgColor,
+    );
+    this.chatService.sendBoldAnnouncement(
+      `Placar final: ${this.score.red}-${this.score.blue}`,
+      0,
+      undefined,
+      msgColor,
+    );
     if (remainingTimeString !== '00:00') {
+      let timeMsg: string;
       if (this.remainingTime > 0) {
-        this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} restante`);
+        timeMsg = `Tempo: ${remainingTimeString} restante`;
       } else {
-        this.chatService.sendNormalAnnouncement(`Tempo: ${remainingTimeString} do overtime`);
+        timeMsg = `Tempo: ${remainingTimeString} do Overtime`;
       }
+      this.chatService.sendNormalAnnouncement(timeMsg, 0, undefined, msgColor);
     }
+    this.chatService.sendBlankLine();
   }
 
   public cancelMatch(player?: HaxRugbyPlayer, restartMatch?: () => void): void {
@@ -485,26 +495,27 @@ export default class GameService implements IGameService {
       return;
     }
 
-    this.isGameFrozen = true;
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
-    Util.timeout(3500, () => {
+    this.room.pauseGame(true);
+
+    Util.timeout(1500, () => {
       this.room.stopGame();
       if (restartMatch) restartMatch();
     });
 
     if (player) {
-      this.chatService.sendBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
+      this.chatService.sendYellowBoldAnnouncement(`Partida cancelada por ${player.name}!`, 2);
     }
-    this.chatService.sendNormalAnnouncement(
+    this.chatService.sendYellowAnnouncement(
       `Placar parcial:  ${this.score.red}-${this.score.blue}`,
     );
-    this.chatService.sendNormalAnnouncement(
+    this.chatService.sendYellowAnnouncement(
       `Tempo restante:  ${Util.getRemainingTimeString(this.remainingTime)}`,
     );
     this.chatService.sendBlankLine();
     if (restartMatch) {
-      this.chatService.sendNormalAnnouncement('Iniciando nova partida em 5 segundos...');
+      this.chatService.sendGreenAnnouncement('Iniciando nova partida em 3 segundos...');
     }
   }
 
@@ -699,7 +710,7 @@ export default class GameService implements IGameService {
   //   });
   // }
 
-  private handleGame(ballPosition: IPosition) {
+  private handleGame(isGameFrozen: boolean, ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
     this.checkForTouches(players, ballPosition);
@@ -739,7 +750,7 @@ export default class GameService implements IGameService {
     );
 
     if (this.lastDriveInfo) {
-      if (this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
+      if (isGameFrozen === false && this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
         return;
       }
     }
@@ -765,7 +776,7 @@ export default class GameService implements IGameService {
         this.driverCountByTeam,
       );
       if (isTryOnGoalLine === false) {
-        if (this.checkForSafety(ballPosition)) {
+        if (isGameFrozen === false && this.checkForSafety(ballPosition)) {
           if (ballPosition.x < 0) {
             this.room.util.setBallColor(colors.teamRed);
           } else {
@@ -776,7 +787,7 @@ export default class GameService implements IGameService {
       }
     }
 
-    if (this.checkForTry(ballPosition)) {
+    if (isGameFrozen === false && this.checkForTry(ballPosition)) {
       return;
     }
 

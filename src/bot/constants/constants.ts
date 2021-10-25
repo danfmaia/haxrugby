@@ -6,8 +6,8 @@ export const CLOSED_PLAYER_NAME = 'Abrimos ter/sex/sáb';
 
 export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟰';
-const APP_PATCH_VERSION = '';
-export const APP_VERSION_IN_ROOM_LIST = 'v0.14';
+const APP_PATCH_VERSION = '𝗮';
+export const APP_VERSION_IN_ROOM_LIST = 'v0.14a';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';
