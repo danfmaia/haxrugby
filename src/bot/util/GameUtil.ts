@@ -1,4 +1,4 @@
-import { IPosition, TeamID } from 'inversihax';
+import { IDiscPropertiesObject, IPosition, TeamID } from 'inversihax';
 import { AHEAD_EMOJI, PLAYER_RADIUS } from '../constants/constants';
 import colors from '../constants/style/colors';
 import AheadEnum from '../enums/AheadEnum';
@@ -13,6 +13,48 @@ import Util from './Util';
 
 class GameUtil {
   constructor(public room: IHaxRugbyRoom, public gameService: IGameService) {}
+
+  // public freezeGame(freeze: boolean = true): void {
+  //   if (freeze) {
+  //     const ballProps = this.room.getDiscProperties(0);
+
+  //     const playerPropMaps: TPlayerPropsMap[] = [];
+  //     const players = this.room
+  //       .getPlayerList()
+  //       .filter((player) => player.team !== TeamID.Spectators);
+  //     players.forEach((player) => {
+  //       playerPropMaps.push({
+  //         playerId: player.id,
+  //         discProps: this.room.getPlayerDiscProperties(player.id),
+  //       });
+  //     });
+
+  //     this.gameService.freezeInfo = {
+  //       ballProps,
+  //       playerPropsMaps: playerPropMaps,
+  //     };
+  //   } else {
+  //     this.gameService.freezeInfo = null;
+  //   }
+  // }
+
+  public triggerScoringEffect(team: TeamEnum): void {
+    this.gameService.isGameFrozen = false;
+
+    const y = this.gameService.tryY ? this.gameService.tryY : 0;
+
+    if (team === TeamEnum.RED) {
+      this.room.setDiscProperties(14, {
+        y,
+        xspeed: 1,
+      } as IDiscPropertiesObject);
+    } else {
+      this.room.setDiscProperties(13, {
+        y,
+        xspeed: -1,
+      } as IDiscPropertiesObject);
+    }
+  }
 
   public getCanLosingTeamTieOrTurn(ballPosition: IPosition): boolean {
     const blueMinusRed = this.gameService.score.blue - this.gameService.score.red;

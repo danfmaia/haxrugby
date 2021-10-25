@@ -4,9 +4,10 @@ export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉';
 export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 ter/sex/sáb';
 export const CLOSED_PLAYER_NAME = 'Abrimos ter/sex/sáb';
 
-export const APP_VERSION_IN_ROOM_LIST = 'v0.13a';
-export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';
-const APP_PATCH_VERSION = '𝗮';
+export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';
+export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟰';
+const APP_PATCH_VERSION = '';
+export const APP_VERSION_IN_ROOM_LIST = 'v0.14';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';

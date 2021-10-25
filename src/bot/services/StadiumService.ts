@@ -30,11 +30,14 @@ export function getDisc(
   trait: TraitEnum,
   xSpeed: number = 0,
   ySpeed: number = 0,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  cGroup?: any,
 ): any {
   return {
     pos,
     trait,
     speed: [xSpeed, ySpeed],
+    cGroup,
   };
 }
 
@@ -55,11 +58,11 @@ export function getPlane(normal: [number, number], dist: number, trait: TraitEnu
   };
 }
 
-export function getBallPhysics(radius: number): any {
-  return {
-    radius,
-  };
-}
+// export function getBallPhysics(radius: number): any {
+//   return {
+//     radius,
+//   };
+// }
 
 class StadiumService {
   constructor(

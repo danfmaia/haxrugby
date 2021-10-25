@@ -22,6 +22,7 @@ export interface IGameService {
   remainingTime: number;
   score: IScore;
 
+  isGameFrozen: boolean;
   isGameStopped: boolean;
   isMatchInProgress: boolean;
   isTimeRunning: boolean;

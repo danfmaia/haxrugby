@@ -1,4 +1,5 @@
 enum TraitEnum {
+  ball = 'ball',
   ballArea = 'ballArea',
   playerArea = 'playerArea',
   goalPost = 'goalPost',
@@ -18,6 +19,8 @@ enum TraitEnum {
   fadeLine = 'fadeLine',
   drawingLine = 'drawingLine',
   shadow = 'shadow',
+
+  score = 'score',
 }
 
 export default TraitEnum;

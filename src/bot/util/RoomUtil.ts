@@ -1,7 +1,7 @@
 import { CollisionFlag, IDiscPropertiesObject, TeamID } from 'inversihax';
 import TeamEnum from '../enums/TeamEnum';
 import TTouchInfo from '../models/game/TTouchInfo';
-import { TPlayerPropMap as TPlayerPropsMap } from '../models/player/PlayerPropMap';
+import { TPlayerPropsMap as TPlayerPropsMap } from '../models/player/TPlayerPropsMap';
 import TPlayerCountByTeam from '../models/team/TPlayerCountByTeam';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 

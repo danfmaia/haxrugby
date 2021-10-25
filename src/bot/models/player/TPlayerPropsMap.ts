@@ -1,6 +1,6 @@
 import { IDiscPropertiesObject } from 'inversihax';
 
-export type TPlayerPropMap = {
+export type TPlayerPropsMap = {
   playerId: number;
   discProps: IDiscPropertiesObject;
 };

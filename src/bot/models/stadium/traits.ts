@@ -1,9 +1,21 @@
+import { BALL_RADIUS } from '../../constants/constants';
 import colors from '../../constants/style/colors';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TTrait from './TTrait';
 
 const traits = {
   // mandatory
+
+  [TraitEnum.ball]: {
+    vis: true,
+    radius: BALL_RADIUS,
+    bCoef: 0.5,
+    invMass: 1,
+    damping: 0.99,
+    color: 'FFFFFF',
+    cMask: ['all'],
+    cGroup: ['ball', 'kick'],
+  } as TTrait,
 
   [TraitEnum.ballArea]: {
     vis: false,
@@ -127,6 +139,13 @@ const traits = {
     cMask: [0],
     color: '587653',
     // color: '00000080',
+  } as TTrait,
+
+  [TraitEnum.score]: {
+    vis: false,
+    radius: 0,
+    cGroup: ['score'],
+    cMask: [0],
   } as TTrait,
 };
 

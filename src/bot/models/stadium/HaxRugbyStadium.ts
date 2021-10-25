@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { IPosition } from 'inversihax';
-import { BALL_RADIUS, PLAYER_RADIUS } from '../../constants/constants';
+import { PLAYER_RADIUS } from '../../constants/constants';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TeamEnum from '../../enums/TeamEnum';
 import StadiumService, {
-  getBallPhysics,
   getDisc,
   getJoint,
   getPlane,
@@ -91,6 +90,7 @@ class HaxRugbyStadium {
     };
 
     this.traits = {
+      [TraitEnum.ball]: traits.ball,
       [TraitEnum.ballArea]: traits.ballArea,
       [TraitEnum.goalPost]: traits.goalPost,
       [TraitEnum.pointDisc]: traits.pointDisc,
@@ -110,6 +110,7 @@ class HaxRugbyStadium {
       [TraitEnum.fadeLine]: traits.fadeLine,
       [TraitEnum.drawingLine]: traits.drawingLine,
       [TraitEnum.shadow]: traits.shadow,
+      [TraitEnum.score]: traits.score,
     };
 
     this.vertexes = [
@@ -739,12 +740,29 @@ class HaxRugbyStadium {
     ];
 
     if (!convProps) {
-      this.goals = [];
+      this.goals = [
+        {
+          team: 'red',
+          p0: [-goalLineX, -height],
+          p1: [-goalLineX, height],
+        },
+        {
+          team: 'blue',
+          p0: [goalLineX, -height],
+          p1: [goalLineX, height],
+        },
+      ];
     } else {
       this.goals = [this.serv.getConversionGoal()];
     }
 
     this.discs = [
+      // ball
+
+      convProps === null
+        ? getDisc([0, 0], TraitEnum.ball)
+        : getDisc([0, 0], TraitEnum.ball, 0, 0, ['ball', 'kick', 'score']),
+
       // goal post discs
 
       /* 1 */ getDisc([-goalLineX, -goalPostY], TraitEnum.goalPost),
@@ -796,6 +814,11 @@ class HaxRugbyStadium {
         this.serv.getTopPostXSpeed(),
       ),
 
+      // scoring effect discs
+
+      /* 13 */ getDisc([-(goalLineX - 0.1), 0], TraitEnum.score),
+      /* 14 */ getDisc([goalLineX - 0.1, 0], TraitEnum.score),
+
       // in-goal cones
 
       // getDisc([-width, -height], TraitEnum.ingoalCone, colors.redRGB),
@@ -832,7 +855,7 @@ class HaxRugbyStadium {
       getPlane([-1, 0], -outerWidth, TraitEnum.playerArea),
     ];
 
-    this.ballPhysics = getBallPhysics(BALL_RADIUS);
+    this.ballPhysics = 'disc0';
   }
 
   public static getNewStadium(

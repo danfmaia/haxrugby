@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v0.14a:
+
+- Removido o pause e adicionado **efeito de pontuação** para todas as pontuações.
+  - O pause no Safety foi mantido por conta de eu ainda não ter conseguido congelar a bola e jogadores.
+  - Assim que eu conseguir fazer isso, vou remover o pause para o Safety também.
+- Melhoradas as mensagens de ajuda da Conversão.
+
 ### v0.14:
 
 - Nosso bot agora está num **VPS**!

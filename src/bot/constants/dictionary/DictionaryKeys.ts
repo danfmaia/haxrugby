@@ -45,14 +45,9 @@ type DictionaryKeys = {
     SCORE: string;
     SCORE_DESCRIPTION: string;
 
-    KICKER: string;
-    KICKER_DESCRIPTION: string;
-
-    GOALKEEPER: string;
-    GOALKEEPER_DESCRIPTION: string;
-
-    BALL: string;
     BALL_DESCRIPTION: string;
+    KICKER_DESCRIPTION: string;
+    GOALKEEPER_DESCRIPTION: string;
 
     RULES: string;
     RULES_DESCRIPTION: string;

@@ -350,14 +350,9 @@ export default class ChatService implements IChatService {
     this.sendBoldAnnouncement(MSG_HELP.SCORE, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.SCORE_DESCRIPTION, 0, playerId);
 
-    this.sendBoldAnnouncement(MSG_HELP.KICKER, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
-    this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
+    this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
 
     this.sendBoldAnnouncement(MSG_HELP.RULES, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.RULES_DESCRIPTION, 0, playerId);
@@ -374,14 +369,10 @@ export default class ChatService implements IChatService {
   }
 
   public sendConversionHelp(playerId?: number): void {
-    this.sendBoldAnnouncement(MSG_HELP.BALL, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.BALL_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.KICKER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.KICKER_DESCRIPTION, 0, playerId);
-
-    this.sendBoldAnnouncement(MSG_HELP.GOALKEEPER, 0, playerId);
     this.sendNormalAnnouncement(MSG_HELP.GOALKEEPER_DESCRIPTION, 0, playerId);
+    this.sendBlankLine(playerId);
   }
 
   public announceBlockedAirKick(kickerId: number, blockerId: number): void {

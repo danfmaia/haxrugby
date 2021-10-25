@@ -4,6 +4,14 @@ import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
+function newGuid(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 function timeout(ms: number, callback: () => void): void {
   const timeout = setTimeout(() => {
     callback();
@@ -138,6 +146,7 @@ function transitionBallColor(team: TeamEnum, count: number, totalTicks: number):
 }
 
 const Util = {
+  newGuid,
   timeout,
   timeoutAsync,
   interval,

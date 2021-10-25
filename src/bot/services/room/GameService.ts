@@ -56,6 +56,7 @@ export default class GameService implements IGameService {
   public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
 
+  public isGameFrozen: boolean = false;
   public isGameStopped: boolean = true;
   public isMatchInProgress: boolean = false;
   private isBeforeKickoff: boolean = true;
@@ -137,6 +138,11 @@ export default class GameService implements IGameService {
       if (this.lastTouchInfo) {
         this.handlePostKickoffOrPenaltyKick();
       }
+    }
+
+    if (this.isGameFrozen) {
+      // this.handleFreeze(this.freezeInfo);
+      return;
     }
 
     if (
@@ -333,35 +339,33 @@ export default class GameService implements IGameService {
       this.isConversionShot = false;
       this.tryY = null;
 
-      Util.timeout(200, () => {
-        this.room.pauseGame(true);
+      this.isGameFrozen = true;
 
-        let teamName: string;
-        let msgColor: number;
-        let stadium: string;
-        if (team === TeamID.RedTeam) {
-          this.score.red = this.score.red + 2;
-          teamName = this.teams.red.name;
-          msgColor = colors.teamRed;
-          stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
-        } else {
-          this.score.blue = this.score.blue + 2;
-          teamName = this.teams.blue.name;
-          msgColor = colors.teamBlue;
-          stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
-        }
+      let teamName: string;
+      let msgColor: number;
+      let stadium: string;
+      if (team === TeamID.RedTeam) {
+        this.score.red = this.score.red + 2;
+        teamName = this.teams.red.name;
+        msgColor = colors.teamRed;
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
+      } else {
+        this.score.blue = this.score.blue + 2;
+        teamName = this.teams.blue.name;
+        msgColor = colors.teamBlue;
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
+      }
 
-        // announce successful conversion
-        this.chatService.sendBoldAnnouncement(`CONVERSÃO do ${teamName}!`, 2, undefined, msgColor);
-        this.chatService.sendNormalAnnouncement(
-          `Mais 2 pontos para o ${teamName}!`,
-          0,
-          undefined,
-          msgColor,
-        );
+      // announce successful conversion
+      this.chatService.sendBoldAnnouncement(`CONVERSÃO do ${teamName}!`, 0, undefined, msgColor);
+      this.chatService.sendNormalAnnouncement(
+        `Mais 2 pontos para o ${teamName}!`,
+        0,
+        undefined,
+        msgColor,
+      );
 
-        this.handleRestartOrFinishing(stadium);
-      });
+      this.handleRestartOrFinishing(stadium);
     }
   }
 
@@ -387,6 +391,7 @@ export default class GameService implements IGameService {
   public initializeMatch(player?: HaxRugbyPlayer): void {
     this.tickCount = 0;
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
+    this.isGameFrozen = false;
     this.isMatchInProgress = true;
     this.isOvertime = false;
     this.score = { red: 0, blue: 0 };
@@ -427,11 +432,11 @@ export default class GameService implements IGameService {
 
   private finishMatch() {
     this.isMatchInProgress = false;
-    this.isTimeRunning = false;
     this.isFinishing = true;
     this.lastScores.unshift(this.score);
 
-    this.room.pauseGame(true);
+    this.isTimeRunning = false;
+    this.isGameFrozen = true;
 
     const lastWinner = this.getLastWinner();
     if (!lastWinner) {
@@ -480,9 +485,9 @@ export default class GameService implements IGameService {
       return;
     }
 
+    this.isGameFrozen = true;
     this.isMatchInProgress = false;
     this.isTimeRunning = false;
-    this.room.pauseGame(true);
     Util.timeout(3500, () => {
       this.room.stopGame();
       if (restartMatch) restartMatch();
@@ -671,6 +676,28 @@ export default class GameService implements IGameService {
       this.util.grantAdvantage(undefined, team);
     }
   }
+
+  // private handleFreeze(freezeInfo: TFreezeInfo) {
+  //   // freeze ball
+  //   this.room.setDiscProperties(0, {
+  //     x: freezeInfo.ballProps.x,
+  //     y: freezeInfo.ballProps.y,
+  //     xspeed: 0,
+  //     yspeed: 0,
+  //   } as IDiscPropertiesObject);
+  //   // freeze players
+  //   freezeInfo.playerPropsMaps.forEach((playerPropsMap) => {
+  //     const player = this.room.getPlayer(playerPropsMap.playerId);
+  //     if (player) {
+  //       this.room.setPlayerDiscProperties(playerPropsMap.playerId, {
+  //         x: playerPropsMap.discProps.x,
+  //         y: playerPropsMap.discProps.y,
+  //         xspeed: 0,
+  //         yspeed: 0,
+  //       } as IDiscPropertiesObject);
+  //     }
+  //   });
+  // }
 
   private handleGame(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
@@ -883,8 +910,8 @@ export default class GameService implements IGameService {
     const offendedTeamName = this.teams.getTeamName(offendedTeam);
 
     if (this.remainingTimeAtPenalty && this.penaltyPosition) {
-      this.isTimeRunning = false;
       this.room.pauseGame(true);
+      this.isTimeRunning = false;
       this.remainingTime = this.remainingTimeAtPenalty;
 
       this.chatService.sendBoldAnnouncement(
@@ -1020,8 +1047,8 @@ export default class GameService implements IGameService {
         return false;
       }
 
+      this.util.triggerScoringEffect(isGoal);
       this.isTimeRunning = false;
-      this.room.pauseGame(true);
       let teamName: string;
       const msgColor = this.teams.getTeamColor(isGoal);
       let stadium: string;
@@ -1039,7 +1066,7 @@ export default class GameService implements IGameService {
       // announce goal
       this.chatService.sendBoldAnnouncement(
         `💨  DROP GOAL do ${teamName}!!  💨`,
-        2,
+        0,
         undefined,
         msgColor,
       );
@@ -1099,8 +1126,8 @@ export default class GameService implements IGameService {
         return false;
       }
 
-      this.isTimeRunning = false;
       this.room.pauseGame(true);
+      this.isTimeRunning = false;
       let teamName: string;
       let stadium: string;
 
@@ -1245,9 +1272,9 @@ export default class GameService implements IGameService {
     }
 
     if (isStillAttempting === false || this.afterTryTickCount >= AFTER_TRY_MAX_TICKS) {
+      this.util.triggerScoringEffect(this.isTry);
       this.isTimeRunning = false;
       this.afterTryTickCount = 0;
-      this.room.pauseGame(true);
 
       let stadium: string;
       if (this.isTry === TeamEnum.RED) {
@@ -1368,7 +1395,7 @@ export default class GameService implements IGameService {
       const teamName = this.teams.getTeamName(team);
       this.chatService.sendYellowBoldAnnouncement(
         `O ${teamName} tem ${SAFETY_MAX_TIME / 1000} segundos para cobrar.`,
-        2,
+        0,
       );
     }
 
@@ -1392,7 +1419,7 @@ export default class GameService implements IGameService {
     this.isConversionShot = false;
 
     if (isStillConversionAttempt) {
-      this.room.pauseGame(true);
+      this.isGameFrozen = true;
       this.isConversionAttempt = false;
       this.tryY = null;
 
@@ -1435,7 +1462,7 @@ export default class GameService implements IGameService {
 
     this.chatService.sendMatchStatus();
 
-    Util.timeout(3000, () => {
+    Util.timeout(1600, () => {
       this.driverIds = [];
       this.driverCountByTeam = { red: 0, blue: 0 };
       this.isDefRec = false;
@@ -1447,6 +1474,7 @@ export default class GameService implements IGameService {
       this.room.util.setBallColor(colors.ball);
 
       this.room.stopGame();
+      this.isGameFrozen = false;
       this.room.setCustomStadium(map);
 
       if (handleGameStop) {

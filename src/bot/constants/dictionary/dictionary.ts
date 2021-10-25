@@ -1,6 +1,13 @@
 import { LanguageEnum } from '../../enums/stadium/LanguageEnum';
 import appConfig from '../appConfig';
-import { APP_MINOR_VERSION, APP_VERSION, GAME_TITLE, LINK_DISCORD, ROOM_TITLE } from '../constants';
+import {
+  APP_MINOR_VERSION,
+  APP_PREVIOUS_MINOR_VERSION,
+  APP_VERSION,
+  GAME_TITLE,
+  LINK_DISCORD,
+  ROOM_TITLE,
+} from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
 export const _1: string = '   ';
@@ -12,8 +19,9 @@ const ptBr: DictionaryKeys = {
   MSG_GAME_INFO_1: `𝖵𝗈𝖼ê 𝖾𝗌𝗍á 𝗇𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GAME_INFO_2:
     '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝗯𝘂𝗴𝘀, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
-  MSG_GAME_INFO_3: `𝖭𝖺𝗌 𝗏𝖾𝗋𝗌õ𝖾𝗌 𝘃𝟬.𝟭𝟭 𝖾 𝘃𝟬.𝟭𝟮 𝗂𝗇𝗍𝗋𝗈𝖽𝗎𝗓𝗂𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽), 𝖺 𝗩𝗮𝗻𝘁𝗮𝗴𝗲𝗺 𝖾 𝗈 𝗣𝗲𝗻𝗮𝗹.`,
-  MSG_GAME_INFO_4: `𝖤 𝗇𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝖼𝗈𝗆𝖾ç𝖺𝗆𝗈𝗌 𝖺 𝗍𝗋𝖺𝖻𝖺𝗅𝗁𝖺𝗋 𝗈 𝗲𝘀𝘁𝗶𝗹𝗼 𝗱𝗼 𝗰𝗮𝗺𝗽𝗼!`,
+  MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_PREVIOUS_MINOR_VERSION} 𝖼𝗈𝗆𝖾ç𝖺𝗆𝗈𝗌 𝖺 𝗍𝗋𝖺𝖻𝖺𝗅𝗁𝖺𝗋 𝗈 𝗲𝘀𝘁𝗶𝗹𝗼 𝗱𝗼 𝗰𝗮𝗺𝗽𝗼!`,
+  MSG_GAME_INFO_4: `𝖤 𝗇𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗌𝗎𝖻𝗂𝗆𝗈𝗌 𝗈 𝖻𝗈𝗍 𝗉𝖺𝗋𝖺 𝗎𝗆 𝗩𝗣𝗦 𝖾 𝖺𝖽𝗂𝖼𝗂𝗈𝗇𝖺𝗆𝗈𝗌 𝗲𝗳𝗲𝗶𝘁𝗼 𝗱𝗲 𝗽𝗼𝗻𝘁𝘂𝗮çã𝗼 𝗉𝖺𝗋𝖺 𝖺𝗌 𝗉𝗈𝗇𝗍𝗎𝖺çõ𝖾𝗌!`,
+  // MSG_GAME_INFO_3: `𝖭𝖺𝗌 𝗏𝖾𝗋𝗌õ𝖾𝗌 𝘃𝟬.𝟭𝟭 𝖾 𝘃𝟬.𝟭𝟮 𝗂𝗇𝗍𝗋𝗈𝖽𝗎𝗓𝗂𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽), 𝖺 𝗩𝗮𝗻𝘁𝗮𝗴𝗲𝗺 𝖾 𝗈 𝗣𝗲𝗻𝗮𝗹.`,
   // MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗮𝗶𝗿).`,
   // MSG_GREETING_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗈 𝖼𝗈𝗇𝖼𝖾𝗂𝗍𝗈 𝖽𝗈 𝖥𝗂𝖾𝗅𝖽 𝖦𝗈𝖺𝗅 𝗆𝗎𝖽𝗈𝗎 𝖾 𝖺𝗀𝗈𝗋𝖺 𝖾𝗅𝖾 𝗌𝖾 𝖼𝗁𝖺𝗆𝖺 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹. 𝖴𝗌𝖾 𝗈 𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽 𝗉𝖺𝗋𝖺 𝗆𝖺𝗂𝗌 𝖽𝖾𝗍𝖺𝗅𝗁𝖾𝗌.`,
   MSG_GAME_INFO_5:
@@ -135,14 +143,13 @@ const ptBr: DictionaryKeys = {
     SCORE: _2 + '!s ou !score ou !placar',
     SCORE_DESCRIPTION: _3 + 'Exibe o tempo e placar da partida.',
 
-    KICKER: _2 + '!k ou !k me ou !k #<ID_do_jogador>',
-    KICKER_DESCRIPTION: _3 + 'Consulta ou altera o Kicker do time.',
-
-    GOALKEEPER: _2 + '!gk ou !gk me ou !gk #<ID_do_jogador>',
-    GOALKEEPER_DESCRIPTION: _3 + 'Consulta ou altera o GK do time.',
-
-    BALL: _2 + 'b ou B',
-    BALL_DESCRIPTION: _3 + 'Reposiciona a bola para o chute de conversão.',
+    BALL_DESCRIPTION:
+      _3 +
+      '𝖻  𝘰𝘶  𝖡                                     𝗥𝗘𝗣𝗢𝗦𝗜𝗖𝗜𝗢𝗡𝗔 𝗔 𝗕𝗢𝗟𝗔 𝗉𝖺𝗋𝖺 𝗈 𝖼𝗁𝗎𝗍𝖾 𝖽𝖾 𝖼𝗈𝗇𝗏𝖾𝗋𝗌ã𝗈.',
+    KICKER_DESCRIPTION:
+      _3 + '!𝚔  𝑜𝑢  !𝚔 𝚖𝚎  𝑜𝑢  !𝚔 #<𝙸𝙳_𝚍𝚘_𝚓𝚘𝚐𝚊𝚍𝚘𝚛>       𝖢𝗈𝗇𝗌𝗎𝗅𝗍𝖺 𝗈𝗎 𝗔𝗟𝗧𝗘𝗥𝗔 𝗢 𝗞𝗜𝗖𝗞𝗘𝗥 𝖽𝗈 𝗍𝗂𝗆𝖾.',
+    GOALKEEPER_DESCRIPTION:
+      _3 + '!𝚐𝚔  𝘰𝘶  !𝚐𝚔 𝚖𝚎  𝘰𝘶  !𝚐𝚔 #<𝙸𝙳_𝚍𝚘_𝚓𝚘𝚐𝚊𝚍𝚘𝚛>    𝖢𝗈𝗇𝗌𝗎𝗅𝗍𝖺 𝗈𝗎 𝗔𝗟𝗧𝗘𝗥𝗔 𝗢 𝗚𝗞 𝖽𝗈 𝗍𝗂𝗆𝖾.',
 
     RULES: _2 + '!r ou !regras ou !rules',
     RULES_DESCRIPTION: _3 + 'Exibe o resumo das regras do jogo.',
