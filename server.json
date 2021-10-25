@@ -1,0 +1,11 @@
+{
+  "server": {
+    "execPath": "/usr/bin/google-chrome"
+  },
+  "panel": {
+    "bots": [{ "name": "haxrugby", "displayName": "HaxRugby", "path": "./bots/haxrugby.js" }],
+    "discordToken": "OTAyMDQxOTc5OTUxNjY1MjQz.YXYqDw.5V6pURVBmLfQps3UtYlBHTspCdY",
+    "discordPrefix": "!",
+    "mastersDiscordId": ["691759834403569714"]
+  }
+}
