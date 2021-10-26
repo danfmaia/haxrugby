@@ -120,7 +120,7 @@ export default class GameService implements IGameService {
     Util.timeout(0.5 * MINUTE_IN_MS, () => {
       this.chatService.sendNewMatchHelp(false, playerId);
       Util.interval(MINUTE_IN_MS, () => {
-        if (this.isMatchInProgress === false) {
+        if (this.isMatchInProgress === false && this.isFinishing === false) {
           this.chatService.sendNewMatchHelp(true, playerId);
         }
       });
@@ -437,6 +437,8 @@ export default class GameService implements IGameService {
     this.isGameFrozen = true;
 
     this.lastScores.unshift(this.score);
+    const matchCount = this.lastScores.length;
+
     const winner = this.getWinner();
     if (!winner) {
       Util.timeout(2500, () => {
@@ -491,7 +493,11 @@ export default class GameService implements IGameService {
     this.lastWinners.unshift(winner);
     this.allBlackerize(winner, this.lastWinners);
 
-    this.chatService.sendBlankLine();
+    Util.timeout(15000, () => {
+      if (matchCount === this.lastScores.length) {
+        this.isFinishing = false;
+      }
+    });
   }
 
   public allBlackerize(winner: TeamEnum, lastWinners: TeamEnum[]): void {
@@ -1021,7 +1027,9 @@ export default class GameService implements IGameService {
       toucherIds.length === 0
     ) {
       // console.log('passed 4: set air ball color & announce successful air kick');
-      this.chatService.announceSuccessfulAirKick(this.airKickerId);
+      if (this.isGameFrozen === false) {
+        this.chatService.announceSuccessfulAirKick(this.airKickerId);
+      }
       if (this.isDefRec === false) {
         this.room.util.setBallColor(colors.airBall);
       } else {

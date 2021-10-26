@@ -2,8 +2,13 @@
 
 ### v0.14b:
 
+- Implementada a **All Blackerização**.
+  - Times com vitórias consecutivas irão ficar gradativamente mais escuros.
+  - Após 5 vitórias consecutivas, o time se transformará no _All Blacks_.
+  - O _All Blacks_ possui cor de disco totalmente preta, além de nome de time e cor de mensagem diferenciados nos anúncios de jogo.
 - Adicionado filtro para mensagens que travam o jogo.
   - Adotamos o mesmo filtro usado por Gab em suas salas.
+- Melhorias diversas ao longo de todo o fluxo de jogo.
 
 ### v0.14a:
 

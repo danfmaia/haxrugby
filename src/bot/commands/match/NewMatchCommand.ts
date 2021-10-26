@@ -96,7 +96,9 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
       this.room.setScoreLimit(updatedMatchConfig.scoreLimit);
 
       Util.timeout(1500, () => {
-        this.gameService.initializeMatch(player);
+        if (this.gameService.isMatchInProgress === false) {
+          this.gameService.initializeMatch(player);
+        }
       });
     };
 
