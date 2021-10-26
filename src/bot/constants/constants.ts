@@ -39,6 +39,6 @@ export const NORMAL_AIR_KICK_BOOST = 1.3;
 
 export const SAFETY_MAX_TIME = 20000;
 
-export const AHEAD_EMOJI = '🛁';
+export const AHEAD_EMOJI = '👎';
 export const AHEAD_PENALTY_EMOJI = '⚠️';
 export const PENALTY_ADVANTAGE_TIME = 5000;

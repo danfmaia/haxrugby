@@ -304,7 +304,7 @@ export default class GameService implements IGameService {
       ownTeamPlayers.forEach((ownTeamPlayer) => {
         if (ownTeamPlayer.id === player.id) {
           this.chatService.sendNormalAnnouncement(
-            'Seu Chute Aéreo está desativado. Use o comando `a` para ativá-lo ou desativá-lo.',
+            'Seu Chute Aéreo está desativado. Use o comando `a` para ativá-lo e desativá-lo.',
             0,
             ownTeamPlayer.id,
           );
@@ -1349,7 +1349,11 @@ export default class GameService implements IGameService {
     isDefRec: boolean,
     isAirBall: boolean,
   ) {
-    if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
+    if (
+      this.isGameFrozen === false &&
+      this.driverCountByTeam.red &&
+      ballPosition.x > -this.map.tryLineX
+    ) {
       this.lastDriveInfo = {
         ballPosition,
         team: TeamEnum.RED,
@@ -1466,7 +1470,7 @@ export default class GameService implements IGameService {
     this.isConversionShot = false;
 
     if (isStillConversionAttempt) {
-      this.isGameFrozen = true;
+      this.room.pauseGame(true);
       this.isConversionAttempt = false;
       this.tryY = null;
 
