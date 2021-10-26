@@ -1339,7 +1339,7 @@ export default class GameService implements IGameService {
       isAirBall === false
     ) {
       this.ballTransitionCount = this.ballTransitionCount - 1;
-      const color = Util.transitionBallColor(
+      const color = this.util.transitionBallColor(
         this.lastDriveInfo.team,
         this.ballTransitionCount,
         BALL_TEAM_COLOR_TICKS,

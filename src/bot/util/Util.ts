@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 
 import PositionEnum from '../enums/PositionEnum';
-import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 
 function newGuid(): string {
@@ -88,59 +87,24 @@ function getPlayerNameAndId(player: HaxRugbyPlayer): string {
   return `${player.name} (ID: ${player.id})`;
 }
 
-function transitionBallColor(team: TeamEnum, count: number, totalTicks: number): number | false {
-  const percentage = (totalTicks - count) / totalTicks;
-  const step = Math.floor(10 * percentage);
+// borrowed from Gab
+const asianRegex = RegExp(
+  /[\p{Script_Extensions=Mymr}\p{Script_Extensions=Han}\p{Script_Extensions=Hira}\p{Script_Extensions=Kana}\p{Script_Extensions=Bopo}\p{Script=Khmer}\p{Script=Lao}\p{Script_Extensions=Phag}\p{Script=Tai_Tham}\p{Script=Thai}\p{Script=Tibetan}]/gu,
+);
+const emojiRegex = RegExp(
+  /[\u{1f300}-\u{1f5ff}\u{1f900}-\u{1f9ff}\u{1f600}-\u{1f64f}\u{1f680}-\u{1f6ff}\u{2600}-\u{26ff}\u{2700}-\u{27bf}\u{1f1e6}-\u{1f1ff}\u{1f191}-\u{1f251}\u{1f004}\u{1f0cf}\u{1f170}-\u{1f171}\u{1f17e}-\u{1f17f}\u{1f18e}\u{3030}\u{2b50}\u{2b55}\u{2934}-\u{2935}\u{2b05}-\u{2b07}\u{2b1b}-\u{2b1c}\u{3297}\u{3299}\u{303d}\u{00a9}\u{00ae}\u{2122}\u{23f3}\u{24c2}\u{23e9}-\u{23ef}\u{25b6}\u{23f8}-\u{23fa}]/gu,
+);
+const longRegex = RegExp(/(⸻|𒈙|𒐫|﷽|𒍙|𒊎|𒄡|𒅌|𒁏|𒀰|𒐪|𒐩|𒈙|𒐫)/gi);
 
-  if (team === TeamEnum.RED) {
-    switch (step) {
-      case 0:
-        return 0xf7bdb4;
-      case 1:
-        return 0xf8c5bd;
-      case 2:
-        return 0xf9ccc5;
-      case 3:
-        return 0xfad3cd;
-      case 4:
-        return 0xfadad6;
-      case 5:
-        return 0xfbe2de;
-      case 6:
-        return 0xfce9e6;
-      case 7:
-        return 0xfdf0ee;
-      case 8:
-        return 0xfef8f7;
-      case 9:
-        return 0xffffff;
-      default:
-    }
-  } else if (team === TeamEnum.BLUE) {
-    switch (step) {
-      case 0:
-        return 0xb1cbf2;
-      case 1:
-        return 0xb9d1f3;
-      case 2:
-        return 0xc2d6f4;
-      case 3:
-        return 0xcbdcf6;
-      case 4:
-        return 0xd4e2f8;
-      case 5:
-        return 0xdce8f9;
-      case 6:
-        return 0xe5eefa;
-      case 7:
-        return 0xeef3fc;
-      case 8:
-        return 0xf6f9fe;
-      case 9:
-        return 0xffffff;
-      default:
-    }
-  }
+// borrowed from Gab
+function isUsingIllegalChars(message: string): boolean {
+  const asian = (message.match(asianRegex) || []).length;
+  const emoji = (message.match(emojiRegex) || []).length;
+  const long = (message.match(longRegex) || []).length;
+
+  if (long > 0) return true;
+  if (asian > 10) return true;
+  if (asian + emoji > 15) return true;
 
   return false;
 }
@@ -156,7 +120,7 @@ const Util = {
   logWithTime,
   getPositionString,
   getPlayerNameAndId,
-  transitionBallColor,
+  isUsingIllegalChars,
 };
 
 export default Util;

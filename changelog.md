@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v0.14b:
+
+- Adicionado filtro para mensagens que travam o jogo.
+  - Adotamos o mesmo filtro usado por Gab em suas salas.
+
 ### v0.14a:
 
 - Removido o pause e adicionado **efeito de pontuação** para todas as pontuações.

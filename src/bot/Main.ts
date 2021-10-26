@@ -49,6 +49,7 @@ import { OffsideCommand } from './commands/rules/OffsideCommand';
 import { PenaltyCommand } from './commands/penalty/PenaltyCommand';
 import { PenaltyRuleCommand } from './commands/rules/PenaltyRuleCommand';
 import appConfig from './constants/appConfig';
+import { FilterInterceptor } from './interceptors/FilterInterceptor';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -110,6 +111,10 @@ const services = new ContainerModule((bind) => {
 
   bind<IChatMessageInterceptor<ChatMessage<HaxRugbyPlayer>>>(Types.IChatMessageInterceptor)
     .to(ExecuteCommandInterceptor)
+    .inRequestScope();
+
+  bind<IChatMessageInterceptor<ChatMessage<HaxRugbyPlayer>>>(Types.IChatMessageInterceptor)
+    .to(FilterInterceptor)
     .inRequestScope();
 });
 

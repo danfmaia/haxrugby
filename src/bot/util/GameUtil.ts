@@ -161,6 +161,63 @@ class GameUtil {
     }
   }
 
+  public transitionBallColor(team: TeamEnum, count: number, totalTicks: number): number | false {
+    const percentage = (totalTicks - count) / totalTicks;
+    const step = Math.floor(10 * percentage);
+
+    if (team === TeamEnum.RED) {
+      switch (step) {
+        case 0:
+          return 0xf7bdb4;
+        case 1:
+          return 0xf8c5bd;
+        case 2:
+          return 0xf9ccc5;
+        case 3:
+          return 0xfad3cd;
+        case 4:
+          return 0xfadad6;
+        case 5:
+          return 0xfbe2de;
+        case 6:
+          return 0xfce9e6;
+        case 7:
+          return 0xfdf0ee;
+        case 8:
+          return 0xfef8f7;
+        case 9:
+          return 0xffffff;
+        default:
+      }
+    } else if (team === TeamEnum.BLUE) {
+      switch (step) {
+        case 0:
+          return 0xb1cbf2;
+        case 1:
+          return 0xb9d1f3;
+        case 2:
+          return 0xc2d6f4;
+        case 3:
+          return 0xcbdcf6;
+        case 4:
+          return 0xd4e2f8;
+        case 5:
+          return 0xdce8f9;
+        case 6:
+          return 0xe5eefa;
+        case 7:
+          return 0xeef3fc;
+        case 8:
+          return 0xf6f9fe;
+        case 9:
+          return 0xffffff;
+        default:
+      }
+    }
+
+    return false;
+  }
+
   public updateAheadPlayers(originPlayer: HaxRugbyPlayer): void {
     const players = this.room.getPlayerList().filter((player) => player.id !== originPlayer.id);
     const ballPosition = this.room.getBallPosition();
