@@ -40,7 +40,7 @@ export class PenaltyCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
-    if (this.gameService.isPenalty === false) {
+    if (this.gameService.isPenalty === false || this.gameService.isGameFrozen) {
       return;
     }
 

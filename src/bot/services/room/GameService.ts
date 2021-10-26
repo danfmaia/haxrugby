@@ -742,7 +742,7 @@ export default class GameService implements IGameService {
     this.checkForTouches(players, ballPosition);
 
     if (this.lastTouchInfo && this.isPenalty === false) {
-      if (this.checkForAheadPenalty(this.lastTouchInfo.toucherIds)) {
+      if (this.isGameFrozen === false && this.checkForAheadPenalty(this.lastTouchInfo.toucherIds)) {
         return;
       }
     }
@@ -941,6 +941,7 @@ export default class GameService implements IGameService {
   }
 
   public handlePenalty(offendedTeam: TeamEnum): void {
+    this.isGameFrozen = true;
     const offendedTeamName = this.teams.getTeamName(offendedTeam);
 
     if (this.remainingTimeAtPenalty && this.penaltyPosition) {
@@ -1158,6 +1159,8 @@ export default class GameService implements IGameService {
     }
 
     if (isSafety) {
+      this.isGameFrozen = true;
+
       if (this.isPenalty) {
         this.handlePenalty(this.isPenalty);
         return false;
