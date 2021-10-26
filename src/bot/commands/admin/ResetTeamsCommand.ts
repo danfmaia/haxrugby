@@ -3,19 +3,21 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import CommandService, { ICommandService } from '../../services/CommandService';
-import Util from '../../util/Util';
+import { IGameService } from '../../services/room/IGameService';
 
 @CommandDecorator({
-  names: ['clearban', 'clearbans'],
+  names: ['rr-teams', 'reset-teams'],
 })
-export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
-  private readonly room: IHaxRugbyRoom;
+export class ResetTeamsCommand extends CommandBase<HaxRugbyPlayer> {
+  // private readonly room: IHaxRugbyRoom;
+  private readonly gameService: IGameService;
   private readonly service: ICommandService;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
 
-    this.room = room;
+    // this.room = room;
+    this.gameService = room.gameService;
     this.service = CommandService.getSingleton(room);
   }
 
@@ -28,19 +30,7 @@ export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
       return;
     }
 
-    const playerNameAndId = Util.getPlayerNameAndId(player);
-
-    if (args[0] === 'all') {
-      this.service.clearAllBans(playerNameAndId);
-      return;
-    }
-
-    const kickedId = Util.parseNumericInput(args[0]);
-    if (kickedId) {
-      this.room.clearBan(kickedId);
-      Util.logWithTime(`${playerNameAndId} tirou o ban do jogador com ID ${kickedId}`);
-    }
-
-    this.service.clearAllBans(playerNameAndId);
+    this.gameService.lastWinners = [];
+    this.gameService.util.resetTeams();
   }
 }

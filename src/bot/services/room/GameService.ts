@@ -31,7 +31,7 @@ import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
-import Teams, { ITeams } from '../../models/team/Teams';
+import Teams, { ITeams, TTeam } from '../../models/team/Teams';
 import colors from '../../constants/style/colors';
 import TLastDriveInfo from '../../models/game/TLastDriveInfo';
 import GameUtil from '../../util/GameUtil';
@@ -491,7 +491,7 @@ export default class GameService implements IGameService {
     this.chatService.sendBlankLine();
 
     this.lastWinners.unshift(winner);
-    this.allBlackerize(winner, this.lastWinners);
+    this.allBlackerize(winnerTeam, this.lastWinners);
 
     Util.timeout(15000, () => {
       if (matchCount === this.lastScores.length) {
@@ -500,19 +500,25 @@ export default class GameService implements IGameService {
     });
   }
 
-  public allBlackerize(winner: TeamEnum, lastWinners: TeamEnum[]): void {
+  public allBlackerize(winner: TTeam, lastWinners: TeamEnum[]): void {
     if (lastWinners.length >= 1) {
       const streak = this.util.getStreakVictoriesNumber(lastWinners);
-      console.log('streak: ', streak);
+
       if (streak === 1) {
-        const loser = TeamUtil.getOpposingTeam(winner);
-        if (lastWinners.length >= 2) {
-          if (lastWinners[1] === loser) {
-            this.util.allBlackerizeTeam(loser, 0);
-          }
+        Util.logWithTime(`${winner.name} ganhou uma partida.`);
+      }
+      if (streak > 1) {
+        Util.logWithTime(`${winner.name} ganhou ${streak} partidas seguidas.`);
+      }
+
+      if (lastWinners.length >= 3) {
+        const loser = TeamUtil.getOpposingTeam(winner.teamEnum);
+        if (lastWinners[1] === loser && lastWinners[2] === loser) {
+          this.util.allBlackerizeTeam(loser, 0);
         }
       }
-      this.util.allBlackerizeTeam(winner, streak);
+
+      this.util.allBlackerizeTeam(winner.teamEnum, streak);
     }
   }
 

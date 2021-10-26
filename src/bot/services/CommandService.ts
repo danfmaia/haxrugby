@@ -1,11 +1,14 @@
 import PositionEnum from '../enums/PositionEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerConfig } from '../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import Util from '../util/Util';
 import { IChatService } from './room/ChatService';
 import { IGameService } from './room/IGameService';
 
 export interface ICommandService {
+  requireSuperAdmin(playerId: number): boolean;
+  clearAllBans(playerNameAndId: string): void;
   setPlayerAsPosition(player: HaxRugbyPlayer, args: string[], position: PositionEnum): void;
 }
 
@@ -27,6 +30,19 @@ class CommandService implements ICommandService {
       this._singleton = new this(room);
     }
     return this._singleton;
+  }
+
+  public requireSuperAdmin(playerId: number): boolean {
+    const playerConfig = HaxRugbyPlayerConfig.getConfig(playerId);
+    if (playerConfig.role.weight < 90) {
+      this.chatService.sendYellowAnnouncement(
+        'Você precisar ser SuperAdmin para usar esse comando.',
+        2,
+        playerId,
+      );
+      return false;
+    }
+    return true;
   }
 
   public clearAllBans(playerNameAndId: string): void {

@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### v0.14c:
+
+- Criado comando para resetar os times (`!rr-teams` ou `!reset-teams`) no que diz respeito à All Blackerização (ou outras customizações).
+  - Apenas _SuperAdmins_ podem usar esse comando.
+- Corrigidos bugs do patch anterior.
+- Agora apenas SuperAdmins podem usar os comandos `!clearban` e `!clearbans`.
+- Alterado o ícone de jogadores impedidos para o de uma banheira (🛁 ).
+
 ### v0.14b:
 
 - Implementada a **All Blackerização**.

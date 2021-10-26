@@ -2,7 +2,7 @@ import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import CommandService from '../../services/CommandService';
+import CommandService, { ICommandService } from '../../services/CommandService';
 import Util from '../../util/Util';
 
 @CommandDecorator({
@@ -10,13 +10,13 @@ import Util from '../../util/Util';
 })
 export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
-  private readonly service: CommandService;
+  private readonly service: ICommandService;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
 
     // this.room = room;
-    this.service = new CommandService(room);
+    this.service = CommandService.getSingleton(room);
   }
 
   public canExecute(player: HaxRugbyPlayer): boolean {
@@ -24,6 +24,10 @@ export class ClearBanCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
+    if (this.service.requireSuperAdmin(player.id) === false) {
+      return;
+    }
+
     const playerNameAndId = Util.getPlayerNameAndId(player);
     this.service.clearAllBans(playerNameAndId);
   }

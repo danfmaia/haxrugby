@@ -131,9 +131,4 @@ export class RoomUtil {
       this.room.setTeamColors(TeamID.BlueTeam, 0, colors.white, new Int32Array([color]));
     }
   }
-
-  public setTeamsDefaultStyle(): void {
-    this.setTeamColor(TeamEnum.RED, colors.playerRed);
-    this.setTeamColor(TeamEnum.BLUE, colors.playerBlue);
-  }
 }

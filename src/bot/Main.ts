@@ -50,6 +50,7 @@ import { PenaltyCommand } from './commands/penalty/PenaltyCommand';
 import { PenaltyRuleCommand } from './commands/rules/PenaltyRuleCommand';
 import appConfig from './constants/appConfig';
 import { FilterInterceptor } from './interceptors/FilterInterceptor';
+import { ResetTeamsCommand } from './commands/admin/ResetTeamsCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -63,6 +64,7 @@ AdminCommand;
 PasswordCommand;
 ClearBanCommand;
 OnlyAdminCommand;
+ResetTeamsCommand;
 
 NewMatchCommand;
 CancelMatchCommand;

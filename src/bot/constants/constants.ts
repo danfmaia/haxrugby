@@ -1,13 +1,15 @@
 export const GAME_TITLE = '𝖧𝖺𝗑𝗥𝘂𝗴𝗯𝘆';
 export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉';
 // export const ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 𝖳𝖾𝗌𝗍𝖾𝗌';
-export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 ter/sex/sáb';
-export const CLOSED_PLAYER_NAME = 'Abrimos ter/sex/sáb';
+// export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 ter/sex/sáb';
+export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 hoje às 20h30';
+// export const CLOSED_PLAYER_NAME = 'Abrimos ter/sex/sáb';
+export const CLOSED_PLAYER_NAME = 'Abriremos às 20h30';
 
 export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟯';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟰';
-const APP_PATCH_VERSION = '𝗯';
-export const APP_VERSION_IN_ROOM_LIST = 'v0.14b';
+const APP_PATCH_VERSION = '𝗰';
+export const APP_VERSION_IN_ROOM_LIST = 'v0.14c';
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';
@@ -37,6 +39,6 @@ export const NORMAL_AIR_KICK_BOOST = 1.3;
 
 export const SAFETY_MAX_TIME = 20000;
 
-export const AHEAD_EMOJI = '✖️';
+export const AHEAD_EMOJI = '🛁';
 export const AHEAD_PENALTY_EMOJI = '⚠️';
 export const PENALTY_ADVANTAGE_TIME = 5000;

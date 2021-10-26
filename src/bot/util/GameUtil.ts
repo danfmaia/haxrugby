@@ -510,6 +510,16 @@ class GameUtil {
     }
   }
 
+  public resetTeams(): void {
+    this.room.util.setTeamColor(TeamEnum.RED, colors.playerRed);
+    this.gameService.teams.setTeamName(TeamEnum.RED, null);
+    this.gameService.teams.setTeamMessageColor(TeamEnum.RED, null);
+
+    this.room.util.setTeamColor(TeamEnum.BLUE, colors.playerBlue);
+    this.gameService.teams.setTeamName(TeamEnum.BLUE, null);
+    this.gameService.teams.setTeamMessageColor(TeamEnum.BLUE, null);
+  }
+
   public getStreakVictoriesNumber(lastWinners: TeamEnum[]): number {
     if (lastWinners.length === 0) {
       return 0;
