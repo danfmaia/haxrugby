@@ -1,10 +1,12 @@
 const colors = {
   haxRugbyGreen: 0x7ec577,
 
+  white: 0xffffff,
   yellow: 0xffff00,
   mediumBlue: 0x00bcd5,
   green: 0x00ff00,
   red: 0xff0000,
+  black: 0x000000,
   redRGB: [255, 0, 0],
   blueRGB: [0, 0, 255],
   // chatRed: 0xf88881,
@@ -17,6 +19,8 @@ const colors = {
   playerRedRGB: [237, 110, 90],
   playerBlue: 0x518be1,
   playerBlueRGB: [81, 139, 225],
+  playerRedStreak: [0xed6e5a, 0xb25244, 0x76372d, 0x3b1c16, 0x000000],
+  playerBlueStreak: [0x518be1, 0x3d68a9, 0x284670, 0x142338, 0x000000],
 
   haxRugbyBall: 0xe39e50,
   haxRugbyBallRGB: [227, 158, 80],

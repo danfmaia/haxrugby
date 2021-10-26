@@ -1,6 +1,7 @@
 import { IDiscPropertiesObject, IPosition, TeamID } from 'inversihax';
 import { AHEAD_EMOJI, PLAYER_RADIUS } from '../constants/constants';
 import colors from '../constants/style/colors';
+import { ALL_BLACKS_TEAM_NAME } from '../constants/team/team';
 import AheadEnum from '../enums/AheadEnum';
 import PositionEnum from '../enums/PositionEnum';
 import TeamEnum from '../enums/TeamEnum';
@@ -39,7 +40,7 @@ class GameUtil {
   // }
 
   public triggerScoringEffect(team: TeamEnum): void {
-    this.gameService.isGameFrozen = false;
+    this.gameService.isGameFrozen = true;
 
     const y = this.gameService.tryY ? this.gameService.tryY : 0;
 
@@ -506,6 +507,75 @@ class GameUtil {
         undefined,
         colors.green,
       );
+    }
+  }
+
+  public getStreakVictoriesNumber(lastWinners: TeamEnum[]): number {
+    if (lastWinners.length === 0) {
+      return 0;
+    }
+
+    const lastWinner = lastWinners[0];
+
+    let result: number = 0;
+    for (let i = 0; i < lastWinners.length; i++) {
+      const winner = lastWinners[i];
+      if (winner === lastWinner) {
+        result = result + 1;
+      } else {
+        return result;
+      }
+    }
+
+    return result;
+  }
+
+  public allBlackerizeTeam(team: TeamEnum, streak: number): void {
+    let colorNumber: number;
+    if (streak === 0) {
+      colorNumber = 0;
+    } else {
+      colorNumber = streak - 1;
+    }
+
+    if (team === TeamEnum.RED) {
+      this.room.util.setTeamColor(team, colors.playerRedStreak[colorNumber]);
+    } else {
+      this.room.util.setTeamColor(team, colors.playerBlueStreak[colorNumber]);
+    }
+
+    let msg: string | null = null;
+    const teamName = this.gameService.teams.getTeamName(team);
+
+    switch (streak) {
+      case 0:
+        msg = `   ‐ ‐ ‐ ‐ ‐   O ${teamName} voltou ao normal.`;
+        this.gameService.teams.setTeamName(team, null);
+        this.gameService.teams.setTeamMessageColor(team, null);
+        break;
+      case 2:
+        msg = `   • • ‐ ‐ ‐   O ${teamName} ganhou 2 partidas seguidas!`;
+        break;
+      case 3:
+        msg = `   • • • ‐ ‐   O ${teamName} ganhou 3 partidas seguidas. Alguém pára esse time!`;
+        break;
+      case 4:
+        msg = `   • • • • ‐   O ${teamName} ganhou 4 partidas seguidas. Mais uma vitória e ele se transformará no ALL BLACKS!`;
+        break;
+      case 5:
+        msg = `   • • • • •   O ${teamName} ganhou 5 partidas seguidas! O ${teamName} se transformou no ALL BLACKS!`;
+        this.gameService.teams.setTeamName(team, ALL_BLACKS_TEAM_NAME);
+        this.gameService.teams.setTeamMessageColor(team, colors.airBall);
+        break;
+      case 6:
+        msg = `   💀   O ${teamName} ganhou ${streak} partidas seguidas!   KA MATE!!!   KA MATE!!!   💀`;
+        break;
+      default:
+    }
+
+    if (msg) {
+      const teamColor = this.gameService.teams.getTeamMessageColor(team);
+      this.gameService.chatService.sendBoldAnnouncement(msg, 0, undefined, teamColor);
     }
   }
 }

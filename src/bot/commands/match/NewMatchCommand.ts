@@ -44,7 +44,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         const stadium = this.getStadiumFromInput(updatedMatchConfig.mapSize);
         if (stadium) {
           this.gameService.map = stadium;
-          if (this.gameService.getLastWinner() === TeamEnum.BLUE) {
+          if (this.gameService.getWinner() === TeamEnum.BLUE) {
             this.room.setCustomStadium(
               stadium.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );

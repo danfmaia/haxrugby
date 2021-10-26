@@ -106,5 +106,7 @@ export class HaxRugbyRoom extends RoomBase<HaxRugbyPlayer> implements IHaxRugbyR
     this.setScoreLimit(this.gameService.matchConfig.scoreLimit);
 
     this.setKickRateLimit(KICK_RATE_LIMIT[0], KICK_RATE_LIMIT[1], KICK_RATE_LIMIT[2]);
+
+    this.util.setTeamsDefaultStyle();
   }
 }

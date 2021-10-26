@@ -55,6 +55,7 @@ export default class GameService implements IGameService {
   public remainingTime: number;
   public score: IScore = { red: 0, blue: 0 };
   private lastScores: IScore[] = [];
+  public lastWinners: TeamEnum[] = [];
 
   public isGameFrozen: boolean = false;
   public isGameStopped: boolean = true;
@@ -140,22 +141,28 @@ export default class GameService implements IGameService {
       }
     }
 
-    if (
-      this.isMatchInProgress === false ||
-      (this.isTimeRunning === false && this.isConversionAttempt === false)
-    ) {
-      return;
-    }
+    // if (
+    //   this.isMatchInProgress === false ||
+    //   (this.isTimeRunning === false && this.isConversionAttempt === false)
+    // ) {
+    //   return;
+    // }
 
     const ballPosition = this.room.getBallPosition();
 
     if (this.isConversionAttempt === false) {
-      if (this.isTry === false) {
+      if (this.isMatchInProgress && this.isTimeRunning && this.isGameFrozen === false) {
         this.tickCount = this.tickCount + 1;
         if (this.tickCount % 6 === 0) {
           this.handleTime(ballPosition);
         }
       }
+      // if (this.isTry === false) {
+      //   this.tickCount = this.tickCount + 1;
+      //   if (this.tickCount % 6 === 0) {
+      //     this.handleTime(ballPosition);
+      //   }
+      // }
       this.handleGame(this.isGameFrozen, ballPosition);
     } else {
       this.handleConversion(ballPosition, this.isConversionAttempt);
@@ -337,17 +344,15 @@ export default class GameService implements IGameService {
       this.isGameFrozen = true;
 
       let teamName: string;
-      let msgColor: number;
+      const msgColor: number = this.teams.getTeamMessageColor(undefined, team);
       let stadium: string;
       if (team === TeamID.RedTeam) {
         this.score.red = this.score.red + 2;
         teamName = this.teams.red.name;
-        msgColor = colors.teamRed;
         stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       } else {
         this.score.blue = this.score.blue + 2;
         teamName = this.teams.blue.name;
-        msgColor = colors.teamBlue;
         stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
 
@@ -366,7 +371,7 @@ export default class GameService implements IGameService {
 
   public handleStadiumChange(newStadiumName: string, byPlayer: HaxRugbyPlayer): void {
     if (newStadiumName.includes('HaxRugby') === false) {
-      const lastWinner = this.getLastWinner();
+      const lastWinner = this.getWinner();
       if (lastWinner === TeamEnum.BLUE) {
         this.room.setCustomStadium(
           this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
@@ -428,56 +433,49 @@ export default class GameService implements IGameService {
   private finishMatch() {
     this.isMatchInProgress = false;
     this.isFinishing = true;
-    this.lastScores.unshift(this.score);
-
     this.isTimeRunning = false;
-    this.room.pauseGame(true);
+    this.isGameFrozen = true;
 
-    const lastWinner = this.getLastWinner();
-    if (!lastWinner) {
+    this.lastScores.unshift(this.score);
+    const winner = this.getWinner();
+    if (!winner) {
       Util.timeout(2500, () => {
         if (this.isFinishing) {
           this.room.stopGame();
         }
-        this.chatService.sendNewMatchHelp();
       });
       return;
     }
 
-    const winnerTeam = this.teams.getTeam(lastWinner);
-
     Util.timeout(2500, () => {
       if (this.isFinishing) {
         this.room.stopGame();
-        if (lastWinner === TeamEnum.RED) {
+        if (winner === TeamEnum.RED) {
           this.room.setCustomStadium(
             this.map.redStadiums.getKickoff(0, this.matchConfig.timeLimit),
           );
-        } else if (lastWinner === TeamEnum.BLUE) {
+        } else if (winner === TeamEnum.BLUE) {
           this.room.setCustomStadium(
             this.map.blueStadiums.getKickoff(0, this.matchConfig.timeLimit),
           );
         }
       }
-      this.chatService.sendNewMatchHelp();
     });
 
-    const msgColor = this.teams.getTeamColor(lastWinner);
+    const msgColor = this.teams.getTeamMessageColor(winner);
     const remainingTimeString = Util.getRemainingTimeString(this.remainingTime);
 
+    const winnerTeam = this.teams.getTeam(winner);
+
     this.chatService.sendBlankLine();
-    this.chatService.sendBoldAnnouncement(
-      `Fim da partida. Vitória do ${winnerTeam.name}!`,
-      2,
-      undefined,
-      msgColor,
-    );
-    this.chatService.sendBoldAnnouncement(
-      `Placar final: ${this.score.red}-${this.score.blue}`,
-      0,
-      undefined,
-      msgColor,
-    );
+    let winnerMsg: string;
+    if (winner === TeamEnum.RED) {
+      winnerMsg = `Fim da partida.     Vitória do ${winnerTeam.name} por ${this.score.red} a ${this.score.blue}!`;
+    } else {
+      winnerMsg = `Fim da partida.     Vitória do ${winnerTeam.name} por ${this.score.blue} a ${this.score.red}!`;
+    }
+    this.chatService.sendBoldAnnouncement(winnerMsg, 2, undefined, msgColor);
+
     if (remainingTimeString !== '00:00') {
       let timeMsg: string;
       if (this.remainingTime > 0) {
@@ -487,7 +485,29 @@ export default class GameService implements IGameService {
       }
       this.chatService.sendNormalAnnouncement(timeMsg, 0, undefined, msgColor);
     }
+
     this.chatService.sendBlankLine();
+
+    this.lastWinners.unshift(winner);
+    this.allBlackerize(winner, this.lastWinners);
+
+    this.chatService.sendBlankLine();
+  }
+
+  public allBlackerize(winner: TeamEnum, lastWinners: TeamEnum[]): void {
+    if (lastWinners.length >= 1) {
+      const streak = this.util.getStreakVictoriesNumber(lastWinners);
+      console.log('streak: ', streak);
+      if (streak === 1) {
+        const loser = TeamUtil.getOpposingTeam(winner);
+        if (lastWinners.length >= 2) {
+          if (lastWinners[1] === loser) {
+            this.util.allBlackerizeTeam(loser, 0);
+          }
+        }
+      }
+      this.util.allBlackerizeTeam(winner, streak);
+    }
   }
 
   public cancelMatch(player?: HaxRugbyPlayer, restartMatch?: () => void): void {
@@ -756,7 +776,7 @@ export default class GameService implements IGameService {
     }
 
     // in case of try, let the scorer attempt to take the ball more to the center
-    if (this.isTry) {
+    if (this.isTry && this.isGameFrozen === false) {
       this.handleAfterTry(ballPosition, this.driverCountByTeam);
       return;
     }
@@ -885,11 +905,12 @@ export default class GameService implements IGameService {
               colors.green,
             );
           } else {
+            const messageColor = this.teams.getTeamMessageColor(offendedTeam.teamEnum);
             this.chatService.sendBoldAnnouncement(
               `O ${offendedTeam.name} tem 5 segundos para aceitar o Penal.`,
               0,
               player.id,
-              offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
+              messageColor,
             );
           }
         });
@@ -900,12 +921,8 @@ export default class GameService implements IGameService {
         } else {
           message = 'A infração aconteceu depois do Try, logo o Try é legal!';
         }
-        this.chatService.sendNormalAnnouncement(
-          message,
-          0,
-          undefined,
-          offendedTeam.teamEnum === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
-        );
+        const messageColor = this.teams.getTeamMessageColor(offendedTeam.teamEnum);
+        this.chatService.sendNormalAnnouncement(message, 0, undefined, messageColor);
       }
 
       this.remainingTimeAtPenalty = this.remainingTime;
@@ -925,11 +942,12 @@ export default class GameService implements IGameService {
       this.isTimeRunning = false;
       this.remainingTime = this.remainingTimeAtPenalty;
 
+      const messageColor = this.teams.getTeamMessageColor(offendedTeam);
       this.chatService.sendBoldAnnouncement(
         `PENAL a favor do ${offendedTeamName}!`,
         2,
         undefined,
-        offendedTeam === TeamEnum.RED ? colors.teamRed : colors.teamBlue,
+        messageColor,
       );
 
       let stadium: string;
@@ -1061,7 +1079,7 @@ export default class GameService implements IGameService {
       this.util.triggerScoringEffect(isGoal);
       this.isTimeRunning = false;
       let teamName: string;
-      const msgColor = this.teams.getTeamColor(isGoal);
+      const msgColor = this.teams.getTeamMessageColor(isGoal);
       let stadium: string;
 
       if (isGoal === TeamEnum.RED) {
@@ -1193,7 +1211,7 @@ export default class GameService implements IGameService {
       this.isTry = isTry;
       this.tryY = ballPosition.y;
       const teamName = this.teams.getTeamName(isTry);
-      const msgColor = this.teams.getTeamColor(isTry);
+      const msgColor = this.teams.getTeamMessageColor(isTry);
 
       if (isTry === TeamEnum.RED) {
         this.score.red = this.score.red + 5;
@@ -1221,6 +1239,8 @@ export default class GameService implements IGameService {
   }
 
   private handleAfterTry(ballPosition: IPosition, driverCountByTeam: TPlayerCountByTeam) {
+    this.isTimeRunning = false;
+
     if (this.isTry === false || this.tryY === null) {
       return;
     }
@@ -1284,7 +1304,6 @@ export default class GameService implements IGameService {
 
     if (isStillAttempting === false || this.afterTryTickCount >= AFTER_TRY_MAX_TICKS) {
       this.util.triggerScoringEffect(this.isTry);
-      this.isTimeRunning = false;
       this.afterTryTickCount = 0;
 
       let stadium: string;
@@ -1499,7 +1518,7 @@ export default class GameService implements IGameService {
     });
   }
 
-  public getLastWinner(): TeamEnum | null | 0 {
+  public getWinner(): TeamEnum | null | 0 {
     const lastScore = this.lastScores[0];
     if (!lastScore) {
       return null;

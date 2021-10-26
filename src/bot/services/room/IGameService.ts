@@ -21,6 +21,7 @@ export interface IGameService {
   tickCount: number;
   remainingTime: number;
   score: IScore;
+  lastWinners: TeamEnum[];
 
   isGameFrozen: boolean;
   isGameStopped: boolean;
@@ -71,5 +72,5 @@ export interface IGameService {
   cancelMatch(player?: HaxRugbyPlayer, restartMatch?: () => void): void;
 
   handlePenalty(offendedTeam: TeamEnum): void;
-  getLastWinner(): TeamEnum | null | 0;
+  getWinner(): TeamEnum | null | 0;
 }

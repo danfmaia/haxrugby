@@ -10,6 +10,7 @@ import TeamPositions, { ITeamPositions } from '../player/TeamPositions';
 
 export type TTeam = {
   name: string;
+  messageColor: number;
   teamEnum: TeamEnum;
   teamID: TeamID;
   positions: ITeamPositions;
@@ -22,7 +23,9 @@ export interface ITeams {
   getTeam(team: TeamEnum): TTeam;
   getTeamByTeamID(teamID: TeamID): TTeam | null;
   getTeamName(teamEnum: TeamEnum): string;
-  getTeamColor(teamEnum: TeamEnum): number;
+  setTeamName(team: TeamEnum, teamName: string | null): void;
+  getTeamMessageColor(teamEnum?: TeamEnum, teamID?: TeamID): number;
+  setTeamMessageColor(team: TeamEnum, messageColor: number | null): void;
 
   fillAllPositions(players: HaxRugbyPlayer[]): void;
   emptyPositionsOnPlayerTeamChange(player: HaxRugbyPlayer): void;
@@ -37,6 +40,7 @@ class Teams implements ITeams {
   constructor(chatService: IChatService, redTeamName?: string, blueTeamName?: string) {
     this.red = {
       name: !redTeamName ? RED_TEAM_NAME : redTeamName,
+      messageColor: colors.teamRed,
       teamEnum: TeamEnum.RED,
       teamID: TeamID.RedTeam,
       positions: new TeamPositions(chatService),
@@ -44,6 +48,7 @@ class Teams implements ITeams {
 
     this.blue = {
       name: !blueTeamName ? BLUE_TEAM_NAME : blueTeamName,
+      messageColor: colors.teamBlue,
       teamEnum: TeamEnum.BLUE,
       teamID: TeamID.BlueTeam,
       positions: new TeamPositions(chatService),
@@ -74,11 +79,53 @@ class Teams implements ITeams {
     return this.blue.name;
   }
 
-  getTeamColor(team: TeamEnum): number {
+  setTeamName(team: TeamEnum, name: string | null): void {
     if (team === TeamEnum.RED) {
-      return colors.teamRed;
+      if (name) {
+        this.red.name = name;
+      } else {
+        this.red.name = RED_TEAM_NAME;
+      }
+    } else {
+      if (name) {
+        this.blue.name = name;
+      } else {
+        this.blue.name = BLUE_TEAM_NAME;
+      }
     }
-    return colors.teamBlue;
+  }
+
+  getTeamMessageColor(teamEnum?: TeamEnum, teamID?: TeamID): number {
+    if (teamEnum) {
+      if (teamEnum === TeamEnum.RED) {
+        return this.red.messageColor;
+      }
+      return this.blue.messageColor;
+    }
+    if (teamID) {
+      if (teamID === TeamID.RedTeam) {
+        return this.red.messageColor;
+      } else if (teamID === TeamID.BlueTeam) {
+        return this.blue.messageColor;
+      }
+    }
+    throw new Error();
+  }
+
+  setTeamMessageColor(team: TeamEnum, messageColor: number | null): void {
+    if (team === TeamEnum.RED) {
+      if (messageColor) {
+        this.red.messageColor = messageColor;
+      } else {
+        this.red.messageColor = colors.teamRed;
+      }
+    } else {
+      if (messageColor) {
+        this.blue.messageColor = messageColor;
+      } else {
+        this.blue.messageColor = colors.teamBlue;
+      }
+    }
   }
 
   public fillAllPositions(players: HaxRugbyPlayer[]): void {

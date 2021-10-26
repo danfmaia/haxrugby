@@ -1,4 +1,5 @@
 import { CollisionFlag, IDiscPropertiesObject, TeamID } from 'inversihax';
+import colors from '../constants/style/colors';
 import TeamEnum from '../enums/TeamEnum';
 import TTouchInfo from '../models/game/TTouchInfo';
 import { TPlayerPropsMap as TPlayerPropsMap } from '../models/player/TPlayerPropsMap';
@@ -121,5 +122,18 @@ export class RoomUtil {
 
     const updatedBallProps = { color } as IDiscPropertiesObject;
     this.room.setDiscProperties(0, updatedBallProps);
+  }
+
+  public setTeamColor(team: TeamEnum, color: number): void {
+    if (team === TeamEnum.RED) {
+      this.room.setTeamColors(TeamID.RedTeam, 0, colors.white, new Int32Array([color]));
+    } else {
+      this.room.setTeamColors(TeamID.BlueTeam, 0, colors.white, new Int32Array([color]));
+    }
+  }
+
+  public setTeamsDefaultStyle(): void {
+    this.setTeamColor(TeamEnum.RED, colors.playerRed);
+    this.setTeamColor(TeamEnum.BLUE, colors.playerBlue);
   }
 }
