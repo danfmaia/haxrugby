@@ -163,7 +163,7 @@ export default class GameService implements IGameService {
       //     this.handleTime(ballPosition);
       //   }
       // }
-      this.handleGame(this.isGameFrozen, ballPosition);
+      this.handleGame(ballPosition);
     } else {
       this.handleConversion(ballPosition, this.isConversionAttempt);
     }
@@ -742,7 +742,7 @@ export default class GameService implements IGameService {
   //   });
   // }
 
-  private handleGame(isGameFrozen: boolean, ballPosition: IPosition) {
+  private handleGame(ballPosition: IPosition) {
     const players = this.room.getPlayerList();
 
     this.checkForTouches(players, ballPosition);
@@ -774,21 +774,23 @@ export default class GameService implements IGameService {
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
-    this.handleBall(
-      ballPosition,
-      didBallEnterOrLeaveIngoal,
-      this.isDefRec,
-      this.airKickerId !== null,
-    );
+    if (this.isGameFrozen === false) {
+      this.handleBall(
+        ballPosition,
+        didBallEnterOrLeaveIngoal,
+        this.isDefRec,
+        this.airKickerId !== null,
+      );
+    }
 
     if (this.lastDriveInfo) {
-      if (isGameFrozen === false && this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
+      if (this.isGameFrozen === false && this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
         return;
       }
     }
 
     // in case of try, let the scorer attempt to take the ball more to the center
-    if (this.isTry && this.isGameFrozen === false) {
+    if (this.isGameFrozen === false && this.isTry) {
       this.handleAfterTry(ballPosition, this.driverCountByTeam);
       return;
     }
@@ -808,7 +810,7 @@ export default class GameService implements IGameService {
         this.driverCountByTeam,
       );
       if (isTryOnGoalLine === false) {
-        if (isGameFrozen === false && this.checkForSafety(ballPosition)) {
+        if (this.isGameFrozen === false && this.checkForSafety(ballPosition)) {
           if (ballPosition.x < 0) {
             this.room.util.setBallColor(colors.teamRed);
           } else {
@@ -819,7 +821,7 @@ export default class GameService implements IGameService {
       }
     }
 
-    if (isGameFrozen === false && this.checkForTry(ballPosition)) {
+    if (this.isGameFrozen === false && this.checkForTry(ballPosition)) {
       return;
     }
 
@@ -1349,11 +1351,7 @@ export default class GameService implements IGameService {
     isDefRec: boolean,
     isAirBall: boolean,
   ) {
-    if (
-      this.isGameFrozen === false &&
-      this.driverCountByTeam.red &&
-      ballPosition.x > -this.map.tryLineX
-    ) {
+    if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
       this.lastDriveInfo = {
         ballPosition,
         team: TeamEnum.RED,
