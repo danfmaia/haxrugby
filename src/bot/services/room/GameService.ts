@@ -1408,8 +1408,7 @@ export default class GameService implements IGameService {
     if (this.isConversionShot === false) {
       if (
         this.isReplacingBall === false &&
-        ballPosition.x !== this.lastBallPosition.x &&
-        ballPosition.y !== this.lastBallPosition.y
+        Physics.hasPositionChanged(this.lastBallPosition, ballPosition)
       ) {
         // handle after shot
         this.isConversionShot = true;
