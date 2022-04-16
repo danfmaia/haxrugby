@@ -7,8 +7,6 @@ import {
   AFTER_TRY_MAX_TICKS,
   AIR_KICK_TICKS,
   AIR_KICK_BLOCK_TICKS,
-  NORMAL_AIR_KICK_BOOST,
-  SMALL_AIR_KICK_BOOST,
   BALL_TEAM_COLOR_TICKS,
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
@@ -36,7 +34,6 @@ import colors from '../../constants/style/colors';
 import TLastDriveInfo from '../../models/game/TLastDriveInfo';
 import GameUtil from '../../util/GameUtil';
 import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
-import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import { RoomUtil } from '../../util/RoomUtil';
 import TAheadPlayers from '../../models/game/TAheadPlayers';
 import AheadEnum from '../../enums/AheadEnum';
@@ -281,12 +278,11 @@ export default class GameService implements IGameService {
       this.ballTransitionCount = AIR_KICK_TICKS;
 
       // boost kick
-      const isSmallMap = this.matchConfig.mapSize === MapSizeEnum.SMALL;
-      const boost = isSmallMap ? SMALL_AIR_KICK_BOOST : NORMAL_AIR_KICK_BOOST;
+      const kickBoost = this.util.getAirKickBoost();
       const ballProps = this.room.getDiscProperties(0);
       const updatedBallProps = {} as IDiscPropertiesObject;
-      updatedBallProps.xspeed = boost * ballProps.xspeed;
-      updatedBallProps.yspeed = boost * ballProps.yspeed;
+      updatedBallProps.xspeed = kickBoost * ballProps.xspeed;
+      updatedBallProps.yspeed = kickBoost * ballProps.yspeed;
       this.room.setDiscProperties(0, updatedBallProps);
     } else {
       this.airKickerId = null;

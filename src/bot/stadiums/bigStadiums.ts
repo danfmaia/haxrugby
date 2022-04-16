@@ -7,21 +7,21 @@ import MapDimensions from '../models/stadium/MapDimensions';
 import TConversionProps from '../models/stadium/TConversionProps';
 
 export const DIMENSIONS = {
-  outerWidth: 720,
-  outerHeight: 350,
-  width: 674,
-  height: 300,
+  outerWidth: 1008,
+  outerHeight: 490,
+  width: 943.6,
+  height: 420,
 
-  spawnDistance: 227,
-  goalLineX: 562,
-  goalPostY: 60,
-  miniArea: 65,
-  kickoffLineX: 179,
-  areaLineX: 412,
-  penaltyBoundaryY: 180,
+  spawnDistance: 317.8,
+  goalLineX: 786.8,
+  goalPostY: 84,
+  miniArea: 91,
+  kickoffLineX: 250.6,
+  areaLineX: 576.8,
+  penaltyBoundaryY: 252,
 
-  goalPostBottomZ: 14.4,
-  goalPostTopZ: 76.8,
+  goalPostBottomZ: 20.16,
+  goalPostTopZ: 107.52,
 };
 
 const dimensions = new MapDimensions(
