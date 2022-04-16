@@ -1,7 +1,11 @@
-import { BALL_RADIUS } from '../../constants/constants';
+//
+// DEPRECATED
+//
+
+import { BALL_RADIUS } from '../../../constants/constants';
 
 const map = {
-  name: 'HaxRugby v19 B by JP',
+  name: 'HaxRugby v19 R by JP',
 
   width: 720,
 
@@ -213,7 +217,7 @@ const map = {
     { v0: 30, v1: 31, trait: 'Line', y: 180 },
     { v0: 32, v1: 33, trait: 'Line', y: 180 },
 
-    { v0: 34, v1: 35, trait: 'kickOffBarrier', curve: 180 },
+    { v0: 34, v1: 35, trait: 'kickOffBarrier', curve: -180 },
 
     { v0: 36, v1: 37, trait: 'Line', curve: 90 },
     { v0: 37, v1: 38, trait: 'Line' },
@@ -319,8 +323,8 @@ const map = {
     goalPost: { radius: 2, invMass: 0, bCoef: 0.5 },
     goalNet: { vis: true, bCoef: 0.1, cMask: [0] },
     kickOffBarrier: { vis: false, bCoef: 0.1, cGroup: ['redKO', 'blueKO'], cMask: ['red', 'blue'] },
-    RedKOBarrier: { vis: false, bCoef: 0.1, cGroup: ['redKO', 'blueKO'], cMask: ['red'] },
-    BlueKOBarrier: { vis: false, bCoef: 0.1, cGroup: ['redKO', 'blueKO'], cMask: ['red'] },
+    RedKOBarrier: { vis: false, bCoef: 0.1, cGroup: ['redKO'], cMask: ['red', 'blue'] },
+    BlueKOBarrier: { vis: false, bCoef: 0.1, cGroup: ['blueKO'], cMask: ['red', 'blue'] },
   },
 
   ballPhysics: {
@@ -328,6 +332,6 @@ const map = {
   },
 };
 
-const blue_kickoff = JSON.stringify(map);
+const red_kickoff = JSON.stringify(map);
 
-export default blue_kickoff;
+export default red_kickoff;

@@ -1,10 +1,10 @@
 import { IPosition } from 'inversihax';
-import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
-import TeamEnum from '../../enums/TeamEnum';
-import THaxRugbyStadiums from '../../models/map/THaxRugbyStadiums';
-import HaxRugbyStadium from '../../models/stadium/HaxRugbyStadium';
-import MapDimensions from '../../models/stadium/MapDimensions';
-import TConversionProps from '../../models/stadium/TConversionProps';
+import MapSizeEnum from '../enums/stadium/MapSizeEnum';
+import TeamEnum from '../enums/TeamEnum';
+import THaxRugbyStadiums from '../models/map/THaxRugbyStadiums';
+import HaxRugbyStadium from '../models/stadium/HaxRugbyStadium';
+import MapDimensions from '../models/stadium/MapDimensions';
+import TConversionProps from '../models/stadium/TConversionProps';
 
 export const DIMENSIONS = {
   outerWidth: 720,
@@ -46,10 +46,10 @@ function red_getKickoff(
   kickoffPosition?: IPosition,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 R by JP',
+    'B-HaxRugby v20 R by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.RED,
     kickoffPosition,
@@ -62,10 +62,10 @@ function red_getConversion(
   conversionProps: TConversionProps,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 RC by JP',
+    'B-HaxRugby v20 RC by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.RED,
     undefined,
@@ -80,10 +80,10 @@ function red_getPenaltyKick(
   isPenalty: boolean,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v9 RP by JP',
+    'B-HaxRugby v9 RP by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.RED,
     kickoffPosition,
@@ -98,10 +98,10 @@ function blue_getKickoff(
   kickoffPosition?: IPosition,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 B by JP',
+    'B-HaxRugby v20 B by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.BLUE,
     kickoffPosition,
@@ -114,10 +114,10 @@ function blue_getConversion(
   conversionProps: TConversionProps,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 BC by JP',
+    'B-HaxRugby v20 BC by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.BLUE,
     undefined,
@@ -132,10 +132,10 @@ function blue_getPenaltyKick(
   isPenalty: boolean,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v9 BP by JP',
+    'B-HaxRugby v9 BP by JP',
     tickCount,
     matchDuration,
-    MapSizeEnum.NORMAL,
+    MapSizeEnum.BIG,
     dimensions,
     TeamEnum.BLUE,
     kickoffPosition,
@@ -144,21 +144,21 @@ function blue_getPenaltyKick(
   );
 }
 
-const redMaps: THaxRugbyStadiums = {
+const redStadiums: THaxRugbyStadiums = {
   getKickoff: red_getKickoff,
   getConversion: red_getConversion,
   getPenaltyKick: red_getPenaltyKick,
 };
 
-const blueMaps: THaxRugbyStadiums = {
+const blueStadiums: THaxRugbyStadiums = {
   getKickoff: blue_getKickoff,
   getConversion: blue_getConversion,
   getPenaltyKick: blue_getPenaltyKick,
 };
 
-const normalMaps = {
-  red: redMaps,
-  blue: blueMaps,
+const bigStadiums = {
+  red: redStadiums,
+  blue: blueStadiums,
 };
 
-export default normalMaps;
+export default bigStadiums;

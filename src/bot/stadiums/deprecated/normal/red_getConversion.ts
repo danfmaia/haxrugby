@@ -1,5 +1,9 @@
-import { BALL_RADIUS } from '../../constants/constants';
-import TConversionProps from '../../models/stadium/TConversionProps';
+//
+// DEPRECATED
+//
+
+import { BALL_RADIUS } from '../../../constants/constants';
+import TConversionProps from '../../../models/stadium/TConversionProps';
 
 function red_getConversion(convProps: TConversionProps): string {
   const map = {

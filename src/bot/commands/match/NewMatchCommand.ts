@@ -6,11 +6,12 @@ import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import smallMap from '../../singletons/smallMap';
-import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import normalMap from '../../singletons/normalMap';
+import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
 import getMatchConfig from '../../singletons/getMatchConfig';
+import bigMap from '../../singletons/bigMap';
 
 @CommandDecorator({
   names: ['rr', 'RR', 'rR', 'Rr', 'new', 'new-match'],
@@ -39,7 +40,14 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
-      if (arg0 === 'x1' || arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
+      if (
+        arg0 === 'x1' ||
+        arg0 === 'x2' ||
+        arg0 === 'x3' ||
+        arg0 === 'x4' ||
+        arg0 === 'x5' ||
+        arg0 === 'x6'
+      ) {
         updatedMatchConfig = getMatchConfig(arg0);
         const stadium = this.getStadiumFromInput(updatedMatchConfig.mapSize);
         if (stadium) {
@@ -114,11 +122,16 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
       return null;
     }
 
-    if (mapSize.toUpperCase() === MapSizeEnum.SMALL) {
-      return smallMap;
-    } else if (mapSize.toUpperCase() === MapSizeEnum.NORMAL) {
-      return normalMap;
+    const upperCaseMapSize = mapSize.toUpperCase();
+    switch (upperCaseMapSize) {
+      case MapSizeEnum.SMALL:
+        return smallMap;
+      case MapSizeEnum.NORMAL:
+        return normalMap;
+      case MapSizeEnum.BIG:
+        return bigMap;
+      default:
+        return null;
     }
-    return null;
   }
 }
