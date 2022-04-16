@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.14d:
+
+- Corrigido o bug da bola ficando na cor errada (do time ofensivo) em safety de bola dividida.
+
 ### v0.14c:
 
 - Criado comando para resetar os times (`!rr-teams` ou `!reset-teams`) no que diz respeito à All Blackerização (ou outras customizações).
