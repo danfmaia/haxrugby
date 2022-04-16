@@ -10,10 +10,10 @@ class MatchConfig implements IMatchConfig {
   public scoreLimit: number;
   public mapSize: MapSizeEnum;
 
-  constructor(timeLimit: number, scoreLimit: number, stadium: MapSizeEnum) {
+  constructor(timeLimit: number, scoreLimit: number, mapSize: MapSizeEnum) {
     this.timeLimit = timeLimit;
     this.scoreLimit = scoreLimit;
-    this.mapSize = stadium;
+    this.mapSize = mapSize;
   }
 
   public getTimeLimitInMs(): number {

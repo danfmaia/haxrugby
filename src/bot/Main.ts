@@ -101,7 +101,7 @@ const services = new ContainerModule((bind) => {
     public: false,
     // password: 'WJ-wges!B3J)M/Tx',
     noPlayer: appConfig.isOpen,
-    maxPlayers: 15,
+    maxPlayers: 18, // old: 15
     // token: 'thr1.AAAAAGF1yoyfzb1jFbcUvw.X_RZsWLMO-I',
   });
 

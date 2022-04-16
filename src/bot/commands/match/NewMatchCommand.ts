@@ -49,16 +49,16 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         arg0 === 'x6'
       ) {
         updatedMatchConfig = getMatchConfig(arg0);
-        const stadium = this.getStadiumFromInput(updatedMatchConfig.mapSize);
-        if (stadium) {
-          this.gameService.map = stadium;
+        const mapAndMapSize = this.getMapAndMapSizeFromInput(updatedMatchConfig.mapSize);
+        if (mapAndMapSize) {
+          this.gameService.map = mapAndMapSize[0];
           if (this.gameService.getWinner() === TeamEnum.BLUE) {
             this.room.setCustomStadium(
-              stadium.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+              mapAndMapSize[0].blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           } else {
             this.room.setCustomStadium(
-              stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+              mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           }
         }
@@ -73,11 +73,13 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           updatedMatchConfig.scoreLimit = scoreLimit;
         }
 
-        const stadium = this.getStadiumFromInput(arg2);
-        if (stadium) {
-          this.gameService.map = stadium;
+        const mapAndMapSize = this.getMapAndMapSizeFromInput(arg2);
+        if (mapAndMapSize) {
+          this.gameService.map = mapAndMapSize[0];
+          // TODO: improve
+          updatedMatchConfig.mapSize = mapAndMapSize[1];
           this.room.setCustomStadium(
-            stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
           );
         } else {
           this.room.setCustomStadium(
@@ -117,7 +119,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getStadiumFromInput(mapSize: string): null | HaxRugbyMap {
+  private getMapAndMapSizeFromInput(mapSize: string): null | [HaxRugbyMap, MapSizeEnum] {
     if (!mapSize) {
       return null;
     }
@@ -125,11 +127,11 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const upperCaseMapSize = mapSize.toUpperCase();
     switch (upperCaseMapSize) {
       case MapSizeEnum.SMALL:
-        return smallMap;
+        return [smallMap, MapSizeEnum.SMALL];
       case MapSizeEnum.NORMAL:
-        return normalMap;
+        return [normalMap, MapSizeEnum.NORMAL];
       case MapSizeEnum.BIG:
-        return bigMap;
+        return [bigMap, MapSizeEnum.BIG];
       default:
         return null;
     }

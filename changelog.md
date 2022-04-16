@@ -1,5 +1,14 @@
 ## CHANGELOG
 
+### v0.15:
+
+- Lançado o map tamanho **Big**.
+  - _Ainda está em fase de testes e ajustes..._
+- Adicionadas as opções `big`, `x5` e `x6` ao comando `!rr`. Exemplos:
+  - `!rr x5`
+  - `!rr 4 30 big`
+  - `!rr - - big`
+
 ### v0.14d:
 
 - Corrigido o bug da bola ficando na cor errada (do time ofensivo) em safety de bola dividida.
