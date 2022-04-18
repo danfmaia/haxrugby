@@ -88,7 +88,7 @@ const traits = {
 
   [TraitEnum.powerBoost]: {
     vis: false,
-    bCoef: -2.7, // -2.4
+    bCoef: -2.7, // old: -2.4
     cMask: ['ball'],
   },
 
