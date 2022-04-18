@@ -46,7 +46,7 @@ function red_getKickoff(
   kickoffPosition?: IPosition,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 R by JP',
+    'HaxRugby R by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,
@@ -62,7 +62,7 @@ function red_getConversion(
   conversionProps: TConversionProps,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 RC by JP',
+    'HaxRugby RC by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,
@@ -80,7 +80,7 @@ function red_getPenaltyKick(
   isPenalty: boolean,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v9 RP by JP',
+    'HaxRugby RP by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,
@@ -98,7 +98,7 @@ function blue_getKickoff(
   kickoffPosition?: IPosition,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 B by JP',
+    'HaxRugby B by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,
@@ -114,7 +114,7 @@ function blue_getConversion(
   conversionProps: TConversionProps,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v20 BC by JP',
+    'HaxRugby BC by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,
@@ -132,7 +132,7 @@ function blue_getPenaltyKick(
   isPenalty: boolean,
 ): string {
   return HaxRugbyStadium.getNewStadium(
-    'HaxRugby v9 BP by JP',
+    'HaxRugby BP by JP',
     tickCount,
     matchDuration,
     MapSizeEnum.NORMAL,

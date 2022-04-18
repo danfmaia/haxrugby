@@ -10,8 +10,9 @@ import normalMap from '../../singletons/normalMap';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
-import getMatchConfig from '../../singletons/getMatchConfig';
 import bigMap from '../../singletons/bigMap';
+import MatchConfig from '../../models/match/MatchConfig';
+import matchConfigs from '../../singletons/matchConfigs';
 
 @CommandDecorator({
   names: ['rr', 'RR', 'rR', 'Rr', 'new', 'new-match'],
@@ -48,8 +49,8 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
         arg0 === 'x5' ||
         arg0 === 'x6'
       ) {
-        updatedMatchConfig = getMatchConfig(arg0);
-        const mapAndMapSize = this.getMapAndMapSizeFromInput(updatedMatchConfig.mapSize);
+        updatedMatchConfig = this.getMatchConfigFromArg(arg0);
+        const mapAndMapSize = this.getMapAndMapSizeFromArg(updatedMatchConfig.mapSize);
         if (mapAndMapSize) {
           this.gameService.map = mapAndMapSize[0];
           if (this.gameService.getWinner() === TeamEnum.BLUE) {
@@ -73,7 +74,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           updatedMatchConfig.scoreLimit = scoreLimit;
         }
 
-        const mapAndMapSize = this.getMapAndMapSizeFromInput(arg2);
+        const mapAndMapSize = this.getMapAndMapSizeFromArg(arg2);
         if (mapAndMapSize) {
           this.gameService.map = mapAndMapSize[0];
           // TODO: improve
@@ -119,12 +120,30 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getMapAndMapSizeFromInput(mapSize: string): null | [HaxRugbyMap, MapSizeEnum] {
-    if (!mapSize) {
+  private getMatchConfigFromArg(configArg: 'x1' | 'x2' | 'x3' | 'x4' | 'x5' | 'x6'): MatchConfig {
+    switch (configArg) {
+      case 'x1':
+      case 'x2':
+        return matchConfigs.x2;
+      case 'x3':
+        return matchConfigs.x3;
+      case 'x4':
+        return matchConfigs.x4;
+      case 'x5':
+        return matchConfigs.x5;
+      case 'x6':
+        return matchConfigs.x6;
+      default:
+        return matchConfigs.x2;
+    }
+  }
+
+  private getMapAndMapSizeFromArg(mapSizeArg: string): null | [HaxRugbyMap, MapSizeEnum] {
+    if (!mapSizeArg) {
       return null;
     }
 
-    const upperCaseMapSize = mapSize.toUpperCase();
+    const upperCaseMapSize = mapSizeArg.toUpperCase();
     switch (upperCaseMapSize) {
       case MapSizeEnum.SMALL:
         return [smallMap, MapSizeEnum.SMALL];

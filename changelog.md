@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v0.15a:
+
+- Corrigido um bug durante a Conversão do map Big.
+- Alterado o map padrão do x4 para o Big.
+
 ### v0.15:
 
 - Lançado o map tamanho **Big**.

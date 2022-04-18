@@ -26,7 +26,6 @@ import ChatService, { IChatService } from './ChatService';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import TPlayerCountByTeam from '../../models/team/TPlayerCountByTeam';
 import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
-import getMatchConfig from '../../singletons/getMatchConfig';
 import PositionEnum from '../../enums/PositionEnum';
 import TeamUtil from '../../util/TeamUtil';
 import Teams, { ITeams, TTeam } from '../../models/team/Teams';
@@ -38,6 +37,7 @@ import { RoomUtil } from '../../util/RoomUtil';
 import TAheadPlayers from '../../models/game/TAheadPlayers';
 import AheadEnum from '../../enums/AheadEnum';
 import appConfig from '../../constants/appConfig';
+import matchConfigs from '../../singletons/matchConfigs';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -100,7 +100,7 @@ export default class GameService implements IGameService {
     this.chatService = new ChatService(room, this);
     this.util = new GameUtil(room, this);
 
-    this.matchConfig = getMatchConfig('x2');
+    this.matchConfig = matchConfigs.x2;
     this.teams = new Teams(this.chatService);
     this.remainingTime = this.matchConfig.getTimeLimitInMs();
   }

@@ -17,7 +17,7 @@ import { ExecuteCommandInterceptor } from './interceptors/ExecuteCommandIntercep
 import { HaxRugbyRoom } from './rooms/HaxRugbyRoom';
 import { NewMatchCommand } from './commands/match/NewMatchCommand';
 import {
-  APP_VERSION_IN_ROOM_LIST,
+  ROOM_DESCRIPTION,
   CLOSED_PLAYER_NAME,
   CLOSED_ROOM_TITLE,
   ROOM_TITLE,
@@ -92,7 +92,7 @@ FacebookCommand;
 
 KickRateLimitCommand;
 
-const roomName = appConfig.isOpen ? `${ROOM_TITLE} ${APP_VERSION_IN_ROOM_LIST}` : CLOSED_ROOM_TITLE;
+const roomName = appConfig.isOpen ? `${ROOM_TITLE} ${ROOM_DESCRIPTION}` : CLOSED_ROOM_TITLE;
 
 const services = new ContainerModule((bind) => {
   bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({

@@ -7,9 +7,10 @@ export const CLOSED_ROOM_TITLE = '🏉 𝖧𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉 hoj
 export const CLOSED_PLAYER_NAME = 'Abriremos às 20h30';
 
 export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟰';
-export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟱';
+export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟱𝗮';
 const APP_PATCH_VERSION = '';
-export const APP_VERSION_IN_ROOM_LIST = 'v0.15 • BIG x4/x5'; // 17 chars allowed
+export const ROOM_DESCRIPTION = 'v0.15a • x4/x5'; // 17 chars allowed
+// export const ROOM_DESCRIPTION = 'CAMP x4 DRAFT'; // 17 chars allowed
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
 export const LINK_DISCORD = 'discord.io/HaxRugby';
