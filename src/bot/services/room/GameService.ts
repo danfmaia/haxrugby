@@ -38,6 +38,7 @@ import TAheadPlayers from '../../models/game/TAheadPlayers';
 import AheadEnum from '../../enums/AheadEnum';
 import appConfig from '../../constants/appConfig';
 import matchConfigs from '../../singletons/matchConfigs';
+import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 
 export default class GameService implements IGameService {
   private room: IHaxRugbyRoom;
@@ -81,6 +82,7 @@ export default class GameService implements IGameService {
   public safetyTime: number = 0;
   public isConversionAttempt: false | TeamEnum = false;
   public isReplacingBall: boolean = false;
+  public isConversionKicked: boolean = false;
   public isConversionShot: boolean = false;
 
   public aheadPlayers: TAheadPlayers = {
@@ -277,7 +279,7 @@ export default class GameService implements IGameService {
       this.airKickerId = player.id;
       this.ballTransitionCount = AIR_KICK_TICKS;
 
-      // boost kick
+      // boost air kick
       const kickBoost = this.util.getAirKickBoost();
       const ballProps = this.room.getDiscProperties(0);
       const updatedBallProps = {} as IDiscPropertiesObject;
@@ -314,6 +316,21 @@ export default class GameService implements IGameService {
       });
     }
 
+    // boost conversion kick
+    if (
+      this.matchConfig.mapSize === MapSizeEnum.BIG &&
+      this.isConversionAttempt &&
+      this.isConversionKicked === false
+    ) {
+      this.isConversionKicked = true;
+
+      const ballProps = this.room.getDiscProperties(0);
+      const updatedBallProps = {} as IDiscPropertiesObject;
+      updatedBallProps.xspeed = 1.4 * ballProps.xspeed;
+      updatedBallProps.yspeed = 1.4 * ballProps.yspeed;
+      this.room.setDiscProperties(0, updatedBallProps);
+    }
+
     this.util.updateAheadPlayers(player);
   }
 
@@ -334,6 +351,7 @@ export default class GameService implements IGameService {
       }
 
       this.isConversionAttempt = false;
+      this.isConversionKicked = false;
       this.isConversionShot = false;
       this.tryY = null;
 
@@ -770,14 +788,12 @@ export default class GameService implements IGameService {
     );
     this.checkForDefRec(ballPosition, didBallEnterOrLeaveIngoal);
 
-    if (this.isGameFrozen === false) {
-      this.handleBall(
-        ballPosition,
-        didBallEnterOrLeaveIngoal,
-        this.isDefRec,
-        this.airKickerId !== null,
-      );
-    }
+    this.handleBall(
+      ballPosition,
+      didBallEnterOrLeaveIngoal,
+      this.isDefRec,
+      this.airKickerId !== null,
+    );
 
     if (this.lastDriveInfo) {
       if (this.isGameFrozen === false && this.checkForDropGoal(ballPosition, this.lastDriveInfo)) {
@@ -1347,22 +1363,24 @@ export default class GameService implements IGameService {
     isDefRec: boolean,
     isAirBall: boolean,
   ) {
-    if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
-      this.lastDriveInfo = {
-        ballPosition,
-        team: TeamEnum.RED,
-      };
-      // change ball color to team's
-      this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.teamRed);
-    } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
-      this.lastDriveInfo = {
-        ballPosition,
-        team: TeamEnum.BLUE,
-      };
-      // change ball color to team's
-      this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-      this.room.util.setBallColor(colors.teamBlue);
+    if (this.isGameFrozen === false) {
+      if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
+        this.lastDriveInfo = {
+          ballPosition,
+          team: TeamEnum.RED,
+        };
+        // change ball color to team's
+        this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
+        this.room.util.setBallColor(colors.teamRed);
+      } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
+        this.lastDriveInfo = {
+          ballPosition,
+          team: TeamEnum.BLUE,
+        };
+        // change ball color to team's
+        this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
+        this.room.util.setBallColor(colors.teamBlue);
+      }
     }
 
     // transition ball color to original
@@ -1460,6 +1478,7 @@ export default class GameService implements IGameService {
   // TODO: improve state logic (here and in other related parts too)
   private handleMissedConversion(timeout: boolean = false) {
     const isStillConversionAttempt = this.isConversionAttempt;
+    this.isConversionKicked = false;
     this.isConversionShot = false;
 
     if (isStillConversionAttempt) {
