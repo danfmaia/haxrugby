@@ -6,11 +6,13 @@ import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
 import smallMap from '../../singletons/smallMap';
-import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import normalMap from '../../singletons/normalMap';
+import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
 import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
-import getMatchConfig from '../../singletons/getMatchConfig';
+import bigMap from '../../singletons/bigMap';
+import MatchConfig from '../../models/match/MatchConfig';
+import matchConfigs from '../../singletons/matchConfigs';
 
 @CommandDecorator({
   names: ['rr', 'RR', 'rR', 'Rr', 'new', 'new-match'],
@@ -39,18 +41,25 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
-      if (arg0 === 'x1' || arg0 === 'x2' || arg0 === 'x3' || arg0 === 'x4') {
-        updatedMatchConfig = getMatchConfig(arg0);
-        const stadium = this.getStadiumFromInput(updatedMatchConfig.mapSize);
-        if (stadium) {
-          this.gameService.map = stadium;
+      if (
+        arg0 === 'x1' ||
+        arg0 === 'x2' ||
+        arg0 === 'x3' ||
+        arg0 === 'x4' ||
+        arg0 === 'x5' ||
+        arg0 === 'x6'
+      ) {
+        updatedMatchConfig = this.getMatchConfigFromArg(arg0);
+        const mapAndMapSize = this.getMapAndMapSizeFromArg(updatedMatchConfig.mapSize);
+        if (mapAndMapSize) {
+          this.gameService.map = mapAndMapSize[0];
           if (this.gameService.getWinner() === TeamEnum.BLUE) {
             this.room.setCustomStadium(
-              stadium.blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+              mapAndMapSize[0].blueStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           } else {
             this.room.setCustomStadium(
-              stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+              mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
             );
           }
         }
@@ -65,11 +74,13 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           updatedMatchConfig.scoreLimit = scoreLimit;
         }
 
-        const stadium = this.getStadiumFromInput(arg2);
-        if (stadium) {
-          this.gameService.map = stadium;
+        const mapAndMapSize = this.getMapAndMapSizeFromArg(arg2);
+        if (mapAndMapSize) {
+          this.gameService.map = mapAndMapSize[0];
+          // TODO: improve
+          updatedMatchConfig.mapSize = mapAndMapSize[1];
           this.room.setCustomStadium(
-            stadium.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+            mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
           );
         } else {
           this.room.setCustomStadium(
@@ -109,16 +120,39 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getStadiumFromInput(mapSize: string): null | HaxRugbyMap {
-    if (!mapSize) {
+  private getMatchConfigFromArg(configArg: 'x1' | 'x2' | 'x3' | 'x4' | 'x5' | 'x6'): MatchConfig {
+    switch (configArg) {
+      case 'x1':
+      case 'x2':
+        return matchConfigs.x2;
+      case 'x3':
+        return matchConfigs.x3;
+      case 'x4':
+        return matchConfigs.x4;
+      case 'x5':
+        return matchConfigs.x5;
+      case 'x6':
+        return matchConfigs.x6;
+      default:
+        return matchConfigs.x2;
+    }
+  }
+
+  private getMapAndMapSizeFromArg(mapSizeArg: string): null | [HaxRugbyMap, MapSizeEnum] {
+    if (!mapSizeArg) {
       return null;
     }
 
-    if (mapSize.toUpperCase() === MapSizeEnum.SMALL) {
-      return smallMap;
-    } else if (mapSize.toUpperCase() === MapSizeEnum.NORMAL) {
-      return normalMap;
+    const upperCaseMapSize = mapSizeArg.toUpperCase();
+    switch (upperCaseMapSize) {
+      case MapSizeEnum.SMALL:
+        return [smallMap, MapSizeEnum.SMALL];
+      case MapSizeEnum.NORMAL:
+        return [normalMap, MapSizeEnum.NORMAL];
+      case MapSizeEnum.BIG:
+        return [bigMap, MapSizeEnum.BIG];
+      default:
+        return null;
     }
-    return null;
   }
 }

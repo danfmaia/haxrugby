@@ -1,5 +1,26 @@
 ## CHANGELOG
 
+### v0.15b:
+
+- O chute de conversão do map big agora é 1,4x mais forte.
+  - Não foi alterada a força do boost já existente no chão, e sim a força do chute (x) mesmo.
+- Corrigido pequeno bug da bola ficando presa na cor do time após pontuações.
+  - Esse bug não afetava a jogabilidade.
+
+### v0.15a:
+
+- Corrigido um bug durante a Conversão do map Big.
+- Alterado o map padrão do x4 para o Big.
+
+### v0.15:
+
+- Lançado o map tamanho **Big**.
+  - _Ainda está em fase de testes e ajustes..._
+- Adicionadas as opções `big`, `x5` e `x6` ao comando `!rr`. Exemplos:
+  - `!rr x5`
+  - `!rr 4 30 big`
+  - `!rr - - big`
+
 ### v0.14d:
 
 - Corrigido o bug da bola ficando na cor errada (do time ofensivo) em safety de bola dividida.

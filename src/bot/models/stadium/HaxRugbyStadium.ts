@@ -77,7 +77,8 @@ class HaxRugbyStadium {
     );
 
     this.width = outerWidth;
-    this.height = size === MapSizeEnum.NORMAL ? outerHeight : outerHeight - 15;
+    // TODO: maybe improve this
+    this.height = size === MapSizeEnum.SMALL ? outerHeight - 15 : outerHeight;
 
     this.spawnDistance = spawnDistance;
 

@@ -1,9 +1,10 @@
 import { IDiscPropertiesObject, IPosition, TeamID } from 'inversihax';
-import { AHEAD_EMOJI, PLAYER_RADIUS } from '../constants/constants';
+import { AHEAD_EMOJI, AIR_KICK_BOOST, PLAYER_RADIUS } from '../constants/constants';
 import colors from '../constants/style/colors';
 import { ALL_BLACKS_TEAM_NAME, BLUE_TEAM_NAME, RED_TEAM_NAME } from '../constants/team/team';
 import AheadEnum from '../enums/AheadEnum';
 import PositionEnum from '../enums/PositionEnum';
+import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { TTeam } from '../models/team/Teams';
@@ -600,6 +601,17 @@ class GameUtil {
     if (msg) {
       this.gameService.chatService.sendBoldAnnouncement(msg, 0, undefined, msgColor);
       this.gameService.chatService.sendBlankLine();
+    }
+  }
+
+  public getAirKickBoost(): number {
+    switch (this.gameService.matchConfig.mapSize) {
+      case MapSizeEnum.SMALL:
+        return AIR_KICK_BOOST.SMALL;
+      case MapSizeEnum.NORMAL:
+        return AIR_KICK_BOOST.NORMAL;
+      case MapSizeEnum.BIG:
+        return AIR_KICK_BOOST.BIG;
     }
   }
 }

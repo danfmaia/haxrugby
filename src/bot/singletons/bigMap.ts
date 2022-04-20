@@ -1,9 +1,9 @@
-import smallStadiums, { DIMENSIONS } from '../stadiums/smallStadiums';
+import bigStadiums, { DIMENSIONS } from '../stadiums/bigStadiums';
 import HaxRugbyMap from '../models/map/HaxRugbyMaps';
 
-const smallMap = new HaxRugbyMap(
-  smallStadiums.red,
-  smallStadiums.blue,
+const bigMap = new HaxRugbyMap(
+  bigStadiums.red,
+  bigStadiums.blue,
   DIMENSIONS.goalLineX,
   DIMENSIONS.goalPostY,
   DIMENSIONS.miniArea,
@@ -12,4 +12,4 @@ const smallMap = new HaxRugbyMap(
   DIMENSIONS.penaltyBoundaryY,
 );
 
-export default smallMap;
+export default bigMap;

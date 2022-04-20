@@ -1,8 +1,8 @@
-import { BALL_RADIUS } from '../../constants/constants';
+import { BALL_RADIUS } from '../../../constants/constants';
 
-function blue_getConversion(ballX: number, tryY: number): string {
+function red_getConversion(ballX: number, tryY: number): string {
   const map = {
-    name: 'S-HaxRugby v8 BC by JP',
+    name: 'S-HaxRugby v8 RC by JP',
 
     width: 420,
 
@@ -29,16 +29,16 @@ function blue_getConversion(ballX: number, tryY: number): string {
       /* 8 */ { x: 0, y: 153, trait: 'Line' },
       /* 9 */ { x: 0, y: -153, trait: 'Line' },
 
-      /* 10 */ { x: -300, y: -200, trait: 'Barrier' },
-      /* 11 */ { x: -300, y: 200, trait: 'Barrier' },
+      /* 10 */ { x: 300, y: -200, trait: 'Barrier' },
+      /* 11 */ { x: 300, y: 200, trait: 'Barrier' },
 
       /* 12 */ { x: -440, y: -200, trait: 'Line' },
       /* 13 */ { x: -440, y: 200, trait: 'Line' },
       /* 14 */ { x: 440, y: -200, trait: 'Line' },
       /* 15 */ { x: 440, y: 200, trait: 'Line' },
 
-      /* 16 */ { x: -300, y: -50, trait: 'Barrier' },
-      /* 17 */ { x: -300, y: 50, trait: 'Barrier' },
+      /* 16 */ { x: 300, y: -50, trait: 'Barrier' },
+      /* 17 */ { x: 300, y: 50, trait: 'Barrier' },
 
       /* 18 */ { x: -100, y: 148, trait: 'Line' },
       /* 19 */ { x: -100, y: -148, trait: 'Line' },
@@ -74,12 +74,12 @@ function blue_getConversion(ballX: number, tryY: number): string {
       /* 46 */ { x: 200, y: -153, trait: 'Line' },
       /* 47 */ { x: 200, y: 153, trait: 'Line' },
 
-      /* 48 */ { x: -215, y: -200, trait: 'Barrier' },
-      /* 49 */ { x: -215, y: 200, trait: 'Barrier' },
-      /* 50 */ { x: -390, y: -200, trait: 'Barrier' },
-      /* 51 */ { x: -390, y: 200, trait: 'Barrier' },
-      /* 52 */ { x: 100, y: -200, trait: 'Barrier' },
-      /* 53 */ { x: 100, y: 200, trait: 'Barrier' },
+      /* 48 */ { x: 215, y: -200, trait: 'Barrier' },
+      /* 49 */ { x: 215, y: 200, trait: 'Barrier' },
+      /* 50 */ { x: -100, y: -200, trait: 'Barrier' },
+      /* 51 */ { x: -100, y: 200, trait: 'Barrier' },
+      /* 52 */ { x: 390, y: -200, trait: 'Barrier' },
+      /* 53 */ { x: 390, y: 200, trait: 'Barrier' },
     ],
 
     segments: [
@@ -107,7 +107,7 @@ function blue_getConversion(ballX: number, tryY: number): string {
 
       { v0: 48, v1: 49, trait: 'Barrier' },
 
-      { v0: 34, v1: 35, trait: 'powerboost', curve: -180 },
+      { v0: 34, v1: 35, trait: 'powerboost', curve: 180 },
 
       { v0: 36, v1: 37, trait: 'Line', curve: 90 },
       { v0: 37, v1: 38, trait: 'Line' },
@@ -122,7 +122,7 @@ function blue_getConversion(ballX: number, tryY: number): string {
       { v0: 52, v1: 53, trait: 'Barrier' },
     ],
 
-    goals: [{ team: 'red', p0: [-300, -50], p1: [-300, 50] }],
+    goals: [{ team: 'blue', p0: [300, -50], p1: [300, 50] }],
 
     discs: [
       { pos: [-300, 50], trait: 'goalPost', color: 'FFCCCC', cMask: ['ball'] },
@@ -165,4 +165,4 @@ function blue_getConversion(ballX: number, tryY: number): string {
   return JSON.stringify(map);
 }
 
-export default blue_getConversion;
+export default red_getConversion;

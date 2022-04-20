@@ -1,4 +1,4 @@
-import { BALL_RADIUS } from '../../constants/constants';
+import { BALL_RADIUS } from '../../../constants/constants';
 
 const map = {
   name: 'S-HaxRugby v9 R by JP',

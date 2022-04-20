@@ -103,6 +103,15 @@ function getDriverIds(touchInfoList: (TTouchInfo | null)[]): number[] {
   return driverIds;
 }
 
+function hasPositionChanged(oldPosition: IPosition, newPosition: IPosition): Boolean {
+  const xDif = +(oldPosition.x - newPosition.x).toFixed(1);
+  const yDif = +(oldPosition.y - newPosition.y).toFixed(1);
+  if (xDif > 0 || yDif > 0) {
+    return true;
+  }
+  return false;
+}
+
 // function getTouchPositionAndPlayers(
 //   players: CustomPlayer[],
 //   ballPosition: IPosition,
@@ -152,6 +161,7 @@ const Physics = {
   getTouchInfoList,
   getToucherIds,
   getDriverIds,
+  hasPositionChanged,
 };
 
 export default Physics;
