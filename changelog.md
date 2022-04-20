@@ -1,5 +1,12 @@
 ## CHANGELOG
 
+### v0.15b:
+
+- O chute de conversão do map big agora é 1,4x mais forte.
+  - Não foi alterada a força do boost já existente no chão, e sim a força do chute (x) mesmo.
+- Corrigido pequeno bug da bola ficando presa na cor do time após pontuações.
+  - Esse bug não afetava a jogabilidade.
+
 ### v0.15a:
 
 - Corrigido um bug durante a Conversão do map Big.
