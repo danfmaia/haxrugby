@@ -1,11 +1,11 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import colors from '../constants/style/colors';
+import PlayerConfigEnum from '../../enums/PlayerConfigEnum';
 
-import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
-import { HaxRugbyPlayerConfig } from '../models/player/HaxRugbyPlayerConfig';
-import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
-import { IChatService } from '../services/room/ChatService';
+import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
+import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
+import { IChatService } from '../../services/room/ChatService';
 
 export const AIR_KICK_COMMAND_HOTKEYS = ['a', 'A'];
 
@@ -31,20 +31,11 @@ export class AirKickCommand extends CommandBase<HaxRugbyPlayer> {
     const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
     playerConfig.isAirKickEnabled = !playerConfig.isAirKickEnabled;
 
-    if (playerConfig.isAirKickEnabled) {
-      this.chatService.sendBoldAnnouncement(
-        '*** Chute Aéreo ATIVADO! ***',
-        2,
-        player.id,
-        colors.green,
-      );
-    } else {
-      this.chatService.sendBoldAnnouncement(
-        '*** Chute Aéreo DESATIVADO! *** ',
-        2,
-        player.id,
-        colors.red,
-      );
-    }
+    this.chatService.sendPlayerConfigInfo(
+      PlayerConfigEnum.AIR_KICK,
+      playerConfig.isAirKickEnabled,
+      player.id,
+      2,
+    );
   }
 }

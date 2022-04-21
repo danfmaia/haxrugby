@@ -62,6 +62,11 @@ type DictionaryKeys = {
   MSG_DEF_REC: [string, string];
   MSG_BALL_LEAVE_INGOAL: string;
   MSG_SAFETY_ALLOWED: string;
+
+  MSG_PLAYER_CONFIGS: {
+    SAFETY: string;
+    AIR_KICK: string;
+  };
 };
 
 export default DictionaryKeys;

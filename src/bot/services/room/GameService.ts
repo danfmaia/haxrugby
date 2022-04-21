@@ -65,7 +65,7 @@ export default class GameService implements IGameService {
 
   private lastTouchInfo: TTouchInfo | null = null;
   private touchInfoList: (TTouchInfo | null)[] = [];
-  private driverIds: number[] = [];
+  public driverIds: number[] = [];
   private toucherCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private driverCountByTeam: TPlayerCountByTeam = { red: 0, blue: 0 };
   private lastDriveInfo: null | TLastDriveInfo = null;
@@ -725,7 +725,9 @@ export default class GameService implements IGameService {
     const timePassed = remainingTimeAtPenalty - this.remainingTime;
 
     if ([2000, 3000, 4000].includes(timePassed)) {
-      const players = this.room.getPlayerList();
+      const players = this.room
+        .getPlayerList()
+        .filter((player) => player.team !== TeamID.Spectators);
       players.forEach((player) => {
         if (player.team === this.offendedTeamID) {
           this.chatService.sendYellowAnnouncement(
@@ -1188,6 +1190,10 @@ export default class GameService implements IGameService {
     }
 
     if (isSafety) {
+      if (this.util.getIsSafetyAllowed(isSafety) === false) {
+        return false;
+      }
+
       this.isGameFrozen = true;
 
       if (this.isPenalty) {
@@ -1248,6 +1254,7 @@ export default class GameService implements IGameService {
         return false;
       }
 
+      this.isDefRec = false;
       this.isTry = isTry;
       this.tryY = ballPosition.y;
       const teamName = this.teams.getTeamName(isTry);
@@ -1372,8 +1379,8 @@ export default class GameService implements IGameService {
     isDefRec: boolean,
     isAirBall: boolean,
   ) {
-    if (this.isGameFrozen === false) {
-      if (this.driverCountByTeam.red && ballPosition.x > -this.map.tryLineX) {
+    if (this.isGameFrozen === false && isDefRec == false) {
+      if (this.driverCountByTeam.red) {
         this.lastDriveInfo = {
           ballPosition,
           team: TeamEnum.RED,
@@ -1381,7 +1388,7 @@ export default class GameService implements IGameService {
         // change ball color to team's
         this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
         this.room.util.setBallColor(colors.teamRed);
-      } else if (this.driverCountByTeam.blue && ballPosition.x < this.map.tryLineX) {
+      } else if (this.driverCountByTeam.blue) {
         this.lastDriveInfo = {
           ballPosition,
           team: TeamEnum.BLUE,

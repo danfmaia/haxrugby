@@ -29,6 +29,8 @@ export interface IGameService {
   isTimeRunning: boolean;
   isOvertime: boolean;
 
+  driverIds: number[];
+
   lastBallPosition: IPosition;
 
   tryY: number | null;

@@ -30,7 +30,7 @@ import { RulesCommand } from './commands/rules/RulesCommand';
 import { HelpCommand } from './commands/HelpCommand';
 import { TryCommand } from './commands/rules/TryCommand';
 import { FieldGoalCommand } from './commands/rules/FieldGoalCommand';
-import { SafetyCommand } from './commands/rules/SafetyCommand';
+import { SafetyRuleCommand } from './commands/rules/SafetyRuleCommand';
 import { DiscordCommand } from './commands/links/DiscordCommand';
 import { FacebookCommand } from './commands/links/FacebookCommand';
 import { SetScoreCommand } from './commands/match/SetScoreCommand';
@@ -42,7 +42,7 @@ import { LeaveCommand } from './commands/LeaveCommand';
 import { CancelMatchCommand } from './commands/match/CancelMatchCommand';
 import { OnlyAdminCommand } from './commands/admin/OnlyAdminCommand';
 import { KickRateLimitCommand } from './commands/physics/KickRateLimitCommand';
-import { AirKickCommand } from './commands/AirKickCommand';
+import { AirKickCommand } from './commands/playerConfig/AirKickCommand';
 import { AirKickRuleCommand } from './commands/rules/AirKickRuleCommand';
 import { AdvantageCommand } from './commands/penalty/AdvantageCommand';
 import { OffsideCommand } from './commands/rules/OffsideCommand';
@@ -51,6 +51,8 @@ import { PenaltyRuleCommand } from './commands/rules/PenaltyRuleCommand';
 import appConfig from './constants/appConfig';
 import { FilterInterceptor } from './interceptors/FilterInterceptor';
 import { ResetTeamsCommand } from './commands/admin/ResetTeamsCommand';
+import { SafetyCommand } from './commands/playerConfig/SafetyCommand';
+import { ConfigCommand } from './commands/playerConfig/ConfigCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
@@ -71,7 +73,10 @@ CancelMatchCommand;
 ScoreCommand;
 SetScoreCommand;
 
+ConfigCommand;
+SafetyCommand;
 AirKickCommand;
+
 KickerCommand;
 GoalkeeperCommand;
 BallCommand;
@@ -82,7 +87,7 @@ RulesCommand;
 TryCommand;
 FieldGoalCommand;
 AirKickRuleCommand;
-SafetyCommand;
+SafetyRuleCommand;
 OffsideCommand;
 PenaltyRuleCommand;
 

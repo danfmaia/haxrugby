@@ -7,10 +7,12 @@ import PositionEnum from '../enums/PositionEnum';
 import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TeamEnum from '../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerConfig } from '../models/player/HaxRugbyPlayerConfig';
 import { TTeam } from '../models/team/Teams';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 
 import { IGameService } from '../services/room/IGameService';
+import TeamUtil from './TeamUtil';
 import Util from './Util';
 
 class GameUtil {
@@ -613,6 +615,22 @@ class GameUtil {
       case MapSizeEnum.BIG:
         return AIR_KICK_BOOST.BIG;
     }
+  }
+
+  public getIsSafetyAllowed(isSafety: false | TeamEnum): boolean {
+    const safetyPlayerIds = this.room
+      .getPlayerList()
+      .filter(
+        (player) =>
+          this.gameService.driverIds.includes(player.id) &&
+          isSafety &&
+          player.team === TeamUtil.getTeamID(isSafety),
+      )
+      .map((player) => player.id);
+    const isSafetyEnabledList = HaxRugbyPlayerConfig.getConfigList(safetyPlayerIds).map(
+      (config) => config.isSafetyEnabled,
+    );
+    return isSafetyEnabledList.includes(true);
   }
 }
 

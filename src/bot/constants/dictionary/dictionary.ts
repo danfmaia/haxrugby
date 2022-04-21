@@ -74,13 +74,14 @@ const ptBr: DictionaryKeys = {
     SAFETY: {
       shortDescription:
         '• 𝗦𝗔𝗙𝗘𝗧𝗬 - 𝖩𝗈𝗀𝖺𝖽𝖺 𝖽𝖾 𝗌𝖾𝗀𝗎𝗋𝖺𝗇ç𝖺 𝖽𝖺 𝖽𝖾𝖿𝖾𝗌𝖺. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖻𝗈𝗅𝖺 𝗻ã𝗼-𝗮𝗺𝗮𝗿𝗲𝗹𝗮 𝗇𝗈 𝗉𝗋ó𝗉𝗋𝗂𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅. 𝘜𝘴𝘦 !𝗌𝖿 𝘱𝘢𝘳𝘢 𝘮𝘢𝘪𝘴 𝘥𝘦𝘵𝘢𝘭𝘩𝘦𝘴.',
-      title: 'SAFETY (SF)     !sf !safety',
+      title: 'SAFETY (SF)     !safe !safety',
       longDescription: [
         _1 +
           '• É 𝖺 𝗃𝗈𝗀𝖺𝖽𝖺 𝖽𝖾 𝗌𝖾𝗀𝗎𝗋𝖺𝗇ç𝖺 𝖽𝖺 𝖽𝖾𝖿𝖾𝗌𝖺. É 𝖿𝖾𝗂𝗍𝗈 𝗖𝗢𝗡𝗗𝗨𝗭𝗜𝗡𝗗𝗢 𝖻𝗈𝗅𝖺 𝗻ã𝗼-𝗮𝗺𝗮𝗿𝗲𝗹𝗮 𝗇𝗈 𝗉𝗋ó𝗉𝗋𝗂𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅.',
         _1 +
           '• 𝖮 𝖲𝖺𝖿𝖾𝗍𝗒 𝗌ó é 𝗉𝗈𝗌𝗌í𝗏𝖾𝗅 𝗌𝖾 𝖺 𝖻𝗈𝗅𝖺 𝗻ã𝗼 𝗲𝘀𝘁𝗶𝘃𝗲𝗿 𝗮𝗺𝗮𝗿𝗲𝗹𝗮, 𝗈𝗎 𝗌𝖾𝗃𝖺, 𝗌𝖾 𝗈 ú𝗅𝗍𝗂𝗆𝗈 𝗍𝗈𝗊𝗎𝖾 𝗇𝖺 𝖻𝗈𝗅𝖺 𝖺𝗇𝗍𝖾𝗌 𝖽𝖾𝗅𝖺 𝖾𝗇𝗍𝗋𝖺𝗋 𝗇𝗈 𝗂𝗇-𝗀𝗈𝖺𝗅 𝖿𝗈𝗋 𝖽𝗈 𝖺𝗍𝖺𝗊𝗎𝖾.',
         _1 + '• 𝖮 𝖲𝖺𝖿𝖾𝗍𝗒 𝖼𝗈𝗇𝖼𝖾𝖽𝖾 à 𝖽𝖾𝖿𝖾𝗌𝖺 𝗎𝗆 𝗍𝗂𝗋𝗈 𝖽𝖾 𝗋𝖾𝗂𝗇í𝖼𝗂𝗈 𝗇𝗈 𝗅𝗈𝖼𝖺𝗅 𝖽𝖺 ú𝗅𝗍𝗂𝗆𝖺 𝖼𝗈𝗇𝖽𝗎çã𝗈 𝖽𝖾 𝖻𝗈𝗅𝖺.',
+        _1 + '• 𝘜𝘴𝘦 𝘰 𝘤𝘰𝘮𝘢𝘯𝘥𝘰 `𝚣` 𝘰𝘶 `𝚜𝚏` 𝘱𝘢𝘳𝘢 𝘢𝘵𝘪𝘷𝘢𝘳/𝘥𝘦𝘴𝘢𝘵𝘪𝘷𝘢𝘳 𝘴𝘦𝘶 𝘚𝘢𝘧𝘦𝘵𝘺.',
       ],
     },
     OFFSIDE: {
@@ -171,6 +172,11 @@ const ptBr: DictionaryKeys = {
   ],
   MSG_BALL_LEAVE_INGOAL: 'A bola saiu do in-goal.',
   MSG_SAFETY_ALLOWED: 'Safety permitido.',
+
+  MSG_PLAYER_CONFIGS: {
+    SAFETY: 'Safety',
+    AIR_KICK: 'Chute Aéreo',
+  },
 };
 
 function getDict() {
@@ -201,3 +207,5 @@ export const MSG_HELP = Dict['MSG_HELP'];
 export const MSG_DEF_REC = Dict['MSG_DEF_REC'];
 export const MSG_BALL_LEAVE_INGOAL = Dict['MSG_BALL_LEAVE_INGOAL'];
 export const MSG_SAFETY_ALLOWED = Dict['MSG_SAFETY_ALLOWED'];
+
+export const MSG_PLAYER_CONFIGS = Dict['MSG_PLAYER_CONFIGS'];

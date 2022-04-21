@@ -2,6 +2,10 @@
 
 ### v0.15c:
 
+- Adicionado comando para **ativar/desativar safety** (comando `z` ou `!sf`).
+  - Isso é útil quando, por exemplo, um jogador deseja realizar um chute aéreo dentro do próprio in-goal em bola não-amarela.
+- Adicionado o comando `!c` (ou `!conf` ou `!config`) para exibir ao jogador as suas configurações de jogo atuais.
+  - Atualmente há apenas duas: Safety (ativado/desativado) e Chute Aéreo (ativado/desativado).
 - Adicionadas as opções `small`/`normal`/`big` ao comando `!rr`. Exemplo: `!rr big`
   - Para ajuda quanto ao comando `!rr` e outros, use o comando `!h`.
 

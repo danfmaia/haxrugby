@@ -1,14 +1,18 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import RuleEnum from '../../enums/RuleEnum';
+import PlayerConfigEnum from '../../enums/PlayerConfigEnum';
+
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
+import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
 
+export const CONFIG_COMMAND_HOTKEYS = ['c', 'conf', 'config', 'configs'];
+
 @CommandDecorator({
-  names: ['safety', 'sf'],
+  names: CONFIG_COMMAND_HOTKEYS,
 })
-export class SafetyCommand extends CommandBase<HaxRugbyPlayer> {
+export class ConfigCommand extends CommandBase<HaxRugbyPlayer> {
   // private readonly room: IHaxRugbyRoom;
   private readonly chatService: IChatService;
 
@@ -24,10 +28,17 @@ export class SafetyCommand extends CommandBase<HaxRugbyPlayer> {
   }
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
-    if (player.admin) {
-      this.chatService.sendLongRule(RuleEnum.SAFETY);
-    } else {
-      this.chatService.sendLongRule(RuleEnum.SAFETY, 0, player.id);
-    }
+    const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
+
+    this.chatService.sendPlayerConfigInfo(
+      PlayerConfigEnum.SAFETY,
+      playerConfig.isSafetyEnabled,
+      player.id,
+    );
+    this.chatService.sendPlayerConfigInfo(
+      PlayerConfigEnum.AIR_KICK,
+      playerConfig.isAirKickEnabled,
+      player.id,
+    );
   }
 }

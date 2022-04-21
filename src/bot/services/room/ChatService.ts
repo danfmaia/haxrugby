@@ -18,6 +18,7 @@ import {
 } from '../../constants/dictionary/dictionary';
 import colors from '../../constants/style/colors';
 import LinkEnum from '../../enums/LinkEnum';
+import PlayerConfigEnum, { PlayerConfigEnumExtension } from '../../enums/PlayerConfigEnum';
 import RuleEnum from '../../enums/RuleEnum';
 import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
@@ -56,6 +57,13 @@ export interface IChatService {
 
   announceBlockedAirKick(kickerId: number, blockerId: number): void;
   announceSuccessfulAirKick(kickerId: number): void;
+
+  sendPlayerConfigInfo(
+    config: PlayerConfigEnum,
+    isEnabled: boolean,
+    playerId: number,
+    sound?: number,
+  ): void;
 }
 
 export default class ChatService implements IChatService {
@@ -461,5 +469,20 @@ export default class ChatService implements IChatService {
         }
       }
     });
+  }
+
+  public sendPlayerConfigInfo(
+    config: PlayerConfigEnum,
+    isEnabled: boolean,
+    playerId: number,
+    sound: number = 0,
+  ): void {
+    const configName = PlayerConfigEnumExtension.getName(config);
+
+    if (isEnabled) {
+      this.sendBoldAnnouncement(`*** ${configName} ATIVADO! ***`, sound, playerId, colors.green);
+    } else {
+      this.sendBoldAnnouncement(`*** ${configName} DESATIVADO! ***`, sound, playerId, colors.red);
+    }
   }
 }
