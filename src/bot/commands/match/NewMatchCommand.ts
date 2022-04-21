@@ -4,7 +4,7 @@ import { CommandBase, CommandDecorator, Types } from 'inversihax';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
 import Util from '../../util/Util';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
-import MapSizeEnum from '../../enums/stadium/MapSizeEnum';
+import MapSizeEnum, { mapSizes, MapSizeString } from '../../enums/stadium/MapSizeEnum';
 import smallMap from '../../singletons/smallMap';
 import normalMap from '../../singletons/normalMap';
 import HaxRugbyMap from '../../models/map/HaxRugbyMaps';
@@ -12,7 +12,7 @@ import { IGameService } from '../../services/room/IGameService';
 import TeamEnum from '../../enums/TeamEnum';
 import bigMap from '../../singletons/bigMap';
 import MatchConfig from '../../models/match/MatchConfig';
-import matchConfigs from '../../singletons/matchConfigs';
+import matchConfigs, { MatchConfigString, matchConfigStrings } from '../../singletons/matchConfigs';
 
 @CommandDecorator({
   names: ['rr', 'RR', 'rR', 'Rr', 'new', 'new-match'],
@@ -41,15 +41,9 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     const restartMatch = () => {
       let updatedMatchConfig = this.gameService.matchConfig;
 
-      if (
-        arg0 === 'x1' ||
-        arg0 === 'x2' ||
-        arg0 === 'x3' ||
-        arg0 === 'x4' ||
-        arg0 === 'x5' ||
-        arg0 === 'x6'
-      ) {
-        updatedMatchConfig = this.getMatchConfigFromArg(arg0);
+      if (matchConfigStrings.includes(arg0 as MatchConfigString)) {
+        // 1st scenario
+        updatedMatchConfig = this.getMatchConfigFromArg(arg0 as MatchConfigString);
         const mapAndMapSize = this.getMapAndMapSizeFromArg(updatedMatchConfig.mapSize);
         if (mapAndMapSize) {
           this.gameService.map = mapAndMapSize[0];
@@ -63,7 +57,11 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
             );
           }
         }
+      } else if (mapSizes.includes(arg0.toUpperCase())) {
+        // 2nd scenario
+        this.setMapAndMapSizeForMatch(updatedMatchConfig, arg0 as MapSizeString);
       } else {
+        // 3rd scenario
         const timeLimit = Util.parseNumericInput(arg0, true);
         if (timeLimit) {
           updatedMatchConfig.timeLimit = timeLimit;
@@ -74,19 +72,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
           updatedMatchConfig.scoreLimit = scoreLimit;
         }
 
-        const mapAndMapSize = this.getMapAndMapSizeFromArg(arg2);
-        if (mapAndMapSize) {
-          this.gameService.map = mapAndMapSize[0];
-          // TODO: improve
-          updatedMatchConfig.mapSize = mapAndMapSize[1];
-          this.room.setCustomStadium(
-            mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
-          );
-        } else {
-          this.room.setCustomStadium(
-            this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
-          );
-        }
+        this.setMapAndMapSizeForMatch(updatedMatchConfig, arg2 as MapSizeString);
 
         if (arg3) {
           const teamArg = arg3.toUpperCase();
@@ -120,7 +106,26 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getMatchConfigFromArg(configArg: 'x1' | 'x2' | 'x3' | 'x4' | 'x5' | 'x6'): MatchConfig {
+  private setMapAndMapSizeForMatch(
+    updatedMatchConfig: MatchConfig,
+    mapSizeArg: MapSizeString,
+  ): void {
+    const mapAndMapSize = this.getMapAndMapSizeFromArg(mapSizeArg);
+    if (mapAndMapSize) {
+      this.gameService.map = mapAndMapSize[0];
+      // TODO: improve
+      updatedMatchConfig.mapSize = mapAndMapSize[1];
+      this.room.setCustomStadium(
+        mapAndMapSize[0].redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+      );
+    } else {
+      this.room.setCustomStadium(
+        this.gameService.map.redStadiums.getKickoff(0, updatedMatchConfig.timeLimit),
+      );
+    }
+  }
+
+  private getMatchConfigFromArg(configArg: MatchConfigString): MatchConfig {
     switch (configArg) {
       case 'x1':
       case 'x2':
@@ -138,7 +143,7 @@ export class NewMatchCommand extends CommandBase<HaxRugbyPlayer> {
     }
   }
 
-  private getMapAndMapSizeFromArg(mapSizeArg: string): null | [HaxRugbyMap, MapSizeEnum] {
+  private getMapAndMapSizeFromArg(mapSizeArg: MapSizeString): null | [HaxRugbyMap, MapSizeEnum] {
     if (!mapSizeArg) {
       return null;
     }
