@@ -93,6 +93,7 @@ export default class GameService implements IGameService {
   public isPenalty: TeamEnum | false = false;
   private isPenaltyKick: TeamEnum | false = false;
   public penaltyPosition: IPosition | null = null;
+  private offendedTeamID: TeamID | null = null;
 
   private airKickerId: number | null = null;
   private ballTransitionCount: number = 0;
@@ -724,9 +725,16 @@ export default class GameService implements IGameService {
     const timePassed = remainingTimeAtPenalty - this.remainingTime;
 
     if ([2000, 3000, 4000].includes(timePassed)) {
-      this.chatService.sendYellowAnnouncement(
-        `${(PENALTY_ADVANTAGE_TIME - timePassed) / 1000}...    Use \`p\` para aceitar o PENAL.`,
-      );
+      const players = this.room.getPlayerList();
+      players.forEach((player) => {
+        if (player.team === this.offendedTeamID) {
+          this.chatService.sendYellowAnnouncement(
+            `${(PENALTY_ADVANTAGE_TIME - timePassed) / 1000}...    Use \`p\` para aceitar o PENAL.`,
+            0,
+            player.id,
+          );
+        }
+      });
     }
     if (timePassed === PENALTY_ADVANTAGE_TIME) {
       const team = this.teams.getTeam(isPenalty);
@@ -903,6 +911,7 @@ export default class GameService implements IGameService {
       }
 
       const offendedTeamID = TeamUtil.getOpposingTeamID(offendingTeam.teamEnum);
+      this.offendedTeamID = offendedTeamID;
       const offendedTeam = this.teams.getTeamByTeamID(offendedTeamID);
       if (offendedTeam === null) {
         throw new Error();
