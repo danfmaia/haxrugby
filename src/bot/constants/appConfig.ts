@@ -1,4 +1,4 @@
-import { LanguageEnum } from '../enums/stadium/LanguageEnum';
+import { LanguageEnum } from '../enums/LanguageEnum';
 
 type TAppConfig = {
   isOpen: boolean;
