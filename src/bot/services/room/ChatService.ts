@@ -325,7 +325,6 @@ export default class ChatService implements IChatService {
         MSG_RULES.SAFETY.longDescription.forEach((rule) => {
           this.sendNormalAnnouncement(rule, 0, playerId);
         });
-        this.sendBlankLine(playerId);
         return;
       case RuleEnum.OFFSIDE:
         this.sendBoldAnnouncement(MSG_RULES.OFFSIDE.title, sound, playerId);

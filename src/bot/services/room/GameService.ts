@@ -11,6 +11,7 @@ import {
   SAFETY_MAX_TIME,
   PENALTY_ADVANTAGE_TIME,
   AHEAD_PENALTY_EMOJI,
+  APP_VERSION,
 } from '../../constants/constants';
 import TeamEnum from '../../enums/TeamEnum';
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
@@ -441,6 +442,7 @@ export default class GameService implements IGameService {
     }
     this.chatService.sendGreenAnnouncement(Util.getDurationString(this.matchConfig.timeLimit));
     this.chatService.sendGreenAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
+    this.chatService.sendGreenAnnouncement(`Versão: ${APP_VERSION}`);
 
     this.util.cancelEmptyMatch();
   }
