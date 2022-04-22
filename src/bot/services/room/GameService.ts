@@ -49,6 +49,7 @@ export default class GameService implements IGameService {
   public map: HaxRugbyMap = smallMap;
   public matchConfig: MatchConfig;
   public teams: ITeams;
+  private stadium: string | null = null;
 
   public tickCount: number = 0;
   public remainingTime: number;
@@ -79,6 +80,8 @@ export default class GameService implements IGameService {
   private isTry: false | TeamEnum = false;
   public tryY: number | null = null;
   private afterTryTickCount: number = 0;
+
+  private isSafetyKick: boolean = false;
 
   public safetyTime: number = 0;
   public isConversionAttempt: false | TeamEnum = false;
@@ -187,7 +190,7 @@ export default class GameService implements IGameService {
     }
 
     if (this.isConversionAttempt === false) {
-      if (this.kickoffX) {
+      if (this.isSafetyKick && this.kickoffX !== null) {
         this.initializeKickoff({ x: this.kickoffX, y: 0 });
       } else if (this.isPenaltyKick && this.penaltyPosition) {
         this.initializeKickoff(this.penaltyPosition);
@@ -201,6 +204,28 @@ export default class GameService implements IGameService {
 
   public handleGameStop(byPlayer: HaxRugbyPlayer): void {
     this.isGameStopped = true;
+
+    // TODO: improve
+    if (
+      this.stadium &&
+      this.isConversionAttempt === false &&
+      this.isSafetyKick === false &&
+      this.isPenaltyKick === false
+    ) {
+      let stadium: string;
+      if (this.stadium.includes(' B ')) {
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit, {
+          x: 0,
+          y: 0,
+        });
+      } else {
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit, {
+          x: 0,
+          y: 0,
+        });
+      }
+      this.room.setCustomStadium(stadium);
+    }
 
     if (this.isTimeRunning) {
       this.isTimeRunning = false;
@@ -339,7 +364,11 @@ export default class GameService implements IGameService {
   public handlePostKickoffOrPenaltyKick(): void {
     this.isBeforeKickoff = false;
     this.isTimeRunning = true;
-    this.kickoffX = null;
+    if (this.isSafetyKick === false) {
+      this.kickoffX = null;
+    } else {
+      this.isSafetyKick = false;
+    }
     this.penaltyPosition = null;
     this.isPenaltyKick = false;
     this.chatService.sendMatchStatus();
@@ -410,6 +439,7 @@ export default class GameService implements IGameService {
     this.isGameFrozen = false;
     this.isMatchInProgress = true;
     this.isOvertime = false;
+    this.stadium = null;
     this.score = { red: 0, blue: 0 };
 
     this.lastTouchInfo = null;
@@ -421,6 +451,7 @@ export default class GameService implements IGameService {
     this.kickoffX = null;
     this.tryY = null;
     this.isTry = false;
+    this.isSafetyKick = false;
     this.isConversionAttempt = false;
     this.util.clearAllAheadPlayers();
     this.remainingTimeAtPenalty = null;
@@ -1203,12 +1234,21 @@ export default class GameService implements IGameService {
         return false;
       }
 
+      this.isSafetyKick = true;
       this.room.pauseGame(true);
       this.isTimeRunning = false;
       let teamName: string;
       let stadium: string;
 
-      let kickoffX = this.lastDriveInfo ? this.lastDriveInfo.ballPosition.x : 0;
+      let kickoffX: number = this.kickoffX !== null ? this.kickoffX : 0;
+      // do not allow safety kick on team's attacking field
+      if (
+        (isSafety === TeamEnum.RED && kickoffX > 0) ||
+        (isSafety === TeamEnum.BLUE && kickoffX < 0)
+      ) {
+        kickoffX = 0;
+      }
+      // do not allow safety kick inside safe zones
       if (kickoffX < -this.map.areaLineX) {
         kickoffX = -this.map.areaLineX;
       } else if (kickoffX > this.map.areaLineX) {
@@ -1229,6 +1269,7 @@ export default class GameService implements IGameService {
           y: 0,
         });
       }
+      this.stadium = stadium;
 
       // announce safety
       this.chatService.sendBoldAnnouncement(`Safety do ${teamName}!`);
@@ -1381,23 +1422,35 @@ export default class GameService implements IGameService {
     isDefRec: boolean,
     isAirBall: boolean,
   ) {
-    if (this.isGameFrozen === false && isDefRec == false) {
+    if (this.isGameFrozen === false) {
       if (this.driverCountByTeam.red) {
         this.lastDriveInfo = {
           ballPosition,
           team: TeamEnum.RED,
         };
+        // do not update kickoffX is ball is inside red's in-goal
+        if (ballPosition.x > -this.map.tryLineX) {
+          this.kickoffX = ballPosition.x;
+        }
         // change ball color to team's
-        this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-        this.room.util.setBallColor(colors.teamRed);
+        if (isDefRec == false) {
+          this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
+          this.room.util.setBallColor(colors.teamRed);
+        }
       } else if (this.driverCountByTeam.blue) {
         this.lastDriveInfo = {
           ballPosition,
           team: TeamEnum.BLUE,
         };
+        // do not update kickoffX is ball is inside blue's in-goal
+        if (ballPosition.x < this.map.tryLineX) {
+          this.kickoffX = ballPosition.x;
+        }
         // change ball color to team's
-        this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
-        this.room.util.setBallColor(colors.teamBlue);
+        if (isDefRec == false) {
+          this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
+          this.room.util.setBallColor(colors.teamBlue);
+        }
       }
     }
 
@@ -1524,17 +1577,18 @@ export default class GameService implements IGameService {
     }
   }
 
-  private handleRestartOrFinishing(map: string, handleGameStop?: () => void) {
+  private handleRestartOrFinishing(stadium: string, handleGameStop?: () => void) {
     if (this.util.getIsMatchFinished(this.score.red, this.score.blue, this.isTry) === false) {
-      this.restartGame(map, handleGameStop);
+      this.restartGame(stadium, handleGameStop);
     } else {
       this.finishMatch();
     }
   }
 
-  private restartGame(map: string, handleGameStop?: () => void) {
+  private restartGame(stadium: string, handleGameStop?: () => void) {
     // won't pass here if is safety kick
-    if (this.kickoffX === null && this.lastDriveInfo) {
+    if (this.isSafetyKick === false && this.lastDriveInfo) {
+      this.kickoffX = null;
       this.lastDriveInfo = {
         ...this.lastDriveInfo,
         ballPosition: { x: 0, y: 0 },
@@ -1556,7 +1610,7 @@ export default class GameService implements IGameService {
 
       this.room.stopGame();
       this.isGameFrozen = false;
-      this.room.setCustomStadium(map);
+      this.room.setCustomStadium(stadium);
 
       if (handleGameStop) {
         handleGameStop();
