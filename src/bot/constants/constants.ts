@@ -13,7 +13,7 @@ export const ROOM_DESCRIPTION = 'v0.15 • x4/x5'; // 15 chars allowed
 // export const ROOM_DESCRIPTION = 'CAMP x4 DRAFT'; // 15 chars allowed
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
-export const LINK_DISCORD = 'discord.io/HaxRugby';
+export const LINK_DISCORD = 'discord.io/HaxRugby    𝐶𝑜𝑙𝑒 𝑜 𝑙𝑖𝑛𝑘 𝑛𝑜 𝑛𝑎𝑣𝑒𝑔𝑎𝑑𝑜𝑟. 𝑁ã𝑜 𝑢𝑠𝑒 𝑛𝑜 𝐷𝑖𝑠𝑐𝑜𝑟𝑑!';
 // export const LINK_DISCORD = 'discord.gg/WBcmrk8G';
 export const LINK_DISCORD_RULES =
   'discord.com/channels/888810050041303050/891749504938815538/898839813673877564';

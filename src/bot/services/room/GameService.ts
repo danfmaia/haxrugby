@@ -49,7 +49,7 @@ export default class GameService implements IGameService {
   public map: HaxRugbyMap = smallMap;
   public matchConfig: MatchConfig;
   public teams: ITeams;
-  private stadium: string | null = null;
+  public stadium: string | null = null;
 
   public tickCount: number = 0;
   public remainingTime: number;
@@ -400,6 +400,7 @@ export default class GameService implements IGameService {
         teamName = this.teams.blue.name;
         stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
+      this.stadium = stadium;
 
       // announce successful conversion
       this.chatService.sendBoldAnnouncement(`CONVERSÃO do ${teamName}!`, 0, undefined, msgColor);
@@ -415,17 +416,17 @@ export default class GameService implements IGameService {
   }
 
   public handleStadiumChange(newStadiumName: string, byPlayer: HaxRugbyPlayer): void {
+    // prevent setting any stadium other than HaxRugby's
     if (newStadiumName.includes('HaxRugby') === false) {
       const lastWinner = this.getWinner();
+      let stadium: string;
       if (lastWinner === TeamEnum.BLUE) {
-        this.room.setCustomStadium(
-          this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
-        );
+        stadium = this.map.blueStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       } else {
-        this.room.setCustomStadium(
-          this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit),
-        );
+        stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
+      this.stadium = stadium;
+      this.room.setCustomStadium(stadium);
     }
   }
 
@@ -500,15 +501,14 @@ export default class GameService implements IGameService {
     Util.timeout(2500, () => {
       if (this.isFinishing) {
         this.room.stopGame();
+        let stadium: string;
         if (winner === TeamEnum.RED) {
-          this.room.setCustomStadium(
-            this.map.redStadiums.getKickoff(0, this.matchConfig.timeLimit),
-          );
-        } else if (winner === TeamEnum.BLUE) {
-          this.room.setCustomStadium(
-            this.map.blueStadiums.getKickoff(0, this.matchConfig.timeLimit),
-          );
+          stadium = this.map.redStadiums.getKickoff(0, this.matchConfig.timeLimit);
+        } else {
+          stadium = this.map.blueStadiums.getKickoff(0, this.matchConfig.timeLimit);
         }
+        this.stadium = stadium;
+        this.room.setCustomStadium(stadium);
       }
     });
 
@@ -1164,6 +1164,7 @@ export default class GameService implements IGameService {
         teamName = this.teams.blue.name;
         stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
+      this.stadium = stadium;
 
       // announce goal
       this.chatService.sendBoldAnnouncement(
@@ -1565,6 +1566,7 @@ export default class GameService implements IGameService {
       } else {
         stadium = this.map.redStadiums.getKickoff(this.tickCount, this.matchConfig.timeLimit);
       }
+      this.stadium = stadium;
 
       // announce missed conversion
       if (timeout === false) {

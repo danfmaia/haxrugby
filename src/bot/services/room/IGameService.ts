@@ -17,6 +17,7 @@ export interface IGameService {
   map: HaxRugbyMap;
   matchConfig: MatchConfig;
   teams: ITeams;
+  stadium: string | null;
 
   tickCount: number;
   remainingTime: number;
