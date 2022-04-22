@@ -8,7 +8,7 @@ export const CLOSED_PLAYER_NAME = 'Abriremos às 20h30';
 
 export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟰';
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟱';
-const APP_PATCH_VERSION = '𝗰';
+const APP_PATCH_VERSION = '𝗱';
 export const ROOM_DESCRIPTION = 'v0.15 • x4/x5'; // 15 chars allowed
 // export const ROOM_DESCRIPTION = 'CAMP x4 DRAFT'; // 15 chars allowed
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;

@@ -1,5 +1,13 @@
 ## CHANGELOG
 
+### v0.15d:
+
+- Corrigida a posição do tiro de safety.
+- **Alterada a posição máxima do tiro de safety para a linha de meio de campo.**
+  - Isso significa que a reposição após o safety (tiro de safety) não mais poderá acontecer no campo adversário.
+- Adicionado reload de map em stop/start forçado.
+  - Isso corrige alguns bugs que ocorriam nesse cenário.
+
 ### v0.15c:
 
 - Adicionado comando para **ativar/desativar safety** (comando `z` ou `!sf`).
