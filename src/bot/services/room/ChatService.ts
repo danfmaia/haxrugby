@@ -258,7 +258,7 @@ export default class ChatService implements IChatService {
           '    ' + LINK_DISCORD_RULES,
           playerId,
           colors.haxRugbyBall,
-          'italic',
+          undefined,
           0,
         );
         return;
@@ -268,7 +268,7 @@ export default class ChatService implements IChatService {
           '    ' + LINK_DISCORD,
           playerId,
           colors.discordPurple,
-          'italic',
+          undefined,
           0,
         );
         return;
@@ -278,7 +278,7 @@ export default class ChatService implements IChatService {
           '    fb.com/groups/haxrugby',
           playerId,
           colors.haxRugbyGreen,
-          'italic',
+          undefined,
           0,
         );
         return;
