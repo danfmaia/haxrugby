@@ -1,5 +1,10 @@
 ## CHANGELOG
 
+### v0.16:
+
+- Implementado o **final de partida por diferença de pontos**.
+  - Atualmente está fixo para **21**, mas em breve poderá ser customizado.
+
 ### v0.15d:
 
 - Corrigida a posição do tiro de safety.
