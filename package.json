@@ -5,15 +5,14 @@
   "author": "Dan Maia (aka JP)",
   "scripts": {
     "test": "mocha --require ts-node/register src/**/*.test.ts",
-    "build": "browserify src/Bot/Main.ts -p [tsify] > dist/bundle.js",
-    "build-uglify": "browserify src/Bot/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js",
+    "build": "browserify src/bot/Main.ts -p [tsify] > dist/bundle.js",
+    "build-uglify": "browserify src/bot/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js",
     "lint": "eslint -c .eslintrc.js --ext .ts src",
     "lint-fix": "eslint -c .eslintrc.js --ext .ts src --fix"
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
     "g": "^2.0.1",
-    "haxball-server": "^4.2.0",
     "inversify": "^5.0.1",
     "inversihax": "^1.1.1",
     "lodash": "^4.17.15",

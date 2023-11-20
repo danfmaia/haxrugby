@@ -42,7 +42,7 @@ export default class AdminService implements IAdminService {
     if (appConfig.isOpen === false) {
       Util.timeout(MINUTE_IN_MS, () => {
         if (player.id > 1) {
-          this.room.kickPlayer(player.id, '𝗗𝗶𝘀𝗰𝗼𝗿𝗱: discord.io/HaxRugby', false);
+          this.room.kickPlayer(player.id, '𝗗𝗶𝘀𝗰𝗼𝗿𝗱: discord.gg/F962NBhRgy', false);
         }
       });
       return;
