@@ -474,6 +474,9 @@ export default class GameService implements IGameService {
     }
     this.chatService.sendGreenAnnouncement(Util.getDurationString(this.matchConfig.timeLimit));
     this.chatService.sendGreenAnnouncement(`Limite de pontos:  ${this.matchConfig.scoreLimit}`);
+    this.chatService.sendGreenAnnouncement(
+      `Limite de diferença de pontos: ${this.matchConfig.scoreDifference}`,
+    );
     this.chatService.sendGreenAnnouncement(`Versão: ${APP_VERSION}`);
 
     this.util.cancelEmptyMatch();
@@ -518,11 +521,20 @@ export default class GameService implements IGameService {
     const winnerTeam = this.teams.getTeam(winner);
 
     this.chatService.sendBlankLine();
+
+    let finishedMatchString: string;
+    if (this.util.getIsScoreDifferenceReached() == false) {
+      finishedMatchString = 'Fim da partida.';
+    } else {
+      // prettier-ignore
+      finishedMatchString = `Fim da partida por DIFERENÇA DE PONTOS! (${this.util.getScoreDifference()} ≥ ${this.matchConfig.scoreDifference})`;
+    }
+
     let winnerMsg: string;
     if (winner === TeamEnum.RED) {
-      winnerMsg = `Fim da partida.     Vitória do ${winnerTeam.name} por ${this.score.red} a ${this.score.blue}!`;
+      winnerMsg = `${finishedMatchString}     Vitória do ${winnerTeam.name} por ${this.score.red} a ${this.score.blue}!`;
     } else {
-      winnerMsg = `Fim da partida.     Vitória do ${winnerTeam.name} por ${this.score.blue} a ${this.score.red}!`;
+      winnerMsg = `${finishedMatchString}     Vitória do ${winnerTeam.name} por ${this.score.blue} a ${this.score.red}!`;
     }
     this.chatService.sendBoldAnnouncement(winnerMsg, 2, undefined, msgColor);
 

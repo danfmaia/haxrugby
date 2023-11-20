@@ -72,11 +72,14 @@ class GameUtil {
   }
 
   public getIsMatchFinished(redScore: number, blueScore: number, isTry: false | TeamEnum): boolean {
-    if (this.gameService.isOvertime === false) {
-      if (
-        redScore >= this.gameService.matchConfig.scoreLimit ||
-        blueScore >= this.gameService.matchConfig.scoreLimit
-      ) {
+    const serv = this.gameService;
+    if (serv.isOvertime === false) {
+      if (redScore >= serv.matchConfig.scoreLimit || blueScore >= serv.matchConfig.scoreLimit) {
+        // by score limit in regular time
+        return true;
+      }
+      if (this.getIsScoreDifferenceReached()) {
+        // by score difference in regular time
         return true;
       }
       return false;
@@ -84,9 +87,11 @@ class GameUtil {
 
     if (isTry === false) {
       if (redScore !== blueScore) {
+        // by time when there is NO pending conversion
         return true;
       }
     } else {
+      // by time when there IS pending conversion
       const ballPosition = this.room.getBallPosition();
       if (ballPosition.x > 0) {
         if (redScore > blueScore) {
@@ -103,6 +108,15 @@ class GameUtil {
       }
     }
     return false;
+  }
+
+  public getScoreDifference(): number {
+    return Math.abs(this.gameService.score.red - this.gameService.score.blue);
+  }
+
+  public getIsScoreDifferenceReached(): boolean {
+    const serv = this.gameService;
+    return this.getScoreDifference() >= serv.matchConfig.scoreDifference;
   }
 
   public setPlayerAsPosition(player: HaxRugbyPlayer, position: PositionEnum): void {

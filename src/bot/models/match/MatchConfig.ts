@@ -8,11 +8,18 @@ export interface IMatchConfig {
 class MatchConfig implements IMatchConfig {
   public timeLimit: number;
   public scoreLimit: number;
+  public scoreDifference: number;
   public mapSize: MapSizeEnum;
 
-  constructor(timeLimit: number, scoreLimit: number, mapSize: MapSizeEnum) {
+  constructor(
+    timeLimit: number,
+    scoreLimit: number,
+    scoreDifference: number,
+    mapSize: MapSizeEnum,
+  ) {
     this.timeLimit = timeLimit;
     this.scoreLimit = scoreLimit;
+    this.scoreDifference = scoreDifference;
     this.mapSize = mapSize;
   }
 
