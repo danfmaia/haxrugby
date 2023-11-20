@@ -35,7 +35,7 @@ describe('Command', function () {
         null,
         null,
         null,
-        new Set([TestRole.Admin, TestRole.Another])
+        new Set([TestRole.Admin, TestRole.Another]),
       );
       const command = new RoleTestCommand();
 
@@ -52,7 +52,7 @@ describe('Command', function () {
         null,
         null,
         null,
-        new Set([TestRole.Admin, TestRole.SuperAdmin])
+        new Set([TestRole.Admin, TestRole.SuperAdmin]),
       );
       const command = new RoleTestCommand();
 

@@ -40,7 +40,7 @@ describe('CommandDecorator', function () {
 
     const metadata = DecoratorsHelper.getMetadata<ICommandMetadataInternal>(
       MetadataKeys.Command,
-      TestCommand
+      TestCommand,
     );
 
     expect(metadata.metadata.names).to.have.all.members([

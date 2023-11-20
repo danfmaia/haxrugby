@@ -49,7 +49,7 @@ describe('DecoratorsHelper', function () {
 
       const metadata = DecoratorsHelper.getMetadata<ITestMetadata>(
         ConstantsLocal.Key,
-        NoMetadataClass
+        NoMetadataClass,
       );
 
       expect(metadata).to.equal(undefined);
@@ -91,7 +91,7 @@ describe('DecoratorsHelper', function () {
       // #endregion
 
       const commandsMetadata = DecoratorsHelper.getCommandsMetadata().map(
-        (metadata) => metadata.target
+        (metadata) => metadata.target,
       );
 
       expect(commandsMetadata).to.have.all.members([TestCommand1, TestCommand2, TestCommand3]);
@@ -99,7 +99,7 @@ describe('DecoratorsHelper', function () {
 
     it('Should return no commands (empty array) if no commands have been decorated with @CommandDecorator', function () {
       const commandConstructors = DecoratorsHelper.getCommandsMetadata().map(
-        (metadata) => metadata.target
+        (metadata) => metadata.target,
       );
 
       expect(commandConstructors).to.not.contain.any.members;

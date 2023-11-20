@@ -33,7 +33,7 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
     @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser
+    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
   ) {
     super(roomConfig, PlayerService, chatMessageInterceptorFactory, chatMessageParser);
 

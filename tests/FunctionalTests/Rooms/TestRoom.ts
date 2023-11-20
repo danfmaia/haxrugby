@@ -16,7 +16,7 @@ export class TestRoom extends RoomBase<Player> {
     @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
     @inject(Types.IChatMessageInterceptorFactory)
     chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser
+    @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
   ) {
     super(roomConfig, PlayerService, chatMessageInterceptorFactory, chatMessageParser);
   }
