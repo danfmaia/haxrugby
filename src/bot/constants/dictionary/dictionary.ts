@@ -3,10 +3,10 @@ import appConfig from '../appConfig';
 import {
   APP_MINOR_VERSION,
   APP_PREVIOUS_MINOR_VERSION,
-  APP_VERSION,
   GAME_TITLE,
   LINK_DISCORD,
   ROOM_TITLE,
+  APP_VERSION,
 } from '../constants';
 import DictionaryKeys from './DictionaryKeys';
 
@@ -19,7 +19,7 @@ const ptBr: DictionaryKeys = {
   MSG_GAME_INFO_1: `𝖵𝗈𝖼ê 𝖾𝗌𝗍á 𝗇𝗈 ${ROOM_TITLE} ${APP_VERSION}!`,
   MSG_GAME_INFO_2:
     '𝖠𝗂𝗇𝖽𝖺 𝖾𝗌𝗍𝖺𝗆𝗈𝗌 𝖾𝗆 𝗱𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗶𝗺𝗲𝗻𝘁𝗼! 𝖲𝖾 𝖾𝗇𝖼𝗈𝗇𝗍𝗋𝖺𝗋 𝗯𝘂𝗴𝘀, 𝗋𝖾𝗅𝖺𝗍𝖾 𝗇𝗈 𝖼𝖺𝗇𝖺𝗅 #𝖻𝗎𝗀𝗌 𝖽𝗈 𝗇𝗈𝗌𝗌𝗈 𝗗𝗶𝘀𝗰𝗼𝗿𝗱 (!𝖽𝖼).',
-  MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 𝖺𝗍𝗎𝖺𝗅 (${APP_MINOR_VERSION}) 𝗅𝖺𝗇ç𝖺𝗆𝗈𝗌 𝗈 𝖿𝗂𝗇𝖺𝗅 𝖽𝖾 𝗉𝖺𝗋𝗍𝗂𝖽𝖺 𝗉𝗈𝗋 𝖽𝗂𝖿𝖾𝗋𝖾𝗇ç𝖺 𝖽𝖾 𝗉𝗈𝗇𝗍𝗈𝗌! 𝘈𝘵𝘶𝘢𝘭𝘮𝘦𝘯𝘵𝘦 𝘧𝘪𝘹𝘰 𝘱𝘢𝘳𝘢 21, 𝘮𝘢𝘴 𝘦𝘮 𝘣𝘳𝘦𝘷𝘦 𝘱𝘰𝘥𝘦𝘳á 𝘴𝘦𝘳 𝘤𝘶𝘴𝘵𝘰𝘮𝘪𝘻𝘢𝘥𝘰.`,
+  MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 𝖺𝗍𝗎𝖺𝗅 (${APP_MINOR_VERSION}) 𝗅𝖺𝗇ç𝖺𝗆𝗈𝗌 𝗈 𝘁𝗲𝗮𝗺 𝗰𝗵𝗮𝘁 e o fim 𝖽𝖾 𝗉𝖺𝗋𝗍𝗂𝖽𝖺 𝗉𝗈𝗋 𝖽𝗂𝖿𝖾𝗋𝖾𝗇ç𝖺 𝖽𝖾 𝗉𝗈𝗇𝗍𝗈𝗌 (𝘢𝘵𝘶𝘢𝘭𝘮𝘦𝘯𝘵𝘦 𝘧𝘪𝘹𝘰 𝘦𝘮 20).`,
   MSG_GAME_INFO_4: `𝖤 𝗇𝖺 𝗏𝖾𝗋𝗌ã𝗈 𝖺𝗇𝗍𝖾𝗋𝗂𝗈𝗋 (${APP_PREVIOUS_MINOR_VERSION}) 𝗅𝖺𝗇ç𝖺𝗆𝗈𝗌 𝗈 𝗆𝖺𝗉 𝗍𝖺𝗆𝖺𝗇𝗁𝗈 𝗕𝗶𝗴! 𝘈𝘪𝘯𝘥𝘢 𝘦𝘴𝘵á 𝘦𝘮 𝘧𝘢𝘴𝘦 𝘥𝘦 𝘵𝘦𝘴𝘵𝘦𝘴 𝘦 𝘢𝘫𝘶𝘴𝘵𝘦𝘴...`,
   // MSG_GAME_INFO_3: `𝖭𝖺𝗌 𝗏𝖾𝗋𝗌õ𝖾𝗌 𝘃𝟬.𝟭𝟭 𝖾 𝘃𝟬.𝟭𝟮 𝗂𝗇𝗍𝗋𝗈𝖽𝗎𝗓𝗂𝗆𝗈𝗌 𝗈 𝗜𝗺𝗽𝗲𝗱𝗶𝗺𝗲𝗻𝘁𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗶𝗺𝗽), 𝖺 𝗩𝗮𝗻𝘁𝗮𝗴𝗲𝗺 𝖾 𝗈 𝗣𝗲𝗻𝗮𝗹.`,
   // MSG_GAME_INFO_3: `𝖭𝖺 𝗏𝖾𝗋𝗌ã𝗈 ${APP_MINOR_VERSION} 𝗂𝗆𝗉𝗅𝖾𝗆𝖾𝗇𝗍𝖺𝗆𝗈𝗌 𝗈 𝗗𝗿𝗼𝗽 𝗚𝗼𝗮𝗹 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗱𝗿𝗼𝗽) 𝖾 𝗈 𝗖𝗵𝘂𝘁𝗲 𝗔𝗲𝗿𝗲𝗼 (𝖼𝗈𝗆𝖺𝗇𝖽𝗈 !𝗮𝗶𝗿).`,
@@ -177,6 +177,7 @@ const ptBr: DictionaryKeys = {
   MSG_PLAYER_CONFIGS: {
     SAFETY: 'Safety',
     AIR_KICK: 'Chute Aéreo',
+    TEAM_CHAT: 'Team Chat',
   },
 };
 

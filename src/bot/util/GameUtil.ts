@@ -628,6 +628,8 @@ class GameUtil {
         return AIR_KICK_BOOST.NORMAL;
       case MapSizeEnum.BIG:
         return AIR_KICK_BOOST.BIG;
+      default:
+        return AIR_KICK_BOOST.NORMAL;
     }
   }
 

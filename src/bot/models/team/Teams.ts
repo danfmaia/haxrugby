@@ -109,7 +109,7 @@ class Teams implements ITeams {
         return this.blue.messageColor;
       }
     }
-    throw new Error();
+    return colors.white;
   }
 
   setTeamMessageColor(team: TeamEnum, messageColor: number | null): void {

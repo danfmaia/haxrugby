@@ -53,11 +53,16 @@ import { FilterInterceptor } from './interceptors/FilterInterceptor';
 import { ResetTeamsCommand } from './commands/admin/ResetTeamsCommand';
 import { SafetyCommand } from './commands/playerConfig/SafetyCommand';
 import { ConfigCommand } from './commands/playerConfig/ConfigCommand';
+import { ChatCommand } from './commands/chat/ChatCommand';
+import { ToggleTeamChatCommand } from './commands/chat/ToggleTeamChatCommand';
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
 // TODO: maybe find a better way of bundling everything up for the browser, however, this is up to the user of the framework...
 // PhysicsCommand;
+
+ChatCommand;
+ToggleTeamChatCommand;
 
 HelpCommand;
 LeaveCommand;

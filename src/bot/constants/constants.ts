@@ -6,8 +6,8 @@ export const CLOSED_PLAYER_NAME = 'Salas divulgadas no DC';
 
 export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟲';
 export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟱';
-const APP_PATCH_VERSION = '';
-export const ROOM_DESCRIPTION = 'v0.16 • x4/x5'; // 15 chars allowed
+const APP_PATCH_VERSION = '𝗯';
+export const ROOM_DESCRIPTION = 'v0.16b • x4/x5'; // 15 chars allowed
 // export const ROOM_DESCRIPTION = 'CAMP x4 DRAFT'; // 15 chars allowed
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 

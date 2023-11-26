@@ -11,6 +11,7 @@ import {
   SafetyCommand,
   SAFETY_COMMAND_HOTKEYS_WITHOUT_EXCLAMATION,
 } from '../commands/playerConfig/SafetyCommand';
+import { ChatCommand } from '../commands/chat/ChatCommand';
 
 @injectable()
 export class ExecuteCommandInterceptor
@@ -40,13 +41,14 @@ export class ExecuteCommandInterceptor
     }
 
     // other commands' interceptor
-    if (message.command == null || message.command.canExecute(message.sentBy) === false) {
-      return true;
+    if (message.command && message.command.canExecute(message.sentBy)) {
+      // exclude messages and team chat commands from log
+      Util.logWithTime(
+        `${Util.getPlayerNameAndId(message.sentBy)} executou o comando \`${message.message}\`.`,
+      );
+    } else {
+      message.command = new ChatCommand(this.room, message.message);
     }
-
-    Util.logWithTime(
-      `${Util.getPlayerNameAndId(message.sentBy)} executou o comando \`${message.message}\`.`,
-    );
 
     // execute command
     message.broadcastForward = false;
