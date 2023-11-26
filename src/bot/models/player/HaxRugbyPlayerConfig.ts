@@ -9,6 +9,7 @@ export class HaxRugbyPlayerConfig {
 
   public isAirKickEnabled: boolean = true;
   public isSafetyEnabled: boolean = true;
+  public isTeamChatEnabled: boolean = false;
 
   constructor(playerId: number) {
     this.playerId = playerId;

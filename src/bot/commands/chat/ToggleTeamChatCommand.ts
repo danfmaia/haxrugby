@@ -1,25 +1,21 @@
 import { inject } from 'inversify';
 import { CommandBase, CommandDecorator, Types } from 'inversihax';
-import PlayerConfigEnum from '../../enums/PlayerConfigEnum';
-
 import { HaxRugbyPlayer } from '../../models/player/HaxRugbyPlayer';
-import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import { IChatService } from '../../services/room/ChatService';
+import { HaxRugbyPlayerConfig } from '../../models/player/HaxRugbyPlayerConfig';
+import PlayerConfigEnum from '../../enums/PlayerConfigEnum';
 
-export const CONFIG_COMMAND_HOTKEYS = ['c', 'conf', 'config', 'configs'];
+export const TOGGLE_TEAM_CHAT_COMMAND_HOTKEYS = ['team', 'teamchat', 'team-chat'];
 
 @CommandDecorator({
-  names: CONFIG_COMMAND_HOTKEYS,
+  names: TOGGLE_TEAM_CHAT_COMMAND_HOTKEYS,
 })
-export class ConfigCommand extends CommandBase<HaxRugbyPlayer> {
-  // private readonly room: IHaxRugbyRoom;
+export class ToggleTeamChatCommand extends CommandBase<HaxRugbyPlayer> {
   private readonly chatService: IChatService;
 
   public constructor(@inject(Types.IRoom) room: IHaxRugbyRoom) {
     super();
-
-    // this.room = room;
     this.chatService = room.gameService.chatService;
   }
 
@@ -29,21 +25,13 @@ export class ConfigCommand extends CommandBase<HaxRugbyPlayer> {
 
   public execute(player: HaxRugbyPlayer, args: string[]): void {
     const playerConfig = HaxRugbyPlayerConfig.getConfig(player.id);
+    playerConfig.isTeamChatEnabled = !playerConfig.isTeamChatEnabled;
 
     this.chatService.sendPlayerConfigInfo(
-      PlayerConfigEnum.SAFETY,
-      playerConfig.isSafetyEnabled,
+      PlayerConfigEnum.TEAM_CHAT,
+      playerConfig.isTeamChatEnabled,
       player.id,
+      2,
     );
-    this.chatService.sendPlayerConfigInfo(
-      PlayerConfigEnum.AIR_KICK,
-      playerConfig.isAirKickEnabled,
-      player.id,
-    );
-    // this.chatService.sendPlayerConfigInfo(
-    //   PlayerConfigEnum.TEAM_CHAT,
-    //   playerConfig.isTeamChatEnabled,
-    //   player.id,
-    // );
   }
 }

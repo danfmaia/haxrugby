@@ -24,6 +24,7 @@ import { IBallEnterOrLeaveIngoal } from '../../models/map/AHaxRugbyMap';
 import { IHaxRugbyRoom } from '../../rooms/HaxRugbyRoom';
 import Util from '../../util/Util';
 import { IGameService } from './IGameService';
+import { TeamID } from 'inversihax';
 
 export interface IChatService {
   sendNormalAnnouncement(message: string, sound?: number, playerId?: number, color?: number): void;
@@ -64,6 +65,9 @@ export interface IChatService {
     playerId: number,
     sound?: number,
   ): void;
+
+  sendAllMessage(playerId: number, message: string): void;
+  sendTeamMessage(playerId: number, message: string): void;
 }
 
 export default class ChatService implements IChatService {
@@ -448,12 +452,12 @@ export default class ChatService implements IChatService {
           player.id,
           colors.airKickMessage,
         );
-        this.sendNormalAnnouncement(
-          'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
-          0,
-          player.id,
-          colors.airKickMessage,
-        );
+        // this.sendNormalAnnouncement(
+        //   'Use o comando `a` para ativar/desativar seu Chute Aéreo.',
+        //   0,
+        //   player.id,
+        //   colors.airKickMessage,
+        // );
       } else {
         const kicker = this.room.getPlayer(kickerId);
         const kickerTeam = this.gameService.teams.getTeamByTeamID(kicker.team);
@@ -483,5 +487,64 @@ export default class ChatService implements IChatService {
     } else {
       this.sendBoldAnnouncement(`*** ${configName} DESATIVADO! ***`, sound, playerId, colors.red);
     }
+  }
+
+  public sendAllMessage(playerId: number, message: string): void {
+    const msgPlayer = this.room.getPlayer(playerId);
+    const teams = this.gameService.teams;
+    const teamId = msgPlayer.team;
+
+    // format message
+    let formattedMsg: string;
+    const team = teams.getTeamByTeamID(teamId);
+    if (!team) {
+      formattedMsg = `${msgPlayer.name}: ${message}`;
+    } else {
+      formattedMsg = `[${team.name.toUpperCase()} > all] ${msgPlayer.name}: ${message}`;
+    }
+
+    const msgColor = teams.getTeamMessageColor(undefined, teamId);
+
+    const players = this.room.getPlayerList();
+    let sound: number;
+    players.forEach((player) => {
+      if (player.team === TeamID.Spectators) {
+        sound = 1;
+      } else {
+        if (msgPlayer.team === player.team) {
+          sound = 1;
+        } else {
+          sound = 0;
+        }
+      }
+      this.sendNormalAnnouncement(formattedMsg, sound, player.id, msgColor);
+    });
+  }
+
+  public sendTeamMessage(playerId: number, message: string): void {
+    const msgPlayer = this.room.getPlayer(playerId);
+    const teams = this.gameService.teams;
+    const teamId = msgPlayer.team;
+
+    // format message
+    let formattedMsg: string;
+    const team = teams.getTeamByTeamID(teamId);
+    if (!team) {
+      return;
+    } else {
+      formattedMsg = `[${team.name.toUpperCase()} > team] ${msgPlayer.name}: ${message}`;
+    }
+
+    const msgColor = teams.getTeamMessageColor(undefined, teamId);
+
+    const players = this.room.getPlayerList();
+    players.forEach((player) => {
+      if (player.team === teamId) {
+        this.sendNormalAnnouncement(formattedMsg, 1, player.id, msgColor);
+      }
+    });
+
+    // const playerTeam = this.gameService.teams.getTeamByTeamID(playerId);
+    // const playetTeam = PlayerConfigEnumExtension;
   }
 }

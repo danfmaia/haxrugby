@@ -1,9 +1,16 @@
 ## CHANGELOG
 
+### v0.16b:
+
+- Adicionado o **team chat**!
+  - Use o prefixo `;` pra mandar uma mensagem simples apenas pro seu time.
+  - Adicionado comando pra _ativar/desativar permanentemente o team chat_: prefixo `;;` ou `!team`.
+- Diminuída a diferença de pontos (pro fim de partida) de 21 pra **20**.
+
 ### v0.16:
 
-- Implementado o **final de partida por diferença de pontos**.
-  - Atualmente está fixo para **21**, mas em breve poderá ser customizado.
+- Implementado o **fim de partida por diferença de pontos**.
+  - Atualmente está fixo em **21**, mas em breve poderá ser customizado.
 
 ### v0.15d:
 

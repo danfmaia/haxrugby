@@ -66,6 +66,7 @@ type DictionaryKeys = {
   MSG_PLAYER_CONFIGS: {
     SAFETY: string;
     AIR_KICK: string;
+    TEAM_CHAT: string;
   };
 };
 
