@@ -4,10 +4,10 @@ export const ROOM_TITLE = '💥🏉 H𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉💥';
 export const CLOSED_ROOM_TITLE = '💥🏉 H𝖺𝗑𝗥𝗨𝗚𝗕𝗬 🏉💥 Sala às noites!';
 export const CLOSED_PLAYER_NAME = 'Salas divulgadas no DC';
 
-export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟲';
-export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟱';
-const APP_PATCH_VERSION = '𝗯';
-export const ROOM_DESCRIPTION = 'v0.16b • x4/x5'; // 15 chars allowed
+export const APP_MINOR_VERSION = '𝘃𝟬.𝟭𝟳';
+export const APP_PREVIOUS_MINOR_VERSION = '𝘃𝟬.𝟭𝟲';
+const APP_PATCH_VERSION = '';
+export const ROOM_DESCRIPTION = 'v0.17 • x3/x4'; // 15 chars allowed
 // export const ROOM_DESCRIPTION = 'CAMP x4 DRAFT'; // 15 chars allowed
 export const APP_VERSION = APP_MINOR_VERSION + APP_PATCH_VERSION;
 
@@ -19,9 +19,12 @@ export const LINK_DISCORD_RULES =
 
 export const MINUTE_IN_MS = 60 * 1000;
 
-export const BALL_RADIUS = 7.5;
-export const PLAYER_RADIUS = 15;
+export const BALL_RADIUS = 6;
 export const GOAL_POST_RADIUS = 2;
+
+// player physics
+export const PLAYER_RADIUS = 15;
+export const BOUNCE_FACTOR = 1.5;
 
 // safety margin for touching
 export const TOUCH_EPSILON = 0.01;

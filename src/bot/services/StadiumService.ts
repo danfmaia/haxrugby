@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { IPosition } from 'inversihax';
-import { BALL_RADIUS } from '../constants/constants';
+import { BALL_RADIUS, BOUNCE_FACTOR } from '../constants/constants';
 import MapSizeEnum from '../enums/stadium/MapSizeEnum';
 import TraitEnum from '../enums/stadium/TraitEnum';
 import TeamEnum from '../enums/TeamEnum';
@@ -287,6 +287,15 @@ class StadiumService {
 
   getBottomPostXSpeed(): number {
     return (this.dims.goalPostBottomZ / this.dims.goalPostTopZ) * this.getTopPostXSpeed();
+  }
+
+  getPlayerPhysics(): any {
+    return {
+      bCoef: 0.5 * BOUNCE_FACTOR,
+      kickingAcceleration: 0.04,
+      kickingDamping: 0.9,
+      kickback: !this.convProps ? 2 : null,
+    };
   }
 }
 

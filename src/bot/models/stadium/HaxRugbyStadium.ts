@@ -33,6 +33,7 @@ class HaxRugbyStadium {
   public joints: any[];
   public planes: any[];
   public ballPhysics: any;
+  public playerPhysics: any;
 
   private serv: StadiumService | null = null;
 
@@ -857,6 +858,7 @@ class HaxRugbyStadium {
     ];
 
     this.ballPhysics = 'disc0';
+    this.playerPhysics = this.serv.getPlayerPhysics();
   }
 
   public static getNewStadium(

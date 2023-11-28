@@ -103,7 +103,7 @@ function getDriverIds(touchInfoList: (TTouchInfo | null)[]): number[] {
   return driverIds;
 }
 
-function hasPositionChanged(oldPosition: IPosition, newPosition: IPosition): Boolean {
+function hasPositionChanged(oldPosition: IPosition, newPosition: IPosition): boolean {
   const xDif = +(oldPosition.x - newPosition.x).toFixed(1);
   const yDif = +(oldPosition.y - newPosition.y).toFixed(1);
   if (xDif > 0 || yDif > 0) {

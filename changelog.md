@@ -1,5 +1,21 @@
 ## CHANGELOG
 
+### v0.17:
+
+- Testando algumas alterações na física. Seguem as alterações:
+  - Diminuído o `raio` da bola de 7,5 pra 6.
+  - Aumentado o `bCoef` (bounce) entre os jogadores de 0,5 pra 0,75.
+    - Foram feitas todas as devidas adaptações pra que esse bounce extra não afetasse outros elementos do jogo além dos jogadores.
+  - Diminuído o `kickingAcceleration` de 0,07 (padrão) pra 0,04.
+  - Diminuído o `kickingDamping` de 0,96 (padrão) pra 0,9.
+  - Adicionado `kickback` (recuo após chute) de 2,0 (o padrão é zero).
+
+### v0.17a:
+
+- Reajustados dois parâmetros alterados na versão:
+  - `kickingAcceleration` reajustado pra 0,55
+  - `kickingDamping` reajustado pra 0,93.
+
 ### v0.16b:
 
 - Adicionado o **team chat**!
