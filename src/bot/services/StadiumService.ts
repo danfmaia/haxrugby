@@ -292,9 +292,9 @@ class StadiumService {
   getPlayerPhysics(): any {
     return {
       bCoef: 0.5 * BOUNCE_FACTOR,
-      kickingAcceleration: 0.04,
-      kickingDamping: 0.9,
-      kickback: !this.convProps ? 2 : null,
+      kickingAcceleration: 0.055,
+      kickingDamping: 0.93,
+      kickback: 2,
     };
   }
 }
