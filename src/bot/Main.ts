@@ -42,7 +42,6 @@ import { LeaveCommand } from './commands/LeaveCommand';
 import { CancelMatchCommand } from './commands/match/CancelMatchCommand';
 import { OnlyAdminCommand } from './commands/admin/OnlyAdminCommand';
 import { KickRateLimitCommand } from './commands/physics/KickRateLimitCommand';
-import { AirKickCommand } from './commands/playerConfig/AirKickCommand';
 import { AirKickRuleCommand } from './commands/rules/AirKickRuleCommand';
 import { AdvantageCommand } from './commands/penalty/AdvantageCommand';
 import { OffsideCommand } from './commands/rules/OffsideCommand';
@@ -80,7 +79,7 @@ SetScoreCommand;
 
 ConfigCommand;
 SafetyCommand;
-AirKickCommand;
+// AirKickCommand;
 
 KickerCommand;
 GoalkeeperCommand;

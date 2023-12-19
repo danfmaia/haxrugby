@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { ChatMessage, IChatMessageInterceptor, Types } from 'inversihax';
 import { BallCommand, BALL_COMMAND_HOTKEYS } from '../commands/conversion/BallCommand';
-import { AirKickCommand, AIR_KICK_COMMAND_HOTKEYS } from '../commands/playerConfig/AirKickCommand';
 import { HaxRugbyPlayer } from '../models/player/HaxRugbyPlayer';
 import { IHaxRugbyRoom } from '../rooms/HaxRugbyRoom';
 import Util from '../util/Util';
@@ -30,9 +29,10 @@ export class ExecuteCommandInterceptor
     if (SAFETY_COMMAND_HOTKEYS_WITHOUT_EXCLAMATION.includes(message.message)) {
       message.command = new SafetyCommand(this.room);
     }
-    if (AIR_KICK_COMMAND_HOTKEYS.includes(message.message)) {
-      message.command = new AirKickCommand(this.room);
-    }
+    // AirKickCommand turned off
+    // if (AIR_KICK_COMMAND_HOTKEYS.includes(message.message)) {
+    //   message.command = new AirKickCommand(this.room);
+    // }
     if (ADVANTAGE_COMMAND_HOTKEYS.includes(message.message)) {
       message.command = new AdvantageCommand(this.room);
     }
