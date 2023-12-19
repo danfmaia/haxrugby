@@ -523,7 +523,7 @@ export default class GameService implements IGameService {
     this.chatService.sendBlankLine();
 
     let finishedMatchString: string;
-    if (this.util.getIsScoreDifferenceReached() == false) {
+    if (this.util.getIsScoreDifferenceReached() === false) {
       finishedMatchString = 'Fim da partida.';
     } else {
       // prettier-ignore
@@ -1446,7 +1446,7 @@ export default class GameService implements IGameService {
           this.kickoffX = ballPosition.x;
         }
         // change ball color to team's
-        if (isDefRec == false) {
+        if (isDefRec === false) {
           this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
           this.room.util.setBallColor(colors.teamRed);
         }
@@ -1460,7 +1460,7 @@ export default class GameService implements IGameService {
           this.kickoffX = ballPosition.x;
         }
         // change ball color to team's
-        if (isDefRec == false) {
+        if (isDefRec === false) {
           this.ballTransitionCount = BALL_TEAM_COLOR_TICKS;
           this.room.util.setBallColor(colors.teamBlue);
         }

@@ -1,4 +1,4 @@
-import { BALL_RADIUS } from '../../constants/constants';
+import { BALL_RADIUS, BOUNCE_FACTOR } from '../../constants/constants';
 import colors from '../../constants/style/colors';
 import TraitEnum from '../../enums/stadium/TraitEnum';
 import TTrait from './TTrait';
@@ -9,7 +9,7 @@ const traits = {
   [TraitEnum.ball]: {
     vis: true,
     radius: BALL_RADIUS,
-    bCoef: 0.5,
+    bCoef: 0.5 / BOUNCE_FACTOR,
     invMass: 1,
     damping: 0.99,
     color: 'FFFFFF',
@@ -19,13 +19,13 @@ const traits = {
 
   [TraitEnum.ballArea]: {
     vis: false,
-    bCoef: 1,
+    bCoef: 1 * BOUNCE_FACTOR,
     cMask: ['ball'],
   } as TTrait,
 
   [TraitEnum.goalPost]: {
     vis: true,
-    bCoef: 0.5,
+    bCoef: 0.5 * BOUNCE_FACTOR,
     cMask: ['ball'],
     radius: 2,
     invMass: 0,
@@ -46,13 +46,13 @@ const traits = {
 
   [TraitEnum.goalNet]: {
     vis: true,
-    bCoef: 0.1,
+    bCoef: 0.1, // not used
     cMask: [0],
   } as TTrait,
 
   [TraitEnum.kickOffBarrier]: {
     vis: false,
-    bCoef: 0.1,
+    bCoef: 0.1 / BOUNCE_FACTOR,
     cGroup: ['redKO', 'blueKO'],
     cMask: ['red', 'blue'],
   } as TTrait,
@@ -68,27 +68,28 @@ const traits = {
 
   [TraitEnum.playerArea]: {
     vis: false,
-    bCoef: 0.1,
+    bCoef: 0.1 / BOUNCE_FACTOR,
     cMask: ['red', 'blue'],
   } as TTrait,
 
   [TraitEnum.redKOBarrier]: {
     vis: false,
-    bCoef: 0.1,
+    bCoef: 0.1 / BOUNCE_FACTOR,
     cGroup: ['redKO'],
     cMask: ['red', 'blue'],
   } as TTrait,
 
   [TraitEnum.blueKOBarrier]: {
     vis: false,
-    bCoef: 0.1,
+    bCoef: 0.1 / BOUNCE_FACTOR,
     cGroup: ['blueKO'],
     cMask: ['red', 'blue'],
   } as TTrait,
 
   [TraitEnum.powerBoost]: {
     vis: false,
-    bCoef: -2.7, // old: -2.4
+    // TODO: does it need to be adjusted due to the new BOUNCE_FACTOR?
+    bCoef: -2.7 * BOUNCE_FACTOR, // old: -2.4
     cMask: ['ball'],
   },
 
