@@ -4,17 +4,22 @@
 
 - Testando algumas alterações na física. Seguem as alterações:
   - Diminuído o `raio` da bola de 7,5 pra 6.
-  - Aumentado o `bCoef` (bounce) entre os jogadores de 0,5 pra 0,75.
+  - Aumentado o `bCoef` (bounce) entre os jogadores de 0,5 (padrão) pra 0,75.
     - Foram feitas todas as devidas adaptações pra que esse bounce extra não afetasse outros elementos do jogo além dos jogadores.
   - Diminuído o `kickingAcceleration` de 0,07 (padrão) pra 0,04.
   - Diminuído o `kickingDamping` de 0,96 (padrão) pra 0,9.
   - Adicionado `kickback` (recuo após chute) de 2,0 (o padrão é zero).
+    - Exceto durante a Conversão de 2 pontos, na qual o kickback continua sendo zero.
 
 ### v0.17a:
 
 - Reajustados dois parâmetros alterados na versão:
-  - `kickingAcceleration` reajustado pra 0,55
+  - `kickingAcceleration` reajustado pra 0,055
   - `kickingDamping` reajustado pra 0,93.
+- Adicionado o `kickback` à Conversão de 2 pontos.
+  - Na Conversão, o kickback funciona apenas como um elemento estético. Não afeta a jogabilidade nem pro GK nem pro K.
+- Alterado o map padrão x4 (do comando `!rr x4`) do Big p/ o Normal.
+- Removido o comando `a` (que ativava/desativava ou Chute Aéreo).
 
 ### v0.16b:
 
